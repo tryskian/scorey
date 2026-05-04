@@ -1,0 +1,12 @@
+.DS_Store
+.env
+.env.*
+.venv/
+.local/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.history/
+*.code-workspace
