@@ -148,10 +148,13 @@ It only judges the pick pair in `scorey_pick, user_pick` order.
 
 - every other `scorey_pick, user_pick` pair
 
-The local sampling lane is intentionally narrower than the live runtime. It
-cycles the fixed picks through deterministic local fixtures, records rows into
-SQLite, and should be read as population/soak coverage rather than a diversity
-claim.
+The local sampling lane now has two deterministic patterns:
+
+- `baseline` cycles the fixed picks through the narrow local fixtures and is
+  best read as population/soak coverage
+- `beta-1-coverage` cycles all six `Beta 1.0` pass pairs evenly
+
+Neither local pattern is a diversity claim.
 
 ## Contracts
 

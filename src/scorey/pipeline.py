@@ -121,10 +121,25 @@ def build_round_state(
 def build_local_round_state(user_pick: str, *, scorey_score: int = 1) -> RoundState:
     user_value = normalise_pick(user_pick)
     scorey_pick = local_scorey_pick_for(user_value)
-    fields = LOCAL_ROUND_FIELDS[(user_value, scorey_pick)]
-    return build_round_state(
+    return build_local_round_state_for_pair(
         user_value,
         scorey_pick,
+        scorey_score=scorey_score,
+    )
+
+
+def build_local_round_state_for_pair(
+    user_pick: str,
+    scorey_pick: str,
+    *,
+    scorey_score: int = 1,
+) -> RoundState:
+    user_value = normalise_pick(user_pick)
+    scorey_value = normalise_pick(scorey_pick)
+    fields = LOCAL_ROUND_FIELDS[(user_value, scorey_value)]
+    return build_round_state(
+        user_value,
+        scorey_value,
         fields,
         scorey_score=scorey_score,
     )

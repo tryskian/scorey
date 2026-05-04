@@ -4,10 +4,12 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from scorey.config import USER_PICKS
+from scorey.config import USER_PICKS, local_scorey_pick_for
 from scorey.eval_db import record_round_state
-from scorey.eval_gates import evaluate_beta_1
-from scorey.pipeline import build_local_round_state, compose_round
+from scorey.eval_gates import beta_1_pass_pairs, evaluate_beta_1
+from scorey.pipeline import build_local_round_state_for_pair, compose_round
+
+LOCAL_SAMPLE_PATTERNS: tuple[str, ...] = ("baseline", "beta-1-coverage")
 
 
 @dataclass(frozen=True)
@@ -20,12 +22,37 @@ class LocalSampleSummary:
     elapsed_seconds: float
 
 
+def _sample_pairs_for_pattern(pattern: str) -> tuple[tuple[str, str], ...]:
+    if pattern == "baseline":
+        return tuple(
+            (local_scorey_pick_for(user_pick), user_pick) for user_pick in USER_PICKS
+        )
+    if pattern == "beta-1-coverage":
+        return beta_1_pass_pairs()
+    raise ValueError(
+        "Unsupported local sample pattern "
+        f"'{pattern}'. Choose one of: {', '.join(LOCAL_SAMPLE_PATTERNS)}."
+    )
+
+
+def _default_model_for_pattern(pattern: str) -> str:
+    if pattern == "baseline":
+        return "local-fixture-batch"
+    if pattern == "beta-1-coverage":
+        return "local-beta-1-coverage-batch"
+    raise ValueError(
+        "Unsupported local sample pattern "
+        f"'{pattern}'. Choose one of: {', '.join(LOCAL_SAMPLE_PATTERNS)}."
+    )
+
+
 def sample_local_eval_outputs(
     *,
     count: int | None = None,
     duration_seconds: float | None = None,
     interval_seconds: float = 0.0,
-    model: str = "local-fixture-batch",
+    pattern: str = "baseline",
+    model: str | None = None,
     time_fn: Callable[[], float] = time.monotonic,
     sleep_fn: Callable[[float], None] = time.sleep,
 ) -> LocalSampleSummary:
@@ -37,6 +64,8 @@ def sample_local_eval_outputs(
         raise ValueError("Duration must be greater than 0.")
     if interval_seconds < 0:
         raise ValueError("Interval must be at least 0.")
+    sample_pairs = _sample_pairs_for_pattern(pattern)
+    model_name = model or _default_model_for_pattern(pattern)
 
     start = time_fn()
     deadline = None if duration_seconds is None else start + duration_seconds
@@ -51,15 +80,19 @@ def sample_local_eval_outputs(
         if deadline is not None and time_fn() >= deadline:
             break
 
-        user_pick = USER_PICKS[index % len(USER_PICKS)]
-        round_state = build_local_round_state(user_pick, scorey_score=index + 1)
+        scorey_pick, user_pick = sample_pairs[index % len(sample_pairs)]
+        round_state = build_local_round_state_for_pair(
+            user_pick,
+            scorey_pick,
+            scorey_score=index + 1,
+        )
         round_text = compose_round(round_state)
         output_id = record_round_state(
             None,
             round_state,
             round_text,
             source_mode="local",
-            model=model,
+            model=model_name,
         )
         output_ids.append(output_id)
 

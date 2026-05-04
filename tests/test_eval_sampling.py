@@ -37,3 +37,31 @@ class EvalSamplingTests(TestCase):
                         ("paper", "scissors"),
                     ],
                 )
+
+    def test_sample_local_eval_outputs_beta_1_coverage_cycles_all_pass_pairs(
+        self,
+    ) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            with patch("scorey.eval_db.EVAL_DB_PATH", db_path):
+                summary = sample_local_eval_outputs(count=6, pattern="beta-1-coverage")
+
+                self.assertEqual(summary.recorded, 6)
+                self.assertEqual(summary.beta_1_pass, 6)
+                self.assertEqual(summary.beta_1_fail, 0)
+
+                rows = list_outputs(db_path, limit=6)
+                observed_pairs = {
+                    (str(row["scorey_pick"]), str(row["user_pick"])) for row in rows
+                }
+                self.assertEqual(
+                    observed_pairs,
+                    {
+                        ("paper", "scissors"),
+                        ("rock", "paper"),
+                        ("scissors", "rock"),
+                        ("paper", "paper"),
+                        ("rock", "rock"),
+                        ("scissors", "scissors"),
+                    },
+                )

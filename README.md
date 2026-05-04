@@ -49,7 +49,9 @@ scorey play rock
 - A small working runtime now exists in `src/scorey/`.
 - A first picks-only `Beta 1.0` gate now exists in `src/scorey/eval_gates.py`.
 - A first eval storage lane now exists in `src/scorey/eval_db.py`.
-- A deterministic local batch sampler now exists in `src/scorey/eval_sampling.py`.
+- A deterministic local sampler now exists in `src/scorey/eval_sampling.py`.
+- The local eval lane now supports both baseline soak sampling and full
+  `Beta 1.0` pass-pair coverage sampling.
 - A follow-along notebook now lives in `output/jupyter-notebook/`.
 - The next active kernel is eval population and human judgment flow, or runtime polish.
 

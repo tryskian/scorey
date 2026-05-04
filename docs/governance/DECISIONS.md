@@ -288,3 +288,19 @@ into implementation authorship.
 - Why: Long local sessions and eval runs should not lose the display to sleep,
   but wake control should still be explicit and easy to shut off at session end,
   including the cases where a background `caffeinate` outlives the managed PID file.
+
+## D-018: Local eval sampling keeps separate soak and coverage patterns
+
+- Date: `2026-05-04`
+- Category: `runtime_engineering`
+- Tags: `local_eval_sampling`, `beta_1_0`, `coverage`, `operator_surface`
+- Provenance: `implementation decision`
+- Decision:
+  - keep `baseline` as the default local sampling pattern
+  - let `baseline` cycle the narrow local fixture subset for soak/population runs
+  - add `beta-1-coverage` as a second deterministic local pattern
+  - let `beta-1-coverage` cycle all six `Beta 1.0` pass pairs evenly
+- Why: The first hour-long local soak proved the storage path and gate but only
+  exercised three valid pass pairs. Keeping soak and full pass-table coverage as
+  separate explicit patterns makes the signal clearer without broadening local
+  mode into a fake diversity surface.

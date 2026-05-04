@@ -60,7 +60,8 @@ Scope:
 - judge the pick pair only
 - read it in `scorey_pick, user_pick` order
 - ignore round prose, tone, and scoreboard claim
-- treat local batch sampling as a soak lane, not as a diversity claim
+- treat local `baseline` sampling as a soak lane, not as a diversity claim
+- treat local `beta-1-coverage` sampling as the deterministic six-pair pass table
 
 `PASS`
 

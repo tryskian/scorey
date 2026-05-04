@@ -73,7 +73,9 @@ Current runtime surfaces:
 - `scorey eval-init` initializes the local eval database
 - `scorey eval-list --limit 10` lists recent eval rows
 - `scorey eval-beta-1 --limit 10` runs the current picks gate against recent rows
-- `scorey eval-sample-local --count 30` records deterministic local eval rows
+- `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
+- `scorey eval-sample-local --count 30 --pattern beta-1-coverage` records all
+  six `Beta 1.0` pass pairs in a deterministic cycle
 - `make caffeinate` keeps the display awake on macOS during active sessions
 - `make decaffeinate` releases the managed wake lock
 - `make decaffeinate-all` clears matching background `caffeinate` processes
@@ -118,7 +120,8 @@ Choose one lane at a time:
   - populate the first rows
   - use `Beta 1.0` while the first rows accumulate
   - keep the gate read-only until a stored judgment path earns a wider surface
-  - use local sampling for soak/population, not for diversity claims
+  - use local `baseline` sampling for soak/population, not for diversity claims
+  - use local `beta-1-coverage` sampling when the full pass-pair truth table matters
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful

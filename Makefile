@@ -9,6 +9,7 @@ EVAL_LIMIT ?= 10
 EVAL_COUNT ?= 30
 EVAL_DURATION_SECONDS ?=
 EVAL_INTERVAL_SECONDS ?= 0
+EVAL_PATTERN ?= baseline
 CAFFEINATE_PID_FILE ?= /tmp/scorey-caffeinate.pid
 CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
 CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
@@ -127,7 +128,7 @@ eval-beta1:
 	PYTHONPATH=src $(PY) -m scorey eval-beta-1 --limit $(EVAL_LIMIT)
 
 eval-sample-local:
-	PYTHONPATH=src $(PY) -m scorey eval-sample-local $(if $(EVAL_DURATION_SECONDS),--duration-seconds $(EVAL_DURATION_SECONDS),--count $(EVAL_COUNT)) --interval-seconds $(EVAL_INTERVAL_SECONDS)
+	PYTHONPATH=src $(PY) -m scorey eval-sample-local $(if $(EVAL_DURATION_SECONDS),--duration-seconds $(EVAL_DURATION_SECONDS),--count $(EVAL_COUNT)) --interval-seconds $(EVAL_INTERVAL_SECONDS) --pattern $(EVAL_PATTERN)
 
 caffeinate:
 	@set -eu; \

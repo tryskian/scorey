@@ -55,7 +55,8 @@ need to inspect, check, or advance the repo.
 | initialize the eval database | `make eval-init` |
 | list recent eval rows | `make eval-list EVAL_LIMIT=10` |
 | run the Beta 1.0 picks gate | `make eval-beta1 EVAL_LIMIT=10` |
-| record a deterministic local eval batch | `make eval-sample-local EVAL_COUNT=30` |
+| record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
+| record a six-pair `Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=beta-1-coverage` |
 | run end-of-day preflight | `make eod-preflight` |
 | run end-of-day closeout | `make eod` |
 
@@ -102,6 +103,7 @@ Storage:
 - `make eval-list EVAL_LIMIT=10`
 - `make eval-beta1 EVAL_LIMIT=10`
 - `make eval-sample-local EVAL_COUNT=30`
+- `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=beta-1-coverage`
 
 Notebook:
 
@@ -113,7 +115,8 @@ Current posture:
 - binary top-level verdicts only
 - one notebook walkthrough beside the operator path
 - `Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
-- local batch sampling is a soak/population lane, not a diversity lane
+- local `baseline` sampling is a soak/population lane, not a diversity lane
+- local `beta-1-coverage` sampling cycles all six `Beta 1.0` pass pairs evenly
 
 ## Validation
 
@@ -149,6 +152,7 @@ For eval storage changes:
 - `make eval-list EVAL_LIMIT=5`
 - `make eval-beta1 EVAL_LIMIT=5`
 - `make eval-sample-local EVAL_COUNT=9`
+- `make eval-sample-local EVAL_COUNT=12 EVAL_PATTERN=beta-1-coverage`
 - `make check`
 - `make package-check`
 

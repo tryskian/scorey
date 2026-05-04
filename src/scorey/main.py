@@ -18,7 +18,7 @@ from scorey.eval_gates import (
     evaluate_beta_1,
     summarise_gate_results,
 )
-from scorey.eval_sampling import sample_local_eval_outputs
+from scorey.eval_sampling import LOCAL_SAMPLE_PATTERNS, sample_local_eval_outputs
 from scorey.pipeline import (
     build_local_round_state,
     build_round_state,
@@ -82,6 +82,12 @@ def build_parser() -> argparse.ArgumentParser:
     eval_sample_local_group.add_argument("--count", type=int)
     eval_sample_local_group.add_argument("--duration-seconds", type=float)
     eval_sample_local_parser.add_argument("--interval-seconds", type=float, default=0.0)
+    eval_sample_local_parser.add_argument(
+        "--pattern",
+        choices=LOCAL_SAMPLE_PATTERNS,
+        default="baseline",
+        help="Choose which deterministic local pair cycle to record.",
+    )
 
     return parser
 
@@ -428,12 +434,14 @@ def command_eval_sample_local(
     count: int | None,
     duration_seconds: float | None,
     interval_seconds: float,
+    pattern: str,
 ) -> int:
     try:
         summary = sample_local_eval_outputs(
             count=count,
             duration_seconds=duration_seconds,
             interval_seconds=interval_seconds,
+            pattern=pattern,
         )
     except Exception as exc:
         print(str(exc), file=sys.stderr)
@@ -446,6 +454,7 @@ def command_eval_sample_local(
     )
     db_path = default_eval_db_path()
     print(f"local eval sample complete: {mode_label}")
+    print(f"pattern={pattern}")
     print(
         f"recorded={summary.recorded} "
         f"beta_1_pass={summary.beta_1_pass} beta_1_fail={summary.beta_1_fail}"
@@ -478,6 +487,7 @@ def main(argv: list[str] | None = None) -> int:
             count=args.count,
             duration_seconds=args.duration_seconds,
             interval_seconds=args.interval_seconds,
+            pattern=args.pattern,
         )
     parser.print_help()
     return 1
