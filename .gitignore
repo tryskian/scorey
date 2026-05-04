@@ -6,7 +6,17 @@
 __pycache__/
 *.py[cod]
 *.egg-info/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.ipynb_checkpoints/
 build/
 dist/
 .history/
 *.code-workspace
+docs/peanut/**
+!docs/peanut/
+!docs/peanut/.gitkeep

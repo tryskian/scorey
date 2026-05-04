@@ -1,6 +1,6 @@
 # Runbook
 
-This is the operator guide for local setup, procedure, validation, and rebuild
+This is the operator guide for local setup, procedure, validation, and eval
 work.
 
 Use `docs/runtime/ARCHITECTURE.md` for system shape. Use this file when you
@@ -17,8 +17,15 @@ need to inspect, check, or advance the repo.
    - `docs/governance/SESSION_HANDOFF.md`
 2. Confirm the repo path:
    - `/Users/tryskian/Github/scorey`
-3. Treat `archive/` as reference only.
-4. State the active kernel before editing tracked files.
+3. Treat the tracked docs as current project state.
+4. Install or refresh the local environment:
+   - `make install`
+5. Keep the display awake during active work on macOS:
+   - `make caffeinate`
+6. Add live runtime credentials when needed:
+   - put `OPENAI_API_KEY` in the repo `.env`
+   - or export it in the shell
+7. State the active kernel before editing tracked files.
 
 ## Everyday Commands
 
@@ -26,11 +33,31 @@ need to inspect, check, or advance the repo.
 | --- | --- |
 | show the repo file tree | `find . -maxdepth 2 -type f | sort` |
 | show tracked docs | `find docs -maxdepth 3 -type f | sort` |
-| inspect archived reference docs | `find archive -maxdepth 3 -type f | sort` |
+| inspect recent history when needed | `git log --stat --oneline --max-count=5` |
 | search the current docs surface | `rg -n "<term>" README.md docs` |
-
-The runtime command surface is intentionally pending. Bare `scorey` will be the
-default user path once the app loop exists.
+| install or refresh the runtime env | `make install` |
+| keep the display awake on macOS | `make caffeinate` |
+| release the display wake lock | `make decaffeinate` |
+| stop all matching caffeinate processes | `make decaffeinate-all` |
+| check the environment | `make doctor-env` |
+| show session status | `make session-status` |
+| run tests | `make test` |
+| run tests with branch coverage | `make test-cov` |
+| run lint checks | `make lint` |
+| run format checks | `make format-check` |
+| format the Python surface | `make format` |
+| run static typing | `make typecheck` |
+| install git hooks | `make precommit-install` |
+| run pre-commit hooks on all files | `make precommit-run` |
+| run pre-push hooks on all files | `make prepush-run` |
+| run the current baseline checks | `make check` |
+| build the package | `make package-check` |
+| initialize the eval database | `make eval-init` |
+| list recent eval rows | `make eval-list EVAL_LIMIT=10` |
+| run the Beta 1.0 picks gate | `make eval-beta1 EVAL_LIMIT=10` |
+| record a deterministic local eval batch | `make eval-sample-local EVAL_COUNT=30` |
+| run end-of-day preflight | `make eod-preflight` |
+| run end-of-day closeout | `make eod` |
 
 ## Upstream Resources
 
@@ -48,43 +75,126 @@ that depend on OpenAI tooling.
 
 ## Scorey Commands
 
-No live or local runtime commands are tracked yet.
+App path:
 
-When the runtime lands:
+- `scorey`
+- `scorey --local`
+- `make app`
+- `LOCAL=1 make app`
 
-- keep bare `scorey` as the app path
-- keep explicit subcommands as the operator path
-- keep the operator path separate from the app loop
+Operator path:
+
+- `scorey play rock`
+- `scorey --local play paper`
+- `make play PICK=rock`
+- `LOCAL=1 make rock`
+- `LOCAL=1 make paper`
+- `LOCAL=1 make scissors`
+
+The local path is deterministic. The live path uses the OpenAI Agents SDK and
+requires `OPENAI_API_KEY`.
 
 ## Eval Commands
 
-No eval command surface is tracked yet.
+Storage:
 
-When the eval lane lands, record the commands here and keep them local-first,
-binary, and small.
+- `make eval-init`
+- `make eval-list EVAL_LIMIT=10`
+- `make eval-beta1 EVAL_LIMIT=10`
+- `make eval-sample-local EVAL_COUNT=30`
+
+Notebook:
+
+- `output/jupyter-notebook/scorey-eval-db-walkthrough.ipynb`
+
+Current posture:
+
+- local SQLite only
+- binary top-level verdicts only
+- one notebook walkthrough beside the operator path
+- `Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
+- local batch sampling is a soak/population lane, not a diversity lane
 
 ## Validation
 
-For the current day-zero docs state:
+For docs-only changes:
 
 - read back the changed docs
 - keep claims aligned with the actual tree
-- keep `archive/` clearly marked as reference-only
+- run `make doctor-env`
+- run `make check`
+
+For round-contract changes specifically:
+
+- sweep `docs/diagrams/PIPELINE.md`
+- sweep `docs/runtime/ARCHITECTURE.md`
+- sweep `docs/research/README.md`
+- sweep `docs/governance/SESSION_HANDOFF.md`
+- record durable runtime choices in `docs/governance/DECISIONS.md`
 
 When git and runtime tooling exist, expand this section with the smallest check
 set that matches each kind of change.
 
+For runtime changes:
+
+- `make doctor-env`
+- `make lint`
+- `make typecheck`
+- `make check`
+- `LOCAL=1 make rock`
+
+For eval storage changes:
+
+- `make eval-init`
+- `make eval-list EVAL_LIMIT=5`
+- `make eval-beta1 EVAL_LIMIT=5`
+- `make eval-sample-local EVAL_COUNT=9`
+- `make check`
+- `make package-check`
+
+For tooling-baseline changes:
+
+- `make doctor-env`
+- `make precommit-run`
+- `make prepush-run`
+- `make check`
+- `make package-check`
+
+If packaging metadata changed:
+
+- `make package-check`
+
+If live generation changed and `OPENAI_API_KEY` is available:
+
+- `scorey play rock`
+
+## End Of Day
+
+Use this closeout flow before ending a working session:
+
+- `make eod-preflight`
+- `make eod`
+
+Current `eod` checks:
+
+- `eod-docs-check`
+- `doctor-env`
+- `check`
+- `session-status`
+- git closeout on clean, synced `main`
+- `decaffeinate-all`
+
 ## Long-Run Eval Loop
 
-Pending until the runtime and eval lanes exist.
+The eval lane is now real, but it is still intentionally small.
 
 The intended posture is:
 
 1. Hold the current baseline steady.
-2. Generate or sample within the active narrow surface.
+2. Record or generate within the active narrow surface.
 3. Judge in sweeps.
 4. Keep verdicts binary.
-5. Let repeated failure clusters earn interventions.
+5. Let repeated failure clusters earn the next lens or intervention.
 
 ## Layered Eval Lenses
 
@@ -92,13 +202,14 @@ Current day-zero posture:
 
 - keep the top-level verdict binary
 - keep one eval focus active at a time
-- start with the round contract before broader product taste
+- start with the round contract before broader fit judgments
 
-The exact lens names and storage shape are intentionally pending.
+The storage shape now exists for the top-level verdict. Additional lens names
+and sidecar judgment tables are still intentionally pending beyond `Beta 1.0`.
 
 ## Command Ownership
 
 - Human lead owns objective, scope, acceptance, and theory.
 - Engineer owns implementation, validation, and repo hygiene.
-- Keep bare `scorey` as the intended app path.
-- Keep explicit subcommands as the future operator path.
+- Keep bare `scorey` as the app path.
+- Keep explicit subcommands as the operator path.

@@ -5,12 +5,35 @@
 Scorey is a small, local, agent-backed CLI toy in the
 **[Polinko research line](https://github.com/tryskian/polinko)**.
 
+It is shaped more like
+**[Probaboracle](https://github.com/tryskian/probaboracle)** than Polinko
+itself: a tiny toy surface, a narrow runtime, and binary eval discipline.
+
 It is a rigged rock, paper, scissors mini chatbot. The surface is silly. The
 method is not.
 
-This rebuild keeps the toy and resets the runtime. The goal is a calmer,
-cleaner Scorey: tight contract, small surface, binary evals, and docs that stay
-honest about what exists.
+Scorey stays small on purpose: tight contract, narrow surface, binary evals,
+and docs that stay honest about what exists.
+
+## Run It
+
+```sh
+make install
+scorey
+```
+
+For the deterministic local fixture lane:
+
+```sh
+scorey --local
+scorey --local play rock
+```
+
+For one live round without opening the app loop:
+
+```sh
+scorey play rock
+```
 
 ## What This Repo Is For
 
@@ -22,10 +45,13 @@ honest about what exists.
 
 ## Current State
 
-- The archived reference docs live under `archive/`.
-- The tracked docs in this repo are the new source of truth.
-- The runtime is being rebuilt intentionally from the contract outward.
-- The next active kernel is the day-zero round contract.
+- The round contract is locked in tracked docs.
+- A small working runtime now exists in `src/scorey/`.
+- A first picks-only `Beta 1.0` gate now exists in `src/scorey/eval_gates.py`.
+- A first eval storage lane now exists in `src/scorey/eval_db.py`.
+- A deterministic local batch sampler now exists in `src/scorey/eval_sampling.py`.
+- A follow-along notebook now lives in `output/jupyter-notebook/`.
+- The next active kernel is eval population and human judgment flow, or runtime polish.
 
 ## Read Next
 

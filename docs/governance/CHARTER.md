@@ -17,10 +17,11 @@ These rules define the project shape.
 Runtime:
 
 - local and CLI-first
-- agent-backed through the OpenAI Agents SDK once the live path lands
+- agent-backed through the OpenAI Agents SDK on the live path
 - deterministic local fixture path beside the live path
 - live generation owns only the unstable round state it needs
 - Scorey composes the final round shape
+- same-pick rounds are valid losing loophole rounds, not ties
 
 Prompt surface:
 
@@ -45,7 +46,7 @@ Eval:
 - `pass`
 - `fail`
 - one eval focus at a time
-- start with the round contract before broader product taste
+- start with the round contract before broader fit judgments
 
 Project posture:
 
@@ -53,7 +54,6 @@ Project posture:
 - keep it local-first
 - keep it aligned with Polinko's eval discipline
 - evolve tooling intentionally
-- archive before delete
 
 ## Working Model
 
@@ -106,7 +106,7 @@ In scope:
 - agent-backed generation
 - deterministic local baseline
 - binary human judgment
-- local eval storage when the eval lane lands
+- local eval storage
 - diagram-backed runtime explanation
 - governance docs for charter, decisions, and handoff state
 
@@ -120,7 +120,7 @@ Out of scope:
 
 ## Security And Ops
 
-- `OPENAI_API_KEY` is required for live generation once the runtime exists.
+- `OPENAI_API_KEY` is required for live generation.
 - The local runtime should auto-load the repo `.env`.
 - Local CLI execution is the trusted development boundary.
-- Local eval data should live under `.local/` when the eval lane lands.
+- Local eval data should live under `.local/`.

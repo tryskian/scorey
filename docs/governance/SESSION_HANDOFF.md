@@ -13,14 +13,15 @@ Last updated: 2026-05-04
    - this file
 2. Confirm repo path:
    - `/Users/tryskian/Github/scorey`
-3. Treat `archive/` as reference material only.
+3. Treat the tracked docs as current project state.
 4. State the active kernel before changing files.
 
 ## Current State
 
-Scorey is the same toy object, but the runtime has been reset.
+Scorey is a small rigged rock, paper, scissors toy with a working runtime and a
+first eval lane.
 
-The tracked docs are now the live source of truth:
+The core tracked surfaces are:
 
 - `README.md`
 - `docs/governance/`
@@ -28,39 +29,104 @@ The tracked docs are now the live source of truth:
 - `docs/research/`
 - `docs/diagrams/`
 
-The archived reference docs remain under `archive/`, but they are not current
-state.
+A small operator surface now exists:
 
-No runtime package, command surface, or eval storage is tracked yet.
+- `make caffeinate`
+- `make decaffeinate`
+- `make decaffeinate-all`
+- `make doctor-env`
+- `make precommit-install`
+- `make precommit-run`
+- `make session-status`
+- `make lint`
+- `make typecheck`
+- `make test-cov`
+- `make check`
+- `make eval-init`
+- `make eval-list`
+- `make eod`
+- `make eod-preflight`
+
+The round contract is now defined in tracked docs:
+
+- allowed Scorey routing is narrow
+- same-pick rounds are valid losing rounds, not ties
+- the runtime owns composition
+- the live model owns only small unstable state fields
+
+A first runtime package is now tracked:
+
+- `pyproject.toml`
+- `.env.example`
+- `src/scorey/config.py`
+- `src/scorey/pipeline.py`
+- `src/scorey/agent.py`
+- `src/scorey/main.py`
+- `src/scorey/eval_db.py`
+- `tests/`
+
+Current runtime surfaces:
+
+- bare `scorey` opens the app loop
+- `scorey play rock` plays one live round
+- `scorey --local play rock` plays one deterministic local round
+- `scorey eval-init` initializes the local eval database
+- `scorey eval-list --limit 10` lists recent eval rows
+- `scorey eval-beta-1 --limit 10` runs the current picks gate against recent rows
+- `scorey eval-sample-local --count 30` records deterministic local eval rows
+- `make caffeinate` keeps the display awake on macOS during active sessions
+- `make decaffeinate` releases the managed wake lock
+- `make decaffeinate-all` clears matching background `caffeinate` processes
+
+A first eval storage lane now exists:
+
+- local SQLite at `.local/evals.sqlite`
+- append-only top-level judgments
+- a notebook walkthrough in `output/jupyter-notebook/`
+- a deterministic local population path for batch row creation
 
 ## Research Snapshot
 
 Scorey remains a small rigged rock, paper, scissors research toy.
 
-Current rebuild posture:
+Current project posture:
 
 - preserve the object
-- rebuild the runtime intentionally
 - keep the surface small and local
 - keep evals binary
 
-Current beta naming is intentionally unset until the round contract lands.
+Current named gate:
+
+- `Beta 1.0`
+- picks only
+- `scorey_pick, user_pick` orientation
+- `pass` on reverse gameplay routes and same-pick loophole routes
+- `fail` on every other pair
 
 ## Next Kernel
 
 Choose one lane at a time:
 
 - contract:
-  - define what one Scorey round must preserve
-  - separate runtime-owned fields from model-generated fields
-  - lock valid routing and same-pick behaviour
+  - locked in tracked docs
 - runtime:
-  - only begin after the round contract is written down
-  - keep the wrapper small
-  - keep the app path separate from operator commands
+  - first package skeleton is in place
+  - keep the wrapper small while the live path settles
+  - keep route enforcement and composition in the runtime
+  - polish the interactive app only if it helps the core object
+- eval:
+  - populate the first rows
+  - use `Beta 1.0` while the first rows accumulate
+  - keep the gate read-only until a stored judgment path earns a wider surface
+  - use local sampling for soak/population, not for diversity claims
+  - keep one narrow binary focus active at a time
+- operators:
+  - keep the Makefile small and useful
+  - preserve `eod` as a first-class closeout command
+  - keep display-sleep control explicit and managed
+  - let `eod` clear stray background `caffeinate` processes
 - docs:
   - keep tracked docs aligned with what actually exists
-  - do not let `archive/` drift back into source-of-truth status
 
 ## Guardrails
 
@@ -71,6 +137,8 @@ Choose one lane at a time:
 - Do not add freeform input while the constrained interaction theory is active.
 - Keep eval verdicts binary only.
 - Keep one active kernel at a time.
+- Keep same-pick rounds as losing loophole rounds, not ties.
+- Keep the local path deterministic and cheap.
 
 ## Close A Session
 
@@ -83,4 +151,4 @@ At minimum:
 
 ## Copy/Paste Refresh Prompt
 
-`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Confirm the repo path is /Users/tryskian/Github/scorey. Treat archive/ as reference only. Then execute the Next Kernel with minimal drift and full validation.`
+`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Confirm the repo path is /Users/tryskian/Github/scorey. Treat the tracked docs as current project state. Then execute the Next Kernel with minimal drift and full validation.`

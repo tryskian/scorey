@@ -2,14 +2,16 @@
 
 This is the fast map of Scorey's stable shape.
 
-On day zero, only the docs spine is tracked. This file records the intended
-system shape as the rebuild lands, while staying honest about what exists now.
+The runtime and first eval lane now exist. This file records what is already
+real and what is still intentionally narrow.
 
 ## System Map
 
 | Surface | Role |
 | --- | --- |
 | `README.md` | public framing and current repo entrypoint |
+| `pyproject.toml` | package metadata and dependency pins |
+| `Makefile` | small operator command surface |
 | `docs/governance/CHARTER.md` | durable rules and scope |
 | `docs/governance/DECISIONS.md` | durable runtime and eval decisions |
 | `docs/governance/SESSION_HANDOFF.md` | current checkpoint and next kernel |
@@ -17,13 +19,22 @@ system shape as the rebuild lands, while staying honest about what exists now.
 | `docs/runtime/RUNBOOK.md` | operator procedure and validation |
 | `docs/research/README.md` | current research framing |
 | `docs/diagrams/PIPELINE.md` | canonical round and eval flow |
-| planned runtime package under `src/scorey/` | future home for config, agent, CLI, and eval storage |
+| `scripts/` | operator helpers for environment checks and end-of-day closeout |
+| `src/scorey/config.py` | fixed picks, routing rules, and settings |
+| `src/scorey/pipeline.py` | deterministic local fixtures and final round composition |
+| `src/scorey/agent.py` | structured live round-field generation through the OpenAI Agents SDK |
+| `src/scorey/eval_gates.py` | explicit eval truth tables and gate helpers |
+| `src/scorey/eval_db.py` | local SQLite eval storage |
+| `src/scorey/eval_sampling.py` | deterministic local eval population and soak helper |
+| `src/scorey/main.py` | app loop and `play` operator command |
+| `tests/` | contract and CLI tests |
+| `output/jupyter-notebook/` | follow-along notebooks and lightweight research walkthroughs |
 
 ## Default App Path
 
-The target default user path is bare `scorey`.
+The default user path is bare `scorey`.
 
-When the runtime lands, it should open a persistent local CLI loop with:
+It opens a persistent local CLI loop with:
 
 - a compact startup header
 - a fixed selector for:
@@ -36,45 +47,124 @@ When the runtime lands, it should open a persistent local CLI loop with:
 - the full round reveal under the selected pick
 - an immediate replay prompt
 
-The app loop does not exist yet. This section describes the intended stable
-shape, not a shipped command surface.
+The app loop also supports a non-TTY fallback prompt path.
 
 ## Generation Path
 
-The current target shape is:
+The current generation shape is:
 
 1. The user selects `rock`, `paper`, or `scissors`.
 2. The runtime validates the fixed pick.
 3. Scorey routes to an allowed Scorey pick.
 4. The route defines the matchup frame for the round.
-5. The live model generates only the unstable unfair round state it needs.
+5. The live model generates only the unstable unfair round state it needs as
+   structured fields.
 6. The runtime composes the final round shape.
 
-The exact boundary between runtime-owned and model-generated fields is the next
-active contract kernel.
+The exact boundary is now part of the tracked contract.
+
+## Round Contract
+
+Allowed routes:
+
+| User Pick | Allowed Scorey Picks | Route Families |
+| --- | --- | --- |
+| `rock` | `scissors`, `rock` | cross-object, same-pick |
+| `paper` | `rock`, `paper` | cross-object, same-pick |
+| `scissors` | `paper`, `scissors` | cross-object, same-pick |
+
+Same-pick rounds are valid Scorey wins. They do not fall back to tie logic.
+
+Ownership boundary:
+
+| Field | Owner | Job |
+| --- | --- | --- |
+| `user_pick` | runtime | preserve the selected fixed pick |
+| `scorey_pick` | runtime | enforce valid routing |
+| `route_family` | runtime | distinguish cross-object from same-pick logic |
+| `winning_state` | model | explain why Scorey's version wins |
+| `worse_state` | model | explain why the user's version loses |
+| `scoreboard_claim` | model | provide a small unfair score-side claim |
+| final round template | runtime | compose labels, prose shape, and closing tag |
+
+Current final round shape:
+
+```text
+you: [rock|paper|scissors]
+me: [rock|paper|scissors]
+
+my [scorey pick] beats your [user pick] because my [scorey pick] was/were [winning state] and your [user pick] was/were [worse state].
+
+me: [scorey score], you: [scoreboard claim]
+
+scorey.
+```
+
+The runtime owns the labels, ordering, and composition. The score line must
+present Scorey as ahead after the round.
 
 ## Eval Path
 
-No eval storage is tracked yet.
+Eval data now lives in `.local/evals.sqlite`.
 
-The intended eval shape is:
+The current tracked shape is intentionally small:
 
-- local storage under `.local/`
-- binary human judgment
-- one active eval focus at a time
-- explicit separation between top-level product judgment and downstream lenses
+- generated or recorded rounds live in `eval_outputs`
+- human judgments are append-only in `eval_judgments`
+- the current top-level verdict is mirrored onto the output row for fast listing
+- verdicts stay binary:
+  - `pass`
+  - `fail`
 
-This section should tighten only after the round contract and first eval lane
-are real.
+The current row shape records:
+
+- `user_pick`
+- `scorey_pick`
+- `route_family`
+- `round_text`
+- `source_mode`
+- `model`
+- `current_verdict`
+- `current_note`
+
+The first notebook lane lives in
+`output/jupyter-notebook/scorey-eval-db-walkthrough.ipynb` and uses the same
+module functions as the runtime surface.
+
+The first named eval gate is `Beta 1.0`.
+
+It only judges the pick pair in `scorey_pick, user_pick` order.
+
+`pass` pairs:
+
+- `paper, scissors`
+- `rock, paper`
+- `scissors, rock`
+- `paper, paper`
+- `rock, rock`
+- `scissors, scissors`
+
+`fail` pairs:
+
+- every other `scorey_pick, user_pick` pair
+
+The local sampling lane is intentionally narrower than the live runtime. It
+cycles the fixed picks through deterministic local fixtures, records rows into
+SQLite, and should be read as population/soak coverage rather than a diversity
+claim.
 
 ## Contracts
 
 - The runtime stays local and CLI-first.
-- The default runtime path stays agent-backed once it exists.
+- The default runtime path stays agent-backed.
 - The deterministic local path stays beside the live path.
 - The prompt surface stays fixed to `rock`, `paper`, and `scissors`.
+- Valid Scorey routes stay narrow and same-pick rounds are not ties.
+- The runtime owns route enforcement and final round composition.
+- The local path stays deterministic.
 - The default user path opens the app loop.
 - Operator commands stay separate from the app loop.
+- Eval storage stays local and SQLite-backed.
 - Eval verdicts stay binary:
   - `pass`
   - `fail`
