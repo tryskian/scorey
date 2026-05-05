@@ -75,10 +75,10 @@ Current runtime surfaces:
 - `scorey eval-list --limit 10 --verdict pending` lists only pending eval rows
 - `scorey eval-review-sample --limit 12` lists the newest pending row per model/pair sample
 - `scorey eval-judge 17922 pass --note "route-valid and legible"` records one human verdict
-- `scorey eval-beta-1 --limit 10` runs the current picks gate against recent rows
+- `scorey research-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
-- `scorey eval-sample-local --count 30 --pattern beta-1-coverage` records all
-  six `Beta 1.0` pass pairs in a deterministic cycle
+- `scorey eval-sample-local --count 30 --pattern research-beta-1-coverage`
+  records all six `Research Beta 1.0` pass pairs in a deterministic cycle
 - `scorey eval-sample-local --count 30 --pair rock,paper --pair scissors,rock`
   records a focused local pair cycle for a rock win/loss lane
 - `make caffeinate` keeps the display awake on macOS during active sessions
@@ -110,15 +110,15 @@ Current project posture:
 
 Current named gate:
 
-- `Beta 1.0`
+- `Research Beta 1.0`
 - picks only
 - `scorey_pick, user_pick` orientation
 - `pass` on reverse gameplay routes and same-pick loophole routes
 - `fail` on every other pair
 
-Current tracked eval beta:
+Current tracked research beta:
 
-- `Beta Eval 2.0`
+- `Research Beta 2.0`
 - focused object lanes
 - local lane set:
   - rock: complete
@@ -137,11 +137,11 @@ Choose one lane at a time:
   - keep route enforcement and composition in the runtime
   - polish the interactive app only if it helps the core object
 - eval:
-  - keep `Beta 1.0` as the routing gate
-  - use `Beta Eval 2.0` for focused object-lane runs
+  - keep `Research Beta 1.0` as the routing gate
+  - use `Research Beta 2.0` for focused object-lane runs
   - keep the gate read-only until a stored judgment path earns a wider surface
   - use local `baseline` sampling for soak/population, not for diversity claims
-  - use local `beta-1-coverage` sampling when the full pass-pair truth table matters
+  - use local `research-beta-1-coverage` sampling when the full pass-pair truth table matters
   - use explicit local pair cycles when a research lane needs one object in a
     narrow win/loss role
   - rock lane: complete and stable

@@ -18,8 +18,8 @@ class EvalSamplingTests(TestCase):
                 summary = sample_local_eval_outputs(count=3)
 
                 self.assertEqual(summary.recorded, 3)
-                self.assertEqual(summary.beta_1_pass, 3)
-                self.assertEqual(summary.beta_1_fail, 0)
+                self.assertEqual(summary.research_beta_1_pass, 3)
+                self.assertEqual(summary.research_beta_1_fail, 0)
                 self.assertIsNotNone(summary.first_output_id)
                 self.assertIsNotNone(summary.last_output_id)
 
@@ -41,17 +41,20 @@ class EvalSamplingTests(TestCase):
                     ],
                 )
 
-    def test_sample_local_eval_outputs_beta_1_coverage_cycles_all_pass_pairs(
+    def test_sample_local_eval_outputs_research_beta_1_coverage_cycles_all_pass_pairs(
         self,
     ) -> None:
         with TemporaryDirectory() as tmpdir:
             db_path = Path(tmpdir) / "evals.sqlite"
             with patch("scorey.eval_db.EVAL_DB_PATH", db_path):
-                summary = sample_local_eval_outputs(count=6, pattern="beta-1-coverage")
+                summary = sample_local_eval_outputs(
+                    count=6,
+                    pattern="research-beta-1-coverage",
+                )
 
                 self.assertEqual(summary.recorded, 6)
-                self.assertEqual(summary.beta_1_pass, 6)
-                self.assertEqual(summary.beta_1_fail, 0)
+                self.assertEqual(summary.research_beta_1_pass, 6)
+                self.assertEqual(summary.research_beta_1_fail, 0)
 
                 rows = list_outputs(db_path, limit=6)
                 observed_pairs = {
@@ -81,8 +84,8 @@ class EvalSamplingTests(TestCase):
                 )
 
                 self.assertEqual(summary.recorded, 4)
-                self.assertEqual(summary.beta_1_pass, 4)
-                self.assertEqual(summary.beta_1_fail, 0)
+                self.assertEqual(summary.research_beta_1_pass, 4)
+                self.assertEqual(summary.research_beta_1_fail, 0)
 
                 rows = list_outputs(db_path, limit=4)
                 observed_pairs = [

@@ -236,14 +236,14 @@ into implementation authorship.
   still behaving like a real persistence surface. The notebook is for following
   along, not for inventing a separate eval system.
 
-## D-015: Beta 1.0 judges only pick routing
+## D-015: Research Beta 1.0 judges only pick routing
 
 - Date: `2026-05-04`
 - Category: `eval_quality`
 - Tags: `beta_1_0`, `pick_routing`, `truth_table`, `binary_gate`
 - Provenance: `human-led method decision`
 - Decision:
-  - name the first active gate `Beta 1.0`
+  - name the first active gate `Research Beta 1.0`
   - judge only the pick pair in `scorey_pick, user_pick` order
   - `pass`:
     - `paper, scissors`
@@ -299,8 +299,8 @@ into implementation authorship.
 - Decision:
   - keep `baseline` as the default local sampling pattern
   - let `baseline` cycle the narrow local fixture subset for soak/population runs
-  - add `beta-1-coverage` as a second deterministic local pattern
-  - let `beta-1-coverage` cycle all six `Beta 1.0` pass pairs evenly
+  - add `research-beta-1-coverage` as a second deterministic local pattern
+  - let `research-beta-1-coverage` cycle all six `Research Beta 1.0` pass pairs evenly
 - Why: The first hour-long local soak proved the storage path and gate but only
   exercised three valid pass pairs. Keeping soak and full pass-table coverage as
   separate explicit patterns makes the signal clearer without broadening local
@@ -318,25 +318,25 @@ into implementation authorship.
   - support the current rock lane as:
     - `rock,paper`
     - `scissors,rock`
-- Why: After the broad `Beta 1.0` pass-table coverage run, the next research
+- Why: After the broad `Research Beta 1.0` pass-table coverage run, the next research
   step is to inspect one object in a tighter role. Explicit pair cycles make
   that lane first-class without turning the local sampler into a pile of
   one-off named patterns.
 
-## D-020: Beta Eval 2.0 uses focused object lanes
+## D-020: Research Beta 2.0 uses focused object lanes
 
 - Date: `2026-05-05`
 - Category: `eval_quality`
 - Tags: `beta_eval_2_0`, `focused_lanes`, `object_roles`, `one_focus`
 - Provenance: `human-led method decision`
 - Decision:
-  - treat the next active eval architecture as `Beta Eval 2.0`
-  - keep `Beta 1.0` as the routing gate underneath it
+  - treat the next active eval architecture as `Research Beta 2.0`
+  - keep `Research Beta 1.0` as the routing gate underneath it
   - use explicit local pair cycles to isolate one object across a win role and a loss role
   - start with the rock lane:
     - `rock,paper`
     - `scissors,rock`
-- Why: Once the full `Beta 1.0` pass table was stable, the next useful question
+- Why: Once the full `Research Beta 1.0` pass table was stable, the next useful question
   was not whether Scorey could route at all, but whether one object could stay
   stable when forced through both sides of the rigged round. That is a real
   shift in eval shape, so it earns its own beta note instead of hiding inside

@@ -57,9 +57,9 @@ need to inspect, check, or advance the repo.
 | list only pending eval rows | `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending` |
 | list a stratified pending review sample | `make eval-review-sample EVAL_LIMIT=12` |
 | record one human verdict | `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'` |
-| run the Beta 1.0 picks gate | `make eval-beta1 EVAL_LIMIT=10` |
+| run the Research Beta 1.0 picks gate | `make research-beta1 EVAL_LIMIT=10` |
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
-| record a six-pair `Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=beta-1-coverage` |
+| record a six-pair `Research Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage` |
 | record an explicit local pair cycle | `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'` |
 | run end-of-day preflight | `make eod-preflight` |
 | run end-of-day closeout | `make eod` |
@@ -108,10 +108,15 @@ Storage:
 - `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending`
 - `make eval-review-sample EVAL_LIMIT=12`
 - `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
-- `make eval-beta1 EVAL_LIMIT=10`
+- `make research-beta1 EVAL_LIMIT=10`
 - `make eval-sample-local EVAL_COUNT=30`
-- `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=beta-1-coverage`
+- `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage`
 - `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'`
+
+Compatibility aliases:
+
+- `scorey eval-beta-1 --limit 10`
+- `make eval-beta1 EVAL_LIMIT=10`
 
 Notebook:
 
@@ -124,9 +129,9 @@ Current posture:
 - one notebook walkthrough beside the operator path
 - explicit human judgments now have a first-class operator command
 - stratified pending review now has a first-class operator command
-- `Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
+- `Research Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
 - local `baseline` sampling is a soak/population lane, not a diversity lane
-- local `beta-1-coverage` sampling cycles all six `Beta 1.0` pass pairs evenly
+- local `research-beta-1-coverage` sampling cycles all six `Research Beta 1.0` pass pairs evenly
 - explicit local pair cycles let the research lane isolate narrow lanes like
   `rock,paper` and `scissors,rock`
 
@@ -165,9 +170,9 @@ For eval storage changes:
 - `make eval-list EVAL_LIMIT=5 EVAL_VERDICT=pending`
 - `make eval-review-sample EVAL_LIMIT=6`
 - `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
-- `make eval-beta1 EVAL_LIMIT=5`
+- `make research-beta1 EVAL_LIMIT=5`
 - `make eval-sample-local EVAL_COUNT=9`
-- `make eval-sample-local EVAL_COUNT=12 EVAL_PATTERN=beta-1-coverage`
+- `make eval-sample-local EVAL_COUNT=12 EVAL_PATTERN=research-beta-1-coverage`
 - `make eval-sample-local EVAL_COUNT=8 EVAL_PAIRS='rock,paper scissors,rock'`
 - `make check`
 - `make package-check`
@@ -225,7 +230,7 @@ Current day-zero posture:
 - start with the round contract before broader fit judgments
 
 The storage shape now exists for the top-level verdict. Additional lens names
-and sidecar judgment tables are still intentionally pending beyond `Beta 1.0`.
+and sidecar judgment tables are still intentionally pending beyond `Research Beta 1.0`.
 
 ## Command Ownership
 

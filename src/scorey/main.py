@@ -21,9 +21,9 @@ from scorey.eval_db import (
     list_review_sample,
 )
 from scorey.eval_gates import (
-    BETA_1_DISPLAY_NAME,
-    beta_1_pass_pairs,
-    evaluate_beta_1,
+    RESEARCH_BETA_1_DISPLAY_NAME,
+    evaluate_research_beta_1,
+    research_beta_1_pass_pairs,
     summarise_gate_results,
 )
 from scorey.eval_sampling import (
@@ -85,11 +85,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Optionally filter rows by current human verdict.",
     )
 
-    eval_beta_1_parser = subparsers.add_parser(
-        "eval-beta-1",
-        help="Run the Beta 1.0 picks gate against recent eval rows.",
+    research_beta_1_parser = subparsers.add_parser(
+        "research-beta-1",
+        aliases=["eval-beta-1"],
+        help="Run the Research Beta 1.0 picks gate against recent eval rows.",
     )
-    eval_beta_1_parser.add_argument("--limit", type=int, default=20)
+    research_beta_1_parser.add_argument("--limit", type=int, default=20)
 
     eval_review_sample_parser = subparsers.add_parser(
         "eval-review-sample",
@@ -422,14 +423,16 @@ def command_eval_list(limit: int, verdict: str | None) -> int:
     return 0
 
 
-def command_eval_beta_1(limit: int) -> int:
+def command_research_beta_1(limit: int) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
     rows = list_outputs(db_path, limit=limit)
 
-    print(f"{BETA_1_DISPLAY_NAME} gate: picks only (`scorey_pick`, `user_pick`)")
+    print(
+        f"{RESEARCH_BETA_1_DISPLAY_NAME} gate: picks only (`scorey_pick`, `user_pick`)"
+    )
     print("pass pairs:")
-    for scorey_pick, user_pick in beta_1_pass_pairs():
+    for scorey_pick, user_pick in research_beta_1_pass_pairs():
         print(f"- {scorey_pick} / {user_pick}")
     print("fail: all other scorey/user pick pairs.")
 
@@ -439,7 +442,7 @@ def command_eval_beta_1(limit: int) -> int:
         return 0
 
     results = [
-        evaluate_beta_1(
+        evaluate_research_beta_1(
             user_pick=str(row["user_pick"]),
             scorey_pick=str(row["scorey_pick"]),
         )
@@ -448,7 +451,7 @@ def command_eval_beta_1(limit: int) -> int:
     summary = summarise_gate_results(results)
     print("")
     print(
-        f"{BETA_1_DISPLAY_NAME} counts: "
+        f"{RESEARCH_BETA_1_DISPLAY_NAME} counts: "
         f"total={summary['total']} pass={summary['pass']} fail={summary['fail']}"
     )
     print("")
@@ -549,7 +552,10 @@ def command_eval_sample_local(
         print(f"pattern={pattern or 'baseline'}")
     print(
         f"recorded={summary.recorded} "
-        f"beta_1_pass={summary.beta_1_pass} beta_1_fail={summary.beta_1_fail}"
+        "research_beta_1_pass="
+        f"{summary.research_beta_1_pass} "
+        "research_beta_1_fail="
+        f"{summary.research_beta_1_fail}"
     )
     print(f"elapsed_seconds={summary.elapsed_seconds:.2f}")
     if summary.first_output_id is not None and summary.last_output_id is not None:
@@ -572,8 +578,8 @@ def main(argv: list[str] | None = None) -> int:
         return command_eval_init()
     if args.command == "eval-list":
         return command_eval_list(args.limit, args.verdict)
-    if args.command == "eval-beta-1":
-        return command_eval_beta_1(args.limit)
+    if args.command in {"research-beta-1", "eval-beta-1"}:
+        return command_research_beta_1(args.limit)
     if args.command == "eval-review-sample":
         return command_eval_review_sample(args.limit)
     if args.command == "eval-judge":

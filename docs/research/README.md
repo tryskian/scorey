@@ -8,9 +8,9 @@ Raw run notes, operator poking, and private scratch material stay in the local `
 
 ## Current Beta
 
-Current tracked eval beta:
+Current tracked research beta:
 
-- `Beta Eval 2.0`
+- `Research Beta 2.0`
 - `focused object lanes`
 
 Current question:
@@ -19,44 +19,41 @@ Can one object stay stable when Scorey is forced to show it as both a win and a 
 
 Current finding:
 
-- `Beta Eval 1.0` proved the narrow routing contract
-- the six-pair coverage run held the full `Beta 1.0` pass table cleanly
-- the first focused rock lane stayed perfectly balanced:
-  - `1790` rows of `rock/paper`
-  - `1790` rows of `scissors/rock`
-- the newest readback on that lane stayed all-pass under `Beta 1.0`
-- the focused paper lane also held cleanly:
-  - `1790` rows of `paper/scissors`
-  - `1789` rows of `rock/paper`
-- the newest readback on that lane stayed all-pass under `Beta 1.0`
+- `Research Beta 1.0` proved the narrow routing contract
+- `Research Beta 2.0` showed that each object lane can hold cleanly on the local deterministic path
+- all three focused lanes completed with stable balance under the same routing gate:
+  - rock:
+    - `1790` rows of `rock/paper`
+    - `1790` rows of `scissors/rock`
+  - paper:
+    - `1790` rows of `paper/scissors`
+    - `1789` rows of `rock/paper`
+  - scissors:
+    - `1790` rows of `scissors/rock`
+    - `1789` rows of `paper/scissors`
 - the local deterministic queue is now fully judged:
   - `17,922` pass
   - `0` fail
   - `0` pending
-  - the reviewed local notes now cover the local fixture, six-pair coverage, and explicit lane runs
 
 Current clean probe:
 
-- one object at a time
-- one winning role plus one losing role
-- explicit local pair cycles in `scorey_pick,user_pick` order
-- about one hour as the useful long-run checkpoint
-- completed lanes:
-  - rock
-  - paper
-  - scissors
+- live gameplay through the real CLI
+- short judged batches before any wider sweep
+- keep the local deterministic queue as baseline evidence, not as the active growth surface
+- widen into prose, tone, or scoreboard judgement only after the live path stays on-pick
 
 ## Beta Map
 
 | Beta | Question | What Changed |
 | --- | --- | --- |
-| `Beta Eval 1.0` | Does Scorey choose a valid rigged route? | The first gate narrowed to pick routing only. |
-| `Beta Eval 2.0` | Can one object hold a stable win/loss lane? | Explicit local pair cycles isolate one object across both roles in one focused lane. |
+| `Research Beta 1.0` | Does Scorey choose a valid rigged route? | The first gate narrowed to pick routing only. |
+| `Research Beta 2.0` | Can one object hold a stable win/loss lane? | Explicit local pair cycles isolate one object across both roles in one focused lane. |
 
 Read in order:
 
-1. [Beta Eval 1.0: Pick Routing First](./BETA_1_PICK_ROUTING.md)
-2. [Beta Eval 2.0: Focused Object Lanes](./BETA_2_OBJECT_LANES.md)
+1. [Research Beta 1.0: Pick Routing First](./BETA_1_PICK_ROUTING.md)
+2. [Research Beta 2.0: Focused Object Lanes](./BETA_2_OBJECT_LANES.md)
 
 ## How To Read The Betas
 
@@ -64,8 +61,8 @@ These betas are research architectures. They are not app release versions, packa
 
 Each beta marks a real change in what the evaluation is asking:
 
-- `Beta Eval 1.0` proved route validity at the pick level
-- `Beta Eval 2.0` keeps the same gate but changes the sampling shape to inspect one object lane at a time
+- `Research Beta 1.0` proved route validity at the pick level
+- `Research Beta 2.0` keeps the same gate but changes the sampling shape to inspect one object lane at a time
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 
@@ -73,8 +70,8 @@ Later betas do not erase earlier ones. They narrow what each verdict is allowed 
 
 ```mermaid
 flowchart LR
-  B1["Beta Eval 1.0<br/>pick routing only"]
-  B2["Beta Eval 2.0<br/>focused object lanes"]
+  B1["Research Beta 1.0<br/>pick routing only"]
+  B2["Research Beta 2.0<br/>focused object lanes"]
 
   S1["six valid pass pairs<br/>and nothing else"]
   S2["one object isolated<br/>across win and loss roles"]
@@ -90,6 +87,8 @@ Parked lanes:
 
 - object lanes:
   - complete for the current local pass
+- live gameplay:
+  - treat the real CLI path as the next meaningful signal
 - later eval lenses:
   - only widen into round prose, tone, or scoreboard judgement after the object lanes are stable
 - research visuals:
@@ -98,17 +97,30 @@ Parked lanes:
 
 ## Polinko Contrast
 
-Scorey uses the same **[Polinko research model](https://github.com/tryskian/polinko)**, but it is a smaller instrument shaped more like **[Probaboracle](https://github.com/tryskian/probaboracle)**.
+Scorey uses the same **[Polinko research model](https://github.com/tryskian/polinko)**, but it is a smaller instrument.
 
-It keeps the same discipline:
+```mermaid
+flowchart LR
+  P["Polinko"]
+  P1["broader research system"]
+  P2["many runtime and eval surfaces"]
+  P3["binary fail pressure across products"]
 
-- local CLI-first runtime
-- narrow interaction surface
-- agent-backed generation
-- binary human judgement
-- repo-native docs and diagrams
+  Q["Scorey"]
+  Q1["rigged round instrument"]
+  Q2["pick-routed round generation"]
+  Q3["routing-first and lane-shaped evals"]
 
-The toy object is different:
+  S["shared line\\nhuman-led research\\nbinary eval discipline\\nrepo-native docs and diagrams"]
 
-- Probaboracle studies answer-shaped non-answers.
-- Scorey studies rigged round rulings.
+  P --> P1
+  P --> P2
+  P --> P3
+
+  Q --> Q1
+  Q --> Q2
+  Q --> Q3
+
+  P --- S
+  Q --- S
+```
