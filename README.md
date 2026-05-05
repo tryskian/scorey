@@ -1,5 +1,7 @@
 # Scorey
 
+![Research Beta](https://img.shields.io/badge/research_beta-2.0%20focused%20object%20slices-E15759)
+
 ## rock, paper, scissors, scorey
 
 scorey keeps the score.<br>
@@ -9,14 +11,26 @@ Scorey is a small, local, agent-backed CLI mini chatbot in the **[Polinko resear
 
 It is a rigged rock, paper, scissors spinoff of **[Probaboracle](https://github.com/tryskian/probaboracle)**. It inherits the Probaboracle-style idea of a narrow, agent-backed generation pipeline, but its surface is more bratty and game-shaped.
 
-Scorey does not generate generic jokes about winning. It preserves the round:
+It only accepts three picks:
 
-- what you picked
-- what scorey picked
-- why your pick failed
-- why scorey's pick worked
-- why scorey still wins
-- what the scoreboard now claims
+- `rock`
+- `paper`
+- `scissors`
+
+Current tracked research beta:
+
+- `Beta Eval 2.0`
+- `focused object slices`
+
+That narrow surface is the point. Scorey is not trying to be a general chat tool or a generic joke machine. It is a small instrument for studying whether a model can preserve a rigged round, stay pick-specific, and keep unfair logic legible inside tight interaction guardrails.
+
+In this repo, major betas are research architectures, and minor versions tighten the active method without changing the whole eval shape.
+
+## What This Repo Demonstrates
+
+- constrained round preservation through a fixed pick surface
+- runtime-owned routing and composition around a narrow agent seam
+- binary eval architectures from pick routing to focused object slices
 
 ## Run It
 
@@ -25,52 +39,23 @@ make install
 scorey
 ```
 
-For the deterministic local fixture lane:
+The app opens a compact terminal loop. Choose `rock`, `paper`, or `scissors` with the arrow keys, press `enter`, or hit `esc` to exit.
+
+For the deterministic local path:
 
 ```sh
 scorey --local
-scorey --local play rock
 ```
 
-For one live round without opening the app loop:
-
-```sh
-scorey play rock
-```
-
-## What This Repo Is For
-
-- constrained round reasoning
-- fixed pick interaction
-- unfair but legible score rulings
-- binary human judgment
-- local-first toy research
-
-## Current State
-
-- The round contract is locked in tracked docs.
-- A small working runtime now exists in `src/scorey/`.
-- A first picks-only `Beta 1.0` gate now exists in `src/scorey/eval_gates.py`.
-- A first eval storage lane now exists in `src/scorey/eval_db.py`.
-- A deterministic local sampler now exists in `src/scorey/eval_sampling.py`.
-- The local eval lane now supports both baseline soak sampling and full `Beta 1.0` pass-pair coverage sampling.
-- It also supports focused local pair cycles for narrower research slices.
-- A follow-along notebook now lives in `output/jupyter-notebook/`.
-- The next active kernel is eval population and human judgment flow, or runtime polish.
+The operator commands, eval workflow, and setup checks live in the [runtime runbook](./docs/runtime/RUNBOOK.md).
 
 ## Read Next
 
-- [docs/governance/CHARTER.md](./docs/governance/CHARTER.md)
-  - durable rules and scope
-- [docs/governance/DECISIONS.md](./docs/governance/DECISIONS.md)
-  - durable engineering, runtime, and eval decisions
-- [docs/runtime/ARCHITECTURE.md](./docs/runtime/ARCHITECTURE.md)
-  - stable system shape as it lands
-- [docs/runtime/RUNBOOK.md](./docs/runtime/RUNBOOK.md)
-  - operator procedure and validation
-- [docs/governance/SESSION_HANDOFF.md](./docs/governance/SESSION_HANDOFF.md)
-  - current checkpoint and next kernel
 - [docs/research/README.md](./docs/research/README.md)
-  - current research framing
-- [docs/diagrams/PIPELINE.md](./docs/diagrams/PIPELINE.md)
-  - canonical round and eval flow
+  - beta map and research reading path
+- [docs/governance/DECISIONS.md](./docs/governance/DECISIONS.md)
+  - durable runtime and eval decisions
+
+---
+
+*Scorey is not a resource for fairness, accurate scoring, or mercy.*
