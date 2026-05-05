@@ -6,17 +6,21 @@ PY := $(shell if [ -x "$(BIN)/python" ]; then echo "$(BIN)/python"; else echo "$
 PICK ?= rock
 LOCAL ?=
 EVAL_LIMIT ?= 10
+EVAL_VERDICT ?=
 EVAL_COUNT ?= 30
 EVAL_DURATION_SECONDS ?=
 EVAL_INTERVAL_SECONDS ?= 0
 EVAL_PATTERN ?= baseline
 EVAL_PAIRS ?=
+OUTPUT_ID ?=
+VERDICT ?=
+NOTE ?=
 CAFFEINATE_PID_FILE ?= /tmp/scorey-caffeinate.pid
 CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
 CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-beta1 eval-sample-local caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
+.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-beta1 eval-sample-local caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
 
 install:
 	$(PYTHON) -m venv $(VENV)
@@ -123,7 +127,10 @@ eval-init:
 	PYTHONPATH=src $(PY) -m scorey eval-init
 
 eval-list:
-	PYTHONPATH=src $(PY) -m scorey eval-list --limit $(EVAL_LIMIT)
+	PYTHONPATH=src $(PY) -m scorey eval-list --limit $(EVAL_LIMIT) $(if $(EVAL_VERDICT),--verdict $(EVAL_VERDICT),)
+
+eval-judge:
+	PYTHONPATH=src $(PY) -m scorey eval-judge $(OUTPUT_ID) $(VERDICT) --note "$(NOTE)"
 
 eval-beta1:
 	PYTHONPATH=src $(PY) -m scorey eval-beta-1 --limit $(EVAL_LIMIT)

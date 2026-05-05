@@ -54,6 +54,8 @@ need to inspect, check, or advance the repo.
 | build the package | `make package-check` |
 | initialize the eval database | `make eval-init` |
 | list recent eval rows | `make eval-list EVAL_LIMIT=10` |
+| list only pending eval rows | `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending` |
+| record one human verdict | `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'` |
 | run the Beta 1.0 picks gate | `make eval-beta1 EVAL_LIMIT=10` |
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
 | record a six-pair `Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=beta-1-coverage` |
@@ -102,6 +104,8 @@ Storage:
 
 - `make eval-init`
 - `make eval-list EVAL_LIMIT=10`
+- `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending`
+- `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
 - `make eval-beta1 EVAL_LIMIT=10`
 - `make eval-sample-local EVAL_COUNT=30`
 - `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=beta-1-coverage`
@@ -116,6 +120,7 @@ Current posture:
 - local SQLite only
 - binary top-level verdicts only
 - one notebook walkthrough beside the operator path
+- explicit human judgments now have a first-class operator command
 - `Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
 - local `baseline` sampling is a soak/population lane, not a diversity lane
 - local `beta-1-coverage` sampling cycles all six `Beta 1.0` pass pairs evenly
@@ -154,6 +159,8 @@ For eval storage changes:
 
 - `make eval-init`
 - `make eval-list EVAL_LIMIT=5`
+- `make eval-list EVAL_LIMIT=5 EVAL_VERDICT=pending`
+- `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
 - `make eval-beta1 EVAL_LIMIT=5`
 - `make eval-sample-local EVAL_COUNT=9`
 - `make eval-sample-local EVAL_COUNT=12 EVAL_PATTERN=beta-1-coverage`

@@ -9,6 +9,7 @@ from scorey.config import EVAL_DB_PATH, USER_PICKS
 from scorey.pipeline import RoundState
 
 VERDICTS: tuple[str, ...] = ("pass", "fail")
+LIST_VERDICTS: tuple[str, ...] = VERDICTS + ("pending",)
 SOURCE_MODES: tuple[str, ...] = ("local", "live")
 ROUTE_FAMILIES: tuple[str, ...] = ("cross-object", "same-pick")
 
@@ -144,7 +145,7 @@ def list_outputs(
 ) -> list[sqlite3.Row]:
     if limit < 1:
         raise ValueError("Limit must be at least 1.")
-    if verdict is not None and verdict not in VERDICTS:
+    if verdict is not None and verdict not in LIST_VERDICTS:
         raise ValueError(f"Unsupported verdict '{verdict}'.")
 
     with closing(connect(db_path)) as conn, conn:
@@ -169,7 +170,7 @@ def list_outputs(
                 """,
                 (limit,),
             )
-        else:
+        elif verdict in VERDICTS:
             cursor = conn.execute(
                 """
                 SELECT
@@ -190,7 +191,54 @@ def list_outputs(
                 """,
                 (verdict, limit),
             )
+        else:
+            cursor = conn.execute(
+                """
+                SELECT
+                    id,
+                    user_pick,
+                    scorey_pick,
+                    route_family,
+                    round_text,
+                    source_mode,
+                    model,
+                    current_verdict,
+                    current_note,
+                    created_at
+                FROM eval_outputs
+                WHERE current_verdict IS NULL
+                ORDER BY id DESC
+                LIMIT ?
+                """,
+                (limit,),
+            )
         return list(cursor.fetchall())
+
+
+def get_output(db_path: Path | None, output_id: int) -> sqlite3.Row:
+    with closing(connect(db_path)) as conn, conn:
+        conn.executescript(SCHEMA)
+        row = conn.execute(
+            """
+            SELECT
+                id,
+                user_pick,
+                scorey_pick,
+                route_family,
+                round_text,
+                source_mode,
+                model,
+                current_verdict,
+                current_note,
+                created_at
+            FROM eval_outputs
+            WHERE id = ?
+            """,
+            (output_id,),
+        ).fetchone()
+        if row is None:
+            raise ValueError(f"Output id {output_id} does not exist.")
+        return row
 
 
 def judge_output(

@@ -25,6 +25,14 @@ Current finding:
   - `1790` rows of `rock/paper`
   - `1790` rows of `scissors/rock`
 - the newest readback on that lane stayed all-pass under `Beta 1.0`
+- the focused paper lane also held cleanly:
+  - `1790` rows of `paper/scissors`
+  - `1789` rows of `rock/paper`
+- the newest readback on that lane stayed all-pass under `Beta 1.0`
+- the first stratified human judgment sweep is now underway:
+  - `12` pass
+  - `0` fail
+  - one reviewed row per model/pair sample across the local fixture, six-pair coverage, and explicit lane runs
 
 Current clean probe:
 
@@ -32,9 +40,10 @@ Current clean probe:
 - one winning role plus one losing role
 - explicit local pair cycles in `scorey_pick,user_pick` order
 - about one hour as the useful long-run checkpoint
-- active lane:
-  - `paper,scissors`
-  - `rock,paper`
+- completed lanes:
+  - rock
+  - paper
+  - scissors
 
 ## Beta Map
 
@@ -79,7 +88,7 @@ Plans are useful, but they are not evidence. They do not become active method un
 Parked lanes:
 
 - object lanes:
-  - run the same focused lane shape for `scissors`
+  - complete for the current local pass
 - later eval lenses:
   - only widen into round prose, tone, or scoreboard judgement after the object lanes are stable
 - research visuals:

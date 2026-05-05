@@ -72,6 +72,8 @@ Current runtime surfaces:
 - `scorey --local play rock` plays one deterministic local round
 - `scorey eval-init` initializes the local eval database
 - `scorey eval-list --limit 10` lists recent eval rows
+- `scorey eval-list --limit 10 --verdict pending` lists only pending eval rows
+- `scorey eval-judge 17922 pass --note "route-valid and legible"` records one human verdict
 - `scorey eval-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
 - `scorey eval-sample-local --count 30 --pattern beta-1-coverage` records all
@@ -86,8 +88,12 @@ A first eval storage lane now exists:
 
 - local SQLite at `.local/evals.sqlite`
 - append-only top-level judgments
+- explicit CLI judgment recording for pending rows
 - a notebook walkthrough in `output/jupyter-notebook/`
 - a deterministic local population path for batch row creation
+- the first stratified human review sweep has begun:
+  - `12` pass
+  - `0` fail
 
 ## Research Snapshot
 
@@ -111,9 +117,10 @@ Current tracked eval beta:
 
 - `Beta Eval 2.0`
 - focused object lanes
-- current live lane:
-  - `paper,scissors`
-  - `rock,paper`
+- local lane set:
+  - rock: complete
+  - paper: complete
+  - scissors: complete
 
 ## Next Kernel
 
@@ -134,6 +141,11 @@ Choose one lane at a time:
   - use local `beta-1-coverage` sampling when the full pass-pair truth table matters
   - use explicit local pair cycles when a research lane needs one object in a
     narrow win/loss role
+  - keep expanding the human judgment sample now that the review lane exists
+  - rock lane: complete and stable
+  - paper lane: complete and stable
+  - scissors lane: complete and stable
+  - next useful move: widen the human judgment sample
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful

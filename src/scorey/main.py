@@ -11,7 +11,14 @@ from pathlib import Path
 from typing import TextIO
 
 from scorey.config import load_settings, require_openai_api_key
-from scorey.eval_db import counts, default_eval_db_path, init_db, list_outputs
+from scorey.eval_db import (
+    counts,
+    default_eval_db_path,
+    get_output,
+    init_db,
+    judge_output,
+    list_outputs,
+)
 from scorey.eval_gates import (
     BETA_1_DISPLAY_NAME,
     beta_1_pass_pairs,
@@ -70,12 +77,30 @@ def build_parser() -> argparse.ArgumentParser:
         help="List recent rows from the local eval database.",
     )
     eval_list_parser.add_argument("--limit", type=int, default=20)
+    eval_list_parser.add_argument(
+        "--verdict",
+        choices=("pass", "fail", "pending"),
+        default=None,
+        help="Optionally filter rows by current human verdict.",
+    )
 
     eval_beta_1_parser = subparsers.add_parser(
         "eval-beta-1",
         help="Run the Beta 1.0 picks gate against recent eval rows.",
     )
     eval_beta_1_parser.add_argument("--limit", type=int, default=20)
+
+    eval_judge_parser = subparsers.add_parser(
+        "eval-judge",
+        help="Record a human verdict for one eval output.",
+    )
+    eval_judge_parser.add_argument("output_id", type=int)
+    eval_judge_parser.add_argument("verdict", choices=("pass", "fail"))
+    eval_judge_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short human note explaining the verdict.",
+    )
 
     eval_sample_local_parser = subparsers.add_parser(
         "eval-sample-local",
@@ -350,28 +375,24 @@ def _format_scorey_user_pair(scorey_pick: str, user_pick: str) -> str:
 
 
 def _format_eval_row(db_path: Path, row_id: int) -> str:
-    rows = list_outputs(db_path, limit=1000)
-    for row in rows:
-        if row["id"] != row_id:
-            continue
-        verdict = row["current_verdict"] or "pending"
-        lines = [
-            (
-                f"[{row['id']}] "
-                f"{_format_scorey_user_pair(row['scorey_pick'], row['user_pick'])} "
-                f"({row['route_family']}, {row['source_mode']}, {verdict})"
-            ),
-            f"model: {row['model']}",
-            row["round_text"],
-        ]
-        note = row["current_note"]
-        if note:
-            lines.append(f"note: {note}")
-        return "\n".join(lines)
-    raise ValueError(f"Output id {row_id} does not exist.")
+    row = get_output(db_path, row_id)
+    verdict = row["current_verdict"] or "pending"
+    lines = [
+        (
+            f"[{row['id']}] "
+            f"{_format_scorey_user_pair(row['scorey_pick'], row['user_pick'])} "
+            f"({row['route_family']}, {row['source_mode']}, {verdict})"
+        ),
+        f"model: {row['model']}",
+        row["round_text"],
+    ]
+    note = row["current_note"]
+    if note:
+        lines.append(f"note: {note}")
+    return "\n".join(lines)
 
 
-def command_eval_list(limit: int) -> int:
+def command_eval_list(limit: int, verdict: str | None) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
     summary = counts(db_path)
@@ -381,7 +402,7 @@ def command_eval_list(limit: int) -> int:
         f"fail={summary['fail']} pending={summary['pending']}"
     )
 
-    rows = list_outputs(db_path, limit=limit)
+    rows = list_outputs(db_path, limit=limit, verdict=verdict)
     if not rows:
         print("no eval outputs yet.")
         return 0
@@ -438,6 +459,22 @@ def command_eval_beta_1(limit: int) -> int:
         print(row["round_text"])
         if row["current_note"]:
             print(f"human note: {row['current_note']}")
+    return 0
+
+
+def command_eval_judge(output_id: int, verdict: str, note: str) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        judge_output(db_path, output_id, verdict, note)
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"judged output {output_id}: {verdict}")
+    print(f"note: {note}")
+    print("")
+    print(_format_eval_row(db_path, output_id))
     return 0
 
 
@@ -502,9 +539,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "eval-init":
         return command_eval_init()
     if args.command == "eval-list":
-        return command_eval_list(args.limit)
+        return command_eval_list(args.limit, args.verdict)
     if args.command == "eval-beta-1":
         return command_eval_beta_1(args.limit)
+    if args.command == "eval-judge":
+        return command_eval_judge(args.output_id, args.verdict, args.note)
     if args.command == "eval-sample-local":
         return command_eval_sample_local(
             count=args.count,

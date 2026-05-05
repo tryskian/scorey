@@ -59,6 +59,29 @@ class MainCommandTests(TestCase):
         self.assertIn("eval counts: total=0 pass=0 fail=0 pending=0", output)
         self.assertIn("no eval outputs yet.", output)
 
+    def test_eval_list_pending_filter_prints_pending_rows(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="my scissors beats your paper because snacks.",
+                source_mode="local",
+                model="local-fixture",
+            )
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(["eval-list", "--limit", "5", "--verdict", "pending"])
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("eval counts: total=1 pass=0 fail=0 pending=1", output)
+        self.assertIn("(cross-object, local, pending)", output)
+
     def test_eval_beta_1_empty_db_prints_gate_definition(self) -> None:
         stdout = io.StringIO()
         with TemporaryDirectory() as tmpdir:
@@ -109,6 +132,74 @@ class MainCommandTests(TestCase):
         self.assertIn("reason: not a beta 1.0 route", output)
         self.assertIn("scorey=scissors user=rock", output)
         self.assertIn("reason: reverse gameplay route", output)
+
+    def test_eval_judge_updates_output(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            output_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="my scissors beats your rock because snacks.",
+                source_mode="local",
+                model="local-fixture",
+            )
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(
+                        [
+                            "eval-judge",
+                            str(output_id),
+                            "pass",
+                            "--note",
+                            "route-valid and legible",
+                        ]
+                    )
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn(f"judged output {output_id}: pass", output)
+        self.assertIn("note: route-valid and legible", output)
+        self.assertIn("(cross-object, local, pass)", output)
+
+    def test_eval_judge_can_render_older_output_ids(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            first_output_id = None
+            for index in range(1005):
+                output_id = record_output(
+                    db_path,
+                    user_pick="rock",
+                    scorey_pick="scissors",
+                    route_family="cross-object",
+                    round_text=f"row {index}",
+                    source_mode="local",
+                    model="local-fixture",
+                )
+                if first_output_id is None:
+                    first_output_id = output_id
+            assert first_output_id is not None
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(
+                        [
+                            "eval-judge",
+                            str(first_output_id),
+                            "pass",
+                            "--note",
+                            "route-valid and legible",
+                        ]
+                    )
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn(f"judged output {first_output_id}: pass", output)
+        self.assertIn("row 0", output)
 
     def test_eval_sample_local_records_rows(self) -> None:
         stdout = io.StringIO()

@@ -81,7 +81,7 @@ into implementation authorship.
 - Date: `2026-05-04`
 - Category: `workflow_environment`
 - Tags: `docs_stack`, `charter`, `runbook`, `handoff`
-- Provenance: `implementation decision`
+- Provenance: `human-led method decision with implementation decision`
 - Decision:
   - use a compact docs spine:
     - charter
@@ -91,8 +91,8 @@ into implementation authorship.
     - runbook
     - research readme
     - pipeline diagram
-- Why: The project needs a clear instruction surface without dragging in a
-  heavier process shell.
+- Why: The repo needed to follow the tiny toy-docs shape the human lead wanted,
+  and the engineering layer formalized that into the tracked file stack.
 
 ## D-005: Start from the contract outward
 
@@ -154,15 +154,16 @@ into implementation authorship.
 - Date: `2026-05-04`
 - Category: `runtime_engineering`
 - Tags: `composition`, `model_boundary`, `round_contract`
-- Provenance: `implementation decision`
+- Provenance: `human-led method decision with implementation decision`
 - Decision:
   - keep routing, output labels, and final round composition in the runtime
   - let the live model generate only:
     - Scorey's winning state
     - the user's worse state
     - a small scoreboard claim
-- Why: The unstable creative parts should stay generated, but the runtime should
-  own the contract shape so the toy remains legible and easier to evaluate.
+- Why: The human-led method wanted a narrow, evalable boundary, and the
+  engineering layer formalized that by keeping composition in the runtime and
+  generation in a small structured model seam.
 
 ## D-010: Live generation uses structured round fields
 
@@ -197,28 +198,28 @@ into implementation authorship.
 - Date: `2026-05-04`
 - Category: `workflow_environment`
 - Tags: `ruff`, `mypy`, `pytest`, `quality_gates`
-- Provenance: `implementation decision`
+- Provenance: `human-led method decision with implementation decision`
 - Decision:
   - include `ruff`, `mypy`, and `pytest` in the tracked dev toolchain
   - expose them as first-class operator commands
   - make `make check` run formatting checks, linting, typing, tests, and diff hygiene
-- Why: Scorey is small enough that the core quality gates can stay fast and
-  local. If they are not part of the default operator loop, they will drift
-  into optional cleanup instead of baseline discipline.
+- Why: Tooling discipline was an explicit human concern after the previous
+  runtime drifted, and the engineering layer answered that by making the core
+  checks part of the default operator loop.
 
 ## D-013: Pre-commit hooks and branch coverage are part of baseline hygiene
 
 - Date: `2026-05-04`
 - Category: `workflow_environment`
 - Tags: `pre_commit`, `coverage`, `branch_coverage`, `tooling`
-- Provenance: `implementation decision`
+- Provenance: `human-led method decision with implementation decision`
 - Decision:
   - add tracked `pre-commit` hooks for repo hygiene and Python checks
   - install both `pre-commit` and `pre-push` hook types by default
   - add branch-coverage test runs as a first-class operator surface
-- Why: Tooling drift was part of what made the previous runtime sloppy. These
-  checks should be automatic and visible enough that they stay part of the
-  baseline instead of becoming cleanup work.
+- Why: The human lead made tooling drift a first-class problem to solve, and
+  the engineering layer responded by hardening the automatic hook and coverage
+  surface into the repo baseline.
 
 ## D-014: Scorey eval storage starts as a small local SQLite lane
 
@@ -340,3 +341,27 @@ into implementation authorship.
   stable when forced through both sides of the rigged round. That is a real
   shift in eval shape, so it earns its own beta note instead of hiding inside
   operator commands.
+
+## D-021: Human judgments get a first-class CLI path
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `eval_judgment`, `operator_surface`, `pending_queue`
+- Provenance: `human-led method decision with implementation decision`
+- Decision:
+  - let `eval-list` filter for `pending` rows
+  - add `eval-judge` as an explicit operator command for one output at a time
+  - keep human notes attached at judgment time instead of leaving verdicts bare
+- Why: The human lead pushed the repo from generation into actual review, and
+  the engineering layer had to turn that into a normal operator path instead of
+  ad hoc database poking.
+
+## D-022: Human lead called the shift to judgment after noticing 17,922 outputs with no judgments
+
+- Date: `2026-05-05`
+- Category: `eval_quality`
+- Tags: `human_judgment`, `backlog`, `pending_queue`, `review_start`
+- Provenance: `human-led method decision`
+- Decision:
+  - start judging evals after the human lead noticed the database had reached `17,922` outputs with `0` judgments
+- Why: That backlog state made the bottleneck obvious. More row generation without review was no longer adding useful signal.
