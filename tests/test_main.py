@@ -147,3 +147,28 @@ class MainCommandTests(TestCase):
         self.assertIn("local eval sample complete: count=6", output)
         self.assertIn("pattern=beta-1-coverage", output)
         self.assertIn("recorded=6 beta_1_pass=6 beta_1_fail=0", output)
+
+    def test_eval_sample_local_explicit_pairs_report_pair_cycle(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with patch("scorey.eval_db.EVAL_DB_PATH", db_path):
+                    with redirect_stdout(stdout):
+                        result = main(
+                            [
+                                "eval-sample-local",
+                                "--count",
+                                "4",
+                                "--pair",
+                                "rock,paper",
+                                "--pair",
+                                "scissors,rock",
+                            ]
+                        )
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("local eval sample complete: count=4", output)
+        self.assertIn("pairs=rock/paper scissors/rock", output)
+        self.assertIn("recorded=4 beta_1_pass=4 beta_1_fail=0", output)

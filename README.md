@@ -52,6 +52,7 @@ scorey play rock
 - A deterministic local sampler now exists in `src/scorey/eval_sampling.py`.
 - The local eval lane now supports both baseline soak sampling and full
   `Beta 1.0` pass-pair coverage sampling.
+- It also supports focused local pair cycles for narrower research slices.
 - A follow-along notebook now lives in `output/jupyter-notebook/`.
 - The next active kernel is eval population and human judgment flow, or runtime polish.
 

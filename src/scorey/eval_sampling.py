@@ -4,7 +4,7 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from scorey.config import USER_PICKS, local_scorey_pick_for
+from scorey.config import USER_PICKS, local_scorey_pick_for, normalise_pick
 from scorey.eval_db import record_round_state
 from scorey.eval_gates import beta_1_pass_pairs, evaluate_beta_1
 from scorey.pipeline import build_local_round_state_for_pair, compose_round
@@ -20,6 +20,41 @@ class LocalSampleSummary:
     beta_1_pass: int
     beta_1_fail: int
     elapsed_seconds: float
+
+
+def format_local_sample_pair(pair: tuple[str, str]) -> str:
+    return f"{pair[0]}/{pair[1]}"
+
+
+def parse_local_sample_pair_spec(pair_spec: str) -> tuple[str, str]:
+    raw_parts = [part.strip() for part in pair_spec.split(",", maxsplit=1)]
+    if len(raw_parts) != 2 or not raw_parts[0] or not raw_parts[1]:
+        raise ValueError(
+            "Pair specs must be written as 'scorey_pick,user_pick'. "
+            "Example: 'rock,paper'."
+        )
+
+    pair = (
+        normalise_pick(raw_parts[0]),
+        normalise_pick(raw_parts[1]),
+    )
+    if pair not in beta_1_pass_pairs():
+        valid_pairs = ", ".join(
+            format_local_sample_pair(valid_pair) for valid_pair in beta_1_pass_pairs()
+        )
+        raise ValueError(
+            "Unsupported local pair cycle entry "
+            f"'{format_local_sample_pair(pair)}'. Choose from: {valid_pairs}."
+        )
+    return pair
+
+
+def explicit_local_sample_pairs(
+    pair_specs: tuple[str, ...] | list[str],
+) -> tuple[tuple[str, str], ...]:
+    if not pair_specs:
+        raise ValueError("Provide at least one pair spec.")
+    return tuple(parse_local_sample_pair_spec(pair_spec) for pair_spec in pair_specs)
 
 
 def _sample_pairs_for_pattern(pattern: str) -> tuple[tuple[str, str], ...]:
@@ -52,6 +87,7 @@ def sample_local_eval_outputs(
     duration_seconds: float | None = None,
     interval_seconds: float = 0.0,
     pattern: str = "baseline",
+    pair_cycle: tuple[tuple[str, str], ...] | None = None,
     model: str | None = None,
     time_fn: Callable[[], float] = time.monotonic,
     sleep_fn: Callable[[float], None] = time.sleep,
@@ -64,8 +100,12 @@ def sample_local_eval_outputs(
         raise ValueError("Duration must be greater than 0.")
     if interval_seconds < 0:
         raise ValueError("Interval must be at least 0.")
-    sample_pairs = _sample_pairs_for_pattern(pattern)
-    model_name = model or _default_model_for_pattern(pattern)
+    sample_pairs = pair_cycle or _sample_pairs_for_pattern(pattern)
+    model_name = model or (
+        "local-explicit-pair-cycle-batch"
+        if pair_cycle is not None
+        else _default_model_for_pattern(pattern)
+    )
 
     start = time_fn()
     deadline = None if duration_seconds is None else start + duration_seconds

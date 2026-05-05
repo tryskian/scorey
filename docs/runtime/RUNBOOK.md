@@ -57,6 +57,7 @@ need to inspect, check, or advance the repo.
 | run the Beta 1.0 picks gate | `make eval-beta1 EVAL_LIMIT=10` |
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
 | record a six-pair `Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=beta-1-coverage` |
+| record an explicit local pair cycle | `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'` |
 | run end-of-day preflight | `make eod-preflight` |
 | run end-of-day closeout | `make eod` |
 
@@ -104,6 +105,7 @@ Storage:
 - `make eval-beta1 EVAL_LIMIT=10`
 - `make eval-sample-local EVAL_COUNT=30`
 - `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=beta-1-coverage`
+- `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'`
 
 Notebook:
 
@@ -117,6 +119,8 @@ Current posture:
 - `Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
 - local `baseline` sampling is a soak/population lane, not a diversity lane
 - local `beta-1-coverage` sampling cycles all six `Beta 1.0` pass pairs evenly
+- explicit local pair cycles let the research lane isolate narrow slices like
+  `rock,paper` and `scissors,rock`
 
 ## Validation
 
@@ -153,6 +157,7 @@ For eval storage changes:
 - `make eval-beta1 EVAL_LIMIT=5`
 - `make eval-sample-local EVAL_COUNT=9`
 - `make eval-sample-local EVAL_COUNT=12 EVAL_PATTERN=beta-1-coverage`
+- `make eval-sample-local EVAL_COUNT=8 EVAL_PAIRS='rock,paper scissors,rock'`
 - `make check`
 - `make package-check`
 

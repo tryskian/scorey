@@ -4,7 +4,10 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from scorey.eval_db import counts, list_outputs
-from scorey.eval_sampling import sample_local_eval_outputs
+from scorey.eval_sampling import (
+    explicit_local_sample_pairs,
+    sample_local_eval_outputs,
+)
 
 
 class EvalSamplingTests(TestCase):
@@ -64,4 +67,34 @@ class EvalSamplingTests(TestCase):
                         ("rock", "rock"),
                         ("scissors", "scissors"),
                     },
+                )
+
+    def test_sample_local_eval_outputs_with_explicit_pair_cycle(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            with patch("scorey.eval_db.EVAL_DB_PATH", db_path):
+                summary = sample_local_eval_outputs(
+                    count=4,
+                    pair_cycle=explicit_local_sample_pairs(
+                        ("rock,paper", "scissors,rock")
+                    ),
+                )
+
+                self.assertEqual(summary.recorded, 4)
+                self.assertEqual(summary.beta_1_pass, 4)
+                self.assertEqual(summary.beta_1_fail, 0)
+
+                rows = list_outputs(db_path, limit=4)
+                observed_pairs = [
+                    (str(row["scorey_pick"]), str(row["user_pick"]))
+                    for row in reversed(rows)
+                ]
+                self.assertEqual(
+                    observed_pairs,
+                    [
+                        ("rock", "paper"),
+                        ("scissors", "rock"),
+                        ("rock", "paper"),
+                        ("scissors", "rock"),
+                    ],
                 )

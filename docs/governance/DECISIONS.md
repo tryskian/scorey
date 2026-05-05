@@ -304,3 +304,20 @@ into implementation authorship.
   exercised three valid pass pairs. Keeping soak and full pass-table coverage as
   separate explicit patterns makes the signal clearer without broadening local
   mode into a fake diversity surface.
+
+## D-019: Focused local eval slices can name explicit pair cycles
+
+- Date: `2026-05-04`
+- Category: `runtime_engineering`
+- Tags: `local_eval_sampling`, `focused_slices`, `pair_cycle`, `operator_surface`
+- Provenance: `human-led method decision`
+- Decision:
+  - let `eval-sample-local` accept explicit pair cycles in `scorey_pick,user_pick` order
+  - use that lane for narrow research slices when one object needs to be isolated
+  - support the current rock slice as:
+    - `rock,paper`
+    - `scissors,rock`
+- Why: After the broad `Beta 1.0` pass-table coverage run, the next research
+  step is to inspect one object in a tighter role. Explicit pair cycles make
+  that slice first-class without turning the local sampler into a pile of
+  one-off named patterns.

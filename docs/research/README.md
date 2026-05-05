@@ -62,6 +62,7 @@ Scope:
 - ignore round prose, tone, and scoreboard claim
 - treat local `baseline` sampling as a soak lane, not as a diversity claim
 - treat local `beta-1-coverage` sampling as the deterministic six-pair pass table
+- treat explicit local pair cycles as focused object slices, like rock-only win/loss runs
 
 `PASS`
 

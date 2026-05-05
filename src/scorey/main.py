@@ -18,7 +18,12 @@ from scorey.eval_gates import (
     evaluate_beta_1,
     summarise_gate_results,
 )
-from scorey.eval_sampling import LOCAL_SAMPLE_PATTERNS, sample_local_eval_outputs
+from scorey.eval_sampling import (
+    LOCAL_SAMPLE_PATTERNS,
+    explicit_local_sample_pairs,
+    format_local_sample_pair,
+    sample_local_eval_outputs,
+)
 from scorey.pipeline import (
     build_local_round_state,
     build_round_state,
@@ -85,8 +90,15 @@ def build_parser() -> argparse.ArgumentParser:
     eval_sample_local_parser.add_argument(
         "--pattern",
         choices=LOCAL_SAMPLE_PATTERNS,
-        default="baseline",
-        help="Choose which deterministic local pair cycle to record.",
+        default=None,
+        help="Choose a named deterministic local pair cycle.",
+    )
+    eval_sample_local_parser.add_argument(
+        "--pair",
+        action="append",
+        default=[],
+        metavar="SCOREY_PICK,USER_PICK",
+        help="Repeat to provide an explicit local pair cycle in scorey/user order.",
     )
 
     return parser
@@ -434,14 +446,19 @@ def command_eval_sample_local(
     count: int | None,
     duration_seconds: float | None,
     interval_seconds: float,
-    pattern: str,
+    pattern: str | None,
+    pair_specs: list[str],
 ) -> int:
     try:
+        pair_cycle = (
+            explicit_local_sample_pairs(tuple(pair_specs)) if pair_specs else None
+        )
         summary = sample_local_eval_outputs(
             count=count,
             duration_seconds=duration_seconds,
             interval_seconds=interval_seconds,
-            pattern=pattern,
+            pattern=pattern or "baseline",
+            pair_cycle=pair_cycle,
         )
     except Exception as exc:
         print(str(exc), file=sys.stderr)
@@ -454,7 +471,13 @@ def command_eval_sample_local(
     )
     db_path = default_eval_db_path()
     print(f"local eval sample complete: {mode_label}")
-    print(f"pattern={pattern}")
+    if pair_specs:
+        print(
+            "pairs="
+            + " ".join(format_local_sample_pair(pair) for pair in pair_cycle or ())
+        )
+    else:
+        print(f"pattern={pattern or 'baseline'}")
     print(
         f"recorded={summary.recorded} "
         f"beta_1_pass={summary.beta_1_pass} beta_1_fail={summary.beta_1_fail}"
@@ -488,6 +511,7 @@ def main(argv: list[str] | None = None) -> int:
             duration_seconds=args.duration_seconds,
             interval_seconds=args.interval_seconds,
             pattern=args.pattern,
+            pair_specs=args.pair,
         )
     parser.print_help()
     return 1

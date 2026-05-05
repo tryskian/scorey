@@ -148,13 +148,16 @@ It only judges the pick pair in `scorey_pick, user_pick` order.
 
 - every other `scorey_pick, user_pick` pair
 
-The local sampling lane now has two deterministic patterns:
+The local sampling lane now has two named deterministic patterns:
 
 - `baseline` cycles the fixed picks through the narrow local fixtures and is
   best read as population/soak coverage
 - `beta-1-coverage` cycles all six `Beta 1.0` pass pairs evenly
 
-Neither local pattern is a diversity claim.
+It also accepts explicit local pair cycles in `scorey_pick,user_pick` order for
+focused slices like `rock,paper` plus `scissors,rock`.
+
+None of these local lanes are diversity claims.
 
 ## Contracts
 
