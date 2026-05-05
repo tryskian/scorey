@@ -6,10 +6,13 @@ from dataclasses import dataclass
 
 from scorey.config import USER_PICKS, local_scorey_pick_for, normalise_pick
 from scorey.eval_db import record_round_state
-from scorey.eval_gates import beta_1_pass_pairs, evaluate_beta_1
+from scorey.eval_gates import (
+    evaluate_research_beta_1,
+    research_beta_1_pass_pairs,
+)
 from scorey.pipeline import build_local_round_state_for_pair, compose_round
 
-LOCAL_SAMPLE_PATTERNS: tuple[str, ...] = ("baseline", "beta-1-coverage")
+LOCAL_SAMPLE_PATTERNS: tuple[str, ...] = ("baseline", "research-beta-1-coverage")
 
 
 @dataclass(frozen=True)
@@ -17,8 +20,8 @@ class LocalSampleSummary:
     recorded: int
     first_output_id: int | None
     last_output_id: int | None
-    beta_1_pass: int
-    beta_1_fail: int
+    research_beta_1_pass: int
+    research_beta_1_fail: int
     elapsed_seconds: float
 
 
@@ -38,9 +41,10 @@ def parse_local_sample_pair_spec(pair_spec: str) -> tuple[str, str]:
         normalise_pick(raw_parts[0]),
         normalise_pick(raw_parts[1]),
     )
-    if pair not in beta_1_pass_pairs():
+    if pair not in research_beta_1_pass_pairs():
         valid_pairs = ", ".join(
-            format_local_sample_pair(valid_pair) for valid_pair in beta_1_pass_pairs()
+            format_local_sample_pair(valid_pair)
+            for valid_pair in research_beta_1_pass_pairs()
         )
         raise ValueError(
             "Unsupported local pair cycle entry "
@@ -62,8 +66,8 @@ def _sample_pairs_for_pattern(pattern: str) -> tuple[tuple[str, str], ...]:
         return tuple(
             (local_scorey_pick_for(user_pick), user_pick) for user_pick in USER_PICKS
         )
-    if pattern == "beta-1-coverage":
-        return beta_1_pass_pairs()
+    if pattern == "research-beta-1-coverage":
+        return research_beta_1_pass_pairs()
     raise ValueError(
         "Unsupported local sample pattern "
         f"'{pattern}'. Choose one of: {', '.join(LOCAL_SAMPLE_PATTERNS)}."
@@ -73,8 +77,8 @@ def _sample_pairs_for_pattern(pattern: str) -> tuple[tuple[str, str], ...]:
 def _default_model_for_pattern(pattern: str) -> str:
     if pattern == "baseline":
         return "local-fixture-batch"
-    if pattern == "beta-1-coverage":
-        return "local-beta-1-coverage-batch"
+    if pattern == "research-beta-1-coverage":
+        return "local-research-beta-1-coverage-batch"
     raise ValueError(
         "Unsupported local sample pattern "
         f"'{pattern}'. Choose one of: {', '.join(LOCAL_SAMPLE_PATTERNS)}."
@@ -110,8 +114,8 @@ def sample_local_eval_outputs(
     start = time_fn()
     deadline = None if duration_seconds is None else start + duration_seconds
     output_ids: list[int] = []
-    beta_1_pass = 0
-    beta_1_fail = 0
+    research_beta_1_pass = 0
+    research_beta_1_fail = 0
     index = 0
 
     while True:
@@ -136,14 +140,14 @@ def sample_local_eval_outputs(
         )
         output_ids.append(output_id)
 
-        gate_result = evaluate_beta_1(
+        gate_result = evaluate_research_beta_1(
             user_pick=round_state.user_pick,
             scorey_pick=round_state.scorey_pick,
         )
         if gate_result.verdict == "pass":
-            beta_1_pass += 1
+            research_beta_1_pass += 1
         else:
-            beta_1_fail += 1
+            research_beta_1_fail += 1
 
         index += 1
 
@@ -165,7 +169,7 @@ def sample_local_eval_outputs(
         recorded=index,
         first_output_id=output_ids[0] if output_ids else None,
         last_output_id=output_ids[-1] if output_ids else None,
-        beta_1_pass=beta_1_pass,
-        beta_1_fail=beta_1_fail,
+        research_beta_1_pass=research_beta_1_pass,
+        research_beta_1_fail=research_beta_1_fail,
         elapsed_seconds=elapsed_seconds,
     )

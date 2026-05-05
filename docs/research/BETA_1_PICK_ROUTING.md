@@ -1,6 +1,6 @@
-# Beta Eval 1.0: Pick Routing First
+# Research Beta 1.0: Pick Routing First
 
-## Question
+## What This Beta Asked
 
 Does Scorey choose a valid rigged route for the selected user pick?
 
@@ -10,22 +10,19 @@ Yes. The first gate held once the eval lane stopped treating the three local fix
 
 ## Eval Shape
 
-`Beta Eval 1.0` judges the pick pair only.
+`Research Beta 1.0` judges the pick pair only.
 
 It reads every row in `scorey_pick, user_pick` order.
 
-`PASS`
-
-- `paper, scissors`
-- `rock, paper`
-- `scissors, rock`
-- `paper, paper`
-- `rock, rock`
-- `scissors, scissors`
-
-`FAIL`
-
-- every other `scorey_pick, user_pick` pair
+- `pass`:
+  - `paper, scissors`
+  - `rock, paper`
+  - `scissors, rock`
+  - `paper, paper`
+  - `rock, rock`
+  - `scissors, scissors`
+- `fail`:
+  - every other `scorey_pick, user_pick` pair
 
 What stays out of scope:
 
@@ -33,7 +30,22 @@ What stays out of scope:
 - tone
 - scoreboard claim
 
-## Current Signal
+## Diagram
+
+```mermaid
+flowchart LR
+  U["user pick"]
+  S["scorey pick"]
+  G["Research Beta 1.0 routing gate"]
+  P["valid rigged pair"]
+  F["invalid pair"]
+
+  U --> S --> G
+  G --> P
+  G --> F
+```
+
+## What It Showed
 
 The first long local soak proved the storage lane and gate, but only hit a narrow deterministic subset:
 
@@ -43,14 +55,21 @@ The first long local soak proved the storage lane and gate, but only hit a narro
 
 That led to the six-pair coverage sampler:
 
-- `3582` `local-beta-1-coverage-batch` rows
+- `3582` `local-research-beta-1-coverage-batch` rows
 - `597` rows for each valid pass pair
 - newest readback stayed all-pass
 
-So the result of `Beta Eval 1.0` is not just that Scorey can pass. It is that the full pass table now has a stable deterministic coverage lane.
+So the result of `Research Beta 1.0` is not just that Scorey can pass. It is that the full pass table now has a stable deterministic coverage lane.
+
+## What It Could Not Show
+
+- live model behaviour
+- round prose quality
+- tone stability
+- scoreboard quality
 
 ## What Changed Next
 
 Once the full pass table was stable, the next question stopped being “is the route valid at all?” and became “can one object stay stable when it is isolated across both roles?”
 
-That shift is `Beta Eval 2.0`.
+That shift is `Research Beta 2.0`.

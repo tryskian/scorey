@@ -106,7 +106,7 @@ The first active eval kernel should stay narrow:
 - does the round preserve the chosen picks?
 - does the route stay valid?
 - does the output keep a legible round shape?
-- current `Beta 1.0` only judges the pick pair in `scorey_pick, user_pick` order
+- current `Research Beta 1.0` only judges the pick pair in `scorey_pick, user_pick` order
 - `pass`:
   - `paper, scissors`
   - `rock, paper`

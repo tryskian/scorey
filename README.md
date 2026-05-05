@@ -20,7 +20,7 @@ It only accepts three picks:
 
 Current tracked research beta:
 
-- `Beta Eval 2.0`
+- `Research Beta 2.0`
 - `focused object lanes`
 
 That narrow surface is the point. Scorey is not trying to be a general chat tool or a generic joke machine. It is a small instrument for studying whether a model can preserve a rigged round, stay pick-specific, and keep unfair logic legible inside tight interaction guardrails.

@@ -131,7 +131,7 @@ The first notebook lane lives in
 `output/jupyter-notebook/scorey-eval-db-walkthrough.ipynb` and uses the same
 module functions as the runtime surface.
 
-The first named eval gate is `Beta 1.0`.
+The first named eval gate is `Research Beta 1.0`.
 
 It only judges the pick pair in `scorey_pick, user_pick` order.
 
@@ -152,7 +152,7 @@ The local sampling lane now has two named deterministic patterns:
 
 - `baseline` cycles the fixed picks through the narrow local fixtures and is
   best read as population/soak coverage
-- `beta-1-coverage` cycles all six `Beta 1.0` pass pairs evenly
+- `research-beta-1-coverage` cycles all six `Research Beta 1.0` pass pairs evenly
 
 It also accepts explicit local pair cycles in `scorey_pick,user_pick` order for
 focused lanes like `rock,paper` plus `scissors,rock`.

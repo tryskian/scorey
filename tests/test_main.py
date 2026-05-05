@@ -82,23 +82,26 @@ class MainCommandTests(TestCase):
         self.assertIn("eval counts: total=1 pass=0 fail=0 pending=1", output)
         self.assertIn("(cross-object, local, pending)", output)
 
-    def test_eval_beta_1_empty_db_prints_gate_definition(self) -> None:
+    def test_research_beta_1_empty_db_prints_gate_definition(self) -> None:
         stdout = io.StringIO()
         with TemporaryDirectory() as tmpdir:
             db_path = Path(tmpdir) / "evals.sqlite"
             with patch("scorey.main.default_eval_db_path", return_value=db_path):
                 with redirect_stdout(stdout):
-                    result = main(["eval-beta-1", "--limit", "5"])
+                    result = main(["research-beta-1", "--limit", "5"])
 
         self.assertEqual(result, 0)
         output = stdout.getvalue()
-        self.assertIn("Beta 1.0 gate: picks only (`scorey_pick`, `user_pick`)", output)
+        self.assertIn(
+            "Research Beta 1.0 gate: picks only (`scorey_pick`, `user_pick`)",
+            output,
+        )
         self.assertIn("- paper / scissors", output)
         self.assertIn("- scissors / scissors", output)
         self.assertIn("fail: all other scorey/user pick pairs.", output)
         self.assertIn("no eval outputs yet.", output)
 
-    def test_eval_beta_1_reports_pass_and_fail_rows(self) -> None:
+    def test_research_beta_1_reports_pass_and_fail_rows(self) -> None:
         stdout = io.StringIO()
         with TemporaryDirectory() as tmpdir:
             db_path = Path(tmpdir) / "evals.sqlite"
@@ -123,15 +126,29 @@ class MainCommandTests(TestCase):
             )
             with patch("scorey.main.default_eval_db_path", return_value=db_path):
                 with redirect_stdout(stdout):
-                    result = main(["eval-beta-1", "--limit", "5"])
+                    result = main(["research-beta-1", "--limit", "5"])
 
         self.assertEqual(result, 0)
         output = stdout.getvalue()
-        self.assertIn("Beta 1.0 counts: total=2 pass=1 fail=1", output)
+        self.assertIn("Research Beta 1.0 counts: total=2 pass=1 fail=1", output)
         self.assertIn("scorey=paper user=rock", output)
-        self.assertIn("reason: not a beta 1.0 route", output)
+        self.assertIn("reason: not a research beta 1.0 route", output)
         self.assertIn("scorey=scissors user=rock", output)
         self.assertIn("reason: reverse gameplay route", output)
+
+    def test_eval_beta_1_alias_still_works(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(["eval-beta-1", "--limit", "5"])
+
+        self.assertEqual(result, 0)
+        self.assertIn(
+            "Research Beta 1.0 gate: picks only (`scorey_pick`, `user_pick`)",
+            stdout.getvalue(),
+        )
 
     def test_eval_review_sample_lists_distinct_pending_rows(self) -> None:
         stdout = io.StringIO()
@@ -257,7 +274,10 @@ class MainCommandTests(TestCase):
         output = stdout.getvalue()
         self.assertIn("local eval sample complete: count=3", output)
         self.assertIn("pattern=baseline", output)
-        self.assertIn("recorded=3 beta_1_pass=3 beta_1_fail=0", output)
+        self.assertIn(
+            "recorded=3 research_beta_1_pass=3 research_beta_1_fail=0",
+            output,
+        )
 
     def test_eval_sample_local_beta_1_coverage_reports_pattern(self) -> None:
         stdout = io.StringIO()
@@ -272,15 +292,18 @@ class MainCommandTests(TestCase):
                                 "--count",
                                 "6",
                                 "--pattern",
-                                "beta-1-coverage",
+                                "research-beta-1-coverage",
                             ]
                         )
 
         self.assertEqual(result, 0)
         output = stdout.getvalue()
         self.assertIn("local eval sample complete: count=6", output)
-        self.assertIn("pattern=beta-1-coverage", output)
-        self.assertIn("recorded=6 beta_1_pass=6 beta_1_fail=0", output)
+        self.assertIn("pattern=research-beta-1-coverage", output)
+        self.assertIn(
+            "recorded=6 research_beta_1_pass=6 research_beta_1_fail=0",
+            output,
+        )
 
     def test_eval_sample_local_explicit_pairs_report_pair_cycle(self) -> None:
         stdout = io.StringIO()
@@ -305,4 +328,7 @@ class MainCommandTests(TestCase):
         output = stdout.getvalue()
         self.assertIn("local eval sample complete: count=4", output)
         self.assertIn("pairs=rock/paper scissors/rock", output)
-        self.assertIn("recorded=4 beta_1_pass=4 beta_1_fail=0", output)
+        self.assertIn(
+            "recorded=4 research_beta_1_pass=4 research_beta_1_fail=0",
+            output,
+        )
