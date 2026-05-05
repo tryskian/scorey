@@ -305,34 +305,34 @@ into implementation authorship.
   separate explicit patterns makes the signal clearer without broadening local
   mode into a fake diversity surface.
 
-## D-019: Focused local eval slices can name explicit pair cycles
+## D-019: Focused local eval lanes can name explicit pair cycles
 
 - Date: `2026-05-04`
 - Category: `runtime_engineering`
-- Tags: `local_eval_sampling`, `focused_slices`, `pair_cycle`, `operator_surface`
+- Tags: `local_eval_sampling`, `focused_lanes`, `pair_cycle`, `operator_surface`
 - Provenance: `human-led method decision`
 - Decision:
   - let `eval-sample-local` accept explicit pair cycles in `scorey_pick,user_pick` order
-  - use that lane for narrow research slices when one object needs to be isolated
-  - support the current rock slice as:
+  - use that lane for narrow research lanes when one object needs to be isolated
+  - support the current rock lane as:
     - `rock,paper`
     - `scissors,rock`
 - Why: After the broad `Beta 1.0` pass-table coverage run, the next research
   step is to inspect one object in a tighter role. Explicit pair cycles make
-  that slice first-class without turning the local sampler into a pile of
+  that lane first-class without turning the local sampler into a pile of
   one-off named patterns.
 
-## D-020: Beta Eval 2.0 uses focused object slices
+## D-020: Beta Eval 2.0 uses focused object lanes
 
 - Date: `2026-05-05`
 - Category: `eval_quality`
-- Tags: `beta_eval_2_0`, `focused_slices`, `object_roles`, `one_focus`
+- Tags: `beta_eval_2_0`, `focused_lanes`, `object_roles`, `one_focus`
 - Provenance: `human-led method decision`
 - Decision:
   - treat the next active eval architecture as `Beta Eval 2.0`
   - keep `Beta 1.0` as the routing gate underneath it
   - use explicit local pair cycles to isolate one object across a win role and a loss role
-  - start with the rock slice:
+  - start with the rock lane:
     - `rock,paper`
     - `scissors,rock`
 - Why: Once the full `Beta 1.0` pass table was stable, the next useful question

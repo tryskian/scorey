@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-04
+Last updated: 2026-05-05
 
 ## Start Here
 
@@ -77,7 +77,7 @@ Current runtime surfaces:
 - `scorey eval-sample-local --count 30 --pattern beta-1-coverage` records all
   six `Beta 1.0` pass pairs in a deterministic cycle
 - `scorey eval-sample-local --count 30 --pair rock,paper --pair scissors,rock`
-  records a focused local pair cycle for the rock win/loss slice
+  records a focused local pair cycle for a rock win/loss lane
 - `make caffeinate` keeps the display awake on macOS during active sessions
 - `make decaffeinate` releases the managed wake lock
 - `make decaffeinate-all` clears matching background `caffeinate` processes
@@ -110,10 +110,10 @@ Current named gate:
 Current tracked eval beta:
 
 - `Beta Eval 2.0`
-- focused object slices
-- current live slice:
+- focused object lanes
+- current live lane:
+  - `paper,scissors`
   - `rock,paper`
-  - `scissors,rock`
 
 ## Next Kernel
 
@@ -128,11 +128,11 @@ Choose one lane at a time:
   - polish the interactive app only if it helps the core object
 - eval:
   - keep `Beta 1.0` as the routing gate
-  - use `Beta Eval 2.0` for focused object-slice runs
+  - use `Beta Eval 2.0` for focused object-lane runs
   - keep the gate read-only until a stored judgment path earns a wider surface
   - use local `baseline` sampling for soak/population, not for diversity claims
   - use local `beta-1-coverage` sampling when the full pass-pair truth table matters
-  - use explicit local pair cycles when a research slice needs one object in a
+  - use explicit local pair cycles when a research lane needs one object in a
     narrow win/loss role
   - keep one narrow binary focus active at a time
 - operators:

@@ -119,7 +119,7 @@ Current posture:
 - `Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
 - local `baseline` sampling is a soak/population lane, not a diversity lane
 - local `beta-1-coverage` sampling cycles all six `Beta 1.0` pass pairs evenly
-- explicit local pair cycles let the research lane isolate narrow slices like
+- explicit local pair cycles let the research lane isolate narrow lanes like
   `rock,paper` and `scissors,rock`
 
 ## Validation

@@ -155,7 +155,7 @@ The local sampling lane now has two named deterministic patterns:
 - `beta-1-coverage` cycles all six `Beta 1.0` pass pairs evenly
 
 It also accepts explicit local pair cycles in `scorey_pick,user_pick` order for
-focused slices like `rock,paper` plus `scissors,rock`.
+focused lanes like `rock,paper` plus `scissors,rock`.
 
 None of these local lanes are diversity claims.
 
@@ -182,7 +182,7 @@ None of these local lanes are diversity claims.
 | `README.md` | public framing and entrypoint |
 | `docs/governance/CHARTER.md` | durable rules and working model |
 | `docs/governance/DECISIONS.md` | durable engineering, runtime, and eval decisions |
-| `docs/governance/SESSION_HANDOFF.md` | current checkpoint and next slice |
+| `docs/governance/SESSION_HANDOFF.md` | current checkpoint and next lane |
 | `docs/runtime/ARCHITECTURE.md` | stable system map |
 | `docs/runtime/RUNBOOK.md` | operator procedure and validation |
 | `docs/research/README.md` | current research framing |

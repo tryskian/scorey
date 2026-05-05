@@ -1,13 +1,14 @@
 # Scorey
 
-![Research Beta](https://img.shields.io/badge/research_beta-2.0%20focused%20object%20slices-E15759)
+[![Research Beta](https://img.shields.io/badge/research_beta-2.0%20focused%20object%20lanes-E15759)](./docs/research/README.md)
+[![Polinko toy factory](https://img.shields.io/badge/polinko_toy_factory-active-4C956C)](https://github.com/tryskian/polinko)
 
 ## rock, paper, scissors, scorey
 
-scorey keeps the score.<br>
+scorey keeps the score.\
 sorry. you already lost.
 
-Scorey is a small, local, agent-backed CLI mini chatbot in the **[Polinko research line](https://github.com/tryskian/polinko)**.
+Scorey is a small, local, agent-backed CLI mini chatbot using the **[Polinko research model](https://github.com/tryskian/polinko)**.
 
 It is a rigged rock, paper, scissors spinoff of **[Probaboracle](https://github.com/tryskian/probaboracle)**. It inherits the Probaboracle-style idea of a narrow, agent-backed generation pipeline, but its surface is more bratty and game-shaped.
 
@@ -20,7 +21,7 @@ It only accepts three picks:
 Current tracked research beta:
 
 - `Beta Eval 2.0`
-- `focused object slices`
+- `focused object lanes`
 
 That narrow surface is the point. Scorey is not trying to be a general chat tool or a generic joke machine. It is a small instrument for studying whether a model can preserve a rigged round, stay pick-specific, and keep unfair logic legible inside tight interaction guardrails.
 
@@ -30,7 +31,7 @@ In this repo, major betas are research architectures, and minor versions tighten
 
 - constrained round preservation through a fixed pick surface
 - runtime-owned routing and composition around a narrow agent seam
-- binary eval architectures from pick routing to focused object slices
+- binary eval architectures from pick routing to focused object lanes
 
 ## Run It
 
