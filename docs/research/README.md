@@ -4,7 +4,7 @@ Scorey keeps the tracked research lane small on purpose.
 
 Each beta is a distinct eval approach. This folder preserves the method shifts that changed what the evidence means.
 
-Raw run notes, operator poking, and private scratch material stay in the local `docs/peanut/` lane.
+Raw run notes and scratch material stay out of the tracked research surface until they become evidence.
 
 ## Current Beta
 

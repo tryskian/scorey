@@ -11,8 +11,7 @@ Last updated: 2026-05-05
    - `docs/runtime/ARCHITECTURE.md`
    - `docs/runtime/RUNBOOK.md`
    - this file
-2. Confirm repo path:
-   - `/Users/tryskian/Github/scorey`
+2. Confirm you are at the repo root.
 3. Treat the tracked docs as current project state.
 4. State the active kernel before changing files.
 
@@ -198,4 +197,4 @@ At minimum:
 
 ## Copy/Paste Refresh Prompt
 
-`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Confirm the repo path is /Users/tryskian/Github/scorey. Treat the tracked docs as current project state. Then execute the Next Kernel with minimal drift and full validation.`
+`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Confirm you are at the repo root. Treat the tracked docs as current project state. Then execute the Next Kernel with minimal drift and full validation.`

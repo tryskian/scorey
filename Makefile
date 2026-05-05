@@ -85,9 +85,6 @@ session-status:
 	if [ -f "docs/governance/SESSION_HANDOFF.md" ]; then \
 		echo "handoff: docs/governance/SESSION_HANDOFF.md"; \
 	fi; \
-		if [ -d "docs/peanut" ]; then \
-			echo "peanut: docs/peanut/"; \
-		fi; \
 		if [ -f "pyproject.toml" ]; then \
 			echo "package: pyproject.toml"; \
 		fi; \

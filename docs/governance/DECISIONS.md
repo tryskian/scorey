@@ -447,3 +447,18 @@ into implementation authorship.
   is actually consuming budget slowly in the background. The cost console keeps
   spend visible, while the batch-first posture preserves the research signal
   without turning Scorey's live lane into an unbounded token sink.
+
+## D-028: The tracked repo surface should read cleanly in public
+
+- Date: `2026-05-05`
+- Category: `workflow_environment`
+- Tags: `public_surface`, `docs_hygiene`, `repo_posture`
+- Provenance: `human-led method decision with repo formalization`
+- Decision:
+  - treat the tracked docs and operator surface as public-facing by default
+  - keep hardcoded personal machine paths out of tracked docs
+  - keep editor-specific workspace files out of the tracked repo surface
+  - keep scratch lanes local or ignored instead of advertising them in public-facing operator output
+- Why: Once Scorey stopped being a private repo, the tracked surface needed to
+  read like an intentional public project rather than a personal checkout with
+  machine-specific residue and visible scratch scaffolding.

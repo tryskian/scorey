@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import select
 import shutil
 import sys
 import termios
@@ -73,6 +74,7 @@ ANSI_REPO_ACCENT = "\x1b[38;5;117m"
 ANSI_MUTED = "\x1b[38;5;245m"
 ANSI_CURSOR_HIDE = "\x1b[?25l"
 ANSI_CURSOR_SHOW = "\x1b[?25h"
+ESC_SEQUENCE_TIMEOUT_SECONDS = 0.03
 
 
 class AppExit(Exception):
@@ -380,9 +382,11 @@ def read_selector_key(input_stream: TextIO | None = None) -> str:
         if first in ("\r", "\n"):
             return "ENTER"
         if first == "\x1b":
-            second = stream.read(1)
+            second = _read_optional_tty_byte(stream)
+            if second is None:
+                return "ESC"
             if second == "[":
-                third = stream.read(1)
+                third = _read_optional_tty_byte(stream)
                 if third == "A":
                     return "UP"
                 if third == "B":
@@ -391,6 +395,20 @@ def read_selector_key(input_stream: TextIO | None = None) -> str:
         return first
     finally:
         termios.tcsetattr(fileno, termios.TCSADRAIN, original)
+
+
+def _read_optional_tty_byte(
+    stream: TextIO,
+    *,
+    timeout_seconds: float = ESC_SEQUENCE_TIMEOUT_SECONDS,
+) -> str | None:
+    ready, _, _ = select.select([stream.fileno()], [], [], timeout_seconds)
+    if not ready:
+        return None
+    value = stream.read(1)
+    if value == "":
+        return None
+    return value
 
 
 def clear_screen(output_stream: TextIO | None = None) -> None:
@@ -727,7 +745,12 @@ def command_eval_list(limit: int, verdict: str | None) -> int:
 
     rows = list_outputs(db_path, limit=limit, verdict=verdict)
     if not rows:
-        print("no eval outputs yet.")
+        if summary["total"] == 0:
+            print("no eval outputs yet.")
+        elif verdict is None:
+            print("no eval outputs found.")
+        else:
+            print(f"no {verdict} eval outputs.")
         return 0
 
     print("")

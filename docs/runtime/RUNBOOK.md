@@ -8,15 +8,16 @@ need to inspect, check, or advance the repo.
 
 ## Start A Session
 
-1. Read the local instruction surface:
+1. Read the tracked instruction surface:
    - `README.md`
    - `docs/governance/CHARTER.md`
    - `docs/governance/DECISIONS.md`
    - `docs/runtime/ARCHITECTURE.md`
    - `docs/runtime/RUNBOOK.md`
    - `docs/governance/SESSION_HANDOFF.md`
-2. Confirm the repo path:
-   - `/Users/tryskian/Github/scorey`
+2. Confirm you are at the repo root:
+   - `git rev-parse --show-toplevel`
+   - or `pwd`
 3. Treat the tracked docs as current project state.
 4. Install or refresh the local environment:
    - `make install`
