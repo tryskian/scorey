@@ -110,7 +110,9 @@ A first eval storage lane now exists:
   - `12` rows
   - `12` routing pass
   - `0` routing fail
-  - `12` human pending
+  - `12` human pass
+  - `0` human fail
+  - `0` human pending
 
 ## Research Snapshot
 
@@ -149,7 +151,7 @@ Choose one lane at a time:
   - first package skeleton is in place
   - keep the wrapper small while the live path settles
   - keep route enforcement and composition in the runtime
-  - next useful runtime move: judge the first live batch and then widen the live queue carefully
+  - next useful runtime move: widen the live queue carefully after the clean first judged batch
 - eval:
   - keep `Research Beta 1.0` as the routing gate
   - use `Research Beta 2.0` for focused object-lane runs
@@ -161,7 +163,7 @@ Choose one lane at a time:
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: judge the first live batch before widening the live queue
+  - next useful move: run a slightly wider judged live batch
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful

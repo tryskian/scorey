@@ -39,12 +39,15 @@ Current finding:
   - `12` rows
   - `12` routing pass
   - `0` routing fail
-  - `12` human pending
+  - `12` human pass
+  - `0` human fail
+  - `0` human pending
+  - the live path stayed on-pick and legible in the first judged sample
 
 Current clean probe:
 
-- short judged live batches through the real API path
-- judge the first live batch before widening the queue
+- slightly wider judged live batches through the real API path
+- keep route and legibility active before widening the eval lens
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
 - widen into prose, tone, or scoreboard judgement only after the live path stays on-pick
 
@@ -93,7 +96,7 @@ Parked lanes:
 - object lanes:
   - complete for the current local pass
 - live gameplay:
-  - the first live batch is now recorded
+  - the first live batch is now fully judged
   - treat judged live rows as the next meaningful signal
 - later eval lenses:
   - only widen into round prose, tone, or scoreboard judgement after the object lanes are stable

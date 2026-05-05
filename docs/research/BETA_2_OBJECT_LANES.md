@@ -97,6 +97,8 @@ The first live batch has now been recorded through the real API path:
 - `12` rows
 - `12` routing pass
 - `0` routing fail
-- `12` human pending
+- `12` human pass
+- `0` human fail
+- `0` human pending
 
-So the next useful move is no longer more local repetition. It is judging the first live batch and then deciding whether Scorey earns a wider prose, tone, or scoreboard-focused eval lane.
+So the next useful move is no longer more local repetition or first-pass live review. It is widening the live queue carefully while keeping the route and legibility lens narrow, then deciding whether Scorey earns a wider prose, tone, or scoreboard-focused eval lane.
