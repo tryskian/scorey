@@ -61,6 +61,7 @@ need to inspect, check, or advance the repo.
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
 | record a six-pair `Research Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage` |
 | record an explicit local pair cycle | `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'` |
+| record a live API eval batch | `make eval-sample-live EVAL_COUNT=12` |
 | run end-of-day preflight | `make eod-preflight` |
 | run end-of-day closeout | `make eod` |
 
@@ -122,6 +123,8 @@ Storage:
 - `make eval-sample-local EVAL_COUNT=30`
 - `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage`
 - `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'`
+- `make eval-sample-live EVAL_COUNT=12`
+- `make eval-sample-live EVAL_COUNT=12 EVAL_USER_PICKS='rock paper'`
 
 Compatibility aliases:
 
@@ -144,6 +147,8 @@ Current posture:
 - local `research-beta-1-coverage` sampling cycles all six `Research Beta 1.0` pass pairs evenly
 - explicit local pair cycles let the research lane isolate narrow lanes like
   `rock,paper` and `scissors,rock`
+- live sampling uses the real API path and records rows as `source_mode=live`
+- live sampling cycles `rock paper scissors` by default unless a narrower user-pick cycle is supplied
 
 ## Validation
 
@@ -184,6 +189,7 @@ For eval storage changes:
 - `make eval-sample-local EVAL_COUNT=9`
 - `make eval-sample-local EVAL_COUNT=12 EVAL_PATTERN=research-beta-1-coverage`
 - `make eval-sample-local EVAL_COUNT=8 EVAL_PAIRS='rock,paper scissors,rock'`
+- `make eval-sample-live EVAL_COUNT=3`
 - `make check`
 - `make package-check`
 

@@ -12,6 +12,7 @@ EVAL_DURATION_SECONDS ?=
 EVAL_INTERVAL_SECONDS ?= 0
 EVAL_PATTERN ?= baseline
 EVAL_PAIRS ?=
+EVAL_USER_PICKS ?=
 OUTPUT_ID ?=
 VERDICT ?=
 NOTE ?=
@@ -20,7 +21,7 @@ CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
 CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge research-beta1 eval-beta1 eval-sample-local caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
+.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge research-beta1 eval-beta1 eval-sample-local eval-sample-live caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
 .PHONY: eval-review-sample
 
 install:
@@ -144,6 +145,9 @@ eval-beta1:
 
 eval-sample-local:
 	PYTHONPATH=src $(PY) -m scorey eval-sample-local $(if $(EVAL_DURATION_SECONDS),--duration-seconds $(EVAL_DURATION_SECONDS),--count $(EVAL_COUNT)) --interval-seconds $(EVAL_INTERVAL_SECONDS) $(if $(strip $(EVAL_PAIRS)),$(foreach pair,$(EVAL_PAIRS),--pair $(pair)),--pattern $(EVAL_PATTERN))
+
+eval-sample-live:
+	PYTHONPATH=src $(PY) -m scorey eval-sample-live $(if $(EVAL_DURATION_SECONDS),--duration-seconds $(EVAL_DURATION_SECONDS),--count $(EVAL_COUNT)) --interval-seconds $(EVAL_INTERVAL_SECONDS) $(foreach pick,$(EVAL_USER_PICKS),--pick $(pick))
 
 caffeinate:
 	@set -eu; \

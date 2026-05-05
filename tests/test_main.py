@@ -8,6 +8,7 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from scorey.eval_db import init_db, record_output
+from scorey.eval_sampling import EvalSampleSummary
 from scorey.main import build_round_scene_lines, choose_banner_lines, main
 
 
@@ -397,3 +398,42 @@ class MainCommandTests(TestCase):
             "recorded=4 research_beta_1_pass=4 research_beta_1_fail=0",
             output,
         )
+
+    def test_eval_sample_live_reports_rows(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with patch(
+                    "scorey.main.sample_live_eval_outputs",
+                    return_value=EvalSampleSummary(
+                        recorded=3,
+                        first_output_id=101,
+                        last_output_id=103,
+                        research_beta_1_pass=2,
+                        research_beta_1_fail=1,
+                        elapsed_seconds=0.25,
+                    ),
+                ):
+                    with redirect_stdout(stdout):
+                        result = main(
+                            [
+                                "eval-sample-live",
+                                "--count",
+                                "3",
+                                "--pick",
+                                "rock",
+                                "--pick",
+                                "paper",
+                            ]
+                        )
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("live eval sample complete: count=3", output)
+        self.assertIn("user_picks=rock paper", output)
+        self.assertIn(
+            "recorded=3 research_beta_1_pass=2 research_beta_1_fail=1",
+            output,
+        )
+        self.assertIn(f"db={db_path}", output)

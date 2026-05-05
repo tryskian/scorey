@@ -88,6 +88,7 @@ Current runtime surfaces:
   records all six `Research Beta 1.0` pass pairs in a deterministic cycle
 - `scorey eval-sample-local --count 30 --pair rock,paper --pair scissors,rock`
   records a focused local pair cycle for a rock win/loss lane
+- `scorey eval-sample-live --count 12` records live API eval rows into the same DB
 - `make caffeinate` keeps the display awake on macOS during active sessions
 - `make decaffeinate` releases the managed wake lock
 - `make decaffeinate-all` clears matching background `caffeinate` processes
@@ -100,10 +101,16 @@ A first eval storage lane now exists:
 - explicit CLI review sampling for pending rows
 - a notebook walkthrough in `output/jupyter-notebook/`
 - a deterministic local population path for batch row creation
+- a live batch path for real API row creation
 - the local deterministic queue is fully judged:
   - `17,922` pass
   - `0` fail
   - `0` pending
+- the first live batch now exists:
+  - `12` rows
+  - `12` routing pass
+  - `0` routing fail
+  - `12` human pending
 
 ## Research Snapshot
 
@@ -142,7 +149,7 @@ Choose one lane at a time:
   - first package skeleton is in place
   - keep the wrapper small while the live path settles
   - keep route enforcement and composition in the runtime
-  - next useful runtime move: start live judged gameplay through the staged app loop
+  - next useful runtime move: judge the first live batch and then widen the live queue carefully
 - eval:
   - keep `Research Beta 1.0` as the routing gate
   - use `Research Beta 2.0` for focused object-lane runs
@@ -154,7 +161,7 @@ Choose one lane at a time:
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: choose a wider eval lens or move to the live path
+  - next useful move: judge the first live batch before widening the live queue
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful

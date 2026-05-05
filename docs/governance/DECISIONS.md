@@ -410,3 +410,19 @@ into implementation authorship.
 - Why: The round needs to feel revealed, not jointly chosen. Staging the picks,
   reveal, and ruling in-place makes the interaction legible without widening
   the UI surface or turning Scorey into a bigger app.
+
+## D-026: Live API eval batches get a first-class operator path
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `live_eval`, `operator_surface`, `batch_generation`, `sqlite`
+- Provenance: `human-led runtime request with implementation decision`
+- Decision:
+  - add `eval-sample-live` as an explicit operator command
+  - record live API rounds into the same SQLite eval DB as local rows
+  - cycle `rock`, `paper`, and `scissors` in user order by default
+  - preserve immediate `Research Beta 1.0` route counters on the live batch output
+- Why: Once the local deterministic queue was fully settled, the next useful
+  signal had to come from real generated gameplay rather than more local
+  repetition. A tracked live batch command is safer and more legible than
+  improvised shell loops or manual one-round recording.

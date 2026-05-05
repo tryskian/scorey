@@ -4,19 +4,31 @@ import time
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from scorey.config import USER_PICKS, local_scorey_pick_for, normalise_pick
+from scorey.agent import generate_live_round_fields
+from scorey.config import (
+    USER_PICKS,
+    load_settings,
+    local_scorey_pick_for,
+    normalise_pick,
+    require_openai_api_key,
+)
 from scorey.eval_db import record_round_state
 from scorey.eval_gates import (
     evaluate_research_beta_1,
     research_beta_1_pass_pairs,
 )
-from scorey.pipeline import build_local_round_state_for_pair, compose_round
+from scorey.pipeline import (
+    build_local_round_state_for_pair,
+    build_round_state,
+    choose_scorey_pick,
+    compose_round,
+)
 
 LOCAL_SAMPLE_PATTERNS: tuple[str, ...] = ("baseline", "research-beta-1-coverage")
 
 
 @dataclass(frozen=True)
-class LocalSampleSummary:
+class EvalSampleSummary:
     recorded: int
     first_output_id: int | None
     last_output_id: int | None
@@ -95,7 +107,7 @@ def sample_local_eval_outputs(
     model: str | None = None,
     time_fn: Callable[[], float] = time.monotonic,
     sleep_fn: Callable[[float], None] = time.sleep,
-) -> LocalSampleSummary:
+) -> EvalSampleSummary:
     if count is None and duration_seconds is None:
         raise ValueError("Provide count or duration_seconds.")
     if count is not None and count < 1:
@@ -165,7 +177,112 @@ def sample_local_eval_outputs(
         sleep_fn(min(interval_seconds, remaining))
 
     elapsed_seconds = time_fn() - start
-    return LocalSampleSummary(
+    return EvalSampleSummary(
+        recorded=index,
+        first_output_id=output_ids[0] if output_ids else None,
+        last_output_id=output_ids[-1] if output_ids else None,
+        research_beta_1_pass=research_beta_1_pass,
+        research_beta_1_fail=research_beta_1_fail,
+        elapsed_seconds=elapsed_seconds,
+    )
+
+
+def explicit_user_pick_cycle(
+    picks: tuple[str, ...] | list[str],
+) -> tuple[str, ...]:
+    if not picks:
+        raise ValueError("Provide at least one user pick.")
+    return tuple(normalise_pick(pick) for pick in picks)
+
+
+def sample_live_eval_outputs(
+    *,
+    count: int | None = None,
+    duration_seconds: float | None = None,
+    interval_seconds: float = 0.0,
+    user_pick_cycle: tuple[str, ...] | None = None,
+    model: str | None = None,
+    time_fn: Callable[[], float] = time.monotonic,
+    sleep_fn: Callable[[float], None] = time.sleep,
+) -> EvalSampleSummary:
+    if count is None and duration_seconds is None:
+        raise ValueError("Provide count or duration_seconds.")
+    if count is not None and count < 1:
+        raise ValueError("Count must be at least 1.")
+    if duration_seconds is not None and duration_seconds <= 0:
+        raise ValueError("Duration must be greater than 0.")
+    if interval_seconds < 0:
+        raise ValueError("Interval must be at least 0.")
+
+    settings = load_settings()
+    require_openai_api_key()
+    pick_cycle = user_pick_cycle or USER_PICKS
+    model_name = model or settings.model
+
+    start = time_fn()
+    deadline = None if duration_seconds is None else start + duration_seconds
+    output_ids: list[int] = []
+    research_beta_1_pass = 0
+    research_beta_1_fail = 0
+    index = 0
+
+    while True:
+        if count is not None and index >= count:
+            break
+        if deadline is not None and time_fn() >= deadline:
+            break
+
+        user_pick = pick_cycle[index % len(pick_cycle)]
+        scorey_pick = choose_scorey_pick(user_pick)
+        route_family = "same-pick" if user_pick == scorey_pick else "cross-object"
+        fields = generate_live_round_fields(
+            settings,
+            user_pick,
+            scorey_pick,
+            route_family,
+        )
+        round_state = build_round_state(
+            user_pick,
+            scorey_pick,
+            fields,
+            scorey_score=index + 1,
+        )
+        round_text = compose_round(round_state)
+        output_id = record_round_state(
+            None,
+            round_state,
+            round_text,
+            source_mode="live",
+            model=model_name,
+        )
+        output_ids.append(output_id)
+
+        gate_result = evaluate_research_beta_1(
+            user_pick=round_state.user_pick,
+            scorey_pick=round_state.scorey_pick,
+        )
+        if gate_result.verdict == "pass":
+            research_beta_1_pass += 1
+        else:
+            research_beta_1_fail += 1
+
+        index += 1
+
+        if interval_seconds <= 0:
+            continue
+
+        if deadline is None:
+            if count is None or index < count:
+                sleep_fn(interval_seconds)
+            continue
+
+        remaining = deadline - time_fn()
+        if remaining <= 0:
+            break
+        sleep_fn(min(interval_seconds, remaining))
+
+    elapsed_seconds = time_fn() - start
+    return EvalSampleSummary(
         recorded=index,
         first_output_id=output_ids[0] if output_ids else None,
         last_output_id=output_ids[-1] if output_ids else None,

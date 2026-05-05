@@ -3,11 +3,15 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
 
+from scorey.config import Settings
 from scorey.eval_db import counts, list_outputs
 from scorey.eval_sampling import (
     explicit_local_sample_pairs,
+    explicit_user_pick_cycle,
+    sample_live_eval_outputs,
     sample_local_eval_outputs,
 )
+from scorey.pipeline import RoundFields
 
 
 class EvalSamplingTests(TestCase):
@@ -101,3 +105,61 @@ class EvalSamplingTests(TestCase):
                         ("scissors", "rock"),
                     ],
                 )
+
+    def test_sample_live_eval_outputs_records_rows(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            with patch("scorey.eval_db.EVAL_DB_PATH", db_path):
+                with patch(
+                    "scorey.eval_sampling.require_openai_api_key", return_value=None
+                ):
+                    with patch(
+                        "scorey.eval_sampling.load_settings",
+                        return_value=Settings(app_name="Scorey", model="gpt-test"),
+                    ):
+                        with patch(
+                            "scorey.eval_sampling.choose_scorey_pick",
+                            side_effect=("scissors", "paper", "paper"),
+                        ):
+                            with patch(
+                                "scorey.eval_sampling.generate_live_round_fields",
+                                return_value=RoundFields(
+                                    winning_state="for snacks",
+                                    worse_state="a fake one",
+                                    scoreboard_claim="none",
+                                ),
+                            ):
+                                summary = sample_live_eval_outputs(count=3)
+
+                self.assertEqual(summary.recorded, 3)
+                self.assertEqual(summary.research_beta_1_pass, 3)
+                self.assertEqual(summary.research_beta_1_fail, 0)
+
+                totals = counts(db_path)
+                self.assertEqual(totals["total"], 3)
+                self.assertEqual(totals["pending"], 3)
+
+                rows = list_outputs(db_path, limit=3)
+                observed_rows = [
+                    (
+                        str(row["scorey_pick"]),
+                        str(row["user_pick"]),
+                        str(row["source_mode"]),
+                        str(row["model"]),
+                    )
+                    for row in reversed(rows)
+                ]
+                self.assertEqual(
+                    observed_rows,
+                    [
+                        ("scissors", "rock", "live", "gpt-test"),
+                        ("paper", "paper", "live", "gpt-test"),
+                        ("paper", "scissors", "live", "gpt-test"),
+                    ],
+                )
+
+    def test_explicit_user_pick_cycle_normalises_values(self) -> None:
+        self.assertEqual(
+            explicit_user_pick_cycle((" Rock ", "PAPER")),
+            ("rock", "paper"),
+        )

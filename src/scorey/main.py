@@ -30,7 +30,9 @@ from scorey.eval_gates import (
 from scorey.eval_sampling import (
     LOCAL_SAMPLE_PATTERNS,
     explicit_local_sample_pairs,
+    explicit_user_pick_cycle,
     format_local_sample_pair,
+    sample_live_eval_outputs,
     sample_local_eval_outputs,
 )
 from scorey.pipeline import (
@@ -152,6 +154,24 @@ def build_parser() -> argparse.ArgumentParser:
         default=[],
         metavar="SCOREY_PICK,USER_PICK",
         help="Repeat to provide an explicit local pair cycle in scorey/user order.",
+    )
+
+    eval_sample_live_parser = subparsers.add_parser(
+        "eval-sample-live",
+        help="Record live API rounds into the eval database.",
+    )
+    eval_sample_live_group = eval_sample_live_parser.add_mutually_exclusive_group(
+        required=True
+    )
+    eval_sample_live_group.add_argument("--count", type=int)
+    eval_sample_live_group.add_argument("--duration-seconds", type=float)
+    eval_sample_live_parser.add_argument("--interval-seconds", type=float, default=0.0)
+    eval_sample_live_parser.add_argument(
+        "--pick",
+        action="append",
+        default=[],
+        metavar="USER_PICK",
+        help="Repeat to provide an explicit user-pick cycle in user order.",
     )
 
     return parser
@@ -861,6 +881,54 @@ def command_eval_sample_local(
     return 0
 
 
+def command_eval_sample_live(
+    *,
+    count: int | None,
+    duration_seconds: float | None,
+    interval_seconds: float,
+    user_picks: list[str],
+) -> int:
+    try:
+        user_pick_cycle = (
+            explicit_user_pick_cycle(tuple(user_picks)) if user_picks else None
+        )
+        summary = sample_live_eval_outputs(
+            count=count,
+            duration_seconds=duration_seconds,
+            interval_seconds=interval_seconds,
+            user_pick_cycle=user_pick_cycle,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    mode_label = (
+        f"count={count}"
+        if count is not None
+        else f"duration_seconds={duration_seconds:g}"
+    )
+    db_path = default_eval_db_path()
+    print(f"live eval sample complete: {mode_label}")
+    if user_pick_cycle is not None:
+        print("user_picks=" + " ".join(user_pick_cycle))
+    else:
+        print("user_picks=rock paper scissors")
+    print(
+        f"recorded={summary.recorded} "
+        "research_beta_1_pass="
+        f"{summary.research_beta_1_pass} "
+        "research_beta_1_fail="
+        f"{summary.research_beta_1_fail}"
+    )
+    print(f"elapsed_seconds={summary.elapsed_seconds:.2f}")
+    if summary.first_output_id is not None and summary.last_output_id is not None:
+        print(
+            f"output_ids={summary.first_output_id}-{summary.last_output_id} "
+            f"db={db_path}"
+        )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
@@ -886,6 +954,13 @@ def main(argv: list[str] | None = None) -> int:
             interval_seconds=args.interval_seconds,
             pattern=args.pattern,
             pair_specs=args.pair,
+        )
+    if args.command == "eval-sample-live":
+        return command_eval_sample_live(
+            count=args.count,
+            duration_seconds=args.duration_seconds,
+            interval_seconds=args.interval_seconds,
+            user_picks=args.pick,
         )
     parser.print_help()
     return 1

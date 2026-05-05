@@ -25,7 +25,7 @@ real and what is still intentionally narrow.
 | `src/scorey/agent.py` | structured live round-field generation through the OpenAI Agents SDK |
 | `src/scorey/eval_gates.py` | explicit eval truth tables and gate helpers |
 | `src/scorey/eval_db.py` | local SQLite eval storage |
-| `src/scorey/eval_sampling.py` | deterministic local eval population and soak helper |
+| `src/scorey/eval_sampling.py` | local and live eval population helpers |
 | `src/scorey/main.py` | app loop and `play` operator command |
 | `tests/` | contract and CLI tests |
 | `output/jupyter-notebook/` | follow-along notebooks and lightweight research walkthroughs |
@@ -169,6 +169,16 @@ It also accepts explicit local pair cycles in `scorey_pick,user_pick` order for
 focused lanes like `rock,paper` plus `scissors,rock`.
 
 None of these local lanes are diversity claims.
+
+The live sampling lane now records real generated rounds into the same DB:
+
+- it cycles user picks in user order by default:
+  - `rock`
+  - `paper`
+  - `scissors`
+- it lets Scorey choose a valid live route for each user pick
+- it records `source_mode=live` with the active model name
+- it preserves the same `Research Beta 1.0` pass/fail counters for immediate route readback
 
 ## Contracts
 

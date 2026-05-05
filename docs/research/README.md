@@ -35,11 +35,16 @@ Current finding:
   - `17,922` pass
   - `0` fail
   - `0` pending
+- the first live batch is now in the database:
+  - `12` rows
+  - `12` routing pass
+  - `0` routing fail
+  - `12` human pending
 
 Current clean probe:
 
-- live gameplay through the real CLI
-- short judged batches before any wider sweep
+- short judged live batches through the real API path
+- judge the first live batch before widening the queue
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
 - widen into prose, tone, or scoreboard judgement only after the live path stays on-pick
 
@@ -88,7 +93,8 @@ Parked lanes:
 - object lanes:
   - complete for the current local pass
 - live gameplay:
-  - treat the real CLI path as the next meaningful signal
+  - the first live batch is now recorded
+  - treat judged live rows as the next meaningful signal
 - later eval lenses:
   - only widen into round prose, tone, or scoreboard judgement after the object lanes are stable
 - research visuals:
