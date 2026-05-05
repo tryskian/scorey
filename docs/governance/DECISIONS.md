@@ -432,8 +432,9 @@ into implementation authorship.
 - Date: `2026-05-05`
 - Category: `runtime_engineering`
 - Tags: `token_management`, `cost_console`, `live_eval`, `operator_posture`
-- Provenance: `human-led runtime reminder with implementation decision`
+- Provenance: `human-led runtime suggestion with implementation decision`
 - Decision:
+  - port the Polinko-style cost console idea into Scorey's live eval operator surface
   - treat throughput limits and spend as separate operator control planes
   - keep interactive live checks synchronous
   - use extended live runs only as explicit batch work
