@@ -49,11 +49,12 @@ The focused paper lane then produced:
 - `1789` rows of `rock/paper`
 - the newest readback on that lane remained all-pass under `Beta 1.0`
 
-The first stratified human judgment sweep then started on top of the local rows:
+The local deterministic queue is now fully judged:
 
-- `12` pass
+- `17,922` pass
 - `0` fail
-- one reviewed row per model/pair sample across:
+- `0` pending
+- the reviewed local notes now cover:
   - `local-fixture-batch`
   - `local-beta-1-coverage-batch`
   - `local-explicit-pair-cycle-batch`
@@ -64,4 +65,4 @@ So the important result here is not just balance. It is that the repo now has a 
 
 All three object lanes are now complete on the local path.
 
-The next useful move is to expand the human judgment sample and then decide whether Scorey earns a wider prose, tone, or scoreboard-focused eval lane.
+The next useful move is to decide whether Scorey earns a wider prose, tone, or scoreboard-focused eval lane, or whether the next real signal needs the live path instead of more local repetition.

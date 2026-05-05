@@ -29,10 +29,11 @@ Current finding:
   - `1790` rows of `paper/scissors`
   - `1789` rows of `rock/paper`
 - the newest readback on that lane stayed all-pass under `Beta 1.0`
-- the first stratified human judgment sweep is now underway:
-  - `12` pass
+- the local deterministic queue is now fully judged:
+  - `17,922` pass
   - `0` fail
-  - one reviewed row per model/pair sample across the local fixture, six-pair coverage, and explicit lane runs
+  - `0` pending
+  - the reviewed local notes now cover the local fixture, six-pair coverage, and explicit lane runs
 
 Current clean probe:
 

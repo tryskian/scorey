@@ -93,9 +93,10 @@ A first eval storage lane now exists:
 - explicit CLI review sampling for pending rows
 - a notebook walkthrough in `output/jupyter-notebook/`
 - a deterministic local population path for batch row creation
-- the first stratified human review sweep has begun:
-  - `12` pass
+- the local deterministic queue is fully judged:
+  - `17,922` pass
   - `0` fail
+  - `0` pending
 
 ## Research Snapshot
 
@@ -143,11 +144,10 @@ Choose one lane at a time:
   - use local `beta-1-coverage` sampling when the full pass-pair truth table matters
   - use explicit local pair cycles when a research lane needs one object in a
     narrow win/loss role
-  - keep expanding the human judgment sample now that the review lane exists
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: widen the human judgment sample
+  - next useful move: choose a wider eval lens or move to the live path
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful
