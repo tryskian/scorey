@@ -426,3 +426,23 @@ into implementation authorship.
   signal had to come from real generated gameplay rather than more local
   repetition. A tracked live batch command is safer and more legible than
   improvised shell loops or manual one-round recording.
+
+## D-027: Live evals follow the token management protocol
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `token_management`, `cost_console`, `live_eval`, `operator_posture`
+- Provenance: `human-led runtime reminder with implementation decision`
+- Decision:
+  - treat throughput limits and spend as separate operator control planes
+  - keep interactive live checks synchronous
+  - use extended live runs only as explicit batch work
+  - add quick operator shortcuts for visibility:
+    - `make open-limits`
+    - `make open-usage`
+    - `make open-billing`
+    - `make open-cost-console`
+- Why: Live eval latency can make "just let it run longer" look harmless when it
+  is actually consuming budget slowly in the background. The cost console keeps
+  spend visible, while the batch-first posture preserves the research signal
+  without turning Scorey's live lane into an unbounded token sink.

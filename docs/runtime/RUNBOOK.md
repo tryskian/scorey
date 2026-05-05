@@ -62,6 +62,10 @@ need to inspect, check, or advance the repo.
 | record a six-pair `Research Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage` |
 | record an explicit local pair cycle | `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'` |
 | record a live API eval batch | `make eval-sample-live EVAL_COUNT=12` |
+| open the OpenAI limits page | `make open-limits` |
+| open the OpenAI usage page | `make open-usage` |
+| open the OpenAI billing page | `make open-billing` |
+| open all three OpenAI cost pages | `make open-cost-console` |
 | run end-of-day preflight | `make eod-preflight` |
 | run end-of-day closeout | `make eod` |
 
@@ -149,6 +153,26 @@ Current posture:
   `rock,paper` and `scissors,rock`
 - live sampling uses the real API path and records rows as `source_mode=live`
 - live sampling cycles `rock paper scissors` by default unless a narrower user-pick cycle is supplied
+- throughput pressure and spend pressure are treated as separate operator concerns
+
+## Rate And Credit Operator Guardrails
+
+1. Treat throughput and spend as separate control planes:
+   - rate limits (`RPM`, `TPM`, queue limits)
+   - usage/billing (token burn, budget, credits)
+2. Cost posture:
+   - keep interactive checks synchronous
+   - use short judged live batches by default
+   - only use extended live runs as explicit batch work
+3. Watch dashboards as part of normal operation:
+   - `make open-limits`
+   - `make open-usage`
+   - `make open-billing`
+   - or one-shot: `make open-cost-console`
+4. Efficiency defaults:
+   - keep `n=1` and structured output surfaces
+   - keep the live eval lens narrow before widening
+   - keep retry/backoff behaviour enabled in the live SDK path
 
 ## Validation
 

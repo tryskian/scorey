@@ -92,6 +92,7 @@ Current runtime surfaces:
 - `make caffeinate` keeps the display awake on macOS during active sessions
 - `make decaffeinate` releases the managed wake lock
 - `make decaffeinate-all` clears matching background `caffeinate` processes
+- `make open-limits`, `make open-usage`, and `make open-billing` expose the OpenAI cost console
 
 A first eval storage lane now exists:
 
@@ -170,6 +171,7 @@ Choose one lane at a time:
   - preserve `eod` as a first-class closeout command
   - keep display-sleep control explicit and managed
   - let `eod` clear stray background `caffeinate` processes
+  - keep live-token visibility explicit before extended runs
 - docs:
   - keep tracked docs aligned with what actually exists
 
