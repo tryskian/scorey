@@ -321,3 +321,22 @@ into implementation authorship.
   step is to inspect one object in a tighter role. Explicit pair cycles make
   that slice first-class without turning the local sampler into a pile of
   one-off named patterns.
+
+## D-020: Beta Eval 2.0 uses focused object slices
+
+- Date: `2026-05-05`
+- Category: `eval_quality`
+- Tags: `beta_eval_2_0`, `focused_slices`, `object_roles`, `one_focus`
+- Provenance: `human-led method decision`
+- Decision:
+  - treat the next active eval architecture as `Beta Eval 2.0`
+  - keep `Beta 1.0` as the routing gate underneath it
+  - use explicit local pair cycles to isolate one object across a win role and a loss role
+  - start with the rock slice:
+    - `rock,paper`
+    - `scissors,rock`
+- Why: Once the full `Beta 1.0` pass table was stable, the next useful question
+  was not whether Scorey could route at all, but whether one object could stay
+  stable when forced through both sides of the rigged round. That is a real
+  shift in eval shape, so it earns its own beta note instead of hiding inside
+  operator commands.

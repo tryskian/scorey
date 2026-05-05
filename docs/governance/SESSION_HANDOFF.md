@@ -107,6 +107,14 @@ Current named gate:
 - `pass` on reverse gameplay routes and same-pick loophole routes
 - `fail` on every other pair
 
+Current tracked eval beta:
+
+- `Beta Eval 2.0`
+- focused object slices
+- current live slice:
+  - `rock,paper`
+  - `scissors,rock`
+
 ## Next Kernel
 
 Choose one lane at a time:
@@ -119,8 +127,8 @@ Choose one lane at a time:
   - keep route enforcement and composition in the runtime
   - polish the interactive app only if it helps the core object
 - eval:
-  - populate the first rows
-  - use `Beta 1.0` while the first rows accumulate
+  - keep `Beta 1.0` as the routing gate
+  - use `Beta Eval 2.0` for focused object-slice runs
   - keep the gate read-only until a stored judgment path earns a wider surface
   - use local `baseline` sampling for soak/population, not for diversity claims
   - use local `beta-1-coverage` sampling when the full pass-pair truth table matters
