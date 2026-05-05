@@ -379,3 +379,34 @@ into implementation authorship.
 - Why: Once human review started, the next engineering bottleneck was queue
   selection. A tracked command is more durable and less error-prone than
   repeating manual database queries.
+
+## D-024: Scorey uses a real startup banner with width-aware fallbacks
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `banner`, `header`, `cli_typography`, `responsive_fallback`
+- Provenance: `human-led method decision with implementation decision`
+- Decision:
+  - port the Probaboracle-style banner geometry and breakpoint logic into Scorey
+  - keep a boxed banner when the terminal is wide enough
+  - fall back to stacked and then minimal banner forms as width narrows
+  - style only the repo line with bold accent treatment
+- Why: Scorey needs a real startup identity block, but the right shape is still
+  a compact CLI banner with tested fallbacks rather than a larger UI surface or
+  hand-tuned one-off centring.
+
+## D-025: The TTY app loop stages the round with a revealed `me:` slot
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `app_loop`, `selector`, `reveal`, `spinner`, `tty`
+- Provenance: `human-led method decision with implementation decision`
+- Decision:
+  - keep `you:` as the only active selector
+  - keep `me:` inactive until the user presses `enter`
+  - reveal Scorey's pick before the ruling text finishes
+  - use the Probaboracle-style Braille spinner for the live wait state
+  - use `enter` to play again and `esc` to exit in the TTY replay step
+- Why: The round needs to feel revealed, not jointly chosen. Staging the picks,
+  reveal, and ruling in-place makes the interaction legible without widening
+  the UI surface or turning Scorey into a bigger app.

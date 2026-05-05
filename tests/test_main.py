@@ -8,10 +8,74 @@ from unittest import TestCase
 from unittest.mock import patch
 
 from scorey.eval_db import init_db, record_output
-from scorey.main import main
+from scorey.main import build_round_scene_lines, choose_banner_lines, main
 
 
 class MainCommandTests(TestCase):
+    def test_choose_banner_lines_uses_box_when_wide(self) -> None:
+        lines = choose_banner_lines(terminal_width=80)
+
+        self.assertEqual(
+            lines[0], "┌──────────────────────────────────────────────────────────────┐"
+        )
+        self.assertIn("SCOREY RESEARCH BETA 2.0", lines[1])
+
+    def test_choose_banner_lines_uses_stacked_header_when_mid_width(self) -> None:
+        lines = choose_banner_lines(terminal_width=56)
+
+        self.assertEqual(
+            lines,
+            (
+                "SCOREY RESEARCH BETA 2.0",
+                "scorey keeps the score. you never win. sorry.",
+                "github.com/tryskian/scorey",
+            ),
+        )
+
+    def test_choose_banner_lines_uses_minimal_header_when_narrow(self) -> None:
+        lines = choose_banner_lines(terminal_width=40)
+
+        self.assertEqual(
+            lines,
+            (
+                "scorey research beta 2.0",
+                "scorey keeps the score.",
+                "you never win. sorry.",
+                "github.com/tryskian/scorey",
+            ),
+        )
+
+    def test_choose_banner_lines_drops_repo_when_tiny(self) -> None:
+        lines = choose_banner_lines(terminal_width=24)
+
+        self.assertEqual(
+            lines,
+            (
+                "scorey research beta 2.0",
+                "scorey keeps the score.",
+                "you never win. sorry.",
+            ),
+        )
+
+    def test_choose_banner_lines_styles_repo_when_active(self) -> None:
+        lines = choose_banner_lines(terminal_width=80, style_active=True)
+
+        self.assertIn("\x1b]8;;https://github.com/tryskian/scorey\x1b\\", lines[4])
+        self.assertIn("\x1b[1m", lines[4])
+        self.assertIn("\x1b[38;5;117m", lines[4])
+
+    def test_round_scene_keeps_consistent_height_across_reveal_states(self) -> None:
+        hidden_lines = build_round_scene_lines(selected_index=1)
+        loading_lines = build_round_scene_lines(
+            selected_index=1,
+            revealed_scorey_pick="rock",
+            loading_frame="⠋",
+        )
+
+        self.assertEqual(len(hidden_lines), len(loading_lines))
+        self.assertEqual(hidden_lines[7], "me:")
+        self.assertEqual(hidden_lines[8], "  [inactive until you press enter]")
+
     def test_local_play_prints_a_round(self) -> None:
         stdout = io.StringIO()
         with redirect_stdout(stdout):
@@ -27,8 +91,9 @@ class MainCommandTests(TestCase):
         stdout = io.StringIO()
         stderr = io.StringIO()
         with patch.dict("os.environ", {}, clear=True):
-            with redirect_stdout(stdout), redirect_stderr(stderr):
-                result = main(["play", "rock"])
+            with patch("scorey.config.load_dotenv", None):
+                with redirect_stdout(stdout), redirect_stderr(stderr):
+                    result = main(["play", "rock"])
 
         self.assertEqual(result, 1)
         self.assertIn("OPENAI_API_KEY", stderr.getvalue())

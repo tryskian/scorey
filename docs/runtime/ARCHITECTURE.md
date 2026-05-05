@@ -36,18 +36,28 @@ The default user path is bare `scorey`.
 
 It opens a persistent local CLI loop with:
 
-- a compact startup header
-- a fixed selector for:
+- a responsive startup banner with narrower fallbacks
+- a fixed `you:` selector for:
   - `rock`
   - `paper`
   - `scissors`
+- an inactive `me:` slot before reveal
 - `enter` as the primary action
 - `esc` as the explicit exit path
-- a visible wait state while generation runs
-- the full round reveal under the selected pick
-- an immediate replay prompt
+- Scorey's pick revealed before the ruling text lands
+- a visible inline wait state while generation runs
+- the ruling line and score revealed in-place under the picks
+- `press enter to play again or esc to exit` as the replay footer
 
 The app loop also supports a non-TTY fallback prompt path.
+
+The startup banner follows the Probaboracle-style runtime shape:
+
+- boxed header when the terminal is wide enough
+- stacked header when the box would be too tight
+- minimal header on narrower widths
+- repo line dropped only on very small terminals
+- bold accent styling only on the repo line
 
 ## Generation Path
 
@@ -56,10 +66,11 @@ The current generation shape is:
 1. The user selects `rock`, `paper`, or `scissors`.
 2. The runtime validates the fixed pick.
 3. Scorey routes to an allowed Scorey pick.
-4. The route defines the matchup frame for the round.
-5. The live model generates only the unstable unfair round state it needs as
+4. The app reveals Scorey's pick in the `me:` slot.
+5. The route defines the matchup frame for the round.
+6. The live model generates only the unstable unfair round state it needs as
    structured fields.
-6. The runtime composes the final round shape.
+7. The runtime composes the final round shape.
 
 The exact boundary is now part of the tracked contract.
 

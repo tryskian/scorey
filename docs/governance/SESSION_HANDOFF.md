@@ -68,6 +68,13 @@ A first runtime package is now tracked:
 Current runtime surfaces:
 
 - bare `scorey` opens the app loop
+- the app opens with a responsive banner and narrower fallbacks
+- the TTY app loop now stages the round:
+  - `you:` selector first
+  - `me:` inactive until reveal
+  - Scorey's pick revealed before the ruling finishes
+  - inline Braille spinner during live generation
+  - `enter` replay / `esc` exit footer
 - `scorey play rock` plays one live round
 - `scorey --local play rock` plays one deterministic local round
 - `scorey eval-init` initializes the local eval database
@@ -135,7 +142,7 @@ Choose one lane at a time:
   - first package skeleton is in place
   - keep the wrapper small while the live path settles
   - keep route enforcement and composition in the runtime
-  - polish the interactive app only if it helps the core object
+  - next useful runtime move: start live judged gameplay through the staged app loop
 - eval:
   - keep `Research Beta 1.0` as the routing gate
   - use `Research Beta 2.0` for focused object-lane runs

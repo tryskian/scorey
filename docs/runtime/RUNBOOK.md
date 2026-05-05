@@ -99,6 +99,16 @@ Operator path:
 The local path is deterministic. The live path uses the OpenAI Agents SDK and
 requires `OPENAI_API_KEY`.
 
+TTY interaction shape:
+
+- banner first
+- `you:` selector is the only active control
+- `me:` stays inactive until `enter`
+- Scorey's pick reveals before the explanation finishes
+- the inline spinner uses the Probaboracle-style Braille loader
+- `enter` starts the next round
+- `esc` exits the app loop
+
 ## Eval Commands
 
 Storage:
