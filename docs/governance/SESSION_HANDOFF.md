@@ -73,6 +73,7 @@ Current runtime surfaces:
 - `scorey eval-init` initializes the local eval database
 - `scorey eval-list --limit 10` lists recent eval rows
 - `scorey eval-list --limit 10 --verdict pending` lists only pending eval rows
+- `scorey eval-review-sample --limit 12` lists the newest pending row per model/pair sample
 - `scorey eval-judge 17922 pass --note "route-valid and legible"` records one human verdict
 - `scorey eval-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
@@ -89,6 +90,7 @@ A first eval storage lane now exists:
 - local SQLite at `.local/evals.sqlite`
 - append-only top-level judgments
 - explicit CLI judgment recording for pending rows
+- explicit CLI review sampling for pending rows
 - a notebook walkthrough in `output/jupyter-notebook/`
 - a deterministic local population path for batch row creation
 - the first stratified human review sweep has begun:

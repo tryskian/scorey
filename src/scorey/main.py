@@ -18,6 +18,7 @@ from scorey.eval_db import (
     init_db,
     judge_output,
     list_outputs,
+    list_review_sample,
 )
 from scorey.eval_gates import (
     BETA_1_DISPLAY_NAME,
@@ -89,6 +90,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Run the Beta 1.0 picks gate against recent eval rows.",
     )
     eval_beta_1_parser.add_argument("--limit", type=int, default=20)
+
+    eval_review_sample_parser = subparsers.add_parser(
+        "eval-review-sample",
+        help="List a stratified pending review sample.",
+    )
+    eval_review_sample_parser.add_argument("--limit", type=int, default=12)
 
     eval_judge_parser = subparsers.add_parser(
         "eval-judge",
@@ -462,6 +469,31 @@ def command_eval_beta_1(limit: int) -> int:
     return 0
 
 
+def command_eval_review_sample(limit: int) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    summary = counts(db_path)
+    print(
+        "eval counts: "
+        f"total={summary['total']} pass={summary['pass']} "
+        f"fail={summary['fail']} pending={summary['pending']}"
+    )
+    print(f"review sample: newest pending row per model/pair (limit={limit})")
+
+    rows = list_review_sample(db_path, limit=limit)
+    if not rows:
+        print("")
+        print("no pending eval outputs.")
+        return 0
+
+    print("")
+    for index, row in enumerate(rows):
+        if index > 0:
+            print("")
+        print(_format_eval_row(db_path, int(row["id"])))
+    return 0
+
+
 def command_eval_judge(output_id: int, verdict: str, note: str) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
@@ -542,6 +574,8 @@ def main(argv: list[str] | None = None) -> int:
         return command_eval_list(args.limit, args.verdict)
     if args.command == "eval-beta-1":
         return command_eval_beta_1(args.limit)
+    if args.command == "eval-review-sample":
+        return command_eval_review_sample(args.limit)
     if args.command == "eval-judge":
         return command_eval_judge(args.output_id, args.verdict, args.note)
     if args.command == "eval-sample-local":

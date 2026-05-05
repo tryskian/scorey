@@ -365,3 +365,17 @@ into implementation authorship.
 - Decision:
   - start judging evals after the human lead noticed the database had reached `17,922` outputs with `0` judgments
 - Why: That backlog state made the bottleneck obvious. More row generation without review was no longer adding useful signal.
+
+## D-023: Pending review sampling gets a first-class CLI path
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `eval_review`, `stratified_sample`, `operator_surface`, `pending_queue`
+- Provenance: `implementation decision`
+- Decision:
+  - add `eval-review-sample` as an explicit operator command
+  - list the newest pending row per model/pair sample
+  - keep the review queue usable without ad hoc SQL
+- Why: Once human review started, the next engineering bottleneck was queue
+  selection. A tracked command is more durable and less error-prone than
+  repeating manual database queries.

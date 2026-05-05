@@ -241,6 +241,48 @@ def get_output(db_path: Path | None, output_id: int) -> sqlite3.Row:
         return row
 
 
+def list_review_sample(
+    db_path: Path | None,
+    *,
+    limit: int = 12,
+) -> list[sqlite3.Row]:
+    if limit < 1:
+        raise ValueError("Limit must be at least 1.")
+
+    with closing(connect(db_path)) as conn, conn:
+        conn.executescript(SCHEMA)
+        rows = conn.execute(
+            """
+            SELECT
+                id,
+                user_pick,
+                scorey_pick,
+                route_family,
+                round_text,
+                source_mode,
+                model,
+                current_verdict,
+                current_note,
+                created_at
+            FROM eval_outputs
+            WHERE current_verdict IS NULL
+            ORDER BY id DESC
+            """
+        ).fetchall()
+
+    sample: list[sqlite3.Row] = []
+    seen: set[tuple[str, str, str]] = set()
+    for row in rows:
+        key = (str(row["model"]), str(row["scorey_pick"]), str(row["user_pick"]))
+        if key in seen:
+            continue
+        seen.add(key)
+        sample.append(row)
+        if len(sample) >= limit:
+            break
+    return sample
+
+
 def judge_output(
     db_path: Path | None,
     output_id: int,

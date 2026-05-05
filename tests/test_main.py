@@ -133,6 +133,49 @@ class MainCommandTests(TestCase):
         self.assertIn("scorey=scissors user=rock", output)
         self.assertIn("reason: reverse gameplay route", output)
 
+    def test_eval_review_sample_lists_distinct_pending_rows(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="first",
+                source_mode="local",
+                model="batch-a",
+            )
+            record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="second",
+                source_mode="local",
+                model="batch-a",
+            )
+            record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="third",
+                source_mode="local",
+                model="batch-a",
+            )
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(["eval-review-sample", "--limit", "5"])
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("review sample: newest pending row per model/pair", output)
+        self.assertIn("second", output)
+        self.assertIn("third", output)
+        self.assertNotIn("first", output)
+
     def test_eval_judge_updates_output(self) -> None:
         stdout = io.StringIO()
         with TemporaryDirectory() as tmpdir:

@@ -21,6 +21,7 @@ CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
 .PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-beta1 eval-sample-local caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
+.PHONY: eval-review-sample
 
 install:
 	$(PYTHON) -m venv $(VENV)
@@ -128,6 +129,9 @@ eval-init:
 
 eval-list:
 	PYTHONPATH=src $(PY) -m scorey eval-list --limit $(EVAL_LIMIT) $(if $(EVAL_VERDICT),--verdict $(EVAL_VERDICT),)
+
+eval-review-sample:
+	PYTHONPATH=src $(PY) -m scorey eval-review-sample --limit $(EVAL_LIMIT)
 
 eval-judge:
 	PYTHONPATH=src $(PY) -m scorey eval-judge $(OUTPUT_ID) $(VERDICT) --note "$(NOTE)"

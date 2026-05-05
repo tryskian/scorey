@@ -55,6 +55,7 @@ need to inspect, check, or advance the repo.
 | initialize the eval database | `make eval-init` |
 | list recent eval rows | `make eval-list EVAL_LIMIT=10` |
 | list only pending eval rows | `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending` |
+| list a stratified pending review sample | `make eval-review-sample EVAL_LIMIT=12` |
 | record one human verdict | `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'` |
 | run the Beta 1.0 picks gate | `make eval-beta1 EVAL_LIMIT=10` |
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
@@ -105,6 +106,7 @@ Storage:
 - `make eval-init`
 - `make eval-list EVAL_LIMIT=10`
 - `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending`
+- `make eval-review-sample EVAL_LIMIT=12`
 - `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
 - `make eval-beta1 EVAL_LIMIT=10`
 - `make eval-sample-local EVAL_COUNT=30`
@@ -121,6 +123,7 @@ Current posture:
 - binary top-level verdicts only
 - one notebook walkthrough beside the operator path
 - explicit human judgments now have a first-class operator command
+- stratified pending review now has a first-class operator command
 - `Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
 - local `baseline` sampling is a soak/population lane, not a diversity lane
 - local `beta-1-coverage` sampling cycles all six `Beta 1.0` pass pairs evenly
@@ -160,6 +163,7 @@ For eval storage changes:
 - `make eval-init`
 - `make eval-list EVAL_LIMIT=5`
 - `make eval-list EVAL_LIMIT=5 EVAL_VERDICT=pending`
+- `make eval-review-sample EVAL_LIMIT=6`
 - `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
 - `make eval-beta1 EVAL_LIMIT=5`
 - `make eval-sample-local EVAL_COUNT=9`

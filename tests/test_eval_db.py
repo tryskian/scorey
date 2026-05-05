@@ -2,7 +2,14 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
 
-from scorey.eval_db import counts, init_db, judge_output, list_outputs, record_output
+from scorey.eval_db import (
+    counts,
+    init_db,
+    judge_output,
+    list_outputs,
+    list_review_sample,
+    record_output,
+)
 
 
 class EvalDbTests(TestCase):
@@ -53,3 +60,43 @@ class EvalDbTests(TestCase):
             self.assertEqual(summary["pass"], 0)
             self.assertEqual(summary["fail"], 0)
             self.assertEqual(summary["pending"], 1)
+
+    def test_review_sample_returns_one_pending_row_per_model_pair(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            older_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="older",
+                source_mode="local",
+                model="batch-a",
+            )
+            newer_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="newer",
+                source_mode="local",
+                model="batch-a",
+            )
+            record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="other",
+                source_mode="local",
+                model="batch-a",
+            )
+            judge_output(db_path, older_id, "pass", "already judged")
+
+            rows = list_review_sample(db_path, limit=5)
+            self.assertEqual(len(rows), 2)
+            ids = {int(row["id"]) for row in rows}
+            self.assertIn(newer_id, ids)
+            self.assertNotIn(older_id, ids)
