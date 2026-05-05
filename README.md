@@ -2,18 +2,21 @@
 
 ## rock, paper, scissors, scorey
 
-Scorey is a small, local, agent-backed CLI toy in the
-**[Polinko research line](https://github.com/tryskian/polinko)**.
+scorey keeps the score.<br>
+sorry. you already lost.
 
-It is shaped more like
-**[Probaboracle](https://github.com/tryskian/probaboracle)** than Polinko
-itself: a tiny toy surface, a narrow runtime, and binary eval discipline.
+Scorey is a small, local, agent-backed CLI mini chatbot in the **[Polinko research line](https://github.com/tryskian/polinko)**.
 
-It is a rigged rock, paper, scissors mini chatbot. The surface is silly. The
-method is not.
+It is a rigged rock, paper, scissors spinoff of **[Probaboracle](https://github.com/tryskian/probaboracle)**. It inherits the Probaboracle-style idea of a narrow, agent-backed generation pipeline, but its surface is more bratty and game-shaped.
 
-Scorey stays small on purpose: tight contract, narrow surface, binary evals,
-and docs that stay honest about what exists.
+Scorey does not generate generic jokes about winning. It preserves the round:
+
+- what you picked
+- what scorey picked
+- why your pick failed
+- why scorey's pick worked
+- why scorey still wins
+- what the scoreboard now claims
 
 ## Run It
 
@@ -50,8 +53,7 @@ scorey play rock
 - A first picks-only `Beta 1.0` gate now exists in `src/scorey/eval_gates.py`.
 - A first eval storage lane now exists in `src/scorey/eval_db.py`.
 - A deterministic local sampler now exists in `src/scorey/eval_sampling.py`.
-- The local eval lane now supports both baseline soak sampling and full
-  `Beta 1.0` pass-pair coverage sampling.
+- The local eval lane now supports both baseline soak sampling and full `Beta 1.0` pass-pair coverage sampling.
 - It also supports focused local pair cycles for narrower research slices.
 - A follow-along notebook now lives in `output/jupyter-notebook/`.
 - The next active kernel is eval population and human judgment flow, or runtime polish.

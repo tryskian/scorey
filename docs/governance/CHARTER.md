@@ -97,6 +97,9 @@ Default execution model:
 After runtime, product-shape, or research-method changes, sweep the tracked
 docs before calling the state settled.
 
+Tracked docs should use UK English, normal paragraph wrapping, and deliberate
+line breaks only when the cadence or structure actually needs them.
+
 ## Scope
 
 In scope:
