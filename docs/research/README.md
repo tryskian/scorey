@@ -106,7 +106,7 @@ Parked lanes:
 
 ## Polinko Contrast
 
-Scorey uses the same **[Polinko research model](https://github.com/tryskian/polinko)**, but it is a smaller instrument.
+Scorey uses the same **[Polinko research model](https://github.com/tryskian/polinko)**, but it is a smaller rigged-round instrument.
 
 ```mermaid
 flowchart LR
