@@ -10,7 +10,7 @@ you already lost. sorry.
 
 Scorey is a small, local, agent-backed CLI mini chatbot using the **[Polinko research model](https://github.com/tryskian/polinko)**.
 
-It is a rigged rock, paper, scissors spinoff of **[Probaboracle](https://github.com/tryskian/probaboracle)**. It inherits the Probaboracle-style idea of a narrow, agent-backed generation pipeline, but its surface is more bratty and game-shaped.
+It is a rigged rock, paper, scissors spinoff of **[Probaboracle](https://github.com/tryskian/probaboracle)**. It keeps the same narrow, agent-backed mini chatbot shape, but turns it into a rigged round instead of an oracle prompt.
 
 It only accepts three picks:
 
