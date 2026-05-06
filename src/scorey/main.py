@@ -351,8 +351,8 @@ def render_round_scene(
     loading_frame: str | None = None,
     round_state: RoundState | None = None,
 ) -> int:
-    output_stream = sys.stdout if output_stream is None else output_stream
-    style_active = bool(getattr(output_stream, "isatty", lambda: False)())
+    stream = sys.stdout if output_stream is None else output_stream
+    style_active = bool(getattr(stream, "isatty", lambda: False)())
     lines = build_round_scene_lines(
         selected_index,
         revealed_scorey_pick=revealed_scorey_pick,
@@ -361,11 +361,11 @@ def render_round_scene(
         style_active=style_active,
     )
     if redraw:
-        output_stream.write(f"\x1b[{len(lines)}F")
+        stream.write(f"\x1b[{len(lines)}F")
     for line in lines:
-        output_stream.write(f"\r{ANSI_RESET}\x1b[2K")
-        output_stream.write(f"{line}\n")
-    output_stream.flush()
+        stream.write(f"\r{ANSI_RESET}\x1b[2K")
+        stream.write(f"{line}\n")
+    stream.flush()
     return len(lines)
 
 
@@ -507,7 +507,7 @@ def run_with_loading(
     output_stream: TextIO | None = None,
     render_frame: Callable[[str], None] | None = None,
 ) -> RoundState:
-    output_stream = sys.stdout if output_stream is None else output_stream
+    stream = sys.stdout if output_stream is None else output_stream
     result: dict[str, RoundState] = {}
     error: dict[str, BaseException] = {}
     stop = threading.Event()
@@ -518,16 +518,16 @@ def run_with_loading(
         while not stop.is_set():
             frame = frames[frame_index % len(frames)]
             if render_frame is None:
-                output_stream.write(f"\r\x1b[2K{frame}")
-                output_stream.flush()
+                stream.write(f"\r\x1b[2K{frame}")
+                stream.flush()
             else:
                 render_frame(frame)
             frame_index += 1
             if stop.wait(0.14):
                 break
         if render_frame is None:
-            output_stream.write("\r\x1b[2K")
-            output_stream.flush()
+            stream.write("\r\x1b[2K")
+            stream.flush()
 
     def worker() -> None:
         try:

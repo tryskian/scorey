@@ -42,7 +42,7 @@ flowchart LR
   L --> X --> G
 ```
 
-## Current Signal
+## What It Showed
 
 The first focused rock lane produced:
 
@@ -87,6 +87,13 @@ This beta separates two different questions:
 - can one object stay stable when it appears on both sides of that rigged logic
 
 That makes the next move cleaner. Local deterministic balance is no longer the open question.
+
+## What It Could Not Show
+
+- broader prose quality
+- tone stability
+- scoreboard judgment
+- whether the live path stays stable beyond the first judged sample
 
 ## What Changed Next
 

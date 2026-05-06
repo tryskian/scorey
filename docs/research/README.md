@@ -44,7 +44,7 @@ Current finding:
   - `0` human pending
   - the live path stayed on-pick and legible in the first judged sample
 
-Current clean probe:
+Current clean lane:
 
 - slightly wider judged live batches through the real API path
 - keep route and legibility active before widening the eval lens
