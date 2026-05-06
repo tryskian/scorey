@@ -462,3 +462,17 @@ into implementation authorship.
 - Why: Once Scorey stopped being a private repo, the tracked surface needed to
   read like an intentional public project rather than a personal checkout with
   machine-specific residue and visible scratch scaffolding.
+
+## D-029: Scorey should mirror Polinko's Apache license shape
+
+- Date: `2026-05-05`
+- Category: `repo_governance`
+- Tags: `license`, `public_surface`, `polinko_alignment`
+- Provenance: `human-led method decision with repo formalization`
+- Decision:
+  - keep Scorey under Apache-2.0
+  - align the tracked `LICENSE` file to the exact `polinko` shape rather than
+    using a looser standard-only Apache text
+- Why: The human lead wanted Scorey to inherit the same explicit public
+  licensing posture as Polinko and to keep the toy-family repo surface aligned
+  on the legal artifact too, not just on runtime and docs structure.
