@@ -17,6 +17,7 @@ build/
 dist/
 .history/
 *.code-workspace
+.vscode/
 docs/peanut/**
 !docs/peanut/
 !docs/peanut/.gitkeep
