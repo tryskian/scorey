@@ -32,8 +32,8 @@ need to inspect, check, or advance the repo.
 
 | Task | Command |
 | --- | --- |
-| show the repo file tree | `find . -maxdepth 2 -type f | sort` |
-| show tracked docs | `find docs -maxdepth 3 -type f | sort` |
+| show the repo file tree | `find . -maxdepth 2 -type f \| sort` |
+| show tracked docs | `find docs -maxdepth 3 -type f \| sort` |
 | inspect recent history when needed | `git log --stat --oneline --max-count=5` |
 | search the current docs surface | `rg -n "<term>" README.md docs` |
 | install or refresh the runtime env | `make install` |
