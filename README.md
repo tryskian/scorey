@@ -59,4 +59,4 @@ The operator commands, eval workflow, and setup checks live in the [runtime runb
 
 ---
 
-*Scorey is not a resource for fairness, accurate scoring, or mercy.*
+*Scorey is not a resource for fairness, sportsmanship, or second chances.*
