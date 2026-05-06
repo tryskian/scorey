@@ -92,4 +92,13 @@ That makes the next move cleaner. Local deterministic balance is no longer the o
 
 All three object lanes are now complete on the local path.
 
-The next useful move is to decide whether Scorey earns a wider prose, tone, or scoreboard-focused eval lane, or whether the next real signal needs the live path instead of more local repetition.
+The first live batch has now been recorded through the real API path:
+
+- `12` rows
+- `12` routing pass
+- `0` routing fail
+- `12` human pass
+- `0` human fail
+- `0` human pending
+
+So the next useful move is no longer more local repetition or first-pass live review. It is widening the live queue carefully while keeping the route and legibility lens narrow, then deciding whether Scorey earns a wider prose, tone, or scoreboard-focused eval lane.

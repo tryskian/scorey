@@ -25,7 +25,7 @@ real and what is still intentionally narrow.
 | `src/scorey/agent.py` | structured live round-field generation through the OpenAI Agents SDK |
 | `src/scorey/eval_gates.py` | explicit eval truth tables and gate helpers |
 | `src/scorey/eval_db.py` | local SQLite eval storage |
-| `src/scorey/eval_sampling.py` | deterministic local eval population and soak helper |
+| `src/scorey/eval_sampling.py` | local and live eval population helpers |
 | `src/scorey/main.py` | app loop and `play` operator command |
 | `tests/` | contract and CLI tests |
 | `output/jupyter-notebook/` | follow-along notebooks and lightweight research walkthroughs |
@@ -36,18 +36,28 @@ The default user path is bare `scorey`.
 
 It opens a persistent local CLI loop with:
 
-- a compact startup header
-- a fixed selector for:
+- a responsive startup banner with narrower fallbacks
+- a fixed `you:` selector for:
   - `rock`
   - `paper`
   - `scissors`
+- an inactive `me:` slot before reveal
 - `enter` as the primary action
 - `esc` as the explicit exit path
-- a visible wait state while generation runs
-- the full round reveal under the selected pick
-- an immediate replay prompt
+- Scorey's pick revealed before the ruling text lands
+- a visible inline wait state while generation runs
+- the ruling line and score revealed in-place under the picks
+- `press enter to play again or esc to exit` as the replay footer
 
 The app loop also supports a non-TTY fallback prompt path.
+
+The startup banner follows the Probaboracle-style runtime shape:
+
+- boxed header when the terminal is wide enough
+- stacked header when the box would be too tight
+- minimal header on narrower widths
+- repo line dropped only on very small terminals
+- bold accent styling only on the repo line
 
 ## Generation Path
 
@@ -56,10 +66,11 @@ The current generation shape is:
 1. The user selects `rock`, `paper`, or `scissors`.
 2. The runtime validates the fixed pick.
 3. Scorey routes to an allowed Scorey pick.
-4. The route defines the matchup frame for the round.
-5. The live model generates only the unstable unfair round state it needs as
+4. The app reveals Scorey's pick in the `me:` slot.
+5. The route defines the matchup frame for the round.
+6. The live model generates only the unstable unfair round state it needs as
    structured fields.
-6. The runtime composes the final round shape.
+7. The runtime composes the final round shape.
 
 The exact boundary is now part of the tracked contract.
 
@@ -158,6 +169,16 @@ It also accepts explicit local pair cycles in `scorey_pick,user_pick` order for
 focused lanes like `rock,paper` plus `scissors,rock`.
 
 None of these local lanes are diversity claims.
+
+The live sampling lane now records real generated rounds into the same DB:
+
+- it cycles user picks in user order by default:
+  - `rock`
+  - `paper`
+  - `scissors`
+- it lets Scorey choose a valid live route for each user pick
+- it records `source_mode=live` with the active model name
+- it preserves the same `Research Beta 1.0` pass/fail counters for immediate route readback
 
 ## Contracts
 

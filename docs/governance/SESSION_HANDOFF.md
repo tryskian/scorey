@@ -11,8 +11,7 @@ Last updated: 2026-05-05
    - `docs/runtime/ARCHITECTURE.md`
    - `docs/runtime/RUNBOOK.md`
    - this file
-2. Confirm repo path:
-   - `/Users/tryskian/Github/scorey`
+2. Confirm you are at the repo root.
 3. Treat the tracked docs as current project state.
 4. State the active kernel before changing files.
 
@@ -68,6 +67,13 @@ A first runtime package is now tracked:
 Current runtime surfaces:
 
 - bare `scorey` opens the app loop
+- the app opens with a responsive banner and narrower fallbacks
+- the TTY app loop now stages the round:
+  - `you:` selector first
+  - `me:` inactive until reveal
+  - Scorey's pick revealed before the ruling finishes
+  - inline Braille spinner during live generation
+  - `enter` replay / `esc` exit footer
 - `scorey play rock` plays one live round
 - `scorey --local play rock` plays one deterministic local round
 - `scorey eval-init` initializes the local eval database
@@ -81,9 +87,11 @@ Current runtime surfaces:
   records all six `Research Beta 1.0` pass pairs in a deterministic cycle
 - `scorey eval-sample-local --count 30 --pair rock,paper --pair scissors,rock`
   records a focused local pair cycle for a rock win/loss lane
+- `scorey eval-sample-live --count 12` records live API eval rows into the same DB
 - `make caffeinate` keeps the display awake on macOS during active sessions
 - `make decaffeinate` releases the managed wake lock
 - `make decaffeinate-all` clears matching background `caffeinate` processes
+- `make open-limits`, `make open-usage`, and `make open-billing` expose the OpenAI cost console
 
 A first eval storage lane now exists:
 
@@ -93,10 +101,18 @@ A first eval storage lane now exists:
 - explicit CLI review sampling for pending rows
 - a notebook walkthrough in `output/jupyter-notebook/`
 - a deterministic local population path for batch row creation
+- a live batch path for real API row creation
 - the local deterministic queue is fully judged:
   - `17,922` pass
   - `0` fail
   - `0` pending
+- the first live batch now exists:
+  - `12` rows
+  - `12` routing pass
+  - `0` routing fail
+  - `12` human pass
+  - `0` human fail
+  - `0` human pending
 
 ## Research Snapshot
 
@@ -135,7 +151,7 @@ Choose one lane at a time:
   - first package skeleton is in place
   - keep the wrapper small while the live path settles
   - keep route enforcement and composition in the runtime
-  - polish the interactive app only if it helps the core object
+  - next useful runtime move: widen the live queue carefully after the clean first judged batch
 - eval:
   - keep `Research Beta 1.0` as the routing gate
   - use `Research Beta 2.0` for focused object-lane runs
@@ -147,13 +163,14 @@ Choose one lane at a time:
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: choose a wider eval lens or move to the live path
+  - next useful move: run a slightly wider judged live batch
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful
   - preserve `eod` as a first-class closeout command
   - keep display-sleep control explicit and managed
   - let `eod` clear stray background `caffeinate` processes
+  - keep live-token visibility explicit before extended runs
 - docs:
   - keep tracked docs aligned with what actually exists
 
@@ -180,4 +197,4 @@ At minimum:
 
 ## Copy/Paste Refresh Prompt
 
-`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Confirm the repo path is /Users/tryskian/Github/scorey. Treat the tracked docs as current project state. Then execute the Next Kernel with minimal drift and full validation.`
+`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Confirm you are at the repo root. Treat the tracked docs as current project state. Then execute the Next Kernel with minimal drift and full validation.`

@@ -8,15 +8,16 @@ need to inspect, check, or advance the repo.
 
 ## Start A Session
 
-1. Read the local instruction surface:
+1. Read the tracked instruction surface:
    - `README.md`
    - `docs/governance/CHARTER.md`
    - `docs/governance/DECISIONS.md`
    - `docs/runtime/ARCHITECTURE.md`
    - `docs/runtime/RUNBOOK.md`
    - `docs/governance/SESSION_HANDOFF.md`
-2. Confirm the repo path:
-   - `/Users/tryskian/Github/scorey`
+2. Confirm you are at the repo root:
+   - `git rev-parse --show-toplevel`
+   - or `pwd`
 3. Treat the tracked docs as current project state.
 4. Install or refresh the local environment:
    - `make install`
@@ -61,6 +62,11 @@ need to inspect, check, or advance the repo.
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
 | record a six-pair `Research Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage` |
 | record an explicit local pair cycle | `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'` |
+| record a live API eval batch | `make eval-sample-live EVAL_COUNT=12` |
+| open the OpenAI limits page | `make open-limits` |
+| open the OpenAI usage page | `make open-usage` |
+| open the OpenAI billing page | `make open-billing` |
+| open all three OpenAI cost pages | `make open-cost-console` |
 | run end-of-day preflight | `make eod-preflight` |
 | run end-of-day closeout | `make eod` |
 
@@ -99,6 +105,16 @@ Operator path:
 The local path is deterministic. The live path uses the OpenAI Agents SDK and
 requires `OPENAI_API_KEY`.
 
+TTY interaction shape:
+
+- banner first
+- `you:` selector is the only active control
+- `me:` stays inactive until `enter`
+- Scorey's pick reveals before the explanation finishes
+- the inline spinner uses the Probaboracle-style Braille loader
+- `enter` starts the next round
+- `esc` exits the app loop
+
 ## Eval Commands
 
 Storage:
@@ -112,6 +128,8 @@ Storage:
 - `make eval-sample-local EVAL_COUNT=30`
 - `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage`
 - `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'`
+- `make eval-sample-live EVAL_COUNT=12`
+- `make eval-sample-live EVAL_COUNT=12 EVAL_USER_PICKS='rock paper'`
 
 Compatibility aliases:
 
@@ -134,6 +152,28 @@ Current posture:
 - local `research-beta-1-coverage` sampling cycles all six `Research Beta 1.0` pass pairs evenly
 - explicit local pair cycles let the research lane isolate narrow lanes like
   `rock,paper` and `scissors,rock`
+- live sampling uses the real API path and records rows as `source_mode=live`
+- live sampling cycles `rock paper scissors` by default unless a narrower user-pick cycle is supplied
+- throughput pressure and spend pressure are treated as separate operator concerns
+
+## Rate And Credit Operator Guardrails
+
+1. Treat throughput and spend as separate control planes:
+   - rate limits (`RPM`, `TPM`, queue limits)
+   - usage/billing (token burn, budget, credits)
+2. Cost posture:
+   - keep interactive checks synchronous
+   - use short judged live batches by default
+   - only use extended live runs as explicit batch work
+3. Watch dashboards as part of normal operation:
+   - `make open-limits`
+   - `make open-usage`
+   - `make open-billing`
+   - or one-shot: `make open-cost-console`
+4. Efficiency defaults:
+   - keep `n=1` and structured output surfaces
+   - keep the live eval lens narrow before widening
+   - keep retry/backoff behaviour enabled in the live SDK path
 
 ## Validation
 
@@ -174,6 +214,7 @@ For eval storage changes:
 - `make eval-sample-local EVAL_COUNT=9`
 - `make eval-sample-local EVAL_COUNT=12 EVAL_PATTERN=research-beta-1-coverage`
 - `make eval-sample-local EVAL_COUNT=8 EVAL_PAIRS='rock,paper scissors,rock'`
+- `make eval-sample-live EVAL_COUNT=3`
 - `make check`
 - `make package-check`
 

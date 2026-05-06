@@ -4,14 +4,134 @@ import io
 from contextlib import redirect_stderr, redirect_stdout
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import TextIO, cast
 from unittest import TestCase
 from unittest.mock import patch
 
 from scorey.eval_db import init_db, record_output
-from scorey.main import main
+from scorey.eval_sampling import EvalSampleSummary
+from scorey.main import (
+    build_round_scene_lines,
+    choose_banner_lines,
+    main,
+    read_selector_key,
+)
+
+
+class _FakeTTYStream:
+    def __init__(self, reads: list[str], fileno: int = 99) -> None:
+        self._reads = reads
+        self._fileno = fileno
+
+    def isatty(self) -> bool:
+        return True
+
+    def fileno(self) -> int:
+        return self._fileno
+
+    def read(self, _count: int) -> str:
+        if not self._reads:
+            raise AssertionError("Unexpected extra read")
+        return self._reads.pop(0)
 
 
 class MainCommandTests(TestCase):
+    def test_choose_banner_lines_uses_box_when_wide(self) -> None:
+        lines = choose_banner_lines(terminal_width=80)
+
+        self.assertEqual(
+            lines[0], "┌──────────────────────────────────────────────────────────────┐"
+        )
+        self.assertIn("SCOREY RESEARCH BETA 2.0", lines[1])
+
+    def test_choose_banner_lines_uses_stacked_header_when_mid_width(self) -> None:
+        lines = choose_banner_lines(terminal_width=56)
+
+        self.assertEqual(
+            lines,
+            (
+                "SCOREY RESEARCH BETA 2.0",
+                "scorey keeps the score. you never win. sorry.",
+                "github.com/tryskian/scorey",
+            ),
+        )
+
+    def test_choose_banner_lines_uses_minimal_header_when_narrow(self) -> None:
+        lines = choose_banner_lines(terminal_width=40)
+
+        self.assertEqual(
+            lines,
+            (
+                "scorey research beta 2.0",
+                "scorey keeps the score.",
+                "you never win. sorry.",
+                "github.com/tryskian/scorey",
+            ),
+        )
+
+    def test_choose_banner_lines_drops_repo_when_tiny(self) -> None:
+        lines = choose_banner_lines(terminal_width=24)
+
+        self.assertEqual(
+            lines,
+            (
+                "scorey research beta 2.0",
+                "scorey keeps the score.",
+                "you never win. sorry.",
+            ),
+        )
+
+    def test_choose_banner_lines_styles_repo_when_active(self) -> None:
+        lines = choose_banner_lines(terminal_width=80, style_active=True)
+
+        self.assertIn("\x1b]8;;https://github.com/tryskian/scorey\x1b\\", lines[4])
+        self.assertIn("\x1b[1m", lines[4])
+        self.assertIn("\x1b[38;5;117m", lines[4])
+
+    def test_round_scene_keeps_consistent_height_across_reveal_states(self) -> None:
+        hidden_lines = build_round_scene_lines(selected_index=1)
+        loading_lines = build_round_scene_lines(
+            selected_index=1,
+            revealed_scorey_pick="rock",
+            loading_frame="⠋",
+        )
+
+        self.assertEqual(len(hidden_lines), len(loading_lines))
+        self.assertEqual(hidden_lines[7], "me:")
+        self.assertEqual(hidden_lines[8], "  [inactive until you press enter]")
+
+    def test_read_selector_key_returns_esc_without_waiting_for_followup_byte(
+        self,
+    ) -> None:
+        stream = _FakeTTYStream(["\x1b"])
+
+        with patch("scorey.main.termios.tcgetattr", return_value=object()):
+            with patch("scorey.main.tty.setraw"):
+                with patch("scorey.main.termios.tcsetattr"):
+                    with patch(
+                        "scorey.main.select.select",
+                        return_value=([], [], []),
+                    ):
+                        self.assertEqual(read_selector_key(cast(TextIO, stream)), "ESC")
+
+    def test_read_selector_key_still_parses_arrow_sequences(self) -> None:
+        stream = _FakeTTYStream(["\x1b", "[", "B"])
+
+        with patch("scorey.main.termios.tcgetattr", return_value=object()):
+            with patch("scorey.main.tty.setraw"):
+                with patch("scorey.main.termios.tcsetattr"):
+                    with patch(
+                        "scorey.main.select.select",
+                        side_effect=[
+                            ([stream.fileno()], [], []),
+                            ([stream.fileno()], [], []),
+                        ],
+                    ):
+                        self.assertEqual(
+                            read_selector_key(cast(TextIO, stream)),
+                            "DOWN",
+                        )
+
     def test_local_play_prints_a_round(self) -> None:
         stdout = io.StringIO()
         with redirect_stdout(stdout):
@@ -27,8 +147,9 @@ class MainCommandTests(TestCase):
         stdout = io.StringIO()
         stderr = io.StringIO()
         with patch.dict("os.environ", {}, clear=True):
-            with redirect_stdout(stdout), redirect_stderr(stderr):
-                result = main(["play", "rock"])
+            with patch("scorey.config.load_dotenv", None):
+                with redirect_stdout(stdout), redirect_stderr(stderr):
+                    result = main(["play", "rock"])
 
         self.assertEqual(result, 1)
         self.assertIn("OPENAI_API_KEY", stderr.getvalue())
@@ -81,6 +202,30 @@ class MainCommandTests(TestCase):
         output = stdout.getvalue()
         self.assertIn("eval counts: total=1 pass=0 fail=0 pending=1", output)
         self.assertIn("(cross-object, local, pending)", output)
+
+    def test_eval_list_filtered_empty_subset_reports_no_matching_rows(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="my scissors beats your paper because snacks.",
+                source_mode="local",
+                model="local-fixture",
+            )
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(["eval-list", "--limit", "5", "--verdict", "pass"])
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("eval counts: total=1 pass=0 fail=0 pending=1", output)
+        self.assertIn("no pass eval outputs.", output)
+        self.assertNotIn("no eval outputs yet.", output)
 
     def test_research_beta_1_empty_db_prints_gate_definition(self) -> None:
         stdout = io.StringIO()
@@ -332,3 +477,42 @@ class MainCommandTests(TestCase):
             "recorded=4 research_beta_1_pass=4 research_beta_1_fail=0",
             output,
         )
+
+    def test_eval_sample_live_reports_rows(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with patch(
+                    "scorey.main.sample_live_eval_outputs",
+                    return_value=EvalSampleSummary(
+                        recorded=3,
+                        first_output_id=101,
+                        last_output_id=103,
+                        research_beta_1_pass=2,
+                        research_beta_1_fail=1,
+                        elapsed_seconds=0.25,
+                    ),
+                ):
+                    with redirect_stdout(stdout):
+                        result = main(
+                            [
+                                "eval-sample-live",
+                                "--count",
+                                "3",
+                                "--pick",
+                                "rock",
+                                "--pick",
+                                "paper",
+                            ]
+                        )
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("live eval sample complete: count=3", output)
+        self.assertIn("user_picks=rock paper", output)
+        self.assertIn(
+            "recorded=3 research_beta_1_pass=2 research_beta_1_fail=1",
+            output,
+        )
+        self.assertIn(f"db={db_path}", output)

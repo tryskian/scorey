@@ -379,3 +379,86 @@ into implementation authorship.
 - Why: Once human review started, the next engineering bottleneck was queue
   selection. A tracked command is more durable and less error-prone than
   repeating manual database queries.
+
+## D-024: Scorey uses a real startup banner with width-aware fallbacks
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `banner`, `header`, `cli_typography`, `responsive_fallback`
+- Provenance: `human-led method decision with implementation decision`
+- Decision:
+  - port the Probaboracle-style banner geometry and breakpoint logic into Scorey
+  - keep a boxed banner when the terminal is wide enough
+  - fall back to stacked and then minimal banner forms as width narrows
+  - style only the repo line with bold accent treatment
+- Why: Scorey needs a real startup identity block, but the right shape is still
+  a compact CLI banner with tested fallbacks rather than a larger UI surface or
+  hand-tuned one-off centring.
+
+## D-025: The TTY app loop stages the round with a revealed `me:` slot
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `app_loop`, `selector`, `reveal`, `spinner`, `tty`
+- Provenance: `human-led method decision with implementation decision`
+- Decision:
+  - keep `you:` as the only active selector
+  - keep `me:` inactive until the user presses `enter`
+  - reveal Scorey's pick before the ruling text finishes
+  - use the Probaboracle-style Braille spinner for the live wait state
+  - use `enter` to play again and `esc` to exit in the TTY replay step
+- Why: The round needs to feel revealed, not jointly chosen. Staging the picks,
+  reveal, and ruling in-place makes the interaction legible without widening
+  the UI surface or turning Scorey into a bigger app.
+
+## D-026: Live API eval batches get a first-class operator path
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `live_eval`, `operator_surface`, `batch_generation`, `sqlite`
+- Provenance: `human-led runtime request with implementation decision`
+- Decision:
+  - add `eval-sample-live` as an explicit operator command
+  - record live API rounds into the same SQLite eval DB as local rows
+  - cycle `rock`, `paper`, and `scissors` in user order by default
+  - preserve immediate `Research Beta 1.0` route counters on the live batch output
+- Why: Once the local deterministic queue was fully settled, the next useful
+  signal had to come from real generated gameplay rather than more local
+  repetition. A tracked live batch command is safer and more legible than
+  improvised shell loops or manual one-round recording.
+
+## D-027: Live evals follow the token management protocol
+
+- Date: `2026-05-05`
+- Category: `runtime_engineering`
+- Tags: `token_management`, `cost_console`, `live_eval`, `operator_posture`
+- Provenance: `human-led runtime suggestion with implementation decision`
+- Decision:
+  - port the Polinko-style cost console idea into Scorey's live eval operator surface
+  - treat throughput limits and spend as separate operator control planes
+  - keep interactive live checks synchronous
+  - use extended live runs only as explicit batch work
+  - add quick operator shortcuts for visibility:
+    - `make open-limits`
+    - `make open-usage`
+    - `make open-billing`
+    - `make open-cost-console`
+- Why: Live eval latency can make "just let it run longer" look harmless when it
+  is actually consuming budget slowly in the background. The cost console keeps
+  spend visible, while the batch-first posture preserves the research signal
+  without turning Scorey's live lane into an unbounded token sink.
+
+## D-028: The tracked repo surface should read cleanly in public
+
+- Date: `2026-05-05`
+- Category: `workflow_environment`
+- Tags: `public_surface`, `docs_hygiene`, `repo_posture`
+- Provenance: `human-led method decision with repo formalization`
+- Decision:
+  - treat the tracked docs and operator surface as public-facing by default
+  - keep hardcoded personal machine paths out of tracked docs
+  - keep editor-specific workspace files out of the tracked repo surface
+  - keep scratch lanes local or ignored instead of advertising them in public-facing operator output
+- Why: Once Scorey stopped being a private repo, the tracked surface needed to
+  read like an intentional public project rather than a personal checkout with
+  machine-specific residue and visible scratch scaffolding.
