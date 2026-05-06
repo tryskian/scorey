@@ -9,6 +9,7 @@ description = "Rigged local CLI rock-paper-scissors mini chatbot within the Poli
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+  "openai==2.35.0",
   "openai-agents==0.15.2",
   "python-dotenv==1.2.2",
 ]

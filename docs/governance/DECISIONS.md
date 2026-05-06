@@ -476,3 +476,18 @@ into implementation authorship.
 - Why: The human lead wanted Scorey to inherit the same explicit public
   licensing posture as Polinko and to keep the toy-family repo surface aligned
   on the legal artifact too, not just on runtime and docs structure.
+
+## D-030: The OpenAI Python SDK is pinned directly, not only through Agents
+
+- Date: `2026-05-06`
+- Category: `runtime_engineering`
+- Tags: `openai_sdk`, `dependency_pin`, `runtime_contract`
+- Provenance: `implementation decision`
+- Decision:
+  - pin the official `openai` Python SDK directly in `pyproject.toml`
+  - do not leave Scorey's runtime depending on `openai` only as a transitive
+    dependency of `openai-agents`
+  - keep the direct SDK pin current alongside the Agents SDK pin
+- Why: Scorey is agent-backed, but the OpenAI runtime dependency should still
+  be explicit. A direct pin makes upgrades and compatibility checks legible
+  instead of leaving the effective SDK version to drift underneath the repo.
