@@ -51,7 +51,7 @@ It opens a persistent local CLI loop with:
 
 The app loop also supports a non-TTY fallback prompt path.
 
-The startup banner follows the Probaboracle-style runtime shape:
+The startup banner keeps the same compact CLI family shape:
 
 - boxed header when the terminal is wide enough
 - stacked header when the box would be too tight

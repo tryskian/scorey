@@ -7,8 +7,9 @@ Scorey is a small, local, agent-backed rock, paper, scissors mini chatbot.
 It explores constrained human-AI interaction through deliberately unfair round
 reasoning, narrow generation, and strict binary evaluation.
 
-Scorey is part of the Polinko research line, but it is shaped like the other
-tiny toy siblings: small surface, clear scope, hard evals, and careful docs.
+Scorey is part of the Polinko research line, but its job is simpler than
+Probaboracle's: keep one rigged round small enough to inspect, repeat, and
+judge.
 
 ## Durable Rules
 
@@ -53,6 +54,7 @@ Project posture:
 - keep it small
 - keep it local-first
 - keep it aligned with Polinko's eval discipline
+- keep the unfairness legible
 - evolve tooling intentionally
 
 ## Working Model
