@@ -27,5 +27,4 @@ jobs:
           close-pr-message: Closing stale dependency PR to keep the queue clean. Reopen or rerun the bump when it becomes active again.
           only-pr-labels: dependencies
           exempt-draft-pr: true
-          delete-branch: true
           operations-per-run: 30
