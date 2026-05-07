@@ -35,21 +35,19 @@ Current finding:
   - `17,922` pass
   - `0` fail
   - `0` pending
-- the first live batch is now in the database:
-  - `12` rows
-  - `12` routing pass
-  - `0` routing fail
-  - `12` human pass
-  - `0` human fail
-  - `0` human pending
-  - the live path stayed on-pick and legible in the first judged sample
+- the live queue is now fully judged under the current narrow lens:
+  - `395` live rows
+  - `395` beab pass
+  - `0` beab fail
+  - `0` beab pending
+  - the live path has stayed on-pick and legible across the wider judged queue
 
 Current clean lane:
 
-- slightly wider judged live batches through the real API path
-- keep route and legibility active before widening the eval lens
+- decide whether the live path has earned a wider prose, tone, or scoreboard lens
+- keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
-- widen into prose, tone, or scoreboard judgement only after the live path stays on-pick
+- widen into prose, tone, or scoreboard judgement only because the live path has now stayed on-pick
 
 ## Beta Map
 
@@ -96,8 +94,8 @@ Parked lanes:
 - object lanes:
   - complete for the current local pass
 - live gameplay:
-  - the first live batch is now fully judged
-  - treat judged live rows as the next meaningful signal
+  - the widened live queue is now fully judged
+  - use those judged live rows to decide the next eval lens, not to farm more of the same evidence
 - later eval lenses:
   - only widen into round prose, tone, or scoreboard judgement after the object lanes are stable
 - research visuals:

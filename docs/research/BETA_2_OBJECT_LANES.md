@@ -93,19 +93,24 @@ That makes the next move cleaner. Local deterministic balance is no longer the o
 - broader prose quality
 - tone stability
 - scoreboard judgment
-- whether the live path stays stable beyond the first judged sample
+- whether the live path stays stable beyond the current narrow judged live queue
 
 ## What Changed Next
 
 All three object lanes are now complete on the local path.
 
-The first live batch has now been recorded through the real API path:
+The widened live queue has now been recorded and fully judged through the real API path:
 
-- `12` rows
-- `12` routing pass
-- `0` routing fail
-- `12` human pass
-- `0` human fail
-- `0` human pending
+- `395` live rows
+- `395` beab pass
+- `0` beab fail
+- `0` beab pending
+- pair balance stayed entirely inside the valid `Research Beta 1.0` route set:
+  - `56` rows of `paper/paper`
+  - `53` rows of `paper/scissors`
+  - `75` rows of `rock/paper`
+  - `74` rows of `rock/rock`
+  - `59` rows of `scissors/rock`
+  - `78` rows of `scissors/scissors`
 
-So the next useful move is no longer more local repetition or first-pass live review. It is widening the live queue carefully while keeping the route and legibility lens narrow, then deciding whether Scorey earns a wider prose, tone, or scoreboard-focused eval lane.
+So the next useful move is no longer more local repetition or more narrow live route review. It is deciding whether Scorey has earned a wider prose, tone, or scoreboard-focused eval lane.

@@ -124,9 +124,9 @@ A first eval storage lane now exists:
   - `0` pending
 - the live review queue now exists:
   - `395` total live rows
-  - `95` pass
+  - `395` pass
   - `0` fail
-  - `300` pending beab judgments
+  - `0` pending beab judgements
 
 ## Research Snapshot
 
@@ -157,7 +157,7 @@ Current tracked research beta:
 - live lane:
   - real API rounds recorded
   - route contract holding so far
-  - review queue now outweighs generation
+  - first widened live queue fully judged
 
 ## Next Kernel
 
@@ -181,7 +181,7 @@ Choose one lane at a time:
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: work down the `300` pending live rows with beab judgment
+  - next useful move: decide whether the live path has earned a wider prose, tone, or scoreboard lens
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful
