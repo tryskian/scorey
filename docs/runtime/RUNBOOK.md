@@ -26,7 +26,10 @@ need to inspect, check, or advance the repo.
 6. Add live runtime credentials when needed:
    - put `OPENAI_API_KEY` in the repo `.env`
    - or export it in the shell
-7. State the active kernel before editing tracked files.
+7. For any live API work, keep the token monitoring dashboard available:
+   - `make open-cost-console`
+   - use `make open-limits` or `make open-usage` directly when a tighter check is enough
+8. State the active kernel before editing tracked files.
 
 ## Everyday Commands
 
@@ -170,7 +173,10 @@ Current posture:
    - `make open-usage`
    - `make open-billing`
    - or one-shot: `make open-cost-console`
-4. Efficiency defaults:
+4. Live API rule:
+   - keep the token monitoring dashboard open or immediately reachable during live eval work
+   - recheck it before widening a batch or starting an extended run
+5. Efficiency defaults:
    - keep `n=1` and structured output surfaces
    - keep the live eval lens narrow before widening
    - keep retry/backoff behaviour enabled in the live SDK path
