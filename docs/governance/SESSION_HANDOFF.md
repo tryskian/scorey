@@ -45,6 +45,8 @@ A small operator surface now exists:
 - `make eval-list`
 - `make eval-review-sample`
 - `make eval-judge`
+- `make eval-tone-sample`
+- `make eval-tone-judge`
 - `make research-beta1`
 - `make eval-sample-live`
 - `make open-limits`
@@ -96,6 +98,8 @@ Current runtime surfaces:
 - `scorey eval-list --limit 10 --verdict pending` lists only pending eval rows
 - `scorey eval-review-sample --limit 12` lists the newest pending row per model/pair sample
 - `scorey eval-judge 17922 pass --note "route-valid and legible"` records one human verdict
+- `scorey eval-tone-sample --limit 12` lists the newest pending live tone row per model/pair sample
+- `scorey eval-tone-judge 17922 pass --note "pick-aware playful confident coherent imaginative"` records one tone verdict
 - `scorey research-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
 - `scorey eval-sample-local --count 30 --pattern research-beta-1-coverage`
@@ -158,6 +162,10 @@ Current tracked research beta:
   - real API rounds recorded
   - route contract holding so far
   - first widened live queue fully judged
+  - first tone sample started:
+    - `6` rows judged
+    - `5` pass
+    - `1` fail
 
 ## Next Kernel
 
@@ -187,7 +195,7 @@ Choose one lane at a time:
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: run the first judged tone pass on the widened live queue
+  - next useful move: continue the judged tone pass on the widened live queue
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful

@@ -47,11 +47,15 @@ Current finding:
   - `confident`
   - `coherent`
   - `imaginative`
-  - the tone pass itself has not started yet
+  - the first judged tone sample has started:
+    - `6` rows judged
+    - `5` pass
+    - `1` fail
+    - the first fail stayed pick-aware and coherent but did not feel imaginative enough
 
 Current clean lane:
 
-- start judged live tone review with the five-point bar
+- continue judged live tone review with the five-point bar
 - keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
 - widen into scoreboard or prose judgement only after the tone lane earns it
@@ -107,7 +111,7 @@ Parked lanes:
   - complete for the current local pass
 - live gameplay:
   - the widened live queue is now fully judged
-  - use those judged live rows as the starting surface for the tone-first pass
+  - keep using those judged live rows as the tone-first evidence surface
 - later eval lenses:
   - only widen into scoreboard or prose judgement after the tone lane stabilises
 - research visuals:

@@ -6,6 +6,9 @@ from scorey.eval_db import (
     counts,
     init_db,
     judge_output,
+    judge_output_for_lens,
+    lens_counts,
+    list_lens_review_sample,
     list_outputs,
     list_review_sample,
     record_output,
@@ -100,3 +103,63 @@ class EvalDbTests(TestCase):
             ids = {int(row["id"]) for row in rows}
             self.assertIn(newer_id, ids)
             self.assertNotIn(older_id, ids)
+
+    def test_tone_review_sample_uses_route_pass_rows_and_skips_tone_judged(
+        self,
+    ) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            older_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="older tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            newer_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="newer tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            other_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="paper",
+                route_family="same-pick",
+                round_text="other tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, older_id, "pass", "route pass")
+            judge_output(db_path, newer_id, "pass", "route pass")
+            judge_output(db_path, other_id, "pass", "route pass")
+            judge_output_for_lens(
+                db_path,
+                other_id,
+                lens="tone",
+                verdict="pass",
+                note="already tone judged",
+            )
+
+            rows = list_lens_review_sample(
+                db_path,
+                lens="tone",
+                source_mode="live",
+                limit=5,
+            )
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(int(rows[0]["id"]), newer_id)
+
+            summary = lens_counts(db_path, lens="tone", source_mode="live")
+            self.assertEqual(summary["total"], 3)
+            self.assertEqual(summary["pass"], 1)
+            self.assertEqual(summary["fail"], 0)
+            self.assertEqual(summary["pending"], 2)

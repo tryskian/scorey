@@ -512,3 +512,22 @@ into implementation authorship.
   tone became the cleanest next method shift. It is narrower and more
   Scorey-specific than a general prose pass, and the positive-only bar keeps
   the lens focused on what the toy is actually trying to sound like.
+
+## D-032: Tone review gets a separate operator surface instead of overwriting route verdicts
+
+- Date: `2026-05-07`
+- Category: `runtime_engineering`
+- Tags: `tone_review`, `operator_surface`, `eval_storage`, `research_beta_3`
+- Provenance: `implementation decision`
+- Decision:
+  - keep the existing `current_verdict` lane as the route-valid floor
+  - add a separate append-only tone review store for later lenses
+  - expose tone review explicitly through:
+    - `eval-tone-sample`
+    - `eval-tone-judge`
+    - `make eval-tone-sample`
+    - `make eval-tone-judge`
+- Why: Once `Research Beta 3.0` became the active lane, reusing the top-level
+  route verdict would have blurred two different questions into one field.
+  Tone review needed its own surface so later lenses can stack on the same live
+  rows without erasing the route-pass baseline.

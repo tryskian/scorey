@@ -24,7 +24,7 @@ CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
 CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
+.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
 .PHONY: eval-review-sample
 
 install:
@@ -136,6 +136,12 @@ eval-review-sample:
 
 eval-judge:
 	PYTHONPATH=src $(PY) -m scorey eval-judge $(OUTPUT_ID) $(VERDICT) --note "$(NOTE)"
+
+eval-tone-sample:
+	PYTHONPATH=src $(PY) -m scorey eval-tone-sample --limit $(EVAL_LIMIT)
+
+eval-tone-judge:
+	PYTHONPATH=src $(PY) -m scorey eval-tone-judge $(OUTPUT_ID) $(VERDICT) --note "$(NOTE)"
 
 research-beta1:
 	PYTHONPATH=src $(PY) -m scorey research-beta-1 --limit $(EVAL_LIMIT)

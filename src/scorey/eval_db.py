@@ -12,6 +12,7 @@ VERDICTS: tuple[str, ...] = ("pass", "fail")
 LIST_VERDICTS: tuple[str, ...] = VERDICTS + ("pending",)
 SOURCE_MODES: tuple[str, ...] = ("local", "live")
 ROUTE_FAMILIES: tuple[str, ...] = ("cross-object", "same-pick")
+LENSES: tuple[str, ...] = ("tone",)
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS eval_outputs (
@@ -38,6 +39,16 @@ CREATE TABLE IF NOT EXISTS eval_judgments (
     verdict TEXT NOT NULL CHECK (verdict IN ('pass', 'fail')),
     note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS eval_lens_judgments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
+    lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    verdict TEXT NOT NULL CHECK (verdict IN ('pass', 'fail')),
+    note TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    UNIQUE (output_id, lens)
 );
 """
 
@@ -283,6 +294,70 @@ def list_review_sample(
     return sample
 
 
+def list_lens_review_sample(
+    db_path: Path | None,
+    *,
+    lens: str,
+    limit: int = 12,
+    source_mode: str | None = None,
+) -> list[sqlite3.Row]:
+    if lens not in LENSES:
+        raise ValueError(f"Unsupported lens '{lens}'.")
+    if limit < 1:
+        raise ValueError("Limit must be at least 1.")
+    if source_mode is not None and source_mode not in SOURCE_MODES:
+        raise ValueError(f"Unsupported source mode '{source_mode}'.")
+
+    where = [
+        "current_verdict = 'pass'",
+        """
+        NOT EXISTS (
+            SELECT 1
+            FROM eval_lens_judgments lens_judgments
+            WHERE lens_judgments.output_id = eval_outputs.id
+              AND lens_judgments.lens = ?
+        )
+        """.strip(),
+    ]
+    params: list[str] = [lens]
+    if source_mode is not None:
+        where.append("source_mode = ?")
+        params.append(source_mode)
+
+    query = f"""
+        SELECT
+            id,
+            user_pick,
+            scorey_pick,
+            route_family,
+            round_text,
+            source_mode,
+            model,
+            current_verdict,
+            current_note,
+            created_at
+        FROM eval_outputs
+        WHERE {" AND ".join(where)}
+        ORDER BY id DESC
+    """
+
+    with closing(connect(db_path)) as conn, conn:
+        conn.executescript(SCHEMA)
+        rows = conn.execute(query, tuple(params)).fetchall()
+
+    sample: list[sqlite3.Row] = []
+    seen: set[tuple[str, str, str]] = set()
+    for row in rows:
+        key = (str(row["model"]), str(row["scorey_pick"]), str(row["user_pick"]))
+        if key in seen:
+            continue
+        seen.add(key)
+        sample.append(row)
+        if len(sample) >= limit:
+            break
+    return sample
+
+
 def judge_output(
     db_path: Path | None,
     output_id: int,
@@ -322,6 +397,42 @@ def judge_output(
         )
 
 
+def judge_output_for_lens(
+    db_path: Path | None,
+    output_id: int,
+    *,
+    lens: str,
+    verdict: str,
+    note: str,
+) -> None:
+    if lens not in LENSES:
+        raise ValueError(f"Unsupported lens '{lens}'.")
+    if verdict not in VERDICTS:
+        raise ValueError(f"Unsupported verdict '{verdict}'.")
+
+    with closing(connect(db_path)) as conn, conn:
+        conn.executescript(SCHEMA)
+        row = conn.execute(
+            "SELECT id FROM eval_outputs WHERE id = ?",
+            (output_id,),
+        ).fetchone()
+        if row is None:
+            raise ValueError(f"Output id {output_id} does not exist.")
+
+        conn.execute(
+            """
+            INSERT INTO eval_lens_judgments (
+                output_id,
+                lens,
+                verdict,
+                note,
+                created_at
+            ) VALUES (?, ?, ?, ?, ?)
+            """,
+            (output_id, lens, verdict, note, utc_now()),
+        )
+
+
 def counts(db_path: Path | None) -> dict[str, int]:
     with closing(connect(db_path)) as conn, conn:
         conn.executescript(SCHEMA)
@@ -343,3 +454,67 @@ def counts(db_path: Path | None) -> dict[str, int]:
             "fail": int(totals["fail"] or 0),
             "pending": int(totals["pending"] or 0),
         }
+
+
+def lens_counts(
+    db_path: Path | None,
+    *,
+    lens: str,
+    source_mode: str | None = None,
+) -> dict[str, int]:
+    if lens not in LENSES:
+        raise ValueError(f"Unsupported lens '{lens}'.")
+    if source_mode is not None and source_mode not in SOURCE_MODES:
+        raise ValueError(f"Unsupported source mode '{source_mode}'.")
+
+    eligible_where = ["current_verdict = 'pass'"]
+    params: list[str] = []
+    if source_mode is not None:
+        eligible_where.append("source_mode = ?")
+        params.append(source_mode)
+
+    eligible_sql = f"""
+        SELECT COUNT(*) AS total
+        FROM eval_outputs
+        WHERE {" AND ".join(eligible_where)}
+    """
+    judgment_where = [
+        "output.current_verdict = 'pass'",
+        "lens_judgments.lens = ?",
+    ]
+    judgment_params: list[str] = [lens]
+    if source_mode is not None:
+        judgment_where.append("output.source_mode = ?")
+        judgment_params.append(source_mode)
+
+    judgments_sql = f"""
+        SELECT
+            lens_judgments.verdict AS verdict,
+            COUNT(*) AS count
+        FROM eval_lens_judgments lens_judgments
+        JOIN eval_outputs output
+          ON output.id = lens_judgments.output_id
+        WHERE {" AND ".join(judgment_where)}
+        GROUP BY lens_judgments.verdict
+    """
+
+    with closing(connect(db_path)) as conn, conn:
+        conn.executescript(SCHEMA)
+        total_row = conn.execute(eligible_sql, tuple(params)).fetchone()
+        total = int(total_row["total"] or 0) if total_row is not None else 0
+        verdict_rows = conn.execute(judgments_sql, tuple(judgment_params)).fetchall()
+
+    pass_count = 0
+    fail_count = 0
+    for row in verdict_rows:
+        if row["verdict"] == "pass":
+            pass_count = int(row["count"] or 0)
+        elif row["verdict"] == "fail":
+            fail_count = int(row["count"] or 0)
+
+    return {
+        "total": total,
+        "pass": pass_count,
+        "fail": fail_count,
+        "pending": total - pass_count - fail_count,
+    }

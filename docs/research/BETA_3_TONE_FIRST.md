@@ -6,9 +6,9 @@ Can Scorey keep its own voice once route validity and pick legibility are no lon
 
 ## Short Answer
 
-Pending.
+Started, but not settled.
 
-The tone lane is now defined, but the judged tone pass has not started yet.
+The tone lane is now defined and the first judged sample has real separation, but the evidence is still too small to call stable.
 
 ## Eval Shape
 
@@ -50,7 +50,7 @@ flowchart LR
 
 ## What It Showed
 
-This beta is now defined, but not yet evidenced.
+This beta has now started, and the first judged tone sample is not an all-pass surface.
 
 Its starting surface is the already-judged live queue:
 
@@ -58,6 +58,13 @@ Its starting surface is the already-judged live queue:
 - `395` beab pass under the current narrow route-and-legibility lens
 - `0` fail
 - `0` pending
+
+The first tone tranche now records:
+
+- `6` rows judged
+- `5` tone pass
+- `1` tone fail
+- the first fail came from a `paper/paper` row that stayed pick-aware and coherent but did not feel imaginative enough
 
 So the open question is no longer whether Scorey stayed on-pick. It is whether Scorey sounds like Scorey once that floor is already satisfied.
 
@@ -71,8 +78,9 @@ It is more specific than a broad prose pass, and it stays closer to the object's
 
 - scoreboard quality as its own judged lane
 - broader prose quality as its own judged lane
+- whether the five-point tone bar will stay stable across a larger judged queue
 - whether later lenses will need a different sampling shape
 
 ## What Changed Next
 
-The next useful move is to start the first judged tone pass on the live queue using the five-point bar.
+The next useful move is to continue the judged tone pass on the live queue until the five-point bar looks stable enough to support a wider lens decision.
