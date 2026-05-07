@@ -491,3 +491,24 @@ into implementation authorship.
 - Why: Scorey is agent-backed, but the OpenAI runtime dependency should still
   be explicit. A direct pin makes upgrades and compatibility checks legible
   instead of leaving the effective SDK version to drift underneath the repo.
+
+## D-031: Research Beta 3.0 is a positive-only tone-first lane
+
+- Date: `2026-05-07`
+- Category: `research_method`
+- Tags: `research_beta_3`, `tone`, `live_eval`, `positive_only`
+- Provenance: `human-led method decision`
+- Decision:
+  - make tone the next research beta after the route-valid live queue settled
+  - keep the tone bar positive-only rather than defining it by anti-patterns
+  - judge the tone lane through five desired traits:
+    - `pick-aware`
+    - `playful`
+    - `confident`
+    - `coherent`
+    - `imaginative`
+  - treat scoreboard and broader prose as later lenses
+- Why: Once live route validity and legibility stopped being the open question,
+  tone became the cleanest next method shift. It is narrower and more
+  Scorey-specific than a general prose pass, and the positive-only bar keeps
+  the lens focused on what the toy is actually trying to sound like.

@@ -10,12 +10,12 @@ Raw run notes and scratch material stay out of the tracked research surface unti
 
 Current tracked research beta:
 
-- `Research Beta 2.0`
-- `focused object lanes`
+- `Research Beta 3.0`
+- `tone first`
 
 Current question:
 
-Can one object stay stable when Scorey is forced to show it as both a win and a loss?
+Can Scorey hold its voice once route validity and pick legibility are no longer the open question?
 
 Current finding:
 
@@ -41,13 +41,20 @@ Current finding:
   - `0` beab fail
   - `0` beab pending
   - the live path has stayed on-pick and legible across the wider judged queue
+- `Research Beta 3.0` is now defined as a positive-only tone lens:
+  - `pick-aware`
+  - `playful`
+  - `confident`
+  - `coherent`
+  - `imaginative`
+  - the tone pass itself has not started yet
 
 Current clean lane:
 
-- decide whether the live path has earned a wider prose, tone, or scoreboard lens
+- start judged live tone review with the five-point bar
 - keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
-- widen into prose, tone, or scoreboard judgement only because the live path has now stayed on-pick
+- widen into scoreboard or prose judgement only after the tone lane earns it
 
 ## Beta Map
 
@@ -55,11 +62,13 @@ Current clean lane:
 | --- | --- | --- |
 | `Research Beta 1.0` | Does Scorey choose a valid rigged route? | The first gate narrowed to pick routing only. |
 | `Research Beta 2.0` | Can one object hold a stable win/loss lane? | Explicit local pair cycles isolate one object across both roles in one focused lane. |
+| `Research Beta 3.0` | Can Scorey keep its own voice once routing is settled? | The live judged lane keeps the route floor but switches the verdict lens to tone first. |
 
 Read in order:
 
 1. [Research Beta 1.0: Pick Routing First](./BETA_1_PICK_ROUTING.md)
 2. [Research Beta 2.0: Focused Object Lanes](./BETA_2_OBJECT_LANES.md)
+3. [Research Beta 3.0: Tone First](./BETA_3_TONE_FIRST.md)
 
 ## How To Read The Betas
 
@@ -69,6 +78,7 @@ Each beta marks a real change in what the evaluation is asking:
 
 - `Research Beta 1.0` proved route validity at the pick level
 - `Research Beta 2.0` keeps the same gate but changes the sampling shape to inspect one object lane at a time
+- `Research Beta 3.0` keeps the live route floor but changes the verdict lens to Scorey's voice
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 
@@ -78,11 +88,13 @@ Later betas do not erase earlier ones. They narrow what each verdict is allowed 
 flowchart LR
   B1["Research Beta 1.0<br/>pick routing only"]
   B2["Research Beta 2.0<br/>focused object lanes"]
+  B3["Research Beta 3.0<br/>tone first"]
 
   S1["six valid pass pairs<br/>and nothing else"]
   S2["one object isolated<br/>across win and loss roles"]
+  S3["five positive tone traits<br/>on judged live rounds"]
 
-  B1 --> S1 --> B2 --> S2
+  B1 --> S1 --> B2 --> S2 --> B3 --> S3
 ```
 
 ## Plans
@@ -95,9 +107,9 @@ Parked lanes:
   - complete for the current local pass
 - live gameplay:
   - the widened live queue is now fully judged
-  - use those judged live rows to decide the next eval lens, not to farm more of the same evidence
+  - use those judged live rows as the starting surface for the tone-first pass
 - later eval lenses:
-  - only widen into round prose, tone, or scoreboard judgement after the object lanes are stable
+  - only widen into scoreboard or prose judgement after the tone lane stabilises
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them

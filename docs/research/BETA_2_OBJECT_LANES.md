@@ -113,4 +113,4 @@ The widened live queue has now been recorded and fully judged through the real A
   - `59` rows of `scissors/rock`
   - `78` rows of `scissors/scissors`
 
-So the next useful move is no longer more local repetition or more narrow live route review. It is deciding whether Scorey has earned a wider prose, tone, or scoreboard-focused eval lane.
+So the next useful move is no longer more local repetition or more narrow live route review. It is `Research Beta 3.0`: a tone-first pass on judged live rows using a positive-only bar of `pick-aware`, `playful`, `confident`, `coherent`, and `imaginative`.

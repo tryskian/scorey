@@ -148,8 +148,8 @@ Current named gate:
 
 Current tracked research beta:
 
-- `Research Beta 2.0`
-- focused object lanes
+- `Research Beta 3.0`
+- tone first
 - local lane set:
   - rock: complete
   - paper: complete
@@ -172,8 +172,14 @@ Choose one lane at a time:
   - keep the token monitoring dashboard open or immediately reachable during live API work
 - eval:
   - keep `Research Beta 1.0` as the routing gate
-  - use `Research Beta 2.0` for focused object-lane runs
-  - keep the gate read-only until a stored judgment path earns a wider surface
+  - treat `Research Beta 3.0` as the active tone-first lane
+  - use the judged live queue as the evidence surface
+  - use the positive-only tone bar:
+    - `pick-aware`
+    - `playful`
+    - `confident`
+    - `coherent`
+    - `imaginative`
   - use local `baseline` sampling for soak/population, not for diversity claims
   - use local `research-beta-1-coverage` sampling when the full pass-pair truth table matters
   - use explicit local pair cycles when a research lane needs one object in a
@@ -181,7 +187,7 @@ Choose one lane at a time:
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: decide whether the live path has earned a wider prose, tone, or scoreboard lens
+  - next useful move: run the first judged tone pass on the widened live queue
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful
