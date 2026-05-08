@@ -127,17 +127,18 @@ A first eval storage lane now exists:
   - `0` fail
   - `0` pending
 - the live review queue now exists:
-  - `664` total live rows
-  - `441` pass
+  - `958` total live rows
+  - `958` pass
   - `0` fail
-  - `223` pending beab route reviews
+  - `0` pending beab route reviews
 - the active tone queue now exists on top of the route-pass live rows:
-  - `11` tone pass
-  - `7` tone fail
-  - `423` pending tone reviews
-- the two most recent extended live runs both held the route contract:
+  - `27` tone pass
+  - `27` tone fail
+  - `904` pending tone reviews
+- the three most recent extended live runs all held the route contract:
   - after output `18317`: `12` new live rows, all valid `Research Beta 1.0` routes
   - after output `18329`: `257` new live rows, all valid `Research Beta 1.0` routes
+  - after output `18586`: `294` new live rows, all valid `Research Beta 1.0` routes
 
 ## Research Snapshot
 
@@ -168,12 +169,13 @@ Current tracked research beta:
 - live lane:
   - real API rounds recorded
   - route contract still holding so far
-  - live generation is now outrunning review throughput
+  - route floor is now fully caught up again
+  - tone review is now the real throughput bottleneck
   - current tone queue:
-    - `18` rows judged
-    - `11` pass
-    - `7` fail
-    - the current weak pattern is usually still coherent but not imaginative enough
+    - `54` rows judged
+    - `27` pass
+    - `27` fail
+    - the current weak pattern is either generic `real one` / `napkin` lines or playful-but-not-coherent drifts
 
 ## Next Kernel
 
@@ -205,7 +207,7 @@ Choose one lane at a time:
   - paper lane: complete and stable
   - scissors lane: complete and stable
   - next useful move:
-    - push the `223` pending live rows through the route floor
+    - keep the route floor caught up when new batches land
     - keep judging tone from the freshest route-passed tranche
   - keep one narrow binary focus active at a time
 - operators:

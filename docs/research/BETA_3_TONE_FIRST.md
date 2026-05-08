@@ -6,9 +6,9 @@ Can Scorey keep its own voice once route validity and pick legibility are no lon
 
 ## Short Answer
 
-Started, promising, but not settled.
+Started, separating real signal, but not settled.
 
-The tone lane now has real separation, and the live route floor is still holding under wider batches, but review throughput is lagging the new generation.
+The tone lane now has real separation, and the live route floor is fully holding under wider batches, but tone review throughput is lagging the widened queue.
 
 ## Eval Shape
 
@@ -59,33 +59,34 @@ Its starting surface was the already-judged live queue:
 - `0` fail
 - `0` pending
 
-Since then, two more extended live runs have widened the active surface:
+Since then, three more extended live runs have widened the active surface:
 
 - `12` new live rows after output `18317`
 - `257` new live rows after output `18329`
-- both runs stayed entirely inside the valid `Research Beta 1.0` route set
+- `294` new live rows after output `18586`
+- all three runs stayed entirely inside the valid `Research Beta 1.0` route set
 
 The current live snapshot is now:
 
-- `664` live rows recorded
-- `441` beab pass at the route-and-legibility floor
+- `958` live rows recorded
+- `958` beab pass at the route-and-legibility floor
 - `0` beab fail
-- `223` still pending route review
+- `0` pending route review
 
 The current tone lane now records:
 
-- `18` rows judged
-- `11` tone pass
-- `7` tone fail
-- `423` route-passed live rows still pending tone review
-- the weak pattern is usually still pick-aware and coherent, but too generic or not imaginative enough
+- `54` rows judged
+- `27` tone pass
+- `27` tone fail
+- `904` route-passed live rows still pending tone review
+- the weak pattern is usually either the generic `real one` / `napkin` line or a playful line that is not coherent enough to keep
 
-Inside the latest `257`-row run, the tandem pass has already started:
+Inside the latest `294`-row run, the tandem pass has already started:
 
-- `34` rows promoted through the route floor
-- `3` tone pass
-- `3` tone fail
-- `28` tone pending
+- `294` rows promoted through the route floor
+- `7` tone pass
+- `11` tone fail
+- `276` tone pending
 
 So the open question is no longer whether Scorey stayed on-pick. It is whether Scorey sounds like Scorey once that floor is already satisfied.
 
@@ -101,8 +102,8 @@ It is more specific than a broad prose pass, and it stays closer to the object's
 - broader prose quality as its own judged lane
 - whether the five-point tone bar will stay stable across a larger judged queue
 - whether later lenses will need a different sampling shape
-- whether tandem review can keep up once live generation widens again
+- whether tone review can keep up once live generation widens again
 
 ## What Changed Next
 
-The next useful move is to keep route review and tone review moving in tandem with live generation until the five-point bar looks stable enough to support a wider lens decision.
+The next useful move is to keep the route floor caught up when new batches land, and keep tone review moving across the widened live queue until the five-point bar looks stable enough to support a wider lens decision.
