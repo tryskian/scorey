@@ -453,6 +453,44 @@ class MainCommandTests(TestCase):
         self.assertIn("third tone row", output)
         self.assertNotIn("first tone row", output)
 
+    def test_eval_tone_sample_can_filter_to_one_user_pick(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            paper_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="paper tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            rock_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="rock tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, paper_id, "pass", "route pass")
+            judge_output(db_path, rock_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(
+                        ["eval-tone-sample", "--limit", "5", "--pick", "paper"]
+                    )
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("tone counts: total=1 pass=0 fail=0 pending=1", output)
+        self.assertIn("user_picks=paper", output)
+        self.assertIn("paper tone row", output)
+        self.assertNotIn("rock tone row", output)
+
     def test_eval_tone_judge_records_lens_verdict(self) -> None:
         stdout = io.StringIO()
         with TemporaryDirectory() as tmpdir:

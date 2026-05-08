@@ -138,7 +138,7 @@ eval-judge:
 	PYTHONPATH=src $(PY) -m scorey eval-judge $(OUTPUT_ID) $(VERDICT) --note "$(NOTE)"
 
 eval-tone-sample:
-	PYTHONPATH=src $(PY) -m scorey eval-tone-sample --limit $(EVAL_LIMIT)
+	PYTHONPATH=src $(PY) -m scorey eval-tone-sample --limit $(EVAL_LIMIT) $(foreach pick,$(EVAL_USER_PICKS),--pick $(pick))
 
 eval-tone-judge:
 	PYTHONPATH=src $(PY) -m scorey eval-tone-judge $(OUTPUT_ID) $(VERDICT) --note "$(NOTE)"

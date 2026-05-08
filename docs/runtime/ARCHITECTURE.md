@@ -127,6 +127,9 @@ The current tracked shape is intentionally small:
 - verdicts stay binary:
   - `pass`
   - `fail`
+- failure disposition stays method-level:
+  - `retain`
+  - `evict`
 
 The current row shape records:
 
@@ -140,6 +143,14 @@ The current row shape records:
 - `current_note`
 
 The top-level verdict still means the route-valid floor.
+
+`RETAIN / EVICT` does not introduce a third verdict value. It is the explicit
+disposition layer applied after a `fail`:
+
+- `retain` means the failure still belongs in the active lane as live evidence
+- `evict` means the failure proved the lane definition is wrong upstream, so
+  the correction belongs in routing, scope, or another runtime boundary before
+  rerun
 
 Later lenses can add their own append-only review surface without overwriting that first judgment.
 
@@ -210,6 +221,9 @@ The live sampling lane now records real generated rounds into the same DB:
 - Eval verdicts stay binary:
   - `pass`
   - `fail`
+- Failed seams use explicit disposition:
+  - `retain`
+  - `evict`
 
 ## Docs Ownership
 

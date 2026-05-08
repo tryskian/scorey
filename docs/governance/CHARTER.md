@@ -46,6 +46,12 @@ Eval:
 - binary verdicts only
 - `pass`
 - `fail`
+- if `fail`, use explicit failure disposition:
+  - `retain`
+  - `evict`
+- treat `retain` as in-scope failure evidence that stays in the active lane
+- treat `evict` as the upstream correction that removes a bad lane before rerun
+- rerun after evictions instead of leaving known-bad seams in the same queue
 - one eval focus at a time
 - start with the round contract before broader fit judgments
 
@@ -111,6 +117,7 @@ In scope:
 - agent-backed generation
 - deterministic local baseline
 - binary human judgment
+- explicit failure disposition after `fail`
 - local eval storage
 - diagram-backed runtime explanation
 - governance docs for charter, decisions, and handoff state

@@ -99,6 +99,7 @@ Current runtime surfaces:
 - `scorey eval-review-sample --limit 12` lists the newest pending row per model/pair sample
 - `scorey eval-judge 17922 pass --note "route-valid and legible"` records one human verdict
 - `scorey eval-tone-sample --limit 12` lists the newest pending live tone row per model/pair sample
+- `scorey eval-tone-sample --limit 12 --pick paper` narrows the tone review queue to paper-only user picks
 - `scorey eval-tone-judge 17922 pass --note "pick-aware playful confident coherent imaginative"` records one tone verdict
 - `scorey research-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
@@ -127,18 +128,25 @@ A first eval storage lane now exists:
   - `0` fail
   - `0` pending
 - the live review queue now exists:
-  - `958` total live rows
+  - `1252` total live rows
   - `958` pass
   - `0` fail
-  - `0` pending beab route reviews
+  - `294` pending beab route reviews
 - the active tone queue now exists on top of the route-pass live rows:
-  - `44` tone pass
-  - `58` tone fail
-  - `856` pending tone reviews
+  - `45` tone pass
+  - `59` tone fail
+  - `854` pending tone reviews on route-passed live rows
+- tone failures now use a second explicit disposition layer:
+  - `retain`
+  - `evict`
 - the three most recent extended live runs all held the route contract:
   - after output `18317`: `12` new live rows, all valid `Research Beta 1.0` routes
   - after output `18329`: `257` new live rows, all valid `Research Beta 1.0` routes
   - after output `18586`: `294` new live rows, all valid `Research Beta 1.0` routes
+  - after output `18880`: `294` new paper-only live rows, all valid `Research Beta 1.0` routes
+  - paper-only balance:
+    - `paper/paper`: `144`
+    - `paper/rock`: `150`
 
 ## Research Snapshot
 
@@ -149,6 +157,7 @@ Current project posture:
 - preserve the object
 - keep the surface small and local
 - keep evals binary
+- keep failure disposition explicit after `fail`
 
 Current named gate:
 
@@ -169,12 +178,15 @@ Current tracked research beta:
 - live lane:
   - real API rounds recorded
   - route contract still holding so far
-  - route floor is now fully caught up again
+  - the latest paper-only run is complete, but its `294` rows still need route-floor promotion
   - tone review is now the real throughput bottleneck
+  - the active failure contract is now:
+    - `PASS / FAIL`
+    - if `FAIL`, then `RETAIN / EVICT`
   - current tone queue:
-    - `102` rows judged
-    - `44` pass
-    - `58` fail
+    - `104` rows judged
+    - `45` pass
+    - `59` fail
     - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
     - the strongest fail pattern is still generic `real one` / `napkin` or version/copy language, with a smaller playful-but-not-coherent drift cluster
 
@@ -194,6 +206,9 @@ Choose one lane at a time:
   - treat `Research Beta 3.0` as the active tone-first lane
   - use the judged live queue as the evidence surface
   - keep route review and tone review moving in tandem with live generation
+  - after `fail`, use explicit failure disposition:
+    - `retain` for in-scope live evidence
+    - `evict` for seams that have earned an upstream correction before rerun
   - use the positive-only tone bar:
     - `pick-aware`
     - `playful`
@@ -208,8 +223,8 @@ Choose one lane at a time:
   - paper lane: complete and stable
   - scissors lane: complete and stable
   - next useful move:
-    - keep the route floor caught up when new batches land
-    - keep judging tone from the freshest route-passed tranche
+    - promote the completed paper-only batch through the route floor
+    - keep judging tone from the isolated paper tranche
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful
@@ -228,6 +243,7 @@ Choose one lane at a time:
 - Keep active input fixed to `rock`, `paper`, and `scissors`.
 - Do not add freeform input while the constrained interaction theory is active.
 - Keep eval verdicts binary only.
+- Keep `RETAIN / EVICT` as a failure-disposition rule, not as a third verdict state.
 - Keep one active kernel at a time.
 - Keep same-pick rounds as losing loophole rounds, not ties.
 - Keep the local path deterministic and cheap.
