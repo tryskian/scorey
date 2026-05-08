@@ -75,18 +75,19 @@ The current live snapshot is now:
 
 The current tone lane now records:
 
-- `54` rows judged
-- `27` tone pass
-- `27` tone fail
-- `904` route-passed live rows still pending tone review
-- the weak pattern is usually either the generic `real one` / `napkin` line or a playful line that is not coherent enough to keep
+- `102` rows judged
+- `44` tone pass
+- `58` tone fail
+- `856` route-passed live rows still pending tone review
+- the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
+- the weak pattern is usually either generic `real one` / `napkin` or version/copy language, with a smaller playful line that is not coherent enough to keep
 
 Inside the latest `294`-row run, the tandem pass has already started:
 
 - `294` rows promoted through the route floor
-- `7` tone pass
-- `11` tone fail
-- `276` tone pending
+- `24` tone pass
+- `42` tone fail
+- `228` tone pending
 
 So the open question is no longer whether Scorey stayed on-pick. It is whether Scorey sounds like Scorey once that floor is already satisfied.
 

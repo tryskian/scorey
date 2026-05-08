@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-07
+Last updated: 2026-05-08
 
 ## Start Here
 
@@ -132,9 +132,9 @@ A first eval storage lane now exists:
   - `0` fail
   - `0` pending beab route reviews
 - the active tone queue now exists on top of the route-pass live rows:
-  - `27` tone pass
-  - `27` tone fail
-  - `904` pending tone reviews
+  - `44` tone pass
+  - `58` tone fail
+  - `856` pending tone reviews
 - the three most recent extended live runs all held the route contract:
   - after output `18317`: `12` new live rows, all valid `Research Beta 1.0` routes
   - after output `18329`: `257` new live rows, all valid `Research Beta 1.0` routes
@@ -172,10 +172,11 @@ Current tracked research beta:
   - route floor is now fully caught up again
   - tone review is now the real throughput bottleneck
   - current tone queue:
-    - `54` rows judged
-    - `27` pass
-    - `27` fail
-    - the current weak pattern is either generic `real one` / `napkin` lines or playful-but-not-coherent drifts
+    - `102` rows judged
+    - `44` pass
+    - `58` fail
+    - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
+    - the strongest fail pattern is still generic `real one` / `napkin` or version/copy language, with a smaller playful-but-not-coherent drift cluster
 
 ## Next Kernel
 
