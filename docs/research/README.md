@@ -35,27 +35,29 @@ Current finding:
   - `17,922` pass
   - `0` fail
   - `0` pending
-- the live queue is now fully judged under the current narrow lens:
-  - `395` live rows
-  - `395` beab pass
+- the live route floor is still holding, but review throughput is now the bottleneck:
+  - `664` live rows recorded
+  - `441` beab pass at the route-and-legibility floor
   - `0` beab fail
-  - `0` beab pending
-  - the live path has stayed on-pick and legible across the wider judged queue
+  - `223` still pending route review
+  - two recent extended live runs added `269` rows and stayed entirely inside the valid `Research Beta 1.0` route set
 - `Research Beta 3.0` is now defined as a positive-only tone lens:
   - `pick-aware`
   - `playful`
   - `confident`
   - `coherent`
   - `imaginative`
-  - the first judged tone sample has started:
-    - `6` rows judged
-    - `5` pass
-    - `1` fail
-    - the first fail stayed pick-aware and coherent but did not feel imaginative enough
+  - the first widened tone queue is now separating real signal:
+    - `18` rows judged
+    - `11` pass
+    - `7` fail
+    - `423` route-passed live rows still pending tone review
+    - the current weak pattern is usually still pick-aware and coherent, but too generic or not imaginative enough
 
 Current clean lane:
 
-- continue judged live tone review with the five-point bar
+- continue tandem live review with the five-point bar
+- keep promoting the fresh live backlog through the route floor while tone-judging the newest route-passed tranche
 - keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
 - widen into scoreboard or prose judgement only after the tone lane earns it
@@ -110,8 +112,9 @@ Parked lanes:
 - object lanes:
   - complete for the current local pass
 - live gameplay:
-  - the widened live queue is now fully judged
-  - keep using those judged live rows as the tone-first evidence surface
+  - the widened live queue is still growing faster than review
+  - keep using the judged live rows as the tone-first evidence surface
+  - keep route review and tone review moving in tandem with live generation
 - later eval lenses:
   - only widen into scoreboard or prose judgement after the tone lane stabilises
 - research visuals:

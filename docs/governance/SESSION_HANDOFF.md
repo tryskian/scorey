@@ -127,10 +127,17 @@ A first eval storage lane now exists:
   - `0` fail
   - `0` pending
 - the live review queue now exists:
-  - `395` total live rows
-  - `395` pass
+  - `664` total live rows
+  - `441` pass
   - `0` fail
-  - `0` pending beab judgements
+  - `223` pending beab route reviews
+- the active tone queue now exists on top of the route-pass live rows:
+  - `11` tone pass
+  - `7` tone fail
+  - `423` pending tone reviews
+- the two most recent extended live runs both held the route contract:
+  - after output `18317`: `12` new live rows, all valid `Research Beta 1.0` routes
+  - after output `18329`: `257` new live rows, all valid `Research Beta 1.0` routes
 
 ## Research Snapshot
 
@@ -160,12 +167,13 @@ Current tracked research beta:
   - scissors: complete
 - live lane:
   - real API rounds recorded
-  - route contract holding so far
-  - first widened live queue fully judged
-  - first tone sample started:
-    - `6` rows judged
-    - `5` pass
-    - `1` fail
+  - route contract still holding so far
+  - live generation is now outrunning review throughput
+  - current tone queue:
+    - `18` rows judged
+    - `11` pass
+    - `7` fail
+    - the current weak pattern is usually still coherent but not imaginative enough
 
 ## Next Kernel
 
@@ -182,6 +190,7 @@ Choose one lane at a time:
   - keep `Research Beta 1.0` as the routing gate
   - treat `Research Beta 3.0` as the active tone-first lane
   - use the judged live queue as the evidence surface
+  - keep route review and tone review moving in tandem with live generation
   - use the positive-only tone bar:
     - `pick-aware`
     - `playful`
@@ -195,7 +204,9 @@ Choose one lane at a time:
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: continue the judged tone pass on the widened live queue
+  - next useful move:
+    - push the `223` pending live rows through the route floor
+    - keep judging tone from the freshest route-passed tranche
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful
