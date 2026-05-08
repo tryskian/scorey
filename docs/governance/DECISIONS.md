@@ -531,3 +531,18 @@ into implementation authorship.
   route verdict would have blurred two different questions into one field.
   Tone review needed its own surface so later lenses can stack on the same live
   rows without erasing the route-pass baseline.
+
+## D-033: Live evals should be judged while the batch is still running
+
+- Date: `2026-05-07`
+- Category: `research_method`
+- Tags: `live_eval`, `tandem_review`, `signal_observation`, `research_beta_3`
+- Provenance: `human-led method decision`
+- Decision:
+  - judge live rows while the eval batch is still running
+  - observe the signal in motion rather than waiting for the full batch to end
+  - keep route validation and tone review moving in tandem with generation
+- Why: The point of the live lane is not just to accumulate rows. It is to
+  watch where the signal strengthens, weakens, or drifts while the batch is
+  active. Judging in tandem makes those shifts visible sooner and keeps the
+  research lane responsive instead of purely archival.
