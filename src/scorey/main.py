@@ -142,6 +142,14 @@ def build_parser() -> argparse.ArgumentParser:
         help="List a stratified pending tone review sample from live route-pass rows.",
     )
     eval_tone_sample_parser.add_argument("--limit", type=int, default=12)
+    eval_tone_sample_parser.add_argument(
+        "--pick",
+        action="append",
+        default=[],
+        choices=APP_PICKS,
+        metavar="USER_PICK",
+        help="Repeat to narrow the tone sample to one or more user picks.",
+    )
 
     eval_tone_judge_parser = subparsers.add_parser(
         "eval-tone-judge",
@@ -872,19 +880,31 @@ def command_eval_judge(output_id: int, verdict: str, note: str) -> int:
     return 0
 
 
-def command_eval_tone_sample(limit: int) -> int:
+def command_eval_tone_sample(limit: int, user_picks: list[str]) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
-    summary = lens_counts(db_path, lens="tone", source_mode="live")
+    resolved_user_picks = tuple(user_picks) if user_picks else None
+    summary = lens_counts(
+        db_path,
+        lens="tone",
+        source_mode="live",
+        user_picks=resolved_user_picks,
+    )
     print(
         "tone counts: "
         f"total={summary['total']} pass={summary['pass']} "
         f"fail={summary['fail']} pending={summary['pending']}"
     )
     print(f"tone sample: newest pending live row per model/pair (limit={limit})")
+    if resolved_user_picks is not None:
+        print(f"user_picks={' '.join(resolved_user_picks)}")
 
     rows = list_lens_review_sample(
-        db_path, lens="tone", source_mode="live", limit=limit
+        db_path,
+        lens="tone",
+        source_mode="live",
+        limit=limit,
+        user_picks=resolved_user_picks,
     )
     if not rows:
         print("")
@@ -1041,7 +1061,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "eval-judge":
         return command_eval_judge(args.output_id, args.verdict, args.note)
     if args.command == "eval-tone-sample":
-        return command_eval_tone_sample(args.limit)
+        return command_eval_tone_sample(args.limit, args.pick)
     if args.command == "eval-tone-judge":
         return command_eval_tone_judge(args.output_id, args.verdict, args.note)
     if args.command == "eval-sample-local":

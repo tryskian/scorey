@@ -62,6 +62,7 @@ need to inspect, check, or advance the repo.
 | list a stratified pending review sample | `make eval-review-sample EVAL_LIMIT=12` |
 | record one human verdict | `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'` |
 | list a stratified pending tone review sample | `make eval-tone-sample EVAL_LIMIT=12` |
+| list a paper-only pending tone review sample | `make eval-tone-sample EVAL_LIMIT=12 EVAL_USER_PICKS='paper'` |
 | record one tone verdict | `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'` |
 | run the Research Beta 1.0 picks gate | `make research-beta1 EVAL_LIMIT=10` |
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
@@ -130,6 +131,7 @@ Storage:
 - `make eval-review-sample EVAL_LIMIT=12`
 - `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
 - `make eval-tone-sample EVAL_LIMIT=12`
+- `make eval-tone-sample EVAL_LIMIT=12 EVAL_USER_PICKS='paper'`
 - `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'`
 - `make research-beta1 EVAL_LIMIT=10`
 - `make eval-sample-local EVAL_COUNT=30`
@@ -151,6 +153,9 @@ Current posture:
 
 - local SQLite only
 - binary top-level verdicts only
+- failed rows use an explicit disposition layer:
+  - `retain`
+  - `evict`
 - one notebook walkthrough beside the operator path
 - explicit human judgments now have a first-class operator command
 - stratified pending review now has a first-class operator command
@@ -279,18 +284,26 @@ The intended posture is:
 2. Record or generate within the active narrow surface.
 3. Judge in sweeps.
 4. Keep verdicts binary.
-5. Let repeated failure clusters earn the next lens or intervention.
+5. If a row fails, decide whether that failure should be retained in the active
+   lane or evicted through an upstream correction.
+6. Let retained failure clusters earn the next lens or intervention.
+7. Rerun after evictions instead of leaving known-bad seams in the same queue.
 
 ## Layered Eval Lenses
 
 Current day-zero posture:
 
 - keep the top-level verdict binary
+- keep failure disposition explicit after `fail`:
+  - `retain`
+  - `evict`
 - keep one eval focus active at a time
 - start with the round contract before broader fit judgments
 
 The storage shape now exists for the top-level verdict. Additional lens names
 and sidecar judgment tables are still intentionally pending beyond `Research Beta 1.0`.
+
+`RETAIN / EVICT` is a method rule, not a third stored verdict state.
 
 ## Command Ownership
 

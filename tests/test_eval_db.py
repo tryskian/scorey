@@ -163,3 +163,50 @@ class EvalDbTests(TestCase):
             self.assertEqual(summary["pass"], 1)
             self.assertEqual(summary["fail"], 0)
             self.assertEqual(summary["pending"], 2)
+
+    def test_tone_review_sample_can_filter_to_one_user_pick(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            paper_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="paper tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            rock_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="rock tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, paper_id, "pass", "route pass")
+            judge_output(db_path, rock_id, "pass", "route pass")
+
+            rows = list_lens_review_sample(
+                db_path,
+                lens="tone",
+                source_mode="live",
+                limit=5,
+                user_picks=("paper",),
+            )
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(int(rows[0]["id"]), paper_id)
+
+            summary = lens_counts(
+                db_path,
+                lens="tone",
+                source_mode="live",
+                user_picks=("paper",),
+            )
+            self.assertEqual(summary["total"], 1)
+            self.assertEqual(summary["pass"], 0)
+            self.assertEqual(summary["fail"], 0)
+            self.assertEqual(summary["pending"], 1)

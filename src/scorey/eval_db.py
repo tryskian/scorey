@@ -61,6 +61,18 @@ def default_eval_db_path() -> Path:
     return EVAL_DB_PATH
 
 
+def _normalise_user_picks(user_picks: tuple[str, ...] | None) -> tuple[str, ...] | None:
+    if user_picks is None:
+        return None
+    if not user_picks:
+        return None
+    invalid = [pick for pick in user_picks if pick not in USER_PICKS]
+    if invalid:
+        invalid_text = ", ".join(invalid)
+        raise ValueError(f"Unsupported user picks: {invalid_text}.")
+    return user_picks
+
+
 def connect(db_path: Path | None = None) -> sqlite3.Connection:
     resolved = default_eval_db_path() if db_path is None else db_path
     resolved.parent.mkdir(parents=True, exist_ok=True)
@@ -300,6 +312,7 @@ def list_lens_review_sample(
     lens: str,
     limit: int = 12,
     source_mode: str | None = None,
+    user_picks: tuple[str, ...] | None = None,
 ) -> list[sqlite3.Row]:
     if lens not in LENSES:
         raise ValueError(f"Unsupported lens '{lens}'.")
@@ -307,6 +320,7 @@ def list_lens_review_sample(
         raise ValueError("Limit must be at least 1.")
     if source_mode is not None and source_mode not in SOURCE_MODES:
         raise ValueError(f"Unsupported source mode '{source_mode}'.")
+    resolved_user_picks = _normalise_user_picks(user_picks)
 
     where = [
         "current_verdict = 'pass'",
@@ -323,6 +337,10 @@ def list_lens_review_sample(
     if source_mode is not None:
         where.append("source_mode = ?")
         params.append(source_mode)
+    if resolved_user_picks is not None:
+        placeholders = ", ".join("?" for _ in resolved_user_picks)
+        where.append(f"user_pick IN ({placeholders})")
+        params.extend(resolved_user_picks)
 
     query = f"""
         SELECT
@@ -461,17 +479,23 @@ def lens_counts(
     *,
     lens: str,
     source_mode: str | None = None,
+    user_picks: tuple[str, ...] | None = None,
 ) -> dict[str, int]:
     if lens not in LENSES:
         raise ValueError(f"Unsupported lens '{lens}'.")
     if source_mode is not None and source_mode not in SOURCE_MODES:
         raise ValueError(f"Unsupported source mode '{source_mode}'.")
+    resolved_user_picks = _normalise_user_picks(user_picks)
 
     eligible_where = ["current_verdict = 'pass'"]
     params: list[str] = []
     if source_mode is not None:
         eligible_where.append("source_mode = ?")
         params.append(source_mode)
+    if resolved_user_picks is not None:
+        placeholders = ", ".join("?" for _ in resolved_user_picks)
+        eligible_where.append(f"user_pick IN ({placeholders})")
+        params.extend(resolved_user_picks)
 
     eligible_sql = f"""
         SELECT COUNT(*) AS total
@@ -486,6 +510,10 @@ def lens_counts(
     if source_mode is not None:
         judgment_where.append("output.source_mode = ?")
         judgment_params.append(source_mode)
+    if resolved_user_picks is not None:
+        placeholders = ", ".join("?" for _ in resolved_user_picks)
+        judgment_where.append(f"output.user_pick IN ({placeholders})")
+        judgment_params.extend(resolved_user_picks)
 
     judgments_sql = f"""
         SELECT

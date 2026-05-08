@@ -35,15 +35,19 @@ Current finding:
   - `17,922` pass
   - `0` fail
   - `0` pending
-- the live route floor is now fully caught up again:
-  - `958` live rows recorded
+- the live surface has now widened again:
+  - `1252` live rows recorded
   - `958` beab pass at the route-and-legibility floor
   - `0` beab fail
-  - `0` beab pending
-  - three recent extended live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
+  - `294` pending route review
+  - four recent extended live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
     - after output `18317`: `12` new live rows
     - after output `18329`: `257` new live rows
     - after output `18586`: `294` new live rows
+    - after output `18880`: `294` new paper-only live rows
+  - the paper-only run stayed inside the expected paper route families:
+    - `paper/paper`: `144`
+    - `paper/rock`: `150`
 - `Research Beta 3.0` is now defined as a positive-only tone lens:
   - `pick-aware`
   - `playful`
@@ -51,10 +55,10 @@ Current finding:
   - `coherent`
   - `imaginative`
   - the widened tone queue is now separating real signal:
-    - `102` rows judged
-    - `44` pass
-    - `58` fail
-    - `856` route-passed live rows still pending tone review
+    - `104` rows judged
+    - `45` pass
+    - `59` fail
+    - `854` route-passed live rows still pending tone review
     - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
     - the current weak pattern is usually either generic `real one` / `napkin` or version/copy language, with a smaller playful line that is not coherent enough to keep
 
@@ -62,7 +66,12 @@ Current clean lane:
 
 - continue tandem live review with the five-point bar
 - keep the route floor caught up as new batches land
+- use the completed paper-only run as the clean isolation lane for the current
+  `real one` / `napkin` seam
 - keep tone-judging the newest route-passed tranche
+- treat tone failures through explicit disposition:
+  - `retain` when the seam still belongs in the active lane
+  - `evict` when the seam proves the lane definition itself is wrong
 - keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
 - widen into scoreboard or prose judgement only after the tone lane earns it
@@ -90,6 +99,8 @@ Each beta marks a real change in what the evaluation is asking:
 - `Research Beta 1.0` proved route validity at the pick level
 - `Research Beta 2.0` keeps the same gate but changes the sampling shape to inspect one object lane at a time
 - `Research Beta 3.0` keeps the live route floor but changes the verdict lens to Scorey's voice
+- failed rows now stay binary first and then move through `RETAIN / EVICT` as
+  the disposition layer
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 

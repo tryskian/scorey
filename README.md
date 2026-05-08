@@ -32,6 +32,8 @@ In this repo, major betas are research architectures, and minor versions tighten
 - constrained round preservation through a fixed pick surface
 - runtime-owned routing and composition around one unfair round
 - binary eval lanes from pick routing to tone-first live review
+- explicit failure disposition when a lane fails:
+  - `RETAIN / EVICT`
 
 ## Run It
 

@@ -546,3 +546,44 @@ into implementation authorship.
   watch where the signal strengthens, weakens, or drifts while the batch is
   active. Judging in tandem makes those shifts visible sooner and keeps the
   research lane responsive instead of purely archival.
+
+## D-034: Paper-only live evals isolate the weakest tone seam
+
+- Date: `2026-05-08`
+- Category: `research_method`
+- Tags: `paper_only`, `live_eval`, `tone_review`, `failure_isolation`, `research_beta_3`, `operator_surface`
+- Provenance: `human-led method decision with implementation decision`
+- Decision:
+  - narrow the next live eval lane to `paper` only
+  - use paper-only generation and paper-only tone sampling to isolate the
+    recurring `real one` / `napkin` failure seam
+  - implement the diagnostic lane through the paper-filtered live and tone
+    operator surface rather than only as an informal review habit
+  - treat this as a focused diagnostic pass for low-signal tone failures rather
+    than a general coverage expansion
+- Why: Once the failure cluster around `real one` and `napkin` became clear,
+  broad mixed-pick live batches were no longer the sharpest instrument.
+  Restricting the lane to `paper` makes the weak pattern easier to observe,
+  compare, and fix without extra noise from stronger picks.
+
+## D-035: Binary verdicts stay strict and failed lanes get explicit disposition
+
+- Date: `2026-05-08`
+- Category: `eval_quality`
+- Tags: `pass_fail`, `retain_evict`, `failure_disposition`, `rerun_discipline`
+- Provenance: `human-led method decision with repo formalization`
+- Decision:
+  - keep the eval gate itself strictly binary:
+    - `pass`
+    - `fail`
+  - if a row or seam fails, make a second explicit disposition decision:
+    - `retain`
+    - `evict`
+  - treat `retain` as valid in-scope failure evidence that should stay in the
+    active lane
+  - treat `evict` as the upstream correction that removes a bad lane before a
+    rerun
+  - rerun after evictions instead of leaving known-bad lanes in the same queue
+- Why: Binary judgment should stay hard and legible, but not every failure
+  belongs in the active queue forever. This keeps verdicts strict while making
+  correction discipline explicit.
