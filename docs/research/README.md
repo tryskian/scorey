@@ -51,11 +51,12 @@ Current finding:
   - `coherent`
   - `imaginative`
   - the widened tone queue is now separating real signal:
-    - `54` rows judged
-    - `27` pass
-    - `27` fail
-    - `904` route-passed live rows still pending tone review
-    - the current weak pattern is usually either the generic `real one` / `napkin` pattern or a playful line that is not coherent enough to keep
+    - `102` rows judged
+    - `44` pass
+    - `58` fail
+    - `856` route-passed live rows still pending tone review
+    - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
+    - the current weak pattern is usually either generic `real one` / `napkin` or version/copy language, with a smaller playful line that is not coherent enough to keep
 
 Current clean lane:
 
