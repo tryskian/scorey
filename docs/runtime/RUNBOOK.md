@@ -26,7 +26,10 @@ need to inspect, check, or advance the repo.
 6. Add live runtime credentials when needed:
    - put `OPENAI_API_KEY` in the repo `.env`
    - or export it in the shell
-7. State the active kernel before editing tracked files.
+7. For any live API work, keep the token monitoring dashboard available:
+   - `make open-cost-console`
+   - use `make open-limits` or `make open-usage` directly when a tighter check is enough
+8. State the active kernel before editing tracked files.
 
 ## Everyday Commands
 
@@ -58,6 +61,8 @@ need to inspect, check, or advance the repo.
 | list only pending eval rows | `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending` |
 | list a stratified pending review sample | `make eval-review-sample EVAL_LIMIT=12` |
 | record one human verdict | `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'` |
+| list a stratified pending tone review sample | `make eval-tone-sample EVAL_LIMIT=12` |
+| record one tone verdict | `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'` |
 | run the Research Beta 1.0 picks gate | `make research-beta1 EVAL_LIMIT=10` |
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
 | record a six-pair `Research Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage` |
@@ -124,6 +129,8 @@ Storage:
 - `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending`
 - `make eval-review-sample EVAL_LIMIT=12`
 - `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
+- `make eval-tone-sample EVAL_LIMIT=12`
+- `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'`
 - `make research-beta1 EVAL_LIMIT=10`
 - `make eval-sample-local EVAL_COUNT=30`
 - `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage`
@@ -147,7 +154,14 @@ Current posture:
 - one notebook walkthrough beside the operator path
 - explicit human judgments now have a first-class operator command
 - stratified pending review now has a first-class operator command
+- tone judgments now have a separate first-class operator path
 - `Research Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
+- `Research Beta 3.0` keeps the route-pass floor and judges tone on live rows through:
+  - `pick-aware`
+  - `playful`
+  - `confident`
+  - `coherent`
+  - `imaginative`
 - local `baseline` sampling is a soak/population lane, not a diversity lane
 - local `research-beta-1-coverage` sampling cycles all six `Research Beta 1.0` pass pairs evenly
 - explicit local pair cycles let the research lane isolate narrow lanes like
@@ -170,7 +184,10 @@ Current posture:
    - `make open-usage`
    - `make open-billing`
    - or one-shot: `make open-cost-console`
-4. Efficiency defaults:
+4. Live API rule:
+   - keep the token monitoring dashboard open or immediately reachable during live eval work
+   - recheck it before widening a batch or starting an extended run
+5. Efficiency defaults:
    - keep `n=1` and structured output surfaces
    - keep the live eval lens narrow before widening
    - keep retry/backoff behaviour enabled in the live SDK path
@@ -210,6 +227,8 @@ For eval storage changes:
 - `make eval-list EVAL_LIMIT=5 EVAL_VERDICT=pending`
 - `make eval-review-sample EVAL_LIMIT=6`
 - `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`
+- `make eval-tone-sample EVAL_LIMIT=6`
+- `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'`
 - `make research-beta1 EVAL_LIMIT=5`
 - `make eval-sample-local EVAL_COUNT=9`
 - `make eval-sample-local EVAL_COUNT=12 EVAL_PATTERN=research-beta-1-coverage`

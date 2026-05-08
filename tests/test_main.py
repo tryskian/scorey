@@ -8,7 +8,7 @@ from typing import TextIO, cast
 from unittest import TestCase
 from unittest.mock import patch
 
-from scorey.eval_db import init_db, record_output
+from scorey.eval_db import init_db, judge_output, record_output
 from scorey.eval_sampling import EvalSampleSummary
 from scorey.main import (
     build_round_scene_lines,
@@ -42,7 +42,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines[0], "┌──────────────────────────────────────────────────────────────┐"
         )
-        self.assertIn("SCOREY RESEARCH BETA 2.0", lines[1])
+        self.assertIn("SCOREY RESEARCH BETA 3.0", lines[1])
 
     def test_choose_banner_lines_uses_stacked_header_when_mid_width(self) -> None:
         lines = choose_banner_lines(terminal_width=56)
@@ -50,7 +50,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "SCOREY RESEARCH BETA 2.0",
+                "SCOREY RESEARCH BETA 3.0",
                 "scorey keeps the score. you never win. sorry.",
                 "github.com/tryskian/scorey",
             ),
@@ -62,7 +62,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "scorey research beta 2.0",
+                "scorey research beta 3.0",
                 "scorey keeps the score.",
                 "you never win. sorry.",
                 "github.com/tryskian/scorey",
@@ -75,7 +75,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "scorey research beta 2.0",
+                "scorey research beta 3.0",
                 "scorey keeps the score.",
                 "you never win. sorry.",
             ),
@@ -405,6 +405,85 @@ class MainCommandTests(TestCase):
         output = stdout.getvalue()
         self.assertIn(f"judged output {first_output_id}: pass", output)
         self.assertIn("row 0", output)
+
+    def test_eval_tone_sample_lists_distinct_pending_live_rows(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            first_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="first tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="second tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            other_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="paper",
+                route_family="same-pick",
+                round_text="third tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "pass", "route pass")
+            judge_output(db_path, other_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(["eval-tone-sample", "--limit", "5"])
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("tone counts: total=3 pass=0 fail=0 pending=3", output)
+        self.assertIn("tone sample: newest pending live row per model/pair", output)
+        self.assertIn("second tone row", output)
+        self.assertIn("third tone row", output)
+        self.assertNotIn("first tone row", output)
+
+    def test_eval_tone_judge_records_lens_verdict(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            output_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, output_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    result = main(
+                        [
+                            "eval-tone-judge",
+                            str(output_id),
+                            "pass",
+                            "--note",
+                            "pick-aware playful confident coherent imaginative",
+                        ]
+                    )
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn(f"judged tone output {output_id}: pass", output)
+        self.assertIn("tone row", output)
 
     def test_eval_sample_local_records_rows(self) -> None:
         stdout = io.StringIO()

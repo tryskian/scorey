@@ -491,3 +491,58 @@ into implementation authorship.
 - Why: Scorey is agent-backed, but the OpenAI runtime dependency should still
   be explicit. A direct pin makes upgrades and compatibility checks legible
   instead of leaving the effective SDK version to drift underneath the repo.
+
+## D-031: Research Beta 3.0 is a positive-only tone-first lane
+
+- Date: `2026-05-07`
+- Category: `research_method`
+- Tags: `research_beta_3`, `tone`, `live_eval`, `positive_only`
+- Provenance: `human-led method decision`
+- Decision:
+  - make tone the next research beta after the route-valid live queue settled
+  - keep the tone bar positive-only rather than defining it by anti-patterns
+  - judge the tone lane through five desired traits:
+    - `pick-aware`
+    - `playful`
+    - `confident`
+    - `coherent`
+    - `imaginative`
+  - treat scoreboard and broader prose as later lenses
+- Why: Once live route validity and legibility stopped being the open question,
+  tone became the cleanest next method shift. It is narrower and more
+  Scorey-specific than a general prose pass, and the positive-only bar keeps
+  the lens focused on what the toy is actually trying to sound like.
+
+## D-032: Tone review gets a separate operator surface instead of overwriting route verdicts
+
+- Date: `2026-05-07`
+- Category: `runtime_engineering`
+- Tags: `tone_review`, `operator_surface`, `eval_storage`, `research_beta_3`
+- Provenance: `implementation decision`
+- Decision:
+  - keep the existing `current_verdict` lane as the route-valid floor
+  - add a separate append-only tone review store for later lenses
+  - expose tone review explicitly through:
+    - `eval-tone-sample`
+    - `eval-tone-judge`
+    - `make eval-tone-sample`
+    - `make eval-tone-judge`
+- Why: Once `Research Beta 3.0` became the active lane, reusing the top-level
+  route verdict would have blurred two different questions into one field.
+  Tone review needed its own surface so later lenses can stack on the same live
+  rows without erasing the route-pass baseline.
+
+## D-033: Live evals should be judged while the batch is still running
+
+- Date: `2026-05-07`
+- Category: `research_method`
+- Tags: `live_eval`, `tandem_review`, `signal_observation`, `research_beta_3`
+- Provenance: `human-led method decision`
+- Decision:
+  - judge live rows while the eval batch is still running
+  - observe the signal in motion rather than waiting for the full batch to end
+  - keep route validation and tone review moving in tandem with generation
+- Why: The point of the live lane is not just to accumulate rows. It is to
+  watch where the signal strengthens, weakens, or drifts while the batch is
+  active. Judging in tandem makes those shifts visible sooner and keeps the
+  research lane responsive instead of purely archival.

@@ -1,6 +1,6 @@
 # Scorey
 
-[![Research Beta](https://img.shields.io/badge/research_beta-2.0%20focused%20object%20lanes-E15759)](./docs/research/README.md)
+[![Research Beta](https://img.shields.io/badge/research_beta-3.0%20tone%20first-E15759)](./docs/research/README.md)
 [![Polinko toy factory](https://img.shields.io/badge/polinko_toy_factory-active-4C956C)](https://github.com/tryskian/polinko)
 
 ## rock, paper, scissors, scorey
@@ -20,8 +20,8 @@ It only accepts three picks:
 
 Current tracked research beta:
 
-- `Research Beta 2.0`
-- `focused object lanes`
+- `Research Beta 3.0`
+- `tone first`
 
 That narrow surface is the point. Scorey is not trying to be a general chat tool or a generic joke machine. It is a small instrument for studying whether a model can preserve a rigged round, stay pick-specific, and keep unfair logic legible inside tight interaction guardrails.
 
@@ -31,7 +31,7 @@ In this repo, major betas are research architectures, and minor versions tighten
 
 - constrained round preservation through a fixed pick surface
 - runtime-owned routing and composition around one unfair round
-- binary eval lanes from pick routing to focused object lanes
+- binary eval lanes from pick routing to tone-first live review
 
 ## Run It
 

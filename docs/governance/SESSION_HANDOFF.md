@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-05
+Last updated: 2026-05-07
 
 ## Start Here
 
@@ -17,8 +17,8 @@ Last updated: 2026-05-05
 
 ## Current State
 
-Scorey is a small rigged rock, paper, scissors toy with a working runtime and a
-first eval lane.
+Scorey is a small rigged rock, paper, scissors toy with a working runtime, a
+settled local eval lane, and an active live review queue.
 
 The core tracked surfaces are:
 
@@ -43,8 +43,25 @@ A small operator surface now exists:
 - `make check`
 - `make eval-init`
 - `make eval-list`
+- `make eval-review-sample`
+- `make eval-judge`
+- `make eval-tone-sample`
+- `make eval-tone-judge`
+- `make research-beta1`
+- `make eval-sample-live`
+- `make open-limits`
+- `make open-usage`
+- `make open-billing`
+- `make open-cost-console`
 - `make eod`
 - `make eod-preflight`
+
+Repo automation is now in place:
+
+- GitHub Actions CI
+- Dependabot for `pip` and `github-actions`
+- markdownlint config aligned with sibling repos
+- stale dependency PR queue cleared
 
 The round contract is now defined in tracked docs:
 
@@ -81,6 +98,8 @@ Current runtime surfaces:
 - `scorey eval-list --limit 10 --verdict pending` lists only pending eval rows
 - `scorey eval-review-sample --limit 12` lists the newest pending row per model/pair sample
 - `scorey eval-judge 17922 pass --note "route-valid and legible"` records one human verdict
+- `scorey eval-tone-sample --limit 12` lists the newest pending live tone row per model/pair sample
+- `scorey eval-tone-judge 17922 pass --note "pick-aware playful confident coherent imaginative"` records one tone verdict
 - `scorey research-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
 - `scorey eval-sample-local --count 30 --pattern research-beta-1-coverage`
@@ -92,6 +111,7 @@ Current runtime surfaces:
 - `make decaffeinate` releases the managed wake lock
 - `make decaffeinate-all` clears matching background `caffeinate` processes
 - `make open-limits`, `make open-usage`, and `make open-billing` expose the OpenAI cost console
+- `make open-cost-console` opens the full token and spend dashboard set
 
 A first eval storage lane now exists:
 
@@ -106,13 +126,18 @@ A first eval storage lane now exists:
   - `17,922` pass
   - `0` fail
   - `0` pending
-- the first live batch now exists:
-  - `12` rows
-  - `12` routing pass
-  - `0` routing fail
-  - `12` human pass
-  - `0` human fail
-  - `0` human pending
+- the live review queue now exists:
+  - `664` total live rows
+  - `441` pass
+  - `0` fail
+  - `223` pending beab route reviews
+- the active tone queue now exists on top of the route-pass live rows:
+  - `11` tone pass
+  - `7` tone fail
+  - `423` pending tone reviews
+- the two most recent extended live runs both held the route contract:
+  - after output `18317`: `12` new live rows, all valid `Research Beta 1.0` routes
+  - after output `18329`: `257` new live rows, all valid `Research Beta 1.0` routes
 
 ## Research Snapshot
 
@@ -134,12 +159,21 @@ Current named gate:
 
 Current tracked research beta:
 
-- `Research Beta 2.0`
-- focused object lanes
+- `Research Beta 3.0`
+- tone first
 - local lane set:
   - rock: complete
   - paper: complete
   - scissors: complete
+- live lane:
+  - real API rounds recorded
+  - route contract still holding so far
+  - live generation is now outrunning review throughput
+  - current tone queue:
+    - `18` rows judged
+    - `11` pass
+    - `7` fail
+    - the current weak pattern is usually still coherent but not imaginative enough
 
 ## Next Kernel
 
@@ -151,11 +185,18 @@ Choose one lane at a time:
   - first package skeleton is in place
   - keep the wrapper small while the live path settles
   - keep route enforcement and composition in the runtime
-  - next useful runtime move: widen the live queue carefully after the clean first judged batch
+  - keep the token monitoring dashboard open or immediately reachable during live API work
 - eval:
   - keep `Research Beta 1.0` as the routing gate
-  - use `Research Beta 2.0` for focused object-lane runs
-  - keep the gate read-only until a stored judgment path earns a wider surface
+  - treat `Research Beta 3.0` as the active tone-first lane
+  - use the judged live queue as the evidence surface
+  - keep route review and tone review moving in tandem with live generation
+  - use the positive-only tone bar:
+    - `pick-aware`
+    - `playful`
+    - `confident`
+    - `coherent`
+    - `imaginative`
   - use local `baseline` sampling for soak/population, not for diversity claims
   - use local `research-beta-1-coverage` sampling when the full pass-pair truth table matters
   - use explicit local pair cycles when a research lane needs one object in a
@@ -163,14 +204,16 @@ Choose one lane at a time:
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable
-  - next useful move: run a slightly wider judged live batch
+  - next useful move:
+    - push the `223` pending live rows through the route floor
+    - keep judging tone from the freshest route-passed tranche
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful
   - preserve `eod` as a first-class closeout command
   - keep display-sleep control explicit and managed
   - let `eod` clear stray background `caffeinate` processes
-  - keep live-token visibility explicit before extended runs
+  - keep live-token visibility explicit before and during live eval work
 - docs:
   - keep tracked docs aligned with what actually exists
 

@@ -19,6 +19,9 @@ from scorey.eval_db import (
     get_output,
     init_db,
     judge_output,
+    judge_output_for_lens,
+    lens_counts,
+    list_lens_review_sample,
     list_outputs,
     list_review_sample,
 )
@@ -47,14 +50,14 @@ from scorey.pipeline import (
 
 APP_PICKS: tuple[str, ...] = ("rock", "paper", "scissors")
 APP_BANNER_INNER_WIDTH = 62
-APP_BANNER_TITLE = "SCOREY RESEARCH BETA 2.0"
+APP_BANNER_TITLE = "SCOREY RESEARCH BETA 3.0"
 APP_BANNER_TAGLINE = "scorey keeps the score. you never win. sorry."
 APP_BANNER_REPO = "github.com/tryskian/scorey"
 APP_BANNER_REPO_URL = "https://github.com/tryskian/scorey"
 APP_BANNER_BOX_WIDTH = APP_BANNER_INNER_WIDTH + 2
 APP_BANNER_STACKED_WIDTH = len(APP_BANNER_TAGLINE)
 APP_BANNER_MINIMAL_WIDTH = len(APP_BANNER_REPO)
-APP_BANNER_MINIMAL_TITLE = "scorey research beta 2.0"
+APP_BANNER_MINIMAL_TITLE = "scorey research beta 3.0"
 APP_BANNER_MINIMAL_TAGLINE_LINES: tuple[str, ...] = (
     "scorey keeps the score.",
     "you never win. sorry.",
@@ -132,6 +135,24 @@ def build_parser() -> argparse.ArgumentParser:
         "--note",
         required=True,
         help="Short human note explaining the verdict.",
+    )
+
+    eval_tone_sample_parser = subparsers.add_parser(
+        "eval-tone-sample",
+        help="List a stratified pending tone review sample from live route-pass rows.",
+    )
+    eval_tone_sample_parser.add_argument("--limit", type=int, default=12)
+
+    eval_tone_judge_parser = subparsers.add_parser(
+        "eval-tone-judge",
+        help="Record a tone verdict for one eval output.",
+    )
+    eval_tone_judge_parser.add_argument("output_id", type=int)
+    eval_tone_judge_parser.add_argument("verdict", choices=("pass", "fail"))
+    eval_tone_judge_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short tone note explaining the verdict.",
     )
 
     eval_sample_local_parser = subparsers.add_parser(
@@ -851,6 +872,55 @@ def command_eval_judge(output_id: int, verdict: str, note: str) -> int:
     return 0
 
 
+def command_eval_tone_sample(limit: int) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    summary = lens_counts(db_path, lens="tone", source_mode="live")
+    print(
+        "tone counts: "
+        f"total={summary['total']} pass={summary['pass']} "
+        f"fail={summary['fail']} pending={summary['pending']}"
+    )
+    print(f"tone sample: newest pending live row per model/pair (limit={limit})")
+
+    rows = list_lens_review_sample(
+        db_path, lens="tone", source_mode="live", limit=limit
+    )
+    if not rows:
+        print("")
+        print("no pending tone eval outputs.")
+        return 0
+
+    print("")
+    for index, row in enumerate(rows):
+        if index > 0:
+            print("")
+        print(_format_eval_row(db_path, int(row["id"])))
+    return 0
+
+
+def command_eval_tone_judge(output_id: int, verdict: str, note: str) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        judge_output_for_lens(
+            db_path,
+            output_id,
+            lens="tone",
+            verdict=verdict,
+            note=note,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"judged tone output {output_id}: {verdict}")
+    print(f"note: {note}")
+    print("")
+    print(_format_eval_row(db_path, output_id))
+    return 0
+
+
 def command_eval_sample_local(
     *,
     count: int | None,
@@ -970,6 +1040,10 @@ def main(argv: list[str] | None = None) -> int:
         return command_eval_review_sample(args.limit)
     if args.command == "eval-judge":
         return command_eval_judge(args.output_id, args.verdict, args.note)
+    if args.command == "eval-tone-sample":
+        return command_eval_tone_sample(args.limit)
+    if args.command == "eval-tone-judge":
+        return command_eval_tone_judge(args.output_id, args.verdict, args.note)
     if args.command == "eval-sample-local":
         return command_eval_sample_local(
             count=args.count,

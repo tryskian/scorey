@@ -122,6 +122,7 @@ The current tracked shape is intentionally small:
 
 - generated or recorded rounds live in `eval_outputs`
 - human judgments are append-only in `eval_judgments`
+- lens-specific judgments are append-only in `eval_lens_judgments`
 - the current top-level verdict is mirrored onto the output row for fast listing
 - verdicts stay binary:
   - `pass`
@@ -137,6 +138,10 @@ The current row shape records:
 - `model`
 - `current_verdict`
 - `current_note`
+
+The top-level verdict still means the route-valid floor.
+
+Later lenses can add their own append-only review surface without overwriting that first judgment.
 
 The first notebook lane lives in
 `output/jupyter-notebook/scorey-eval-db-walkthrough.ipynb` and uses the same
@@ -158,6 +163,16 @@ It only judges the pick pair in `scorey_pick, user_pick` order.
 `fail` pairs:
 
 - every other `scorey_pick, user_pick` pair
+
+The next named review lane is `Research Beta 3.0`.
+
+It keeps the route-pass floor and judges live rows through five positive-only tone traits:
+
+- `pick-aware`
+- `playful`
+- `confident`
+- `coherent`
+- `imaginative`
 
 The local sampling lane now has two named deterministic patterns:
 
