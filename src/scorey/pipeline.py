@@ -52,8 +52,8 @@ LOCAL_ROUND_FIELDS: dict[tuple[str, str], RoundFields] = {
         scoreboard_claim="not even on it",
     ),
     ("paper", "paper"): RoundFields(
-        winning_state="the real one",
-        worse_state="a napkin",
+        winning_state="clipped to the answer key",
+        worse_state="damp confetti from homeroom",
         scoreboard_claim="none",
     ),
     ("scissors", "paper"): RoundFields(

@@ -106,6 +106,7 @@ Current runtime surfaces:
 - `scorey eval-tone-judge 17922 pass --note "pick-aware playful confident coherent imaginative"` records one tone verdict
 - `scorey eval-tone-archive 17922 --note "paper seam archived out of active queue"` archives one pending tone row out of the active review surface
 - `scorey eval-tone-disposition-sample --limit 12` lists failed tone rows that still need `RETAIN` or `EVICT`
+- `scorey eval-tone-disposition-archive 17922 --note "historical stale fail backlog archived out of active disposition queue"` archives one stale failed tone row out of the active disposition surface
 - `scorey eval-tone-dispose 17922 retain --note "keep in active lane"` records one failure disposition after a tone `fail`
 - `scorey research-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
@@ -134,20 +135,19 @@ A first eval storage lane now exists:
   - `0` fail
   - `0` pending
 - the live review queue now exists:
-  - `1579` total live rows
-  - `1579` pass
+  - `1921` total live rows
+  - `1921` pass
   - `0` fail
   - `0` pending beab route reviews
 - the active tone queue now exists on top of the route-pass live rows:
-  - `297` tone pass
-  - `555` tone fail
-  - `727` archived tone rows
+  - `302` tone pass
+  - `558` tone fail
+  - `1061` archived tone rows
   - `0` pending tone reviews on route-passed live rows
   - explicit tone fail dispositions now exist on the fresh post-surface lane:
     - `196` evict
-    - `0` retain
-    - older pre-surface tone fails still exist without dispositions and should
-      not be confused with the fresh active queue
+    - `3` retain
+    - `359` archived stale failed rows no longer sit in the active disposition queue
   - isolated paper-only tone lane:
     - `722` total
     - `185` pass
@@ -194,6 +194,24 @@ A first eval storage lane now exists:
     - `0` fresh pending route reviews
     - `0` fresh pending tone reviews
     - `0` fresh pending fail dispositions
+  - after output `19501`: `342` new live rows, all valid `Research Beta 1.0` routes
+  - corrected mixed-run balance:
+    - `paper/paper`: `63`
+    - `paper/scissors`: `53`
+    - `rock/paper`: `51`
+    - `rock/rock`: `52`
+    - `scissors/rock`: `62`
+    - `scissors/scissors`: `61`
+  - the corrected slice is wind-down-closed:
+    - `342` route pass
+    - `5` tone pass
+    - `3` tone fail
+    - `334` archived tone rows at wind-down
+    - `3` retain
+    - `0` evict
+    - `0` fresh pending route reviews
+    - `0` fresh pending tone reviews
+    - `0` fresh pending fail dispositions
   - paper-only balance:
     - `paper/paper`: `144`
     - `paper/rock`: `150`
@@ -235,17 +253,19 @@ Current tracked research beta:
     - `PASS / FAIL`
     - if `FAIL`, then `RETAIN / EVICT`
   - the operator surface now matches that two-step contract directly
+  - stale failed rows can now also be archived out of the active disposition queue
   - current tone queue:
-    - `852` rows judged
-    - `297` pass
-    - `555` fail
-    - `727` archived
+    - `860` rows judged
+    - `302` pass
+    - `558` fail
+    - `1061` archived
     - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
-    - the strongest fail pattern is still generic `real one` / `napkin` or version/copy language, with a smaller thin-power cluster like `paper supremacy` or `paper power`
+    - the strongest fail pattern is now mostly cross-object coherence drift with a smaller same-pick object-shape drift
   - both fresh post-surface live runs are now fully dispositioned at the
     active boundary
-  - historical pre-surface tone fails still do not have dispositions and should
-    be treated as legacy backlog rather than an active blocker
+  - historical pre-surface tone fails are now archived out of the active
+    disposition queue and should be treated as legacy backlog rather than an
+    active blocker
 
 ## Next Kernel
 
@@ -277,9 +297,8 @@ Choose one lane at a time:
     - `confident`
     - `coherent`
     - `imaginative`
-  - on the current branch, package the first fully closed post-evict live slice
-    and its docs refresh together
-  - after that branch lands, start the next live run from this clean boundary
+  - the corrected live batch is now wind-down-closed on the current branch
+  - after this branch lands, start the next live run from this clean boundary
   - use local `baseline` sampling for soak/population, not for diversity claims
   - use local `research-beta-1-coverage` sampling when the full pass-pair truth table matters
   - use explicit local pair cycles when a research lane needs one object in a

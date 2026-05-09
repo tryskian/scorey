@@ -4,6 +4,7 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 
 from scorey.eval_db import (
+    archive_failure_disposition_for_lens,
     archive_output_for_lens,
     counts,
     init_db,
@@ -368,7 +369,7 @@ class EvalDbTests(TestCase):
             self.assertEqual(summary["pending"], 1)
             self.assertEqual(summary["archived"], 1)
 
-    def test_tone_failure_disposition_sample_only_lists_failed_rows_without_disposition(
+    def test_tone_failure_disposition_sample_skips_disposed_and_archived_failed_rows(
         self,
     ) -> None:
         with TemporaryDirectory() as tmpdir:
@@ -393,6 +394,15 @@ class EvalDbTests(TestCase):
                 source_mode="live",
                 model="gpt-5-nano",
             )
+            archived_id = record_output(
+                db_path,
+                user_pick="scissors",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="archived tone fail row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
             pass_id = record_output(
                 db_path,
                 user_pick="rock",
@@ -404,6 +414,7 @@ class EvalDbTests(TestCase):
             )
             judge_output(db_path, pending_id, "pass", "route pass")
             judge_output(db_path, disposed_id, "pass", "route pass")
+            judge_output(db_path, archived_id, "pass", "route pass")
             judge_output(db_path, pass_id, "pass", "route pass")
             judge_output_for_lens(
                 db_path,
@@ -415,6 +426,13 @@ class EvalDbTests(TestCase):
             judge_output_for_lens(
                 db_path,
                 disposed_id,
+                lens="tone",
+                verdict="fail",
+                note="generic and thin",
+            )
+            judge_output_for_lens(
+                db_path,
+                archived_id,
                 lens="tone",
                 verdict="fail",
                 note="generic and thin",
@@ -433,6 +451,12 @@ class EvalDbTests(TestCase):
                 disposition="retain",
                 note="keep in active lane",
             )
+            archive_failure_disposition_for_lens(
+                db_path,
+                archived_id,
+                lens="tone",
+                note="historical stale fail",
+            )
 
             rows = list_lens_failure_disposition_sample(
                 db_path,
@@ -448,7 +472,8 @@ class EvalDbTests(TestCase):
                 lens="tone",
                 source_mode="live",
             )
-            self.assertEqual(summary["total"], 2)
+            self.assertEqual(summary["total"], 3)
             self.assertEqual(summary["retain"], 1)
             self.assertEqual(summary["evict"], 0)
             self.assertEqual(summary["pending"], 1)
+            self.assertEqual(summary["archived"], 1)

@@ -570,7 +570,9 @@ class MainCommandTests(TestCase):
         self.assertIn("active tone row", output)
         self.assertNotIn("archived tone row", output.split("tone sample:")[-1])
 
-    def test_eval_tone_disposition_sample_and_dispose_cover_failed_rows(self) -> None:
+    def test_eval_tone_disposition_sample_dispose_and_archive_cover_failed_rows(
+        self,
+    ) -> None:
         stdout = io.StringIO()
         with TemporaryDirectory() as tmpdir:
             db_path = Path(tmpdir) / "evals.sqlite"
@@ -593,8 +595,18 @@ class MainCommandTests(TestCase):
                 source_mode="live",
                 model="gpt-5-nano",
             )
+            archived_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="archived tone fail row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
             judge_output(db_path, pending_id, "pass", "route pass")
             judge_output(db_path, disposed_id, "pass", "route pass")
+            judge_output(db_path, archived_id, "pass", "route pass")
             judge_output_for_lens(
                 db_path,
                 pending_id,
@@ -605,6 +617,13 @@ class MainCommandTests(TestCase):
             judge_output_for_lens(
                 db_path,
                 disposed_id,
+                lens="tone",
+                verdict="fail",
+                note="generic and thin",
+            )
+            judge_output_for_lens(
+                db_path,
+                archived_id,
                 lens="tone",
                 verdict="fail",
                 note="generic and thin",
@@ -629,6 +648,14 @@ class MainCommandTests(TestCase):
                             "keep in active lane",
                         ]
                     )
+                    archive_result = main(
+                        [
+                            "eval-tone-disposition-archive",
+                            str(archived_id),
+                            "--note",
+                            "historical stale fail",
+                        ]
+                    )
                     after_result = main(
                         [
                             "eval-tone-disposition-sample",
@@ -641,10 +668,11 @@ class MainCommandTests(TestCase):
 
         self.assertEqual(before_result, 0)
         self.assertEqual(dispose_result, 0)
+        self.assertEqual(archive_result, 0)
         self.assertEqual(after_result, 0)
         output = stdout.getvalue()
         self.assertIn(
-            "tone fail disposition counts: total=2 retain=0 evict=0 pending=2",
+            "tone fail disposition counts: total=3 retain=0 evict=0 pending=3",
             output,
         )
         self.assertIn(
@@ -652,7 +680,14 @@ class MainCommandTests(TestCase):
             output,
         )
         self.assertIn(
-            "tone fail disposition counts: total=2 retain=1 evict=0 pending=1",
+            f"archived tone disposition output {archived_id}",
+            output,
+        )
+        self.assertIn(
+            (
+                "tone fail disposition counts: total=3 retain=1 evict=0 "
+                "pending=1 archived=1"
+            ),
             output,
         )
         self.assertIn("pending tone fail row", output)

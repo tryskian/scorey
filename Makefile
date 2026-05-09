@@ -25,7 +25,7 @@ CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
 CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-dispose research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
+.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate decaffeinate-all caffeinate-status eod eod-preflight eod-docs-check eod-git-check clean
 .PHONY: eval-review-sample
 
 install:
@@ -149,6 +149,9 @@ eval-tone-archive:
 
 eval-tone-disposition-sample:
 	PYTHONPATH=src $(PY) -m scorey eval-tone-disposition-sample --limit $(EVAL_LIMIT) $(foreach pick,$(EVAL_USER_PICKS),--pick $(pick))
+
+eval-tone-disposition-archive:
+	PYTHONPATH=src $(PY) -m scorey eval-tone-disposition-archive $(OUTPUT_ID) --note "$(NOTE)"
 
 eval-tone-dispose:
 	PYTHONPATH=src $(PY) -m scorey eval-tone-dispose $(OUTPUT_ID) $(DISPOSITION) --note "$(NOTE)"
