@@ -8,7 +8,7 @@ from typing import TextIO, cast
 from unittest import TestCase
 from unittest.mock import patch
 
-from scorey.eval_db import init_db, judge_output, record_output
+from scorey.eval_db import init_db, judge_output, judge_output_for_lens, record_output
 from scorey.eval_sampling import EvalSampleSummary
 from scorey.main import (
     build_round_scene_lines,
@@ -569,6 +569,93 @@ class MainCommandTests(TestCase):
         self.assertIn("tone counts: total=2 pass=0 fail=0 pending=1 archived=1", output)
         self.assertIn("active tone row", output)
         self.assertNotIn("archived tone row", output.split("tone sample:")[-1])
+
+    def test_eval_tone_disposition_sample_and_dispose_cover_failed_rows(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            pending_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="paper",
+                route_family="same-pick",
+                round_text="pending tone fail row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            disposed_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="disposed tone fail row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, pending_id, "pass", "route pass")
+            judge_output(db_path, disposed_id, "pass", "route pass")
+            judge_output_for_lens(
+                db_path,
+                pending_id,
+                lens="tone",
+                verdict="fail",
+                note="generic and thin",
+            )
+            judge_output_for_lens(
+                db_path,
+                disposed_id,
+                lens="tone",
+                verdict="fail",
+                note="generic and thin",
+            )
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    before_result = main(
+                        [
+                            "eval-tone-disposition-sample",
+                            "--limit",
+                            "5",
+                            "--pick",
+                            "paper",
+                        ]
+                    )
+                    dispose_result = main(
+                        [
+                            "eval-tone-dispose",
+                            str(disposed_id),
+                            "retain",
+                            "--note",
+                            "keep in active lane",
+                        ]
+                    )
+                    after_result = main(
+                        [
+                            "eval-tone-disposition-sample",
+                            "--limit",
+                            "5",
+                            "--pick",
+                            "paper",
+                        ]
+                    )
+
+        self.assertEqual(before_result, 0)
+        self.assertEqual(dispose_result, 0)
+        self.assertEqual(after_result, 0)
+        output = stdout.getvalue()
+        self.assertIn(
+            "tone fail disposition counts: total=2 retain=0 evict=0 pending=2",
+            output,
+        )
+        self.assertIn(
+            f"recorded tone disposition for output {disposed_id}: retain",
+            output,
+        )
+        self.assertIn(
+            "tone fail disposition counts: total=2 retain=1 evict=0 pending=1",
+            output,
+        )
+        self.assertIn("pending tone fail row", output)
 
     def test_eval_sample_local_records_rows(self) -> None:
         stdout = io.StringIO()

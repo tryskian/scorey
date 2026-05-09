@@ -13,6 +13,7 @@ LIST_VERDICTS: tuple[str, ...] = VERDICTS + ("pending",)
 SOURCE_MODES: tuple[str, ...] = ("local", "live")
 ROUTE_FAMILIES: tuple[str, ...] = ("cross-object", "same-pick")
 LENSES: tuple[str, ...] = ("tone",)
+DISPOSITIONS: tuple[str, ...] = ("retain", "evict")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS eval_outputs (
@@ -27,8 +28,8 @@ CREATE TABLE IF NOT EXISTS eval_outputs (
     source_mode TEXT NOT NULL
         CHECK (source_mode IN ('local', 'live')),
     model TEXT NOT NULL,
-    current_verdict TEXT DEFAULT NULL
-        CHECK (current_verdict IN ('pass', 'fail') OR current_verdict IS NULL),
+    current_verdict TEXT NOT NULL DEFAULT 'pending'
+        CHECK (current_verdict IN ('pass', 'fail', 'pending')),
     current_note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL
 );
@@ -55,6 +56,16 @@ CREATE TABLE IF NOT EXISTS eval_lens_archives (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
     lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    note TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    UNIQUE (output_id, lens)
+);
+
+CREATE TABLE IF NOT EXISTS eval_lens_failure_dispositions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
+    lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    disposition TEXT NOT NULL CHECK (disposition IN ('retain', 'evict')),
     note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
     UNIQUE (output_id, lens)
@@ -91,10 +102,190 @@ def connect(db_path: Path | None = None) -> sqlite3.Connection:
     return conn
 
 
+def _needs_pending_verdict_migration(conn: sqlite3.Connection) -> bool:
+    columns = conn.execute("PRAGMA table_info(eval_outputs)").fetchall()
+    if not columns:
+        return False
+
+    current_verdict_column = next(
+        (column for column in columns if column["name"] == "current_verdict"),
+        None,
+    )
+    if current_verdict_column is None:
+        return False
+
+    if int(current_verdict_column["notnull"] or 0) == 0:
+        return True
+
+    default_value = current_verdict_column["dflt_value"]
+    if default_value is None:
+        return True
+
+    normalised_default = str(default_value).strip("'\"").lower()
+    if normalised_default != "pending":
+        return True
+
+    null_row = conn.execute(
+        """
+        SELECT 1
+        FROM eval_outputs
+        WHERE current_verdict IS NULL
+        LIMIT 1
+        """
+    ).fetchone()
+    return null_row is not None
+
+
+def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
+    conn.execute("PRAGMA foreign_keys = OFF")
+    conn.executescript(
+        """
+        CREATE TABLE eval_outputs_new (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_pick TEXT NOT NULL
+                CHECK (user_pick IN ('rock', 'paper', 'scissors')),
+            scorey_pick TEXT NOT NULL
+                CHECK (scorey_pick IN ('rock', 'paper', 'scissors')),
+            route_family TEXT NOT NULL
+                CHECK (route_family IN ('cross-object', 'same-pick')),
+            round_text TEXT NOT NULL,
+            source_mode TEXT NOT NULL
+                CHECK (source_mode IN ('local', 'live')),
+            model TEXT NOT NULL,
+            current_verdict TEXT NOT NULL DEFAULT 'pending'
+                CHECK (current_verdict IN ('pass', 'fail', 'pending')),
+            current_note TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL
+        );
+
+        CREATE TABLE eval_judgments_new (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            output_id INTEGER NOT NULL
+                REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
+            verdict TEXT NOT NULL CHECK (verdict IN ('pass', 'fail')),
+            note TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL
+        );
+
+        CREATE TABLE eval_lens_judgments_new (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            output_id INTEGER NOT NULL
+                REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
+            lens TEXT NOT NULL CHECK (lens IN ('tone')),
+            verdict TEXT NOT NULL CHECK (verdict IN ('pass', 'fail')),
+            note TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL,
+            UNIQUE (output_id, lens)
+        );
+
+        CREATE TABLE eval_lens_archives_new (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            output_id INTEGER NOT NULL
+                REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
+            lens TEXT NOT NULL CHECK (lens IN ('tone')),
+            note TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL,
+            UNIQUE (output_id, lens)
+        );
+
+        CREATE TABLE eval_lens_failure_dispositions_new (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            output_id INTEGER NOT NULL
+                REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
+            lens TEXT NOT NULL CHECK (lens IN ('tone')),
+            disposition TEXT NOT NULL CHECK (disposition IN ('retain', 'evict')),
+            note TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL,
+            UNIQUE (output_id, lens)
+        );
+
+        INSERT INTO eval_outputs_new (
+            id,
+            user_pick,
+            scorey_pick,
+            route_family,
+            round_text,
+            source_mode,
+            model,
+            current_verdict,
+            current_note,
+            created_at
+        )
+        SELECT
+            id,
+            user_pick,
+            scorey_pick,
+            route_family,
+            round_text,
+            source_mode,
+            model,
+            COALESCE(current_verdict, 'pending'),
+            current_note,
+            created_at
+        FROM eval_outputs;
+
+        INSERT INTO eval_judgments_new (id, output_id, verdict, note, created_at)
+        SELECT id, output_id, verdict, note, created_at
+        FROM eval_judgments;
+
+        INSERT INTO eval_lens_judgments_new (
+            id,
+            output_id,
+            lens,
+            verdict,
+            note,
+            created_at
+        )
+        SELECT id, output_id, lens, verdict, note, created_at
+        FROM eval_lens_judgments;
+
+        INSERT INTO eval_lens_archives_new (id, output_id, lens, note, created_at)
+        SELECT id, output_id, lens, note, created_at
+        FROM eval_lens_archives;
+
+        INSERT INTO eval_lens_failure_dispositions_new (
+            id,
+            output_id,
+            lens,
+            disposition,
+            note,
+            created_at
+        )
+        SELECT id, output_id, lens, disposition, note, created_at
+        FROM eval_lens_failure_dispositions;
+
+        DROP TABLE eval_lens_failure_dispositions;
+        DROP TABLE eval_lens_archives;
+        DROP TABLE eval_lens_judgments;
+        DROP TABLE eval_judgments;
+        DROP TABLE eval_outputs;
+
+        ALTER TABLE eval_outputs_new RENAME TO eval_outputs;
+        ALTER TABLE eval_judgments_new RENAME TO eval_judgments;
+        ALTER TABLE eval_lens_judgments_new RENAME TO eval_lens_judgments;
+        ALTER TABLE eval_lens_archives_new RENAME TO eval_lens_archives;
+        ALTER TABLE eval_lens_failure_dispositions_new
+            RENAME TO eval_lens_failure_dispositions;
+        """
+    )
+    conn.commit()
+    conn.execute("PRAGMA foreign_keys = ON")
+
+    problems = conn.execute("PRAGMA foreign_key_check").fetchall()
+    if problems:
+        raise RuntimeError("Foreign key check failed after pending verdict migration.")
+
+
+def prepare_db(conn: sqlite3.Connection) -> None:
+    conn.executescript(SCHEMA)
+    if _needs_pending_verdict_migration(conn):
+        _migrate_pending_verdict_schema(conn)
+
+
 def init_db(db_path: Path | None = None) -> Path:
     resolved = default_eval_db_path() if db_path is None else db_path
     with closing(connect(resolved)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
     return resolved
 
 
@@ -122,7 +313,7 @@ def record_output(
         raise ValueError("Model must be non-empty.")
 
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         cursor = conn.execute(
             """
             INSERT INTO eval_outputs (
@@ -181,7 +372,7 @@ def list_outputs(
         raise ValueError(f"Unsupported verdict '{verdict}'.")
 
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         if verdict is None:
             cursor = conn.execute(
                 """
@@ -238,7 +429,7 @@ def list_outputs(
                     current_note,
                     created_at
                 FROM eval_outputs
-                WHERE current_verdict IS NULL
+                WHERE current_verdict = 'pending'
                 ORDER BY id DESC
                 LIMIT ?
                 """,
@@ -249,7 +440,7 @@ def list_outputs(
 
 def get_output(db_path: Path | None, output_id: int) -> sqlite3.Row:
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         row = conn.execute(
             """
             SELECT
@@ -282,7 +473,7 @@ def list_review_sample(
         raise ValueError("Limit must be at least 1.")
 
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         rows = conn.execute(
             """
             SELECT
@@ -297,7 +488,7 @@ def list_review_sample(
                 current_note,
                 created_at
             FROM eval_outputs
-            WHERE current_verdict IS NULL
+            WHERE current_verdict = 'pending'
             ORDER BY id DESC
             """
         ).fetchall()
@@ -375,7 +566,84 @@ def list_lens_review_sample(
     """
 
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
+        rows = conn.execute(query, tuple(params)).fetchall()
+
+    sample: list[sqlite3.Row] = []
+    seen: set[tuple[str, str, str]] = set()
+    for row in rows:
+        key = (str(row["model"]), str(row["scorey_pick"]), str(row["user_pick"]))
+        if key in seen:
+            continue
+        seen.add(key)
+        sample.append(row)
+        if len(sample) >= limit:
+            break
+    return sample
+
+
+def list_lens_failure_disposition_sample(
+    db_path: Path | None,
+    *,
+    lens: str,
+    limit: int = 12,
+    source_mode: str | None = None,
+    user_picks: tuple[str, ...] | None = None,
+) -> list[sqlite3.Row]:
+    if lens not in LENSES:
+        raise ValueError(f"Unsupported lens '{lens}'.")
+    if limit < 1:
+        raise ValueError("Limit must be at least 1.")
+    if source_mode is not None and source_mode not in SOURCE_MODES:
+        raise ValueError(f"Unsupported source mode '{source_mode}'.")
+    resolved_user_picks = _normalise_user_picks(user_picks)
+
+    where = [
+        "current_verdict = 'pass'",
+        """
+        EXISTS (
+            SELECT 1
+            FROM eval_lens_judgments lens_judgments
+            WHERE lens_judgments.output_id = eval_outputs.id
+              AND lens_judgments.lens = ?
+              AND lens_judgments.verdict = 'fail'
+        )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM eval_lens_failure_dispositions failure_dispositions
+            WHERE failure_dispositions.output_id = eval_outputs.id
+              AND failure_dispositions.lens = ?
+        )
+        """.strip(),
+    ]
+    params: list[str] = [lens, lens]
+    if source_mode is not None:
+        where.append("source_mode = ?")
+        params.append(source_mode)
+    if resolved_user_picks is not None:
+        placeholders = ", ".join("?" for _ in resolved_user_picks)
+        where.append(f"user_pick IN ({placeholders})")
+        params.extend(resolved_user_picks)
+
+    query = f"""
+        SELECT
+            id,
+            user_pick,
+            scorey_pick,
+            route_family,
+            round_text,
+            source_mode,
+            model,
+            current_verdict,
+            current_note,
+            created_at
+        FROM eval_outputs
+        WHERE {" AND ".join(where)}
+        ORDER BY id DESC
+    """
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
         rows = conn.execute(query, tuple(params)).fetchall()
 
     sample: list[sqlite3.Row] = []
@@ -401,7 +669,7 @@ def judge_output(
         raise ValueError(f"Unsupported verdict '{verdict}'.")
 
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         row = conn.execute(
             "SELECT id FROM eval_outputs WHERE id = ?",
             (output_id,),
@@ -444,7 +712,7 @@ def judge_output_for_lens(
         raise ValueError(f"Unsupported verdict '{verdict}'.")
 
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         row = conn.execute(
             "SELECT id FROM eval_outputs WHERE id = ?",
             (output_id,),
@@ -477,7 +745,7 @@ def archive_output_for_lens(
         raise ValueError(f"Unsupported lens '{lens}'.")
 
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         row = conn.execute(
             """
             SELECT id, current_verdict
@@ -521,16 +789,89 @@ def archive_output_for_lens(
         )
 
 
+def record_failure_disposition_for_lens(
+    db_path: Path | None,
+    output_id: int,
+    *,
+    lens: str,
+    disposition: str,
+    note: str,
+) -> None:
+    if lens not in LENSES:
+        raise ValueError(f"Unsupported lens '{lens}'.")
+    if disposition not in DISPOSITIONS:
+        raise ValueError(f"Unsupported disposition '{disposition}'.")
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+        row = conn.execute(
+            """
+            SELECT id, current_verdict
+            FROM eval_outputs
+            WHERE id = ?
+            """,
+            (output_id,),
+        ).fetchone()
+        if row is None:
+            raise ValueError(f"Output id {output_id} does not exist.")
+        if row["current_verdict"] != "pass":
+            raise ValueError(
+                "Output id "
+                f"{output_id} is not route-pass and cannot record {lens} disposition."
+            )
+
+        judged = conn.execute(
+            """
+            SELECT verdict
+            FROM eval_lens_judgments
+            WHERE output_id = ? AND lens = ?
+            """,
+            (output_id, lens),
+        ).fetchone()
+        if judged is None or judged["verdict"] != "fail":
+            raise ValueError(
+                "Output id "
+                f"{output_id} must have a failed {lens} verdict before disposition."
+            )
+
+        archived = conn.execute(
+            """
+            SELECT 1
+            FROM eval_lens_archives
+            WHERE output_id = ? AND lens = ?
+            """,
+            (output_id, lens),
+        ).fetchone()
+        if archived is not None:
+            raise ValueError(
+                "Output id "
+                f"{output_id} is archived for {lens} and cannot take a disposition."
+            )
+
+        conn.execute(
+            """
+            INSERT INTO eval_lens_failure_dispositions (
+                output_id,
+                lens,
+                disposition,
+                note,
+                created_at
+            ) VALUES (?, ?, ?, ?, ?)
+            """,
+            (output_id, lens, disposition, note, utc_now()),
+        )
+
+
 def counts(db_path: Path | None) -> dict[str, int]:
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         totals = conn.execute(
             """
             SELECT
                 COUNT(*) AS total,
                 SUM(CASE WHEN current_verdict = 'pass' THEN 1 ELSE 0 END) AS pass,
                 SUM(CASE WHEN current_verdict = 'fail' THEN 1 ELSE 0 END) AS fail,
-                SUM(CASE WHEN current_verdict IS NULL THEN 1 ELSE 0 END) AS pending
+                SUM(CASE WHEN current_verdict = 'pending' THEN 1 ELSE 0 END) AS pending
             FROM eval_outputs
             """
         ).fetchone()
@@ -622,7 +963,7 @@ def lens_counts(
     """
 
     with closing(connect(db_path)) as conn, conn:
-        conn.executescript(SCHEMA)
+        prepare_db(conn)
         total_row = conn.execute(eligible_sql, tuple(params)).fetchone()
         total = int(total_row["total"] or 0) if total_row is not None else 0
         verdict_rows = conn.execute(judgments_sql, tuple(judgment_params)).fetchall()
@@ -644,4 +985,88 @@ def lens_counts(
         "fail": fail_count,
         "pending": total - pass_count - fail_count - archived_count,
         "archived": archived_count,
+    }
+
+
+def lens_failure_disposition_counts(
+    db_path: Path | None,
+    *,
+    lens: str,
+    source_mode: str | None = None,
+    user_picks: tuple[str, ...] | None = None,
+) -> dict[str, int]:
+    if lens not in LENSES:
+        raise ValueError(f"Unsupported lens '{lens}'.")
+    if source_mode is not None and source_mode not in SOURCE_MODES:
+        raise ValueError(f"Unsupported source mode '{source_mode}'.")
+    resolved_user_picks = _normalise_user_picks(user_picks)
+
+    total_where = [
+        "output.current_verdict = 'pass'",
+        "lens_judgments.lens = ?",
+        "lens_judgments.verdict = 'fail'",
+    ]
+    total_params: list[str] = [lens]
+    if source_mode is not None:
+        total_where.append("output.source_mode = ?")
+        total_params.append(source_mode)
+    if resolved_user_picks is not None:
+        placeholders = ", ".join("?" for _ in resolved_user_picks)
+        total_where.append(f"output.user_pick IN ({placeholders})")
+        total_params.extend(resolved_user_picks)
+
+    totals_sql = f"""
+        SELECT COUNT(*) AS total
+        FROM eval_lens_judgments lens_judgments
+        JOIN eval_outputs output
+          ON output.id = lens_judgments.output_id
+        WHERE {" AND ".join(total_where)}
+    """
+
+    disposition_where = [
+        "output.current_verdict = 'pass'",
+        "failure_dispositions.lens = ?",
+    ]
+    disposition_params: list[str] = [lens]
+    if source_mode is not None:
+        disposition_where.append("output.source_mode = ?")
+        disposition_params.append(source_mode)
+    if resolved_user_picks is not None:
+        placeholders = ", ".join("?" for _ in resolved_user_picks)
+        disposition_where.append(f"output.user_pick IN ({placeholders})")
+        disposition_params.extend(resolved_user_picks)
+
+    dispositions_sql = f"""
+        SELECT
+            failure_dispositions.disposition AS disposition,
+            COUNT(*) AS count
+        FROM eval_lens_failure_dispositions failure_dispositions
+        JOIN eval_outputs output
+          ON output.id = failure_dispositions.output_id
+        WHERE {" AND ".join(disposition_where)}
+        GROUP BY failure_dispositions.disposition
+    """
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+        total_row = conn.execute(totals_sql, tuple(total_params)).fetchone()
+        total = int(total_row["total"] or 0) if total_row is not None else 0
+        disposition_rows = conn.execute(
+            dispositions_sql,
+            tuple(disposition_params),
+        ).fetchall()
+
+    retain_count = 0
+    evict_count = 0
+    for row in disposition_rows:
+        if row["disposition"] == "retain":
+            retain_count = int(row["count"] or 0)
+        elif row["disposition"] == "evict":
+            evict_count = int(row["count"] or 0)
+
+    return {
+        "total": total,
+        "retain": retain_count,
+        "evict": evict_count,
+        "pending": total - retain_count - evict_count,
     }
