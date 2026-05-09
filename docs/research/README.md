@@ -37,9 +37,9 @@ Current finding:
   - `0` pending
 - the live surface has now widened again:
   - `1252` live rows recorded
-  - `958` beab pass at the route-and-legibility floor
+  - `1252` beab pass at the route-and-legibility floor
   - `0` beab fail
-  - `294` pending route review
+  - `0` pending route review
   - four recent extended live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
     - after output `18317`: `12` new live rows
     - after output `18329`: `257` new live rows
@@ -48,27 +48,36 @@ Current finding:
   - the paper-only run stayed inside the expected paper route families:
     - `paper/paper`: `144`
     - `paper/rock`: `150`
-- `Research Beta 3.0` is now defined as a positive-only tone lens:
+  - `Research Beta 3.0` is now defined as a positive-only tone lens:
   - `pick-aware`
   - `playful`
   - `confident`
   - `coherent`
   - `imaginative`
   - the widened tone queue is now separating real signal:
-    - `104` rows judged
-    - `45` pass
-    - `59` fail
-    - `854` route-passed live rows still pending tone review
+    - `525` rows judged
+    - `166` pass
+    - `359` fail
+    - `727` archived out of the active tone queue
+    - `0` route-passed live rows still pending tone review
     - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
     - the current weak pattern is usually either generic `real one` / `napkin` or version/copy language, with a smaller playful line that is not coherent enough to keep
+  - inside the isolated paper-only tone lane:
+    - `613` route-passed paper rows total
+    - `457` judged
+    - `138` pass
+    - `319` fail
+    - `156` archived after the failure seam was established
+    - `0` pending
 
 Current clean lane:
 
-- continue tandem live review with the five-point bar
-- keep the route floor caught up as new batches land
+- the route floor is caught up again on the completed paper-only batch
 - use the completed paper-only run as the clean isolation lane for the current
   `real one` / `napkin` seam
-- keep tone-judging the newest route-passed tranche
+- the widened live tone queue is now fully dispositioned: judged or archived
+- the stale active queue is closed; the next tone evidence should come from a
+  fresh post-archive live run instead of more backlog traversal
 - treat tone failures through explicit disposition:
   - `retain` when the seam still belongs in the active lane
   - `evict` when the seam proves the lane definition itself is wrong
@@ -130,7 +139,7 @@ Parked lanes:
 - live gameplay:
   - the widened live queue is now fully route-passed again
   - keep using those route-passed live rows as the tone-first evidence surface
-  - keep route review and tone review moving in tandem with live generation when new batches run
+  - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
   - only widen into scoreboard or prose judgement after the tone lane stabilises
 - research visuals:

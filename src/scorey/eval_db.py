@@ -50,6 +50,15 @@ CREATE TABLE IF NOT EXISTS eval_lens_judgments (
     created_at TEXT NOT NULL,
     UNIQUE (output_id, lens)
 );
+
+CREATE TABLE IF NOT EXISTS eval_lens_archives (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
+    lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    note TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    UNIQUE (output_id, lens)
+);
 """
 
 
@@ -331,9 +340,15 @@ def list_lens_review_sample(
             WHERE lens_judgments.output_id = eval_outputs.id
               AND lens_judgments.lens = ?
         )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM eval_lens_archives lens_archives
+            WHERE lens_archives.output_id = eval_outputs.id
+              AND lens_archives.lens = ?
+        )
         """.strip(),
     ]
-    params: list[str] = [lens]
+    params: list[str] = [lens, lens]
     if source_mode is not None:
         where.append("source_mode = ?")
         params.append(source_mode)
@@ -451,6 +466,61 @@ def judge_output_for_lens(
         )
 
 
+def archive_output_for_lens(
+    db_path: Path | None,
+    output_id: int,
+    *,
+    lens: str,
+    note: str,
+) -> None:
+    if lens not in LENSES:
+        raise ValueError(f"Unsupported lens '{lens}'.")
+
+    with closing(connect(db_path)) as conn, conn:
+        conn.executescript(SCHEMA)
+        row = conn.execute(
+            """
+            SELECT id, current_verdict
+            FROM eval_outputs
+            WHERE id = ?
+            """,
+            (output_id,),
+        ).fetchone()
+        if row is None:
+            raise ValueError(f"Output id {output_id} does not exist.")
+        if row["current_verdict"] != "pass":
+            raise ValueError(
+                "Output id "
+                f"{output_id} is not route-pass and cannot be archived for {lens}."
+            )
+
+        judged = conn.execute(
+            """
+            SELECT 1
+            FROM eval_lens_judgments
+            WHERE output_id = ? AND lens = ?
+            """,
+            (output_id, lens),
+        ).fetchone()
+        if judged is not None:
+            raise ValueError(
+                "Output id "
+                f"{output_id} already has a {lens} verdict and cannot be archived."
+            )
+
+        conn.execute(
+            """
+            INSERT INTO eval_lens_archives (
+                output_id,
+                lens,
+                note,
+                created_at
+            ) VALUES (?, ?, ?, ?)
+            """,
+            (output_id, lens, note, utc_now()),
+        )
+
+
 def counts(db_path: Path | None) -> dict[str, int]:
     with closing(connect(db_path)) as conn, conn:
         conn.executescript(SCHEMA)
@@ -526,11 +596,37 @@ def lens_counts(
         GROUP BY lens_judgments.verdict
     """
 
+    archive_where = [
+        "output.current_verdict = 'pass'",
+        "lens_archives.lens = ?",
+        "lens_judgments.output_id IS NULL",
+    ]
+    archive_params: list[str] = [lens]
+    if source_mode is not None:
+        archive_where.append("output.source_mode = ?")
+        archive_params.append(source_mode)
+    if resolved_user_picks is not None:
+        placeholders = ", ".join("?" for _ in resolved_user_picks)
+        archive_where.append(f"output.user_pick IN ({placeholders})")
+        archive_params.extend(resolved_user_picks)
+
+    archives_sql = f"""
+        SELECT COUNT(*) AS archived
+        FROM eval_lens_archives lens_archives
+        JOIN eval_outputs output
+          ON output.id = lens_archives.output_id
+        LEFT JOIN eval_lens_judgments lens_judgments
+          ON lens_judgments.output_id = output.id
+         AND lens_judgments.lens = lens_archives.lens
+        WHERE {" AND ".join(archive_where)}
+    """
+
     with closing(connect(db_path)) as conn, conn:
         conn.executescript(SCHEMA)
         total_row = conn.execute(eligible_sql, tuple(params)).fetchone()
         total = int(total_row["total"] or 0) if total_row is not None else 0
         verdict_rows = conn.execute(judgments_sql, tuple(judgment_params)).fetchall()
+        archive_row = conn.execute(archives_sql, tuple(archive_params)).fetchone()
 
     pass_count = 0
     fail_count = 0
@@ -540,9 +636,12 @@ def lens_counts(
         elif row["verdict"] == "fail":
             fail_count = int(row["count"] or 0)
 
+    archived_count = int(archive_row["archived"] or 0) if archive_row is not None else 0
+
     return {
         "total": total,
         "pass": pass_count,
         "fail": fail_count,
-        "pending": total - pass_count - fail_count,
+        "pending": total - pass_count - fail_count - archived_count,
+        "archived": archived_count,
     }

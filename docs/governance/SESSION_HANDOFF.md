@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-08
+Last updated: 2026-05-09
 
 ## Start Here
 
@@ -47,6 +47,7 @@ A small operator surface now exists:
 - `make eval-judge`
 - `make eval-tone-sample`
 - `make eval-tone-judge`
+- `make eval-tone-archive`
 - `make research-beta1`
 - `make eval-sample-live`
 - `make open-limits`
@@ -101,6 +102,7 @@ Current runtime surfaces:
 - `scorey eval-tone-sample --limit 12` lists the newest pending live tone row per model/pair sample
 - `scorey eval-tone-sample --limit 12 --pick paper` narrows the tone review queue to paper-only user picks
 - `scorey eval-tone-judge 17922 pass --note "pick-aware playful confident coherent imaginative"` records one tone verdict
+- `scorey eval-tone-archive 17922 --note "paper seam archived out of active queue"` archives one pending tone row out of the active review surface
 - `scorey research-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
 - `scorey eval-sample-local --count 30 --pattern research-beta-1-coverage`
@@ -129,13 +131,20 @@ A first eval storage lane now exists:
   - `0` pending
 - the live review queue now exists:
   - `1252` total live rows
-  - `958` pass
+  - `1252` pass
   - `0` fail
-  - `294` pending beab route reviews
+  - `0` pending beab route reviews
 - the active tone queue now exists on top of the route-pass live rows:
-  - `45` tone pass
-  - `59` tone fail
-  - `854` pending tone reviews on route-passed live rows
+  - `166` tone pass
+  - `359` tone fail
+  - `727` archived tone rows
+  - `0` pending tone reviews on route-passed live rows
+  - isolated paper-only tone lane:
+    - `613` total
+    - `138` pass
+    - `319` fail
+    - `156` archived
+    - `0` pending
 - tone failures now use a second explicit disposition layer:
   - `retain`
   - `evict`
@@ -178,15 +187,17 @@ Current tracked research beta:
 - live lane:
   - real API rounds recorded
   - route contract still holding so far
-  - the latest paper-only run is complete, but its `294` rows still need route-floor promotion
-  - tone review is now the real throughput bottleneck
+  - the latest paper-only run is complete and now promoted through the route floor
+  - the active paper-only queue is now closed; its remaining pending rows were archived after the seam was established
+  - the widened live tone queue is now also fully closed; the remaining stale non-paper pendings were archived before the next fresh run
   - the active failure contract is now:
     - `PASS / FAIL`
     - if `FAIL`, then `RETAIN / EVICT`
   - current tone queue:
-    - `104` rows judged
-    - `45` pass
-    - `59` fail
+    - `525` rows judged
+    - `166` pass
+    - `359` fail
+    - `727` archived
     - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
     - the strongest fail pattern is still generic `real one` / `napkin` or version/copy language, with a smaller playful-but-not-coherent drift cluster
 
@@ -223,8 +234,8 @@ Choose one lane at a time:
   - paper lane: complete and stable
   - scissors lane: complete and stable
   - next useful move:
-    - promote the completed paper-only batch through the route floor
-    - keep judging tone from the isolated paper tranche
+    - implement the actual `RETAIN / EVICT` operator/runtime surface
+    - start the next tone measurement from a fresh live run rather than the archived backlog
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful

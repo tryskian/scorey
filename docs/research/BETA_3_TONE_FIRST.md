@@ -8,9 +8,9 @@ Can Scorey keep its own voice once route validity and pick legibility are no lon
 
 Started, separating real signal, but not settled.
 
-The tone lane now has real separation, and the live route floor is still
-holding on completed batches, but route-floor catch-up and tone review
-throughput are both lagging the widened queue.
+The tone lane now has real separation, and the widened live tone surface is
+fully dispositioned. The stale queue is closed; the next useful evidence should
+come from a fresh post-archive run.
 
 ## Eval Shape
 
@@ -77,24 +77,31 @@ Since then, four more extended live runs have widened the active surface:
 The current live snapshot is now:
 
 - `1252` live rows recorded
-- `958` beab pass at the route-and-legibility floor
+- `1252` beab pass at the route-and-legibility floor
 - `0` beab fail
-- `294` pending route review
+- `0` pending route review
 - the newest paper-only batch stayed inside the expected paper route families:
   - `paper/paper`: `144`
   - `paper/rock`: `150`
 
 The current tone lane now records:
 
-- `104` rows judged
-- `45` tone pass
-- `59` tone fail
-- `854` route-passed live rows still pending tone review
+- `525` rows judged
+- `166` tone pass
+- `359` tone fail
+- `727` tone rows archived out of the active queue
+- `0` route-passed live rows still pending tone review
 - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
 - the weak pattern is usually either generic `real one` / `napkin` or version/copy language, with a smaller playful line that is not coherent enough to keep
 
-Inside the paper-only `294`-row run, the first isolation reads are already useful:
+Inside the paper-only lane, the first isolated judged surface is now:
 
+- `613` route-passed paper rows total
+- `457` judged paper-only tone rows
+- `138` pass
+- `319` fail
+- `156` archived out of the active paper queue
+- `0` pending
 - `my paper was the real one and your paper was a napkin` is still a weak fail
 - `my rock was stone-cold advantage and your paper was a napkin` is still a stronger pass
 - the seam is not "napkin" by itself
@@ -118,9 +125,9 @@ It is more specific than a broad prose pass, and it stays closer to the object's
 
 ## What Changed Next
 
-The next useful move is to promote the completed paper-only batch through the
-route floor, then keep tone review moving on that isolated paper lane until
-the failure seam is sharp enough to support the next implementation pass.
+The next useful move is to move off the now-archived paper isolation lane and
+carry the stronger failure contract into the next implementation pass and the
+next fresh live run.
 
 That now includes a sharper failure rule:
 

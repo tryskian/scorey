@@ -32,8 +32,12 @@ In this repo, major betas are research architectures, and minor versions tighten
 - constrained round preservation through a fixed pick surface
 - runtime-owned routing and composition around one unfair round
 - binary eval lanes from pick routing to tone-first live review
-- explicit failure disposition when a lane fails:
-  - `RETAIN / EVICT`
+- explicit post-fail gate stack:
+  - `PASS / FAIL`
+  - if `FAIL`, then `RETAIN / EVICT`
+  - rerun
+  - `PASS / FAIL`
+- explicit archive cleanup when a pending review lane should leave the active queue without becoming a verdict
 
 ## Run It
 

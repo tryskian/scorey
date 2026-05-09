@@ -99,6 +99,22 @@ flowchart TD
   L --> M
 ```
 
+## Post-Fail Gate Stack
+
+```mermaid
+flowchart LR
+  A["Judged round"] --> B{"PASS / FAIL"}
+  B -->|"PASS"| C["Keep confidence in active lane"]
+  B -->|"FAIL"| D["Failure evidence"]
+  D --> E{"RETAIN / EVICT"}
+  E -->|"RETAIN"| F["Keep row in active lane"]
+  F --> G["Accumulate more judged signal"]
+  G --> A
+  E -->|"EVICT"| H["Upstream route or lane correction"]
+  H --> I["Rerun corrected lane"]
+  I --> A
+```
+
 ## Eval Shape Reading Note
 
 The first active eval kernel should stay narrow:
@@ -118,3 +134,10 @@ The first active eval kernel should stay narrow:
   - every other pick pair
 
 Broader taste judgments should only harden after the round contract is stable.
+
+That gate stays binary first:
+
+- `PASS / FAIL`
+- if `FAIL`, then `RETAIN / EVICT`
+- rerun
+- `PASS / FAIL`
