@@ -36,26 +36,34 @@ Current finding:
   - `0` fail
   - `0` pending
 - the live surface has now widened again:
-  - `1422` live rows recorded
-  - `1422` beab pass at the route-and-legibility floor
+  - `1579` live rows recorded
+  - `1579` beab pass at the route-and-legibility floor
   - `0` beab fail
   - `0` pending route review
-  - five recent extended live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
+  - six recent extended live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
     - after output `18317`: `12` new live rows
     - after output `18329`: `257` new live rows
     - after output `18586`: `294` new live rows
     - after output `18880`: `294` new paper-only live rows
     - after output `19174`: `170` new live rows
+    - after output `19344`: `157` new live rows
   - the paper-only run stayed inside the expected paper route families:
     - `paper/paper`: `144`
     - `paper/rock`: `150`
-  - the newest mixed run also stayed inside the valid route families:
+  - the first mixed post-surface run also stayed inside the valid route families:
     - `paper/paper`: `34`
     - `paper/scissors`: `24`
     - `rock/paper`: `23`
     - `rock/rock`: `29`
     - `scissors/rock`: `28`
     - `scissors/scissors`: `32`
+  - the next post-evict run also stayed inside the valid route families:
+    - `paper/paper`: `25`
+    - `paper/scissors`: `21`
+    - `rock/paper`: `27`
+    - `rock/rock`: `27`
+    - `scissors/rock`: `26`
+    - `scissors/scissors`: `31`
   - `Research Beta 3.0` is now defined as a positive-only tone lens:
   - `pick-aware`
   - `playful`
@@ -63,9 +71,9 @@ Current finding:
   - `coherent`
   - `imaginative`
   - the widened tone queue is now separating real signal:
-    - `695` rows judged
-    - `232` pass
-    - `463` fail
+    - `852` rows judged
+    - `297` pass
+    - `555` fail
     - `727` archived out of the active tone queue
     - `0` route-passed live rows still pending tone review
     - the first fresh post-surface run is fully closed:
@@ -76,24 +84,32 @@ Current finding:
       - `0` fresh pending route reviews
       - `0` fresh pending tone reviews
       - `0` fresh pending fail dispositions
+    - the next post-evict run is also fully closed:
+      - `157` route pass
+      - `65` tone pass
+      - `92` tone fail
+      - `92` evict
+      - `0` fresh pending route reviews
+      - `0` fresh pending tone reviews
+      - `0` fresh pending fail dispositions
     - older pre-surface tone fails still remain undispositioned and should not
       be confused with the active fresh queue
     - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
-    - the current weak pattern is usually either generic `real one` / `napkin` or version/copy language, with a smaller playful line that is not coherent enough to keep
+    - the current weak pattern is still mostly generic `real one` / `napkin` or version/copy language, with a smaller thin-power cluster like `paper supremacy` or `paper power`
   - inside the isolated paper-only tone lane:
-    - `670` route-passed paper rows total
-    - `514` judged
-    - `161` pass
-    - `353` fail
+    - `722` route-passed paper rows total
+    - `566` judged
+    - `185` pass
+    - `381` fail
     - `156` archived after the failure seam was established
     - `0` pending
 
 Current clean lane:
 
-- the route floor is fully caught up on the newest fresh mixed run
+- the route floor is fully caught up on the newest post-evict run
 - the isolated paper-only run remains the clean seam-finding lane for the
   current `real one` / `napkin` pattern
-- the first fresh post-surface live run is now fully closed
+- both fresh post-surface live runs are now fully closed
 - the active queue is clean at the fresh boundary; the next tone evidence can
   come from another new live run instead of more backlog traversal
 - treat tone failures through explicit disposition:
