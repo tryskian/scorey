@@ -22,9 +22,12 @@ from scorey.eval_db import (
     judge_output,
     judge_output_for_lens,
     lens_counts,
+    lens_failure_disposition_counts,
+    list_lens_failure_disposition_sample,
     list_lens_review_sample,
     list_outputs,
     list_review_sample,
+    record_failure_disposition_for_lens,
 )
 from scorey.eval_gates import (
     RESEARCH_BETA_1_DISPLAY_NAME,
@@ -173,6 +176,35 @@ def build_parser() -> argparse.ArgumentParser:
         "--note",
         required=True,
         help="Short note explaining why the pending tone row is being archived.",
+    )
+
+    eval_tone_disposition_sample_parser = subparsers.add_parser(
+        "eval-tone-disposition-sample",
+        help="List a stratified tone-fail sample that still needs RETAIN or EVICT.",
+    )
+    eval_tone_disposition_sample_parser.add_argument("--limit", type=int, default=12)
+    eval_tone_disposition_sample_parser.add_argument(
+        "--pick",
+        action="append",
+        default=[],
+        choices=APP_PICKS,
+        metavar="USER_PICK",
+        help=(
+            "Repeat to narrow the tone-fail disposition sample to one or more "
+            "user picks."
+        ),
+    )
+
+    eval_tone_dispose_parser = subparsers.add_parser(
+        "eval-tone-dispose",
+        help="Record RETAIN or EVICT for one failed tone row.",
+    )
+    eval_tone_dispose_parser.add_argument("output_id", type=int)
+    eval_tone_dispose_parser.add_argument("disposition", choices=("retain", "evict"))
+    eval_tone_dispose_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short note explaining the failure disposition.",
     )
 
     eval_sample_local_parser = subparsers.add_parser(
@@ -758,7 +790,7 @@ def _format_scorey_user_pair(scorey_pick: str, user_pick: str) -> str:
 
 def _format_eval_row(db_path: Path, row_id: int) -> str:
     row = get_output(db_path, row_id)
-    verdict = row["current_verdict"] or "pending"
+    verdict = str(row["current_verdict"])
     lines = [
         (
             f"[{row['id']}] "
@@ -837,7 +869,7 @@ def command_research_beta_1(limit: int) -> int:
     for index, (row, result) in enumerate(zip(rows, results, strict=True)):
         if index > 0:
             print("")
-        human_verdict = row["current_verdict"] or "pending"
+        human_verdict = str(row["current_verdict"])
         print(
             f"[{row['id']}] {result.verdict} "
             f"{_format_scorey_user_pair(result.scorey_pick, result.user_pick)} "
@@ -975,6 +1007,70 @@ def command_eval_tone_archive(output_id: int, note: str) -> int:
     return 0
 
 
+def command_eval_tone_disposition_sample(limit: int, user_picks: list[str]) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    resolved_user_picks = tuple(user_picks) if user_picks else None
+    summary = lens_failure_disposition_counts(
+        db_path,
+        lens="tone",
+        source_mode="live",
+        user_picks=resolved_user_picks,
+    )
+    print(
+        "tone fail disposition counts: "
+        f"total={summary['total']} retain={summary['retain']} "
+        f"evict={summary['evict']} pending={summary['pending']}"
+    )
+    print(
+        "tone fail disposition sample: "
+        f"newest failed live row per model/pair (limit={limit})"
+    )
+    if resolved_user_picks is not None:
+        print(f"user_picks={' '.join(resolved_user_picks)}")
+
+    rows = list_lens_failure_disposition_sample(
+        db_path,
+        lens="tone",
+        source_mode="live",
+        limit=limit,
+        user_picks=resolved_user_picks,
+    )
+    if not rows:
+        print("")
+        print("no pending tone failure dispositions.")
+        return 0
+
+    print("")
+    for index, row in enumerate(rows):
+        if index > 0:
+            print("")
+        print(_format_eval_row(db_path, int(row["id"])))
+    return 0
+
+
+def command_eval_tone_dispose(output_id: int, disposition: str, note: str) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        record_failure_disposition_for_lens(
+            db_path,
+            output_id,
+            lens="tone",
+            disposition=disposition,
+            note=note,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"recorded tone disposition for output {output_id}: {disposition}")
+    print(f"note: {note}")
+    print("")
+    print(_format_eval_row(db_path, output_id))
+    return 0
+
+
 def command_eval_sample_local(
     *,
     count: int | None,
@@ -1100,6 +1196,14 @@ def main(argv: list[str] | None = None) -> int:
         return command_eval_tone_judge(args.output_id, args.verdict, args.note)
     if args.command == "eval-tone-archive":
         return command_eval_tone_archive(args.output_id, args.note)
+    if args.command == "eval-tone-disposition-sample":
+        return command_eval_tone_disposition_sample(args.limit, args.pick)
+    if args.command == "eval-tone-dispose":
+        return command_eval_tone_dispose(
+            args.output_id,
+            args.disposition,
+            args.note,
+        )
     if args.command == "eval-sample-local":
         return command_eval_sample_local(
             count=args.count,

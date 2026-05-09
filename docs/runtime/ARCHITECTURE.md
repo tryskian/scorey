@@ -123,6 +123,7 @@ The current tracked shape is intentionally small:
 - generated or recorded rounds live in `eval_outputs`
 - human judgments are append-only in `eval_judgments`
 - lens-specific judgments are append-only in `eval_lens_judgments`
+- post-fail lens dispositions are append-only in `eval_lens_failure_dispositions`
 - the current top-level verdict is mirrored onto the output row for fast listing
 - verdicts stay binary:
   - `pass`
@@ -143,6 +144,16 @@ The current row shape records:
 - `current_note`
 
 The top-level verdict still means the route-valid floor.
+
+`current_verdict` is now explicit all the way through the runtime:
+
+- `pass`
+- `fail`
+- `pending`
+
+Pending route rows should use the literal `pending` value, not `NULL`, so the
+operator surface, direct SQL reads, and later lenses all agree on the active
+queue state.
 
 `RETAIN / EVICT` does not introduce a third verdict value. It is the explicit
 disposition layer applied after a `fail`:

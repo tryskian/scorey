@@ -605,3 +605,41 @@ into implementation authorship.
   no longer belonged in the active queue. They still should not become fake
   verdicts, and archive should not be confused with the post-`FAIL`
   `RETAIN / EVICT` disposition layer.
+
+## D-037: Failed tone rows get an explicit post-fail operator surface
+
+- Date: `2026-05-09`
+- Category: `runtime_engineering`
+- Tags: `tone_review`, `retain_evict`, `operator_surface`, `failure_disposition`
+- Provenance: `implementation decision`
+- Decision:
+  - add a separate tone failure-disposition sample:
+    - `eval-tone-disposition-sample`
+    - `make eval-tone-disposition-sample`
+  - add a separate tone failure-disposition write path:
+    - `eval-tone-dispose`
+    - `make eval-tone-dispose`
+  - keep `PASS / FAIL` as the first gate
+  - only allow `RETAIN / EVICT` after a stored tone `fail`
+  - keep archive separate from the post-fail disposition layer
+- Why: The method contract is two-step on purpose. `PASS / FAIL` decides the
+  row. `RETAIN / EVICT` decides what to do with a failed row next. The runtime
+  surface should make that order explicit instead of relying on ad hoc notes or
+  memory.
+
+## D-038: Pending route rows should be explicit in `current_verdict`
+
+- Date: `2026-05-09`
+- Category: `runtime_engineering`
+- Tags: `eval_storage`, `operator_surface`, `pending_queue`
+- Provenance: `implementation decision`
+- Decision:
+  - store pending route rows as the literal `pending` value in
+    `eval_outputs.current_verdict`
+  - stop using `NULL` as the live pending representation
+  - migrate legacy rows forward on DB initialization so direct SQL and the CLI
+    surface agree on active queue state
+- Why: The operator surface already speaks in `pass`, `fail`, and `pending`.
+  Leaving pending rows implicit as `NULL` made direct inspection brittle and let
+  route-pending counts disagree depending on how the DB was queried. The runtime
+  should use one explicit pending state.

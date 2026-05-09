@@ -66,40 +66,58 @@ Its starting surface was the already-judged live queue:
 - `0` fail
 - `0` pending
 
-Since then, four more extended live runs have widened the active surface:
+Since then, five more extended live runs have widened the active surface:
 
 - `12` new live rows after output `18317`
 - `257` new live rows after output `18329`
 - `294` new live rows after output `18586`
 - `294` new paper-only live rows after output `18880`
-- all four runs stayed entirely inside the valid `Research Beta 1.0` route set
+- `170` new live rows after output `19174`
+- all five runs stayed entirely inside the valid `Research Beta 1.0` route set
 
 The current live snapshot is now:
 
-- `1252` live rows recorded
-- `1252` beab pass at the route-and-legibility floor
+- `1422` live rows recorded
+- `1422` beab pass at the route-and-legibility floor
 - `0` beab fail
 - `0` pending route review
 - the newest paper-only batch stayed inside the expected paper route families:
   - `paper/paper`: `144`
   - `paper/rock`: `150`
+- the newest mixed run also stayed inside the valid route families:
+  - `paper/paper`: `34`
+  - `paper/scissors`: `24`
+  - `rock/paper`: `23`
+  - `rock/rock`: `29`
+  - `scissors/rock`: `28`
+  - `scissors/scissors`: `32`
 
 The current tone lane now records:
 
-- `525` rows judged
-- `166` tone pass
-- `359` tone fail
+- `695` rows judged
+- `232` tone pass
+- `463` tone fail
 - `727` tone rows archived out of the active queue
 - `0` route-passed live rows still pending tone review
+- the first fresh post-surface live run is now fully closed:
+  - `170` route pass
+  - `66` tone pass
+  - `104` tone fail
+  - `104` evict
+  - `0` fresh pending route reviews
+  - `0` fresh pending tone reviews
+  - `0` fresh pending fail dispositions
+- historical pre-surface tone fails still remain undispositioned and should not
+  be confused with the fresh active queue
 - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
 - the weak pattern is usually either generic `real one` / `napkin` or version/copy language, with a smaller playful line that is not coherent enough to keep
 
 Inside the paper-only lane, the first isolated judged surface is now:
 
-- `613` route-passed paper rows total
-- `457` judged paper-only tone rows
-- `138` pass
-- `319` fail
+- `670` route-passed paper rows total
+- `514` judged paper-only tone rows
+- `161` pass
+- `353` fail
 - `156` archived out of the active paper queue
 - `0` pending
 - `my paper was the real one and your paper was a napkin` is still a weak fail
@@ -125,9 +143,9 @@ It is more specific than a broad prose pass, and it stays closer to the object's
 
 ## What Changed Next
 
-The next useful move is to move off the now-archived paper isolation lane and
-carry the stronger failure contract into the next implementation pass and the
-next fresh live run.
+The next useful move is to keep the fresh-slice closure rule in place and start
+the next live run from this now-clean boundary instead of widening another stale
+queue.
 
 That now includes a sharper failure rule:
 
