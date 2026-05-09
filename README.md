@@ -37,7 +37,8 @@ In this repo, major betas are research architectures, and minor versions tighten
   - if `FAIL`, then `RETAIN / EVICT`
   - rerun
   - `PASS / FAIL`
-- explicit archive cleanup when a pending review lane should leave the active queue without becoming a verdict
+- explicit archive cleanup when a pending review lane or stale failed
+  disposition lane should leave the active queue without becoming a verdict
 
 ## Run It
 

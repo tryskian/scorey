@@ -70,6 +70,15 @@ CREATE TABLE IF NOT EXISTS eval_lens_failure_dispositions (
     created_at TEXT NOT NULL,
     UNIQUE (output_id, lens)
 );
+
+CREATE TABLE IF NOT EXISTS eval_lens_failure_disposition_archives (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
+    lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    note TEXT NOT NULL DEFAULT '',
+    created_at TEXT NOT NULL,
+    UNIQUE (output_id, lens)
+);
 """
 
 
@@ -199,6 +208,16 @@ def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
             UNIQUE (output_id, lens)
         );
 
+        CREATE TABLE eval_lens_failure_disposition_archives_new (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            output_id INTEGER NOT NULL
+                REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
+            lens TEXT NOT NULL CHECK (lens IN ('tone')),
+            note TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL,
+            UNIQUE (output_id, lens)
+        );
+
         INSERT INTO eval_outputs_new (
             id,
             user_pick,
@@ -254,6 +273,17 @@ def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
         SELECT id, output_id, lens, disposition, note, created_at
         FROM eval_lens_failure_dispositions;
 
+        INSERT INTO eval_lens_failure_disposition_archives_new (
+            id,
+            output_id,
+            lens,
+            note,
+            created_at
+        )
+        SELECT id, output_id, lens, note, created_at
+        FROM eval_lens_failure_disposition_archives;
+
+        DROP TABLE eval_lens_failure_disposition_archives;
         DROP TABLE eval_lens_failure_dispositions;
         DROP TABLE eval_lens_archives;
         DROP TABLE eval_lens_judgments;
@@ -266,6 +296,8 @@ def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
         ALTER TABLE eval_lens_archives_new RENAME TO eval_lens_archives;
         ALTER TABLE eval_lens_failure_dispositions_new
             RENAME TO eval_lens_failure_dispositions;
+        ALTER TABLE eval_lens_failure_disposition_archives_new
+            RENAME TO eval_lens_failure_disposition_archives;
         """
     )
     conn.commit()
@@ -614,9 +646,15 @@ def list_lens_failure_disposition_sample(
             WHERE failure_dispositions.output_id = eval_outputs.id
               AND failure_dispositions.lens = ?
         )
+        AND NOT EXISTS (
+            SELECT 1
+            FROM eval_lens_failure_disposition_archives failure_disposition_archives
+            WHERE failure_disposition_archives.output_id = eval_outputs.id
+              AND failure_disposition_archives.lens = ?
+        )
         """.strip(),
     ]
-    params: list[str] = [lens, lens]
+    params: list[str] = [lens, lens, lens]
     if source_mode is not None:
         where.append("source_mode = ?")
         params.append(source_mode)
@@ -862,6 +900,89 @@ def record_failure_disposition_for_lens(
         )
 
 
+def archive_failure_disposition_for_lens(
+    db_path: Path | None,
+    output_id: int,
+    *,
+    lens: str,
+    note: str,
+) -> None:
+    if lens not in LENSES:
+        raise ValueError(f"Unsupported lens '{lens}'.")
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+        row = conn.execute(
+            """
+            SELECT id, current_verdict
+            FROM eval_outputs
+            WHERE id = ?
+            """,
+            (output_id,),
+        ).fetchone()
+        if row is None:
+            raise ValueError(f"Output id {output_id} does not exist.")
+        if row["current_verdict"] != "pass":
+            raise ValueError(
+                "Output id "
+                f"{output_id} is not route-pass and cannot archive {lens} disposition."
+            )
+
+        judged = conn.execute(
+            """
+            SELECT verdict
+            FROM eval_lens_judgments
+            WHERE output_id = ? AND lens = ?
+            """,
+            (output_id, lens),
+        ).fetchone()
+        if judged is None or judged["verdict"] != "fail":
+            raise ValueError(
+                "Output id "
+                f"{output_id} must have a failed {lens} verdict before "
+                "disposition archive."
+            )
+
+        disposed = conn.execute(
+            """
+            SELECT 1
+            FROM eval_lens_failure_dispositions
+            WHERE output_id = ? AND lens = ?
+            """,
+            (output_id, lens),
+        ).fetchone()
+        if disposed is not None:
+            raise ValueError(
+                "Output id "
+                f"{output_id} already has a {lens} disposition and cannot be archived."
+            )
+
+        archived = conn.execute(
+            """
+            SELECT 1
+            FROM eval_lens_failure_disposition_archives
+            WHERE output_id = ? AND lens = ?
+            """,
+            (output_id, lens),
+        ).fetchone()
+        if archived is not None:
+            raise ValueError(
+                f"Output id {output_id} already has an archived {lens} disposition."
+            )
+
+        conn.execute(
+            """
+            INSERT INTO eval_lens_failure_disposition_archives (
+                output_id,
+                lens,
+                note,
+                created_at
+            ) VALUES (?, ?, ?, ?)
+            """,
+            (output_id, lens, note, utc_now()),
+        )
+
+
 def counts(db_path: Path | None) -> dict[str, int]:
     with closing(connect(db_path)) as conn, conn:
         prepare_db(conn)
@@ -1047,6 +1168,27 @@ def lens_failure_disposition_counts(
         GROUP BY failure_dispositions.disposition
     """
 
+    archive_where = [
+        "output.current_verdict = 'pass'",
+        "failure_disposition_archives.lens = ?",
+    ]
+    archive_params: list[str] = [lens]
+    if source_mode is not None:
+        archive_where.append("output.source_mode = ?")
+        archive_params.append(source_mode)
+    if resolved_user_picks is not None:
+        placeholders = ", ".join("?" for _ in resolved_user_picks)
+        archive_where.append(f"output.user_pick IN ({placeholders})")
+        archive_params.extend(resolved_user_picks)
+
+    archives_sql = f"""
+        SELECT COUNT(*) AS archived
+        FROM eval_lens_failure_disposition_archives failure_disposition_archives
+        JOIN eval_outputs output
+          ON output.id = failure_disposition_archives.output_id
+        WHERE {" AND ".join(archive_where)}
+    """
+
     with closing(connect(db_path)) as conn, conn:
         prepare_db(conn)
         total_row = conn.execute(totals_sql, tuple(total_params)).fetchone()
@@ -1055,6 +1197,7 @@ def lens_failure_disposition_counts(
             dispositions_sql,
             tuple(disposition_params),
         ).fetchall()
+        archive_row = conn.execute(archives_sql, tuple(archive_params)).fetchone()
 
     retain_count = 0
     evict_count = 0
@@ -1063,10 +1206,12 @@ def lens_failure_disposition_counts(
             retain_count = int(row["count"] or 0)
         elif row["disposition"] == "evict":
             evict_count = int(row["count"] or 0)
+    archived_count = int(archive_row["archived"] or 0) if archive_row is not None else 0
 
     return {
         "total": total,
         "retain": retain_count,
         "evict": evict_count,
-        "pending": total - retain_count - evict_count,
+        "pending": total - retain_count - evict_count - archived_count,
+        "archived": archived_count,
     }

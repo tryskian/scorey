@@ -48,6 +48,12 @@ class RoundPipelineTests(TestCase):
         self.assertIn("me: 3, you: none", round_text)
         self.assertTrue(round_text.endswith("scorey."))
 
+    def test_local_paper_same_pick_avoids_real_one_napkin_fallback(self) -> None:
+        round_state = build_local_round_state("paper")
+
+        self.assertEqual(round_state.winning_state, "clipped to the answer key")
+        self.assertEqual(round_state.worse_state, "damp confetti from homeroom")
+
     def test_choose_scorey_pick_uses_only_allowed_routes(self) -> None:
         self.assertEqual(choose_scorey_pick("rock", rng=_FakeRng()), "rock")
 

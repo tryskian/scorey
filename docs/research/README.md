@@ -36,8 +36,8 @@ Current finding:
   - `0` fail
   - `0` pending
 - the live surface has now widened again:
-  - `1579` live rows recorded
-  - `1579` beab pass at the route-and-legibility floor
+  - `1921` live rows recorded
+  - `1921` beab pass at the route-and-legibility floor
   - `0` beab fail
   - `0` pending route review
   - six recent extended live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
@@ -47,6 +47,7 @@ Current finding:
     - after output `18880`: `294` new paper-only live rows
     - after output `19174`: `170` new live rows
     - after output `19344`: `157` new live rows
+    - after output `19501`: `342` new live rows
   - the paper-only run stayed inside the expected paper route families:
     - `paper/paper`: `144`
     - `paper/rock`: `150`
@@ -71,10 +72,10 @@ Current finding:
   - `coherent`
   - `imaginative`
   - the widened tone queue is now separating real signal:
-    - `852` rows judged
-    - `297` pass
-    - `555` fail
-    - `727` archived out of the active tone queue
+    - `860` rows judged
+    - `302` pass
+    - `558` fail
+    - `1061` archived out of the active tone queue
     - `0` route-passed live rows still pending tone review
     - the first fresh post-surface run is fully closed:
       - `170` route pass
@@ -92,10 +93,20 @@ Current finding:
       - `0` fresh pending route reviews
       - `0` fresh pending tone reviews
       - `0` fresh pending fail dispositions
-    - older pre-surface tone fails still remain undispositioned and should not
-      be confused with the active fresh queue
+    - the corrected two-hour tone batch after output `19501` is route-closed and wind-down-closed:
+      - `342` route pass
+      - `5` tone pass
+      - `3` tone fail
+      - `334` archived at wind-down before full tone review
+      - `3` retain
+      - `0` evict
+      - `0` fresh pending route reviews
+      - `0` fresh pending tone reviews
+      - `0` fresh pending fail dispositions
+    - older pre-surface tone fails no longer sit in the active disposition queue:
+      - `359` stale failed rows are now archived out of that surface
     - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
-    - the current weak pattern is still mostly generic `real one` / `napkin` or version/copy language, with a smaller thin-power cluster like `paper supremacy` or `paper power`
+    - the current weak pattern has tightened from `real one` / `napkin` into mostly cross-object coherence drift with a smaller same-pick object-shape drift
   - inside the isolated paper-only tone lane:
     - `722` route-passed paper rows total
     - `566` judged
@@ -106,17 +117,17 @@ Current finding:
 
 Current clean lane:
 
-- the route floor is fully caught up on the newest post-evict run
+- the route floor is fully caught up through the newest corrected live run
 - the isolated paper-only run remains the clean seam-finding lane for the
   current `real one` / `napkin` pattern
-- both fresh post-surface live runs are now fully closed
-- the active queue is clean at the fresh boundary; the next tone evidence can
-  come from another new live run instead of more backlog traversal
+- the latest corrected live run is wind-down-closed even though only the first
+  judged tranche was tone-reviewed
+- the active queue is clean at the fresh boundary again; the next tone evidence
+  can come from another new live run instead of more backlog traversal
 - treat tone failures through explicit disposition:
   - `retain` when the seam still belongs in the active lane
   - `evict` when the seam proves the lane definition itself is wrong
-- do not treat historical pre-surface tone fails as an active fresh-slice
-  blocker
+- stale historical failed rows can be archived out of the active disposition queue
 - keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
 - widen into scoreboard or prose judgement only after the tone lane earns it

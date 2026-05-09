@@ -74,12 +74,13 @@ Since then, six more extended live runs have widened the active surface:
 - `294` new paper-only live rows after output `18880`
 - `170` new live rows after output `19174`
 - `157` new live rows after output `19344`
+- `342` new live rows after output `19501`
 - all six runs stayed entirely inside the valid `Research Beta 1.0` route set
 
 The current live snapshot is now:
 
-- `1579` live rows recorded
-- `1579` beab pass at the route-and-legibility floor
+- `1921` live rows recorded
+- `1921` beab pass at the route-and-legibility floor
 - `0` beab fail
 - `0` pending route review
 - the newest paper-only batch stayed inside the expected paper route families:
@@ -102,10 +103,10 @@ The current live snapshot is now:
 
 The current tone lane now records:
 
-- `852` rows judged
-- `297` tone pass
-- `555` tone fail
-- `727` tone rows archived out of the active queue
+- `860` rows judged
+- `302` tone pass
+- `558` tone fail
+- `1061` tone rows archived out of the active queue
 - `0` route-passed live rows still pending tone review
 - the first fresh post-surface live run is now fully closed:
   - `170` route pass
@@ -123,10 +124,20 @@ The current tone lane now records:
   - `0` fresh pending route reviews
   - `0` fresh pending tone reviews
   - `0` fresh pending fail dispositions
-- historical pre-surface tone fails still remain undispositioned and should not
-  be confused with the fresh active queue
+- the corrected two-hour live batch after output `19501` is wind-down-closed:
+  - `342` route pass
+  - `5` tone pass
+  - `3` tone fail
+  - `334` archived at wind-down before full tone review
+  - `3` retain
+  - `0` evict
+  - `0` fresh pending route reviews
+  - `0` fresh pending tone reviews
+  - `0` fresh pending fail dispositions
+- historical pre-surface tone fails no longer sit in the active disposition queue:
+  - `359` stale failed rows are archived out of that surface
 - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
-- the weak pattern is still mostly generic `real one` / `napkin` or version/copy language, with a smaller thin-power cluster like `paper supremacy` or `paper power`
+- the weak pattern has tightened from generic `real one` / `napkin` toward cross-object coherence drift, with a smaller same-pick object-shape drift
 
 Inside the paper-only lane, the first isolated judged surface is now:
 
@@ -168,3 +179,5 @@ That now includes a sharper failure rule:
 - retain failures that still belong in the active lane as live evidence
 - evict failures that prove the paper seam or another lane boundary needs an
   upstream correction before rerun
+- archive stale failed rows out of the active disposition queue when they are no
+  longer the live work surface

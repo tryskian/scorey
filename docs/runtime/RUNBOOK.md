@@ -66,6 +66,7 @@ need to inspect, check, or advance the repo.
 | record one tone verdict | `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'` |
 | archive one pending tone row out of the active queue | `make eval-tone-archive OUTPUT_ID=17922 NOTE='paper seam archived out of active queue'` |
 | list failed tone rows that still need `RETAIN / EVICT` | `make eval-tone-disposition-sample EVAL_LIMIT=12` |
+| archive one stale failed tone row out of the active disposition queue | `make eval-tone-disposition-archive OUTPUT_ID=17922 NOTE='historical stale fail backlog archived out of active disposition queue'` |
 | record `RETAIN` or `EVICT` for one failed tone row | `make eval-tone-dispose OUTPUT_ID=17922 DISPOSITION=retain NOTE='keep in active lane'` |
 | run the Research Beta 1.0 picks gate | `make research-beta1 EVAL_LIMIT=10` |
 | record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
@@ -138,6 +139,7 @@ Storage:
 - `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'`
 - `make eval-tone-archive OUTPUT_ID=17922 NOTE='paper seam archived out of active queue'`
 - `make eval-tone-disposition-sample EVAL_LIMIT=12`
+- `make eval-tone-disposition-archive OUTPUT_ID=17922 NOTE='historical stale fail backlog archived out of active disposition queue'`
 - `make eval-tone-dispose OUTPUT_ID=17922 DISPOSITION=retain NOTE='keep in active lane'`
 - `make research-beta1 EVAL_LIMIT=10`
 - `make eval-sample-local EVAL_COUNT=30`
@@ -165,6 +167,7 @@ Current posture:
 - failed rows use an explicit disposition layer:
   - `retain`
   - `evict`
+- stale failed tone rows can also be archived out of the active disposition queue without becoming `retain` or `evict`
 - pending tone rows can also be archived out of the active queue without turning archive into a verdict
 - one notebook walkthrough beside the operator path
 - explicit human judgments now have a first-class operator command
@@ -172,6 +175,7 @@ Current posture:
 - tone judgments now have a separate first-class operator path
 - tone archives now have a separate first-class operator path
 - tone fail dispositions now have a separate first-class operator path
+- stale tone fail disposition archives now have a separate first-class operator path
 - `Research Beta 1.0` judges only the pick pair in `scorey_pick, user_pick` order
 - `Research Beta 3.0` keeps the route-pass floor and judges tone on live rows through:
   - `pick-aware`

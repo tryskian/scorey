@@ -643,3 +643,25 @@ into implementation authorship.
   Leaving pending rows implicit as `NULL` made direct inspection brittle and let
   route-pending counts disagree depending on how the DB was queried. The runtime
   should use one explicit pending state.
+
+## D-039: Stale failed tone rows can be archived out of the active disposition queue
+
+- Date: `2026-05-09`
+- Category: `runtime_engineering`
+- Tags: `tone_review`, `failure_disposition`, `archive`, `operator_surface`
+- Provenance: `implementation decision`
+- Decision:
+  - add an explicit stale fail archive path:
+    - `eval-tone-disposition-archive`
+    - `make eval-tone-disposition-archive`
+  - keep failed-row archive separate from both:
+    - pending tone archive
+    - `retain` / `evict`
+  - allow historical failed rows to leave the active disposition queue without
+    pretending they were actively retained or evicted
+  - count archived failed rows explicitly in the disposition surface instead of
+    leaving them mixed into `pending`
+- Why: Once the fresh correction lane became the only work surface, the older
+  undispositioned failed rows stopped being active decisions and became
+  historical evidence. They still should not be forced through `retain` or
+  `evict`, but they also should not keep polluting the live disposition queue.

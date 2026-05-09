@@ -14,6 +14,7 @@ from typing import TextIO
 
 from scorey.config import Settings, load_settings, require_openai_api_key
 from scorey.eval_db import (
+    archive_failure_disposition_for_lens,
     archive_output_for_lens,
     counts,
     default_eval_db_path,
@@ -193,6 +194,17 @@ def build_parser() -> argparse.ArgumentParser:
             "Repeat to narrow the tone-fail disposition sample to one or more "
             "user picks."
         ),
+    )
+
+    eval_tone_disposition_archive_parser = subparsers.add_parser(
+        "eval-tone-disposition-archive",
+        help="Archive one failed tone row out of the active disposition surface.",
+    )
+    eval_tone_disposition_archive_parser.add_argument("output_id", type=int)
+    eval_tone_disposition_archive_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short note explaining why the failed tone row is being archived.",
     )
 
     eval_tone_dispose_parser = subparsers.add_parser(
@@ -1021,6 +1033,7 @@ def command_eval_tone_disposition_sample(limit: int, user_picks: list[str]) -> i
         "tone fail disposition counts: "
         f"total={summary['total']} retain={summary['retain']} "
         f"evict={summary['evict']} pending={summary['pending']}"
+        + (f" archived={summary['archived']}" if summary["archived"] else "")
     )
     print(
         "tone fail disposition sample: "
@@ -1065,6 +1078,27 @@ def command_eval_tone_dispose(output_id: int, disposition: str, note: str) -> in
         return 1
 
     print(f"recorded tone disposition for output {output_id}: {disposition}")
+    print(f"note: {note}")
+    print("")
+    print(_format_eval_row(db_path, output_id))
+    return 0
+
+
+def command_eval_tone_disposition_archive(output_id: int, note: str) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        archive_failure_disposition_for_lens(
+            db_path,
+            output_id,
+            lens="tone",
+            note=note,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"archived tone disposition output {output_id}")
     print(f"note: {note}")
     print("")
     print(_format_eval_row(db_path, output_id))
@@ -1198,6 +1232,8 @@ def main(argv: list[str] | None = None) -> int:
         return command_eval_tone_archive(args.output_id, args.note)
     if args.command == "eval-tone-disposition-sample":
         return command_eval_tone_disposition_sample(args.limit, args.pick)
+    if args.command == "eval-tone-disposition-archive":
+        return command_eval_tone_disposition_archive(args.output_id, args.note)
     if args.command == "eval-tone-dispose":
         return command_eval_tone_dispose(
             args.output_id,

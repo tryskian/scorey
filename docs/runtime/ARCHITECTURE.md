@@ -124,6 +124,8 @@ The current tracked shape is intentionally small:
 - human judgments are append-only in `eval_judgments`
 - lens-specific judgments are append-only in `eval_lens_judgments`
 - post-fail lens dispositions are append-only in `eval_lens_failure_dispositions`
+- archived stale failed dispositions are append-only in
+  `eval_lens_failure_disposition_archives`
 - the current top-level verdict is mirrored onto the output row for fast listing
 - verdicts stay binary:
   - `pass`
