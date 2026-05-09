@@ -34,6 +34,7 @@ In this repo, major betas are research architectures, and minor versions tighten
 - binary eval lanes from pick routing to tone-first live review
 - explicit failure disposition when a lane fails:
   - `RETAIN / EVICT`
+- explicit archive cleanup when a pending review lane should leave the active queue without becoming a verdict
 
 ## Run It
 

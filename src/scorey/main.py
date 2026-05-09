@@ -14,6 +14,7 @@ from typing import TextIO
 
 from scorey.config import Settings, load_settings, require_openai_api_key
 from scorey.eval_db import (
+    archive_output_for_lens,
     counts,
     default_eval_db_path,
     get_output,
@@ -161,6 +162,17 @@ def build_parser() -> argparse.ArgumentParser:
         "--note",
         required=True,
         help="Short tone note explaining the verdict.",
+    )
+
+    eval_tone_archive_parser = subparsers.add_parser(
+        "eval-tone-archive",
+        help="Archive one pending tone row out of the active review surface.",
+    )
+    eval_tone_archive_parser.add_argument("output_id", type=int)
+    eval_tone_archive_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short note explaining why the pending tone row is being archived.",
     )
 
     eval_sample_local_parser = subparsers.add_parser(
@@ -890,10 +902,11 @@ def command_eval_tone_sample(limit: int, user_picks: list[str]) -> int:
         source_mode="live",
         user_picks=resolved_user_picks,
     )
+    archived_suffix = f" archived={summary['archived']}" if summary["archived"] else ""
     print(
         "tone counts: "
         f"total={summary['total']} pass={summary['pass']} "
-        f"fail={summary['fail']} pending={summary['pending']}"
+        f"fail={summary['fail']} pending={summary['pending']}{archived_suffix}"
     )
     print(f"tone sample: newest pending live row per model/pair (limit={limit})")
     if resolved_user_picks is not None:
@@ -935,6 +948,27 @@ def command_eval_tone_judge(output_id: int, verdict: str, note: str) -> int:
         return 1
 
     print(f"judged tone output {output_id}: {verdict}")
+    print(f"note: {note}")
+    print("")
+    print(_format_eval_row(db_path, output_id))
+    return 0
+
+
+def command_eval_tone_archive(output_id: int, note: str) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        archive_output_for_lens(
+            db_path,
+            output_id,
+            lens="tone",
+            note=note,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"archived tone output {output_id}")
     print(f"note: {note}")
     print("")
     print(_format_eval_row(db_path, output_id))
@@ -1064,6 +1098,8 @@ def main(argv: list[str] | None = None) -> int:
         return command_eval_tone_sample(args.limit, args.pick)
     if args.command == "eval-tone-judge":
         return command_eval_tone_judge(args.output_id, args.verdict, args.note)
+    if args.command == "eval-tone-archive":
+        return command_eval_tone_archive(args.output_id, args.note)
     if args.command == "eval-sample-local":
         return command_eval_sample_local(
             count=args.count,

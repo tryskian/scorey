@@ -523,6 +523,53 @@ class MainCommandTests(TestCase):
         self.assertIn(f"judged tone output {output_id}: pass", output)
         self.assertIn("tone row", output)
 
+    def test_eval_tone_archive_records_archive_and_updates_sample_counts(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            archived_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="paper",
+                route_family="same-pick",
+                round_text="archived tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            active_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="active tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, archived_id, "pass", "route pass")
+            judge_output(db_path, active_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    archive_result = main(
+                        [
+                            "eval-tone-archive",
+                            str(archived_id),
+                            "--note",
+                            "paper seam archived out of active queue",
+                        ]
+                    )
+                    sample_result = main(
+                        ["eval-tone-sample", "--limit", "5", "--pick", "paper"]
+                    )
+
+        self.assertEqual(archive_result, 0)
+        self.assertEqual(sample_result, 0)
+        output = stdout.getvalue()
+        self.assertIn(f"archived tone output {archived_id}", output)
+        self.assertIn("tone counts: total=2 pass=0 fail=0 pending=1 archived=1", output)
+        self.assertIn("active tone row", output)
+        self.assertNotIn("archived tone row", output.split("tone sample:")[-1])
+
     def test_eval_sample_local_records_rows(self) -> None:
         stdout = io.StringIO()
         with TemporaryDirectory() as tmpdir:

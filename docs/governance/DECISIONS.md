@@ -587,3 +587,21 @@ into implementation authorship.
 - Why: Binary judgment should stay hard and legible, but not every failure
   belongs in the active queue forever. This keeps verdicts strict while making
   correction discipline explicit.
+
+## D-036: Pending tone rows can be archived out of the active queue without becoming a verdict
+
+- Date: `2026-05-09`
+- Category: `runtime_engineering`
+- Tags: `tone_review`, `archive`, `operator_surface`, `pending_queue`
+- Provenance: `implementation decision`
+- Decision:
+  - add an explicit tone-archive operator path:
+    - `eval-tone-archive`
+    - `make eval-tone-archive`
+  - keep archive separate from both binary verdicts and `RETAIN / EVICT`
+  - let archived tone rows leave the active review surface without pretending they were judged
+  - count archived tone rows explicitly in the operator surface instead of folding them back into `pending`
+- Why: Once the paper-only seam was sharp enough, the remaining paper pendings
+  no longer belonged in the active queue. They still should not become fake
+  verdicts, and archive should not be confused with the post-`FAIL`
+  `RETAIN / EVICT` disposition layer.

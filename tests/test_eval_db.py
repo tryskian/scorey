@@ -3,6 +3,7 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 
 from scorey.eval_db import (
+    archive_output_for_lens,
     counts,
     init_db,
     judge_output,
@@ -210,3 +211,57 @@ class EvalDbTests(TestCase):
             self.assertEqual(summary["pass"], 0)
             self.assertEqual(summary["fail"], 0)
             self.assertEqual(summary["pending"], 1)
+
+    def test_tone_archive_removes_pending_row_from_active_sample(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            archived_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="paper",
+                route_family="same-pick",
+                round_text="archived paper tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            active_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="active paper tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, archived_id, "pass", "route pass")
+            judge_output(db_path, active_id, "pass", "route pass")
+            archive_output_for_lens(
+                db_path,
+                archived_id,
+                lens="tone",
+                note="paper seam archived out of active queue",
+            )
+
+            rows = list_lens_review_sample(
+                db_path,
+                lens="tone",
+                source_mode="live",
+                limit=5,
+                user_picks=("paper",),
+            )
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(int(rows[0]["id"]), active_id)
+
+            summary = lens_counts(
+                db_path,
+                lens="tone",
+                source_mode="live",
+                user_picks=("paper",),
+            )
+            self.assertEqual(summary["total"], 2)
+            self.assertEqual(summary["pass"], 0)
+            self.assertEqual(summary["fail"], 0)
+            self.assertEqual(summary["pending"], 1)
+            self.assertEqual(summary["archived"], 1)
