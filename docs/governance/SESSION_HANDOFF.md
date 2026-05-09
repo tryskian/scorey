@@ -134,24 +134,24 @@ A first eval storage lane now exists:
   - `0` fail
   - `0` pending
 - the live review queue now exists:
-  - `1422` total live rows
-  - `1422` pass
+  - `1579` total live rows
+  - `1579` pass
   - `0` fail
   - `0` pending beab route reviews
 - the active tone queue now exists on top of the route-pass live rows:
-  - `232` tone pass
-  - `463` tone fail
+  - `297` tone pass
+  - `555` tone fail
   - `727` archived tone rows
   - `0` pending tone reviews on route-passed live rows
   - explicit tone fail dispositions now exist on the fresh post-surface lane:
-    - `104` evict
+    - `196` evict
     - `0` retain
     - older pre-surface tone fails still exist without dispositions and should
       not be confused with the fresh active queue
   - isolated paper-only tone lane:
-    - `670` total
-    - `161` pass
-    - `353` fail
+    - `722` total
+    - `185` pass
+    - `381` fail
     - `156` archived
     - `0` pending
 - tone failures now use a second explicit disposition layer:
@@ -163,18 +163,34 @@ A first eval storage lane now exists:
   - after output `18586`: `294` new live rows, all valid `Research Beta 1.0` routes
   - after output `18880`: `294` new paper-only live rows, all valid `Research Beta 1.0` routes
   - after output `19174`: `170` new live rows, all valid `Research Beta 1.0` routes
-  - fresh mixed-run balance:
+  - first mixed post-surface balance:
     - `paper/paper`: `34`
     - `paper/scissors`: `24`
     - `rock/paper`: `23`
     - `rock/rock`: `29`
     - `scissors/rock`: `28`
     - `scissors/scissors`: `32`
-  - the fresh mixed slice is fully closed:
+  - the first fresh post-surface slice is fully closed:
     - `170` route pass
     - `66` tone pass
     - `104` tone fail
     - `104` evict
+    - `0` fresh pending route reviews
+    - `0` fresh pending tone reviews
+    - `0` fresh pending fail dispositions
+  - after output `19344`: `157` new live rows, all valid `Research Beta 1.0` routes
+  - post-evict mixed-run balance:
+    - `paper/paper`: `25`
+    - `paper/scissors`: `21`
+    - `rock/paper`: `27`
+    - `rock/rock`: `27`
+    - `scissors/rock`: `26`
+    - `scissors/scissors`: `31`
+  - the post-evict slice is fully closed:
+    - `157` route pass
+    - `65` tone pass
+    - `92` tone fail
+    - `92` evict
     - `0` fresh pending route reviews
     - `0` fresh pending tone reviews
     - `0` fresh pending fail dispositions
@@ -220,13 +236,13 @@ Current tracked research beta:
     - if `FAIL`, then `RETAIN / EVICT`
   - the operator surface now matches that two-step contract directly
   - current tone queue:
-    - `695` rows judged
-    - `232` pass
-    - `463` fail
+    - `852` rows judged
+    - `297` pass
+    - `555` fail
     - `727` archived
     - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
-    - the strongest fail pattern is still generic `real one` / `napkin` or version/copy language, with a smaller playful-but-not-coherent drift cluster
-  - the first fresh post-surface live run is now fully dispositioned at the
+    - the strongest fail pattern is still generic `real one` / `napkin` or version/copy language, with a smaller thin-power cluster like `paper supremacy` or `paper power`
+  - both fresh post-surface live runs are now fully dispositioned at the
     active boundary
   - historical pre-surface tone fails still do not have dispositions and should
     be treated as legacy backlog rather than an active blocker
@@ -261,8 +277,8 @@ Choose one lane at a time:
     - `confident`
     - `coherent`
     - `imaginative`
-  - on the current branch, package the explicit `pending` runtime fix together
-    with the first fully closed fresh `RETAIN / EVICT` slice
+  - on the current branch, package the first fully closed post-evict live slice
+    and its docs refresh together
   - after that branch lands, start the next live run from this clean boundary
   - use local `baseline` sampling for soak/population, not for diversity claims
   - use local `research-beta-1-coverage` sampling when the full pass-pair truth table matters
