@@ -51,7 +51,7 @@ class MainCommandTests(TestCase):
             lines,
             (
                 "SCOREY RESEARCH BETA 3.0",
-                "scorey keeps the score. you never win. sorry.",
+                "scorey keeps the score and you've already lost.",
                 "github.com/tryskian/scorey",
             ),
         )
@@ -63,8 +63,9 @@ class MainCommandTests(TestCase):
             lines,
             (
                 "scorey research beta 3.0",
-                "scorey keeps the score.",
-                "you never win. sorry.",
+                "scorey keeps the score and",
+                "you've already lost.",
+                "sorry.",
                 "github.com/tryskian/scorey",
             ),
         )
@@ -76,8 +77,9 @@ class MainCommandTests(TestCase):
             lines,
             (
                 "scorey research beta 3.0",
-                "scorey keeps the score.",
-                "you never win. sorry.",
+                "scorey keeps the score and",
+                "you've already lost.",
+                "sorry.",
             ),
         )
 
