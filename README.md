@@ -55,7 +55,9 @@ For the deterministic local path:
 scorey --local
 ```
 
-The operator commands, eval workflow, and setup checks live in the [runtime runbook](./docs/runtime/RUNBOOK.md).
+The operator commands, eval workflow, and setup checks live in the
+[runtime runbook](./docs/runtime/RUNBOOK.md). The compact day-open/day-close
+sheet lives in [Start / End Reference](./docs/runtime/START_END_REFERENCE.md).
 
 ## Read Next
 

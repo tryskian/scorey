@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-09
+Last updated: 2026-05-10
 
 ## Start Here
 
@@ -10,10 +10,14 @@ Last updated: 2026-05-09
    - `docs/governance/DECISIONS.md`
    - `docs/runtime/ARCHITECTURE.md`
    - `docs/runtime/RUNBOOK.md`
+   - `docs/runtime/START_END_REFERENCE.md`
    - this file
 2. Confirm you are at the repo root.
-3. Treat the tracked docs as current project state.
-4. State the active kernel before changing files.
+3. Run session preflight:
+   - `make doctor-env`
+   - `make session-status`
+4. Treat the tracked docs as current project state.
+5. State the active kernel before changing files.
 
 ## Current State
 
@@ -30,7 +34,10 @@ The core tracked surfaces are:
 
 A small operator surface now exists:
 
+- `make start`
+- `make rituals`
 - `make caffeinate`
+- `make caffeinate-status`
 - `make decaffeinate`
 - `make decaffeinate-all`
 - `make doctor-env`
@@ -49,6 +56,7 @@ A small operator surface now exists:
 - `make eval-tone-judge`
 - `make eval-tone-archive`
 - `make eval-tone-disposition-sample`
+- `make eval-tone-disposition-archive`
 - `make eval-tone-dispose`
 - `make research-beta1`
 - `make eval-sample-live`
@@ -56,6 +64,8 @@ A small operator surface now exists:
 - `make open-usage`
 - `make open-billing`
 - `make open-cost-console`
+- `make end`
+- `make end-stop`
 - `make eod`
 - `make eod-preflight`
 

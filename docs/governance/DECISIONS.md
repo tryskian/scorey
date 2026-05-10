@@ -665,3 +665,24 @@ into implementation authorship.
   undispositioned failed rows stopped being active decisions and became
   historical evidence. They still should not be forced through `retain` or
   `evict`, but they also should not keep polluting the live disposition queue.
+
+## D-040: Scorey gets a compact start/end operator sheet and aliases
+
+- Date: `2026-05-10`
+- Category: `workflow_environment`
+- Tags: `operator_surface`, `start_end`, `rituals`, `session_ops`
+- Provenance: `implementation decision`
+- Decision:
+  - add `docs/runtime/START_END_REFERENCE.md` as the compact day-open/day-close
+    operator sheet
+  - add:
+    - `make start`
+    - `make end`
+    - `make end-stop`
+    - `make rituals`
+  - keep `RUNBOOK.md` as the deeper procedure surface and use the start/end
+    reference as the quick operator reminder
+- Why: The repo already had the real operator pieces, but the session-open and
+  session-close path was spread across the runbook, handoff, and Makefile. A
+  compact reference plus explicit targets keeps the routine easy to find
+  without replacing the fuller runtime docs.

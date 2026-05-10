@@ -17,9 +17,10 @@ real and what is still intentionally narrow.
 | `docs/governance/SESSION_HANDOFF.md` | current checkpoint and next kernel |
 | `docs/runtime/ARCHITECTURE.md` | stable system map |
 | `docs/runtime/RUNBOOK.md` | operator procedure and validation |
+| `docs/runtime/START_END_REFERENCE.md` | compact day-open and day-close operator sheet |
 | `docs/research/README.md` | current research framing |
 | `docs/diagrams/PIPELINE.md` | canonical round and eval flow |
-| `scripts/` | operator helpers for environment checks and end-of-day closeout |
+| `scripts/` | operator helpers for environment checks, session open, and end-of-day closeout |
 | `src/scorey/config.py` | fixed picks, routing rules, and settings |
 | `src/scorey/pipeline.py` | deterministic local fixtures and final round composition |
 | `src/scorey/agent.py` | structured live round-field generation through the OpenAI Agents SDK |
