@@ -1,4 +1,5 @@
 import sqlite3
+from contextlib import closing
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase
@@ -26,7 +27,7 @@ class EvalDbTests(TestCase):
         with TemporaryDirectory() as tmpdir:
             db_path = Path(tmpdir) / "evals.sqlite"
 
-            with sqlite3.connect(db_path) as conn:
+            with closing(sqlite3.connect(db_path)) as conn, conn:
                 conn.executescript(
                     """
                     CREATE TABLE eval_outputs (

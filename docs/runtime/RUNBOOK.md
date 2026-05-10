@@ -6,6 +6,9 @@ work.
 Use `docs/runtime/ARCHITECTURE.md` for system shape. Use this file when you
 need to inspect, check, or advance the repo.
 
+For the compact session-open/session-close sheet, use
+`docs/runtime/START_END_REFERENCE.md`.
+
 ## Start A Session
 
 1. Read the tracked instruction surface:
@@ -14,22 +17,26 @@ need to inspect, check, or advance the repo.
    - `docs/governance/DECISIONS.md`
    - `docs/runtime/ARCHITECTURE.md`
    - `docs/runtime/RUNBOOK.md`
+   - `docs/runtime/START_END_REFERENCE.md`
    - `docs/governance/SESSION_HANDOFF.md`
 2. Confirm you are at the repo root:
    - `git rev-parse --show-toplevel`
    - or `pwd`
-3. Treat the tracked docs as current project state.
-4. Install or refresh the local environment:
+3. Run session preflight:
+   - `make doctor-env`
+   - `make session-status`
+4. Treat the tracked docs as current project state.
+5. Install or refresh the local environment:
    - `make install`
-5. Keep the display awake during active work on macOS:
+6. Keep the display awake during active work on macOS:
    - `make caffeinate`
-6. Add live runtime credentials when needed:
+7. Add live runtime credentials when needed:
    - put `OPENAI_API_KEY` in the repo `.env`
    - or export it in the shell
-7. For any live API work, keep the token monitoring dashboard available:
-   - `make open-cost-console`
+8. For any live API work, keep token monitoring available when needed:
    - use `make open-limits` or `make open-usage` directly when a tighter check is enough
-8. State the active kernel before editing tracked files.
+   - use `make open-cost-console` only when you actually want the full dashboard set
+9. State the active kernel before editing tracked files.
 
 ## Everyday Commands
 
@@ -39,8 +46,11 @@ need to inspect, check, or advance the repo.
 | show tracked docs | `find docs -maxdepth 3 -type f \| sort` |
 | inspect recent history when needed | `git log --stat --oneline --max-count=5` |
 | search the current docs surface | `rg -n "<term>" README.md docs` |
+| run the compact day-open routine | `make start` |
+| print the compact start/end operator sheet | `make rituals` |
 | install or refresh the runtime env | `make install` |
 | keep the display awake on macOS | `make caffeinate` |
+| show display wake-lock status on macOS | `make caffeinate-status` |
 | release the display wake lock | `make decaffeinate` |
 | stop all matching caffeinate processes | `make decaffeinate-all` |
 | check the environment | `make doctor-env` |
@@ -77,6 +87,8 @@ need to inspect, check, or advance the repo.
 | open the OpenAI usage page | `make open-usage` |
 | open the OpenAI billing page | `make open-billing` |
 | open all three OpenAI cost pages | `make open-cost-console` |
+| run the compact end-of-day alias | `make end` |
+| run the final shutdown step only | `make end-stop` |
 | run end-of-day preflight | `make eod-preflight` |
 | run end-of-day closeout | `make eod` |
 

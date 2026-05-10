@@ -4,7 +4,15 @@ import importlib.util
 import os
 import shutil
 import sys
+from collections.abc import Callable
 from pathlib import Path
+
+try:
+    from dotenv import load_dotenv as _load_dotenv
+except ImportError:  # pragma: no cover - optional until the venv exists
+    load_dotenv: Callable[..., bool] | None = None
+else:
+    load_dotenv = _load_dotenv
 
 
 def _ok(message: str) -> None:
@@ -17,6 +25,11 @@ def _warn(message: str) -> None:
 
 def main() -> int:
     python = Path(sys.executable)
+    root = Path(__file__).resolve().parents[1]
+
+    if load_dotenv is not None:
+        load_dotenv(root / ".env", override=False)
+
     _ok(f"python={python}")
 
     if shutil.which("git") is None:
