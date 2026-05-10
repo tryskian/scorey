@@ -5,8 +5,8 @@
 
 ## rock, paper, scissors, scorey
 
-scorey keeps the score.\
-you already lost. sorry.
+scorey keeps the score and you've already lost.\
+sorry.
 
 Scorey is a small, local, agent-backed CLI mini chatbot using the **[Polinko research model](https://github.com/tryskian/polinko)**.
 
