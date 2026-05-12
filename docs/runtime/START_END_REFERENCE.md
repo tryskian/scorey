@@ -1,5 +1,3 @@
-<!-- @format -->
-
 # Start / End Reference
 
 This is the compact operator sheet for the canonical day-open/day-close
@@ -16,21 +14,21 @@ make start
 Sequence:
 
 1. Print the canonical docs to read:
-   - `README.md`
-   - `docs/governance/CHARTER.md`
-   - `docs/governance/DECISIONS.md`
-   - `docs/runtime/RUNBOOK.md`
-   - `docs/runtime/ARCHITECTURE.md`
-   - `docs/governance/SESSION_HANDOFF.md`
+  - `README.md`
+  - `docs/governance/CHARTER.md`
+  - `docs/governance/DECISIONS.md`
+  - `docs/runtime/RUNBOOK.md`
+  - `docs/runtime/ARCHITECTURE.md`
+  - `docs/governance/SESSION_HANDOFF.md`
 2. Print workspace context:
-   - repo root
-   - active branch
-   - `git status --short --branch`
+  - repo root
+  - active branch
+  - `git status --short --branch`
 3. Run the startup safety path:
-   - `make doctor-env`
-   - `make caffeinate`
-   - `make caffeinate-status`
-   - `make session-status`
+  - `make doctor-env`
+  - `make caffeinate`
+  - `make caffeinate-status`
+  - `make session-status`
 
 Source of truth:
 
@@ -47,18 +45,15 @@ make end
 Sequence:
 
 1. Run the closeout safety path:
-   - docs truth check
-   - environment check
-   - full repo validation
-   - session snapshot
-   - git closeout check
-2. Final shutdown command:
-   - `make end-stop`
-
-`make end-stop` then runs:
-
-- `make decaffeinate-all`
-- `make session-status`
+  - docs truth check
+  - environment check
+  - full repo validation
+  - session snapshot
+  - git closeout check
+2. Release the managed wake lock:
+  - `make decaffeinate`
+3. Print the final repo state:
+  - `make session-status`
 
 Source of truth:
 
