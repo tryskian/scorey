@@ -40,11 +40,10 @@ For the compact session-open/session-close sheet, use
 
 ## Everyday Commands
 
-
 | Task                                                                  | Command                                                                                                                            |
 | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| show the repo file tree                                               | `find . -maxdepth 2 -type f | sort`                                                                                                |
-| show tracked docs                                                     | `find docs -maxdepth 3 -type f | sort`                                                                                             |
+| show the repo file tree                                               | `find . -maxdepth 2 -type f \| sort`                                                                                               |
+| show tracked docs                                                     | `find docs -maxdepth 3 -type f \| sort`                                                                                            |
 | inspect recent history when needed                                    | `git log --stat --oneline --max-count=5`                                                                                           |
 | search the current docs surface                                       | `rg -n "<term>" README.md docs`                                                                                                    |
 | run the compact day-open routine                                      | `make start`                                                                                                                       |
@@ -89,7 +88,6 @@ For the compact session-open/session-close sheet, use
 | open all three OpenAI cost pages                                      | `make open-cost-console`                                                                                                           |
 | run the compact end-of-day alias                                      | `make end`                                                                                                                         |
 | run end-of-day preflight                                              | `make end-preflight`                                                                                                               |
-
 
 ## Upstream Resources
 
