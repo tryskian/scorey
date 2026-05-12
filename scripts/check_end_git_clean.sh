@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BRANCH="${EOD_GIT_BRANCH:-main}"
-REMOTE="${EOD_GIT_REMOTE:-origin}"
+BRANCH="${END_GIT_BRANCH:-main}"
+REMOTE="${END_GIT_REMOTE:-origin}"
 
 fail() {
-	echo "eod-git-check: FAIL" >&2
+	echo "end-git-check: FAIL" >&2
 	echo "  $1" >&2
 	echo "  finish by merging the feature branch, switching to $BRANCH, pulling --ff-only, and rerunning ./scripts/end_of_day_routine.sh" >&2
 	exit 1
@@ -38,4 +38,4 @@ if [ "$local_sha" != "$remote_sha" ]; then
 	fail "local $BRANCH is not synced with $REMOTE/$BRANCH"
 fi
 
-echo "eod-git-check: PASS ($BRANCH clean and synced with $REMOTE/$BRANCH)"
+echo "end-git-check: PASS ($BRANCH clean and synced with $REMOTE/$BRANCH)"

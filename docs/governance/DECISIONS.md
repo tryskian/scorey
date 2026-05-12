@@ -124,11 +124,11 @@ into implementation authorship.
 
 - Date: `2026-05-04`
 - Category: `workflow_environment`
-- Tags: `makefile`, `operators`, `eod`, `session_status`
+- Tags: `makefile`, `operators`, ``, `session_status`
 - Provenance: `human-led method decision`
 - Decision:
   - add a small `Makefile` operator surface before the runtime lands
-  - include `eod` as a first-class operator command
+  - include `` as a first-class operator command
   - keep the operator surface toy-sized rather than inheriting `polinko` scale
 - Why: The toy family uses operators as part of the working method, and end-of-day
   closeout is important enough to exist from the start instead of arriving later.
@@ -279,13 +279,12 @@ into implementation authorship.
 
 - Date: `2026-05-04`
 - Category: `workflow_environment`
-- Tags: `caffeinate`, `display_sleep`, `session_ops`, `eod`
+- Tags: `caffeinate`, `display_sleep`, `session_ops`, `wake_lock`
 - Provenance: `human-led method decision`
 - Decision:
   - add managed `make caffeinate` and `make decaffeinate` commands for macOS sessions
-  - add `make decaffeinate-all` for matching background `caffeinate -d -i -m` processes
   - track the managed process with a PID file
-  - make `make eod` always attempt `decaffeinate-all` before exit
+  - make `make end` attempt `decaffeinate` before exit
 - Why: Long local sessions and eval runs should not lose the display to sleep,
   but wake control should still be explicit and easy to shut off at session end,
   including the cases where a background `caffeinate` outlives the managed PID file.
@@ -678,7 +677,6 @@ into implementation authorship.
   - add:
     - `make start`
     - `make end`
-    - `make end-stop`
     - `make rituals`
   - keep `RUNBOOK.md` as the deeper procedure surface and use the start/end
     reference as the quick operator reminder
@@ -686,3 +684,41 @@ into implementation authorship.
   session-close path was spread across the runbook, handoff, and Makefile. A
   compact reference plus explicit targets keeps the routine easy to find
   without replacing the fuller runtime docs.
+
+## D-041: Keep `make end` comprehensive and keep its wake-lock shutdown managed
+
+- Date: `2026-05-12`
+- Category: `workflow_environment`
+- Tags: `operator_surface`, `caffeinate`, `closeout`, `session_ops`
+- Provenance: `implementation decision`
+- Decision:
+  - keep `make end` as the one public day-close command
+  - after the validation closeout script finishes, have `make end` run:
+    - `make decaffeinate`
+    - `make session-status`
+  - keep `make end-preflight` as the validation-only path
+- Why: The closeout surface should stay compact while still shutting down
+  Scorey's own managed wake lock without implying a broader global caffeinate
+  sweep.
+
+## D-042: Dependency review and Python audit are part of Scorey's repo baseline
+
+- Date: `2026-05-12`
+- Category: `workflow_environment`
+- Tags: `github_actions`, `dependabot`, `dependency_review`, `security_gates`
+- Provenance: `implementation decision`
+- Decision:
+  - keep the default-branch required checks to:
+    - `markdownlint`
+    - `test`
+    - `dependency-review`
+    - `python-security`
+  - keep Dependabot version updates active for:
+    - `github-actions`
+    - `pip`
+  - retire the older stale dependency queue automation in favor of direct
+    review and audit gates
+- Why: Scorey's runtime and eval surface are now stable enough that dependency
+  changes should be gated explicitly. The smaller toy-family baseline is still
+  the right fit, but it should include review of dependency diffs and a first-
+  class Python audit rather than a queue cleanup surrogate.

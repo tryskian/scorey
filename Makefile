@@ -25,7 +25,7 @@ CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
 CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate decaffeinate-all caffeinate-status start end end-stop rituals eod eod-preflight eod-docs-check eod-git-check clean
+.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status start end rituals end-preflight end-docs-check end-git-check clean
 .PHONY: eval-review-sample
 
 install:
@@ -262,25 +262,6 @@ decaffeinate:
 	fi; \
 	rm -f "$(CAFFEINATE_PID_FILE)"
 
-decaffeinate-all:
-	@set -eu; \
-	if [ "$$(uname -s)" != "Darwin" ]; then \
-		echo "caffeinate is macOS-only; skipping."; \
-		exit 0; \
-	fi; \
-	$(MAKE) --no-print-directory decaffeinate || true; \
-	PIDS=$$(pgrep -f "^/usr/bin/caffeinate -d -i -m( |$$)" || true); \
-	if [ -n "$$PIDS" ]; then \
-		for PID in $$PIDS; do \
-			kill "$$PID" 2>/dev/null || true; \
-		done; \
-		sleep 0.1; \
-		echo "Stopped matching caffeinate processes: $$PIDS"; \
-	else \
-		echo "No matching caffeinate processes running."; \
-	fi; \
-	rm -f "$(CAFFEINATE_PID_FILE)"
-
 caffeinate-status:
 	@set -eu; \
 	if [ "$$(uname -s)" != "Darwin" ]; then \
@@ -298,39 +279,32 @@ caffeinate-status:
 		echo "Managed caffeinate: OFF."; \
 		EXISTING_PID=$$(pgrep -f "^/usr/bin/caffeinate -d -i -m( |$$)" | head -n 1 || true); \
 		if [ -n "$$EXISTING_PID" ]; then \
-			echo "Unmanaged caffeinate detected (PID $$EXISTING_PID); run 'make decaffeinate-all' to clear it."; \
+			echo "Unmanaged caffeinate detected (PID $$EXISTING_PID); run 'make decaffeinate' to clear it."; \
 		fi; \
 	fi
 
 start:
 	bash ./scripts/start_of_day_routine.sh
 
-end:
-	$(MAKE) --no-print-directory eod
-
-end-stop:
-	@set -eu; \
-	$(MAKE) --no-print-directory decaffeinate-all || true; \
-	$(MAKE) --no-print-directory session-status || true
-
 rituals:
 	@cat docs/runtime/START_END_REFERENCE.md
 
-eod:
+end:
 	@set -eu; \
 	STATUS=0; \
 	./scripts/end_of_day_routine.sh || STATUS=$$?; \
-	$(MAKE) --no-print-directory end-stop || true; \
+	$(MAKE) --no-print-directory decaffeinate || true; \
+	$(MAKE) --no-print-directory session-status || true; \
 	exit $$STATUS
 
-eod-preflight:
-	EOD_SKIP_GIT_CHECK=1 ./scripts/end_of_day_routine.sh
+end-preflight:
+	end_SKIP_GIT_CHECK=1 ./scripts/end_of_day_routine.sh
 
-eod-docs-check:
-	$(PY) ./scripts/check_eod_docs.py
+end-docs-check:
+	$(PY) ./scripts/check_end_docs.py
 
-eod-git-check:
-	bash ./scripts/check_eod_git_clean.sh
+end-git-check:
+	bash ./scripts/check_end_git_clean.sh
 
 clean:
 	rm -rf $(VENV) .coverage .mypy_cache .pytest_cache .ruff_cache htmlcov coverage.xml scripts/__pycache__ src/scorey/__pycache__ tests/__pycache__ build dist src/*.egg-info

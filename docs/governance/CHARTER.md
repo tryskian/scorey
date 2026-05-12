@@ -137,3 +137,9 @@ Out of scope:
 - The local runtime should auto-load the repo `.env`.
 - Local CLI execution is the trusted development boundary.
 - Local eval data should live under `.local/`.
+- default branch changes land through PRs with required checks:
+  - `markdownlint`
+  - `test`
+  - `dependency-review`
+  - `python-security`
+- Dependabot and GitHub secret scanning are part of the tracked repo baseline.

@@ -1,21 +1,21 @@
 # Session Handoff
 
-Last updated: 2026-05-10
+Last updated: 2026-05-12
 
 ## Start Here
 
 1. Read:
-   - `README.md`
-   - `docs/governance/CHARTER.md`
-   - `docs/governance/DECISIONS.md`
-   - `docs/runtime/ARCHITECTURE.md`
-   - `docs/runtime/RUNBOOK.md`
-   - `docs/runtime/START_END_REFERENCE.md`
-   - this file
+  - `README.md`
+  - `docs/governance/CHARTER.md`
+  - `docs/governance/DECISIONS.md`
+  - `docs/runtime/ARCHITECTURE.md`
+  - `docs/runtime/RUNBOOK.md`
+  - `docs/runtime/START_END_REFERENCE.md`
+  - this file
 2. Confirm you are at the repo root.
 3. Run session preflight:
-   - `make doctor-env`
-   - `make session-status`
+  - `make doctor-env`
+  - `make session-status`
 4. Treat the tracked docs as current project state.
 5. State the active kernel before changing files.
 
@@ -39,7 +39,6 @@ A small operator surface now exists:
 - `make caffeinate`
 - `make caffeinate-status`
 - `make decaffeinate`
-- `make decaffeinate-all`
 - `make doctor-env`
 - `make precommit-install`
 - `make precommit-run`
@@ -65,16 +64,15 @@ A small operator surface now exists:
 - `make open-billing`
 - `make open-cost-console`
 - `make end`
-- `make end-stop`
-- `make eod`
-- `make eod-preflight`
+- `make end-preflight`
 
 Repo automation is now in place:
 
 - GitHub Actions CI
+- dedicated `dependency-review`
+- `python-security`
 - Dependabot for `pip` and `github-actions`
 - markdownlint config aligned with sibling repos
-- stale dependency PR queue cleared
 
 The round contract is now defined in tracked docs:
 
@@ -121,13 +119,12 @@ Current runtime surfaces:
 - `scorey research-beta-1 --limit 10` runs the current picks gate against recent rows
 - `scorey eval-sample-local --count 30` records deterministic baseline local eval rows
 - `scorey eval-sample-local --count 30 --pattern research-beta-1-coverage`
-  records all six `Research Beta 1.0` pass pairs in a deterministic cycle
+records all six `Research Beta 1.0` pass pairs in a deterministic cycle
 - `scorey eval-sample-local --count 30 --pair rock,paper --pair scissors,rock`
-  records a focused local pair cycle for a rock win/loss lane
+records a focused local pair cycle for a rock win/loss lane
 - `scorey eval-sample-live --count 12` records live API eval rows into the same DB
 - `make caffeinate` keeps the display awake on macOS during active sessions
 - `make decaffeinate` releases the managed wake lock
-- `make decaffeinate-all` clears matching background `caffeinate` processes
 - `make open-limits`, `make open-usage`, and `make open-billing` expose the OpenAI cost console
 - `make open-cost-console` opens the full token and spend dashboard set
 
@@ -272,10 +269,10 @@ Current tracked research beta:
     - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
     - the strongest fail pattern is now mostly cross-object coherence drift with a smaller same-pick object-shape drift
   - both fresh post-surface live runs are now fully dispositioned at the
-    active boundary
+  active boundary
   - historical pre-surface tone fails are now archived out of the active
-    disposition queue and should be treated as legacy backlog rather than an
-    active blocker
+  disposition queue and should be treated as legacy backlog rather than an
+  active blocker
 
 ## Next Kernel
 
@@ -312,7 +309,7 @@ Choose one lane at a time:
   - use local `baseline` sampling for soak/population, not for diversity claims
   - use local `research-beta-1-coverage` sampling when the full pass-pair truth table matters
   - use explicit local pair cycles when a research lane needs one object in a
-    narrow win/loss role
+  narrow win/loss role
   - rock lane: complete and stable
   - paper lane: complete and stable
   - scissors lane: complete and stable

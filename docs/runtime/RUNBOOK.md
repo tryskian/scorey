@@ -12,85 +12,84 @@ For the compact session-open/session-close sheet, use
 ## Start A Session
 
 1. Read the tracked instruction surface:
-   - `README.md`
-   - `docs/governance/CHARTER.md`
-   - `docs/governance/DECISIONS.md`
-   - `docs/runtime/ARCHITECTURE.md`
-   - `docs/runtime/RUNBOOK.md`
-   - `docs/runtime/START_END_REFERENCE.md`
-   - `docs/governance/SESSION_HANDOFF.md`
+  - `README.md`
+  - `docs/governance/CHARTER.md`
+  - `docs/governance/DECISIONS.md`
+  - `docs/runtime/ARCHITECTURE.md`
+  - `docs/runtime/RUNBOOK.md`
+  - `docs/runtime/START_END_REFERENCE.md`
+  - `docs/governance/SESSION_HANDOFF.md`
 2. Confirm you are at the repo root:
-   - `git rev-parse --show-toplevel`
-   - or `pwd`
+  - `git rev-parse --show-toplevel`
+  - or `pwd`
 3. Run session preflight:
-   - `make doctor-env`
-   - `make session-status`
+  - `make doctor-env`
+  - `make session-status`
 4. Treat the tracked docs as current project state.
 5. Install or refresh the local environment:
-   - `make install`
+  - `make install`
 6. Keep the display awake during active work on macOS:
-   - `make caffeinate`
+  - `make caffeinate`
 7. Add live runtime credentials when needed:
-   - put `OPENAI_API_KEY` in the repo `.env`
-   - or export it in the shell
+  - put `OPENAI_API_KEY` in the repo `.env`
+  - or export it in the shell
 8. For any live API work, keep token monitoring available when needed:
-   - use `make open-limits` or `make open-usage` directly when a tighter check is enough
-   - use `make open-cost-console` only when you actually want the full dashboard set
+  - use `make open-limits` or `make open-usage` directly when a tighter check is enough
+  - use `make open-cost-console` only when you actually want the full dashboard set
 9. State the active kernel before editing tracked files.
 
 ## Everyday Commands
 
-| Task | Command |
-| --- | --- |
-| show the repo file tree | `find . -maxdepth 2 -type f \| sort` |
-| show tracked docs | `find docs -maxdepth 3 -type f \| sort` |
-| inspect recent history when needed | `git log --stat --oneline --max-count=5` |
-| search the current docs surface | `rg -n "<term>" README.md docs` |
-| run the compact day-open routine | `make start` |
-| print the compact start/end operator sheet | `make rituals` |
-| install or refresh the runtime env | `make install` |
-| keep the display awake on macOS | `make caffeinate` |
-| show display wake-lock status on macOS | `make caffeinate-status` |
-| release the display wake lock | `make decaffeinate` |
-| stop all matching caffeinate processes | `make decaffeinate-all` |
-| check the environment | `make doctor-env` |
-| show session status | `make session-status` |
-| run tests | `make test` |
-| run tests with branch coverage | `make test-cov` |
-| run lint checks | `make lint` |
-| run format checks | `make format-check` |
-| format the Python surface | `make format` |
-| run static typing | `make typecheck` |
-| install git hooks | `make precommit-install` |
-| run pre-commit hooks on all files | `make precommit-run` |
-| run pre-push hooks on all files | `make prepush-run` |
-| run the current baseline checks | `make check` |
-| build the package | `make package-check` |
-| initialize the eval database | `make eval-init` |
-| list recent eval rows | `make eval-list EVAL_LIMIT=10` |
-| list only pending eval rows | `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending` |
-| list a stratified pending review sample | `make eval-review-sample EVAL_LIMIT=12` |
-| record one human verdict | `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'` |
-| list a stratified pending tone review sample | `make eval-tone-sample EVAL_LIMIT=12` |
-| list a paper-only pending tone review sample | `make eval-tone-sample EVAL_LIMIT=12 EVAL_USER_PICKS='paper'` |
-| record one tone verdict | `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'` |
-| archive one pending tone row out of the active queue | `make eval-tone-archive OUTPUT_ID=17922 NOTE='paper seam archived out of active queue'` |
-| list failed tone rows that still need `RETAIN / EVICT` | `make eval-tone-disposition-sample EVAL_LIMIT=12` |
+
+| Task                                                                  | Command                                                                                                                            |
+| --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| show the repo file tree                                               | `find . -maxdepth 2 -type f | sort`                                                                                                |
+| show tracked docs                                                     | `find docs -maxdepth 3 -type f | sort`                                                                                             |
+| inspect recent history when needed                                    | `git log --stat --oneline --max-count=5`                                                                                           |
+| search the current docs surface                                       | `rg -n "<term>" README.md docs`                                                                                                    |
+| run the compact day-open routine                                      | `make start`                                                                                                                       |
+| print the compact start/end operator sheet                            | `make rituals`                                                                                                                     |
+| install or refresh the runtime env                                    | `make install`                                                                                                                     |
+| keep the display awake on macOS                                       | `make caffeinate`                                                                                                                  |
+| show display wake-lock status on macOS                                | `make caffeinate-status`                                                                                                           |
+| release the display wake lock                                         | `make decaffeinate`                                                                                                                |
+| check the environment                                                 | `make doctor-env`                                                                                                                  |
+| show session status                                                   | `make session-status`                                                                                                              |
+| run tests                                                             | `make test`                                                                                                                        |
+| run tests with branch coverage                                        | `make test-cov`                                                                                                                    |
+| run lint checks                                                       | `make lint`                                                                                                                        |
+| run format checks                                                     | `make format-check`                                                                                                                |
+| format the Python surface                                             | `make format`                                                                                                                      |
+| run static typing                                                     | `make typecheck`                                                                                                                   |
+| install git hooks                                                     | `make precommit-install`                                                                                                           |
+| run pre-commit hooks on all files                                     | `make precommit-run`                                                                                                               |
+| run pre-push hooks on all files                                       | `make prepush-run`                                                                                                                 |
+| run the current baseline checks                                       | `make check`                                                                                                                       |
+| build the package                                                     | `make package-check`                                                                                                               |
+| initialize the eval database                                          | `make eval-init`                                                                                                                   |
+| list recent eval rows                                                 | `make eval-list EVAL_LIMIT=10`                                                                                                     |
+| list only pending eval rows                                           | `make eval-list EVAL_LIMIT=10 EVAL_VERDICT=pending`                                                                                |
+| list a stratified pending review sample                               | `make eval-review-sample EVAL_LIMIT=12`                                                                                            |
+| record one human verdict                                              | `make eval-judge OUTPUT_ID=17922 VERDICT=pass NOTE='route-valid and legible'`                                                      |
+| list a stratified pending tone review sample                          | `make eval-tone-sample EVAL_LIMIT=12`                                                                                              |
+| list a paper-only pending tone review sample                          | `make eval-tone-sample EVAL_LIMIT=12 EVAL_USER_PICKS='paper'`                                                                      |
+| record one tone verdict                                               | `make eval-tone-judge OUTPUT_ID=17922 VERDICT=pass NOTE='pick-aware playful confident coherent imaginative'`                       |
+| archive one pending tone row out of the active queue                  | `make eval-tone-archive OUTPUT_ID=17922 NOTE='paper seam archived out of active queue'`                                            |
+| list failed tone rows that still need `RETAIN / EVICT`                | `make eval-tone-disposition-sample EVAL_LIMIT=12`                                                                                  |
 | archive one stale failed tone row out of the active disposition queue | `make eval-tone-disposition-archive OUTPUT_ID=17922 NOTE='historical stale fail backlog archived out of active disposition queue'` |
-| record `RETAIN` or `EVICT` for one failed tone row | `make eval-tone-dispose OUTPUT_ID=17922 DISPOSITION=retain NOTE='keep in active lane'` |
-| run the Research Beta 1.0 picks gate | `make research-beta1 EVAL_LIMIT=10` |
-| record a baseline local eval batch | `make eval-sample-local EVAL_COUNT=30` |
-| record a six-pair `Research Beta 1.0` local coverage batch | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage` |
-| record an explicit local pair cycle | `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'` |
-| record a live API eval batch | `make eval-sample-live EVAL_COUNT=12` |
-| open the OpenAI limits page | `make open-limits` |
-| open the OpenAI usage page | `make open-usage` |
-| open the OpenAI billing page | `make open-billing` |
-| open all three OpenAI cost pages | `make open-cost-console` |
-| run the compact end-of-day alias | `make end` |
-| run the final shutdown step only | `make end-stop` |
-| run end-of-day preflight | `make eod-preflight` |
-| run end-of-day closeout | `make eod` |
+| record `RETAIN` or `EVICT` for one failed tone row                    | `make eval-tone-dispose OUTPUT_ID=17922 DISPOSITION=retain NOTE='keep in active lane'`                                             |
+| run the Research Beta 1.0 picks gate                                  | `make research-beta1 EVAL_LIMIT=10`                                                                                                |
+| record a baseline local eval batch                                    | `make eval-sample-local EVAL_COUNT=30`                                                                                             |
+| record a six-pair `Research Beta 1.0` local coverage batch            | `make eval-sample-local EVAL_COUNT=30 EVAL_PATTERN=research-beta-1-coverage`                                                       |
+| record an explicit local pair cycle                                   | `make eval-sample-local EVAL_COUNT=30 EVAL_PAIRS='rock,paper scissors,rock'`                                                       |
+| record a live API eval batch                                          | `make eval-sample-live EVAL_COUNT=12`                                                                                              |
+| open the OpenAI limits page                                           | `make open-limits`                                                                                                                 |
+| open the OpenAI usage page                                            | `make open-usage`                                                                                                                  |
+| open the OpenAI billing page                                          | `make open-billing`                                                                                                                |
+| open all three OpenAI cost pages                                      | `make open-cost-console`                                                                                                           |
+| run the compact end-of-day alias                                      | `make end`                                                                                                                         |
+| run end-of-day preflight                                              | `make end-preflight`                                                                                                               |
+
 
 ## Upstream Resources
 
@@ -198,7 +197,7 @@ Current posture:
 - local `baseline` sampling is a soak/population lane, not a diversity lane
 - local `research-beta-1-coverage` sampling cycles all six `Research Beta 1.0` pass pairs evenly
 - explicit local pair cycles let the research lane isolate narrow lanes like
-  `rock,paper` and `scissors,rock`
+`rock,paper` and `scissors,rock`
 - live sampling uses the real API path and records rows as `source_mode=live`
 - live sampling cycles `rock paper scissors` by default unless a narrower user-pick cycle is supplied
 - throughput pressure and spend pressure are treated as separate operator concerns
@@ -206,24 +205,24 @@ Current posture:
 ## Rate And Credit Operator Guardrails
 
 1. Treat throughput and spend as separate control planes:
-   - rate limits (`RPM`, `TPM`, queue limits)
-   - usage/billing (token burn, budget, credits)
+  - rate limits (`RPM`, `TPM`, queue limits)
+  - usage/billing (token burn, budget, credits)
 2. Cost posture:
-   - keep interactive checks synchronous
-   - use short judged live batches by default
-   - only use extended live runs as explicit batch work
+  - keep interactive checks synchronous
+  - use short judged live batches by default
+  - only use extended live runs as explicit batch work
 3. Watch dashboards as part of normal operation:
-   - `make open-limits`
-   - `make open-usage`
-   - `make open-billing`
-   - or one-shot: `make open-cost-console`
+  - `make open-limits`
+  - `make open-usage`
+  - `make open-billing`
+  - or one-shot: `make open-cost-console`
 4. Live API rule:
-   - keep the token monitoring dashboard open or immediately reachable during live eval work
-   - recheck it before widening a batch or starting an extended run
+  - keep the token monitoring dashboard open or immediately reachable during live eval work
+  - recheck it before widening a batch or starting an extended run
 5. Efficiency defaults:
-   - keep `n=1` and structured output surfaces
-   - keep the live eval lens narrow before widening
-   - keep retry/backoff behaviour enabled in the live SDK path
+  - keep `n=1` and structured output surfaces
+  - keep the live eval lens narrow before widening
+  - keep retry/backoff behaviour enabled in the live SDK path
 
 ## Validation
 
@@ -288,19 +287,16 @@ If live generation changed and `OPENAI_API_KEY` is available:
 
 ## End Of Day
 
-Use this closeout flow before ending a working session:
+Use `make end` as the canonical closeout command.
 
-- `make eod-preflight`
-- `make eod`
+It runs:
 
-Current `eod` checks:
+- `scripts/end_of_day_routine.sh`
+- `make decaffeinate`
+- `make session-status`
 
-- `eod-docs-check`
-- `doctor-env`
-- `check`
-- `session-status`
-- git closeout on clean, synced `main`
-- `decaffeinate-all`
+Use `make end-preflight` only when you want the validation path without the
+final git closeout.
 
 ## Long-Run Eval Loop
 
@@ -313,7 +309,7 @@ The intended posture is:
 3. Judge in sweeps.
 4. Keep verdicts binary.
 5. If a row fails, decide whether that failure should be retained in the active
-   lane or evicted through an upstream correction.
+  lane or evicted through an upstream correction.
 6. Let retained failure clusters earn the next lens or intervention.
 7. Rerun after evictions instead of leaving known-bad seams in the same queue.
 

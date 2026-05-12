@@ -11,7 +11,7 @@ REQUIRED_DOCS = (Path("docs/governance/SESSION_HANDOFF.md"),)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Check that Scorey current-truth EOD docs were refreshed today."
+        description="Check that Scorey current-truth END docs were refreshed today."
     )
     parser.add_argument(
         "--date",
@@ -49,7 +49,7 @@ def main() -> int:
             )
 
     if failures:
-        print("eod-docs-check: FAIL", file=sys.stderr)
+        print("end-docs-check: FAIL", file=sys.stderr)
         for failure in failures:
             print(f"- {failure}", file=sys.stderr)
         print(
@@ -59,7 +59,7 @@ def main() -> int:
         )
         return 1
 
-    print(f"eod-docs-check: PASS ({len(checked_docs)} docs updated for {args.date})")
+    print(f"end-docs-check: PASS ({len(checked_docs)} docs updated for {args.date})")
     return 0
 
 
