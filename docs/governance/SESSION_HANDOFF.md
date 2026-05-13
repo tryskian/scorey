@@ -15,6 +15,7 @@ Last updated: 2026-05-12
 2. Confirm you are at the repo root.
 3. Run session preflight:
   - `make doctor-env`
+  - `make start-runtime-check`
   - `make session-status`
 4. Treat the tracked docs as current project state.
 5. State the active kernel before changing files.
@@ -40,6 +41,7 @@ A small operator surface now exists:
 - `make caffeinate-status`
 - `make decaffeinate`
 - `make doctor-env`
+- `make start-runtime-check`
 - `make precommit-install`
 - `make precommit-run`
 - `make session-status`
@@ -65,6 +67,7 @@ A small operator surface now exists:
 - `make open-cost-console`
 - `make end`
 - `make end-preflight`
+- `make end-runtime-check`
 
 Repo automation is now in place:
 
@@ -137,23 +140,26 @@ A first eval storage lane now exists:
 - a notebook walkthrough in `output/jupyter-notebook/`
 - a deterministic local population path for batch row creation
 - a live batch path for real API row creation
+- secondary worktrees must point their `.local` directory back to the canonical
+  repo `.local` before running live sampling, so the active queue stays in one
+  SQLite surface
 - the local deterministic queue is fully judged:
   - `17,922` pass
   - `0` fail
   - `0` pending
 - the live review queue now exists:
-  - `1921` total live rows
-  - `1921` pass
+  - `2076` total live rows
+  - `1924` pass
   - `0` fail
-  - `0` pending beab route reviews
+  - `152` pending beab route reviews
 - the active tone queue now exists on top of the route-pass live rows:
-  - `302` tone pass
-  - `558` tone fail
+  - `304` tone pass
+  - `559` tone fail
   - `1061` archived tone rows
   - `0` pending tone reviews on route-passed live rows
   - explicit tone fail dispositions now exist on the fresh post-surface lane:
     - `196` evict
-    - `3` retain
+    - `4` retain
     - `359` archived stale failed rows no longer sit in the active disposition queue
   - isolated paper-only tone lane:
     - `722` total
@@ -164,7 +170,9 @@ A first eval storage lane now exists:
 - tone failures now use a second explicit disposition layer:
   - `retain`
   - `evict`
-- the three most recent extended live runs all held the route contract:
+- the recent completed live runs all held the route contract:
+- pair balances below stay in `scorey/user` order to match `Research Beta 1.0`
+  pass pairs
   - after output `18317`: `12` new live rows, all valid `Research Beta 1.0` routes
   - after output `18329`: `257` new live rows, all valid `Research Beta 1.0` routes
   - after output `18586`: `294` new live rows, all valid `Research Beta 1.0` routes
@@ -221,7 +229,29 @@ A first eval storage lane now exists:
     - `0` fresh pending fail dispositions
   - paper-only balance:
     - `paper/paper`: `144`
-    - `paper/rock`: `150`
+    - `rock/paper`: `150`
+  - after output `19843`: `155` new live rows completed generation on the fresh mixed post-correction run
+  - current mixed-run balance:
+    - `paper/paper`: `21`
+    - `paper/scissors`: `27`
+    - `rock/paper`: `31`
+    - `rock/rock`: `25`
+    - `scissors/rock`: `27`
+    - `scissors/scissors`: `24`
+  - the fresh mixed review slice is now open:
+    - `3` route pass
+    - `0` route fail
+    - `152` fresh pending route reviews
+    - `2` tone pass
+    - `1` tone fail
+    - `1` retain
+    - `0` evict
+    - `0` fresh pending tone reviews on already judged rows
+    - `0` fresh pending fail dispositions on already judged rows
+  - early signal on the fresh mixed run:
+    - no `real one` / `napkin` relapse so far
+    - the first fail is small same-pick `rock/rock` object-shape drift around `cracked bottle cap`, retained
+    - the first passes lean back toward sharper physical mismatch lines like `industrial welding shears` vs `bent paper clip`
 
 ## Research Snapshot
 

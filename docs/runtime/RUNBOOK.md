@@ -24,6 +24,7 @@ For the compact session-open/session-close sheet, use
   - or `pwd`
 3. Run session preflight:
   - `make doctor-env`
+  - `make start-runtime-check`
   - `make session-status`
 4. Treat the tracked docs as current project state.
 5. Install or refresh the local environment:
@@ -53,6 +54,7 @@ For the compact session-open/session-close sheet, use
 | show display wake-lock status on macOS                                | `make caffeinate-status`                                                                                                           |
 | release the display wake lock                                         | `make decaffeinate`                                                                                                                |
 | check the environment                                                 | `make doctor-env`                                                                                                                  |
+| run the start-of-day runtime gate                                     | `make start-runtime-check`                                                                                                         |
 | show session status                                                   | `make session-status`                                                                                                              |
 | run tests                                                             | `make test`                                                                                                                        |
 | run tests with branch coverage                                        | `make test-cov`                                                                                                                    |
@@ -88,6 +90,7 @@ For the compact session-open/session-close sheet, use
 | open all three OpenAI cost pages                                      | `make open-cost-console`                                                                                                           |
 | run the compact end-of-day alias                                      | `make end`                                                                                                                         |
 | run end-of-day preflight                                              | `make end-preflight`                                                                                                               |
+| run the runtime completion gate directly                              | `make end-runtime-check`                                                                                                           |
 
 ## Upstream Resources
 
@@ -200,6 +203,24 @@ Current posture:
 - live sampling cycles `rock paper scissors` by default unless a narrower user-pick cycle is supplied
 - throughput pressure and spend pressure are treated as separate operator concerns
 
+Fresh live review rule:
+
+- let the sampler fill and judge the fresh slice in tandem
+- route first:
+  - `PASS / FAIL`
+- then on fresh tone failures:
+  - `RETAIN / EVICT`
+- do not package or land the branch until the fresh slice is back to `0`
+  pending at route, tone, and failure-disposition layers
+- if a live sampler runs from a secondary worktree, bind that worktree `.local`
+  back to the canonical repo `.local` before launch so the active queue stays
+  in one SQLite surface
+- secondary worktree live lanes should also source the canonical repo `.env`
+  and canonical repo `.venv`
+- `make start-runtime-check` should catch the two invalid day-open states:
+  - a still-running sampler
+  - a split worktree-local queue
+
 ## Rate And Credit Operator Guardrails
 
 1. Treat throughput and spend as separate control planes:
@@ -293,8 +314,32 @@ It runs:
 - `make decaffeinate`
 - `make session-status`
 
+The closeout routine now also includes a hard runtime completion gate:
+
+- `make end-runtime-check`
+
+That gate fails if any of these are still open:
+
+- a live sampler process
+- route-pending live rows
+- tone-pending live rows
+- pending `RETAIN / EVICT` work on failed tone rows
+- a secondary worktree using its own unsymlinked `.local` queue
+
 Use `make end-preflight` only when you want the validation path without the
 final git closeout.
+
+`make start` now also includes a hard start-of-day runtime gate:
+
+- `make start-runtime-check`
+
+That gate fails if any of these are still true before a new day opens:
+
+- a live sampler process is still running
+- a secondary worktree is pointed at its own unsymlinked `.local` queue
+
+An interrupted but resumable live slice does not fail `make start`; it is
+surfaced in `make session-status` so the next kernel can resume it on purpose.
 
 ## Long-Run Eval Loop
 
