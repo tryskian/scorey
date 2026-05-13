@@ -213,6 +213,12 @@ Fresh live review rule:
   - `RETAIN / EVICT`
 - do not package or land the branch until the fresh slice is back to `0`
   pending at route, tone, and failure-disposition layers
+- if an interrupted slice has gone stale, audit the route floor first and then
+  close it in one hand:
+  - if the slice is still useful and fresh enough, resume normal tandem review
+  - if the slice is Beta 1-valid but no longer a fresh tone lane, bulk-close
+    the route floor and archive the stale tone queue instead of pretending it
+    is fresh review work
 - if a live sampler runs from a secondary worktree, bind that worktree `.local`
   back to the canonical repo `.local` before launch so the active queue stays
   in one SQLite surface
