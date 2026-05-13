@@ -12,6 +12,7 @@ For the compact session-open/session-close sheet, use
 ## Start A Session
 
 1. Read the tracked instruction surface:
+  - from the final `STOP` block in `make start`
   - `README.md`
   - `docs/governance/CHARTER.md`
   - `docs/governance/DECISIONS.md`

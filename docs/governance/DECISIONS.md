@@ -805,3 +805,32 @@ into implementation authorship.
   not a haunted one-off. Explicit `src/` bootstrap plus current metadata makes
   the notebook behave like the rest of the repo instead of depending on ambient
   editor state.
+
+## D-047: Put the startup reading cue in the final `STOP` block
+
+- Date: `2026-05-13`
+- Category: `workflow_environment`
+- Tags: `operator_surface`, `startup`, `session_ops`, `repo_hygiene`
+- Provenance: `human-led operator decision with implementation decision`
+- Decision:
+  - treat this startup-ritual refinement as human-led:
+    - the human lead set the operator expectation
+    - Codex executed, formalized, and validated the repo-facing update
+  - keep `make start` in two explicit phases:
+    - machine context, runtime gate, wake-lock, and status checks first
+    - docs read, startup read, and kernel declaration in the final `STOP`
+      block
+  - keep the canonical docs list inside the final `STOP` block instead of
+    front-loading it before runtime safety
+  - when the start routine changes, sync all three surfaces in the same kernel:
+    - `scripts/start_of_day_routine.sh`
+    - `docs/runtime/START_END_REFERENCE.md`
+    - `docs/runtime/RUNBOOK.md`
+- Validation:
+  - `make start`
+  - `bash -n scripts/start_of_day_routine.sh`
+  - `git diff --check`
+- Why: Scorey already had the right startup gates, but the reading cue was still
+  too easy to blur into the top of the command. Moving the docs list and
+  declaration cue into the final `STOP` block keeps the machine checks first
+  and the intentional one-kernel handoff last.
