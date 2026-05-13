@@ -37,11 +37,11 @@ Current finding:
   - `0` pending
 - the live surface has now widened again:
   - `2076` live rows recorded
-  - `1924` beab pass at the route-and-legibility floor
+  - `2076` beab pass at the route-and-legibility floor
   - `0` beab fail
-  - `152` pending route review
+  - `0` pending route review
   - pair balances below stay in `scorey/user` order to match `Research Beta 1.0` pass pairs
-  - seven recent completed live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
+  - eight recent completed live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
     - after output `18317`: `12` new live rows
     - after output `18329`: `257` new live rows
     - after output `18586`: `294` new live rows
@@ -49,8 +49,7 @@ Current finding:
     - after output `19174`: `170` new live rows
     - after output `19344`: `157` new live rows
     - after output `19501`: `342` new live rows
-  - the next mixed run after output `19843` completed generation and reopened the active review slice:
-    - `155` new live rows
+    - after output `19843`: `155` new mixed live rows
   - the paper-only run stayed inside the expected paper route families:
     - `paper/paper`: `144`
     - `rock/paper`: `150`
@@ -68,7 +67,7 @@ Current finding:
     - `rock/rock`: `27`
     - `scissors/rock`: `26`
     - `scissors/scissors`: `31`
-  - the newest mixed run is also sampling the expected route families so far:
+  - the newest mixed run also stayed inside the valid route families:
     - `paper/paper`: `21`
     - `paper/scissors`: `27`
     - `rock/paper`: `31`
@@ -85,7 +84,7 @@ Current finding:
     - `863` rows judged
     - `304` pass
     - `559` fail
-    - `1061` archived out of the active tone queue
+    - `1213` archived out of the active tone queue
     - `0` route-passed live rows still pending tone review
     - the first fresh post-surface run is fully closed:
       - `170` route pass
@@ -113,16 +112,25 @@ Current finding:
       - `0` fresh pending route reviews
       - `0` fresh pending tone reviews
       - `0` fresh pending fail dispositions
-    - the newest mixed run after output `19843` has completed generation but is not review-closed yet:
-      - `3` route pass
-      - `0` route fail
-      - `152` fresh pending route reviews
-      - `2` tone pass
-      - `1` tone fail
-      - `1` retain
-      - `0` evict
-      - `0` fresh pending tone reviews on already judged rows
-      - `0` fresh pending fail dispositions on already judged rows
+    - the newest mixed run after output `19843` is now fully closed in two phases:
+      - first judged tranche:
+        - `3` route pass
+        - `2` tone pass
+        - `1` tone fail
+        - `1` retain
+      - stale remainder after output `19846`:
+        - `152` route pass
+        - `152` archived tone rows
+      - full run closeout:
+        - `155` route pass
+        - `2` tone pass
+        - `1` tone fail
+        - `152` archived tone rows
+        - `1` retain
+        - `0` evict
+        - `0` fresh pending route reviews
+        - `0` fresh pending tone reviews
+        - `0` fresh pending fail dispositions
     - older pre-surface tone fails no longer sit in the active disposition queue:
       - `359` stale failed rows are now archived out of that surface
     - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
@@ -143,9 +151,9 @@ Current clean lane:
   current `real one` / `napkin` pattern
 - the latest corrected live run is wind-down-closed even though only the first
   judged tranche was tone-reviewed
-- the next mixed live run after output `19843` has now completed generation and reopened a fresh active review slice
-- that active slice currently has `152` route-pending rows, with only the first `3` route-pass rows judged for tone
-- keep tandem judging on that fresh slice and do not package it until route, tone, and failure-disposition pending counts are all back to `0`
+- the next mixed live run after output `19843` is now fully closed
+- the first `3` route-pass rows were judged directly for tone
+- the remaining `152` route-valid stale rows were audit-closed and tone-archived instead of being treated as fake fresh review work
 - treat tone failures through explicit disposition:
   - `retain` when the seam still belongs in the active lane
   - `evict` when the seam proves the lane definition itself is wrong

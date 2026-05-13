@@ -80,9 +80,9 @@ Since then, seven more completed live runs have widened the active surface:
 The current live snapshot is now:
 
 - `2076` live rows recorded
-- `1924` beab pass at the route-and-legibility floor
+- `2076` beab pass at the route-and-legibility floor
 - `0` beab fail
-- `152` pending route review
+- `0` pending route review
 - pair balances below stay in `scorey/user` order to match `Research Beta 1.0`
   pass pairs
 - the newest paper-only batch stayed inside the expected paper route families:
@@ -102,7 +102,7 @@ The current live snapshot is now:
   - `rock/rock`: `27`
   - `scissors/rock`: `26`
   - `scissors/scissors`: `31`
-- the newest mixed run after output `19843` completed generation inside the expected route families:
+- the newest mixed run after output `19843` also stayed inside the valid route families:
   - `paper/paper`: `21`
   - `paper/scissors`: `27`
   - `rock/paper`: `31`
@@ -115,7 +115,7 @@ The current tone lane now records:
 - `863` rows judged
 - `304` tone pass
 - `559` tone fail
-- `1061` tone rows archived out of the active queue
+- `1213` tone rows archived out of the active queue
 - `0` route-passed live rows still pending tone review
 - the first fresh post-surface live run is now fully closed:
   - `170` route pass
@@ -143,16 +143,25 @@ The current tone lane now records:
   - `0` fresh pending route reviews
   - `0` fresh pending tone reviews
   - `0` fresh pending fail dispositions
-- the newest mixed run after output `19843` has only its first judged tranche reviewed so far:
-  - `3` route pass
-  - `0` route fail
-  - `152` fresh pending route reviews
-  - `2` tone pass
-  - `1` tone fail
-  - `1` retain
-  - `0` evict
-  - `0` fresh pending tone reviews on already judged rows
-  - `0` fresh pending fail dispositions on already judged rows
+- the newest mixed run after output `19843` is now fully closed in two phases:
+  - first judged tranche:
+    - `3` route pass
+    - `2` tone pass
+    - `1` tone fail
+    - `1` retain
+  - stale remainder after output `19846`:
+    - `152` route pass
+    - `152` archived tone rows
+  - full run closeout:
+    - `155` route pass
+    - `2` tone pass
+    - `1` tone fail
+    - `152` archived tone rows
+    - `1` retain
+    - `0` evict
+    - `0` fresh pending route reviews
+    - `0` fresh pending tone reviews
+    - `0` fresh pending fail dispositions
 - historical pre-surface tone fails no longer sit in the active disposition queue:
   - `359` stale failed rows are archived out of that surface
 - the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
@@ -190,9 +199,9 @@ It is more specific than a broad prose pass, and it stays closer to the object's
 
 ## What Changed Next
 
-The next useful move is no longer to start another fresh run. That run is now
-done at the generation layer after output `19843`, and the live task is to
-close its review slice back to zero pending without widening anything else.
+The next useful move is no longer to close the `19843` run. That run is now
+fully closed, and the live task is to decide what fresh measurement or
+upstream correction lane should follow it.
 
 That now includes a sharper failure rule:
 
@@ -200,6 +209,9 @@ That now includes a sharper failure rule:
   - `PASS / FAIL`
   - then `RETAIN / EVICT` on fresh failures
   - do not package until route, tone, and failure-disposition pending counts return to `0`
+- if an interrupted slice has gone stale but is still fully Beta 1-valid at the route floor:
+  - bulk-close the route floor
+  - archive the stale tone queue instead of treating it as fresh tandem review
 - retain failures that still belong in the active lane as live evidence
 - evict failures that prove the paper seam or another lane boundary needs an
   upstream correction before rerun
