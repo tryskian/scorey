@@ -784,3 +784,24 @@ into implementation authorship.
   they do different jobs. End-of-day must prove the slice is closed. Start-of-day
   must prove the operator is not about to fork or collide with an already-running
   live lane.
+
+## D-046: Keep the walkthrough notebook aligned to the canonical repo env
+
+- Date: `2026-05-13`
+- Category: `workflow_environment`
+- Tags: `notebook`, `python_env`, `eval_walkthrough`, `repo_hygiene`
+- Provenance: `human-led method decision with implementation decision`
+- Decision:
+  - treat this notebook/env refresh as human-led:
+    - the human lead set the direction for the canonical env shape
+    - Codex executed, formalized, and validated the repo-facing update
+  - keep the tracked walkthrough notebook aligned to the canonical repo `.venv`
+    and current Python metadata
+  - make the notebook bootstrap `src/` explicitly so its import behavior matches
+    the repo-local runtime surface instead of relying on editor luck
+  - keep local workspace/editor settings on the same canonical `.venv` path when
+    they exist
+- Why: Scorey's tracked notebook is meant to be a follow-along evidence surface,
+  not a haunted one-off. Explicit `src/` bootstrap plus current metadata makes
+  the notebook behave like the rest of the repo instead of depending on ambient
+  editor state.
