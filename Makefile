@@ -25,7 +25,7 @@ CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
 CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status start end rituals end-preflight end-docs-check end-git-check clean
+.PHONY: install env venv doctor-env session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
 .PHONY: eval-review-sample
 
 install:
@@ -98,7 +98,8 @@ session-status:
 			fi; \
 		else \
 			echo "caffeinate: off"; \
-		fi
+		fi; \
+	PYTHONPATH=src $(PY) ./scripts/check_end_runtime_state.py
 
 check:
 	$(MAKE) --no-print-directory format-check
@@ -302,6 +303,12 @@ end-preflight:
 
 end-docs-check:
 	$(PY) ./scripts/check_end_docs.py
+
+start-runtime-check:
+	PYTHONPATH=src $(PY) ./scripts/check_end_runtime_state.py --start-strict
+
+end-runtime-check:
+	PYTHONPATH=src $(PY) ./scripts/check_end_runtime_state.py --strict
 
 end-git-check:
 	bash ./scripts/check_end_git_clean.sh

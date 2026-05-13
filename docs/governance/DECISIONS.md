@@ -722,3 +722,65 @@ into implementation authorship.
   changes should be gated explicitly. The smaller toy-family baseline is still
   the right fit, but it should include review of dependency diffs and a first-
   class Python audit rather than a queue cleanup surrogate.
+
+## D-043: Secondary worktrees must reuse the canonical eval database for live sampling
+
+- Date: `2026-05-12`
+- Category: `runtime_engineering`
+- Tags: `worktrees`, `eval_storage`, `operator_surface`, `live_sampling`
+- Provenance: `implementation decision`
+- Decision:
+  - treat `/Users/tryskian/Github/scorey/.local/evals.sqlite` as the canonical
+    live eval surface
+  - when a live lane runs from a secondary worktree, bind that worktree
+    `.local` directory back to the canonical repo `.local` before launch
+  - keep worktree live lanes on the canonical repo `.env` and `.venv` when they
+    are contributing to the same active queue
+  - do not allow parallel worktree-local SQLite queues to silently split the
+    live evidence surface
+- Why: The first fresh mixed run from a named worktree initially wrote into a
+  separate worktree-local `.local/evals.sqlite`, which made the active queue
+  look stalled from the canonical repo. The method depends on one shared queue,
+  one truth surface, and one review slice. Live worktrees are fine; split DBs
+  are not.
+
+## D-044: `make end` must fail if the live runtime slice is still open
+
+- Date: `2026-05-12`
+- Category: `workflow_environment`
+- Tags: `closeout`, `runtime_gate`, `operator_surface`, `session_ops`
+- Provenance: `implementation decision`
+- Decision:
+  - add `make end-runtime-check` as a hard closeout gate
+  - have `scripts/end_of_day_routine.sh` run that gate before session snapshot
+  - have `make session-status` print the same runtime truth surface used by the
+    gate
+  - fail closeout when any of these are still open:
+    - live sampler process
+    - route-pending live rows
+    - tone-pending live rows
+    - pending post-fail `retain` / `evict` work
+    - unsymlinked worktree-local `.local` queue on a secondary worktree
+- Why: Scorey's research method depends on active slices actually closing back
+  to zero pending before a branch lands or a day ends. The old `make end`
+  checked docs, env, tests, and git, but it still treated runtime completion as
+  a chat assumption. The new gate makes "done" a machine-checked repo state.
+
+## D-045: `make start` must fail on stray live samplers and split worktree queues
+
+- Date: `2026-05-12`
+- Category: `workflow_environment`
+- Tags: `startup_gate`, `runtime_gate`, `operator_surface`, `session_ops`
+- Provenance: `implementation decision`
+- Decision:
+  - add `make start-runtime-check` as a hard day-open gate
+  - have `scripts/start_of_day_routine.sh` run that gate after `make doctor-env`
+  - fail day-open when either of these are true:
+    - a live sampler process is still running
+    - a secondary worktree is pointed at its own unsymlinked `.local` queue
+  - do not fail day-open just because an interrupted live slice still exists;
+    surface that state in `make session-status` so the next kernel can resume it
+- Why: start-of-day and end-of-day should be symmetric about machine state, but
+  they do different jobs. End-of-day must prove the slice is closed. Start-of-day
+  must prove the operator is not about to fork or collide with an already-running
+  live lane.

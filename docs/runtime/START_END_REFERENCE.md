@@ -26,6 +26,7 @@ Sequence:
   - `git status --short --branch`
 3. Run the startup safety path:
   - `make doctor-env`
+  - `make start-runtime-check`
   - `make caffeinate`
   - `make caffeinate-status`
   - `make session-status`
@@ -48,6 +49,7 @@ Sequence:
   - docs truth check
   - environment check
   - full repo validation
+  - runtime completion gate
   - session snapshot
   - git closeout check
 2. Release the managed wake lock:

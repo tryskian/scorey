@@ -119,6 +119,12 @@ present Scorey as ahead after the round.
 
 Eval data now lives in `.local/evals.sqlite`.
 
+For canonical repo work, that path is the one active eval surface.
+
+If a live lane runs from a secondary worktree, that worktree must bind its
+`.local` directory back to the canonical repo `.local` before launch. The live
+queue should not fork into parallel SQLite files.
+
 The current tracked shape is intentionally small:
 
 - generated or recorded rounds live in `eval_outputs`

@@ -36,11 +36,12 @@ Current finding:
   - `0` fail
   - `0` pending
 - the live surface has now widened again:
-  - `1921` live rows recorded
-  - `1921` beab pass at the route-and-legibility floor
+  - `2076` live rows recorded
+  - `1924` beab pass at the route-and-legibility floor
   - `0` beab fail
-  - `0` pending route review
-  - six recent extended live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
+  - `152` pending route review
+  - pair balances below stay in `scorey/user` order to match `Research Beta 1.0` pass pairs
+  - seven recent completed live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
     - after output `18317`: `12` new live rows
     - after output `18329`: `257` new live rows
     - after output `18586`: `294` new live rows
@@ -48,9 +49,11 @@ Current finding:
     - after output `19174`: `170` new live rows
     - after output `19344`: `157` new live rows
     - after output `19501`: `342` new live rows
+  - the next mixed run after output `19843` completed generation and reopened the active review slice:
+    - `155` new live rows
   - the paper-only run stayed inside the expected paper route families:
     - `paper/paper`: `144`
-    - `paper/rock`: `150`
+    - `rock/paper`: `150`
   - the first mixed post-surface run also stayed inside the valid route families:
     - `paper/paper`: `34`
     - `paper/scissors`: `24`
@@ -65,6 +68,13 @@ Current finding:
     - `rock/rock`: `27`
     - `scissors/rock`: `26`
     - `scissors/scissors`: `31`
+  - the newest mixed run is also sampling the expected route families so far:
+    - `paper/paper`: `21`
+    - `paper/scissors`: `27`
+    - `rock/paper`: `31`
+    - `rock/rock`: `25`
+    - `scissors/rock`: `27`
+    - `scissors/scissors`: `24`
   - `Research Beta 3.0` is now defined as a positive-only tone lens:
   - `pick-aware`
   - `playful`
@@ -72,9 +82,9 @@ Current finding:
   - `coherent`
   - `imaginative`
   - the widened tone queue is now separating real signal:
-    - `860` rows judged
-    - `302` pass
-    - `558` fail
+    - `863` rows judged
+    - `304` pass
+    - `559` fail
     - `1061` archived out of the active tone queue
     - `0` route-passed live rows still pending tone review
     - the first fresh post-surface run is fully closed:
@@ -103,10 +113,21 @@ Current finding:
       - `0` fresh pending route reviews
       - `0` fresh pending tone reviews
       - `0` fresh pending fail dispositions
+    - the newest mixed run after output `19843` has completed generation but is not review-closed yet:
+      - `3` route pass
+      - `0` route fail
+      - `152` fresh pending route reviews
+      - `2` tone pass
+      - `1` tone fail
+      - `1` retain
+      - `0` evict
+      - `0` fresh pending tone reviews on already judged rows
+      - `0` fresh pending fail dispositions on already judged rows
     - older pre-surface tone fails no longer sit in the active disposition queue:
       - `359` stale failed rows are now archived out of that surface
     - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
     - the current weak pattern has tightened from `real one` / `napkin` into mostly cross-object coherence drift with a smaller same-pick object-shape drift
+    - the newest mixed run has not relapsed into `real one` / `napkin`; its first fail is smaller same-pick `rock/rock` object-shape drift around `cracked bottle cap`
   - inside the isolated paper-only tone lane:
     - `722` route-passed paper rows total
     - `566` judged
@@ -117,13 +138,14 @@ Current finding:
 
 Current clean lane:
 
-- the route floor is fully caught up through the newest corrected live run
+- the route floor was fully caught up through output `19843` before the newest run started
 - the isolated paper-only run remains the clean seam-finding lane for the
   current `real one` / `napkin` pattern
 - the latest corrected live run is wind-down-closed even though only the first
   judged tranche was tone-reviewed
-- the active queue is clean at the fresh boundary again; the next tone evidence
-  can come from another new live run instead of more backlog traversal
+- the next mixed live run after output `19843` has now completed generation and reopened a fresh active review slice
+- that active slice currently has `152` route-pending rows, with only the first `3` route-pass rows judged for tone
+- keep tandem judging on that fresh slice and do not package it until route, tone, and failure-disposition pending counts are all back to `0`
 - treat tone failures through explicit disposition:
   - `retain` when the seam still belongs in the active lane
   - `evict` when the seam proves the lane definition itself is wrong
