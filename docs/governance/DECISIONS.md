@@ -834,3 +834,33 @@ into implementation authorship.
   too easy to blur into the top of the command. Moving the docs list and
   declaration cue into the final `STOP` block keeps the machine checks first
   and the intentional one-kernel handoff last.
+
+## D-048: Stale interrupted live slices should be audit-closed, not fake-fresh reviewed
+
+- Date: `2026-05-13`
+- Category: `research_method`
+- Tags: `live_review`, `stale_slice`, `operator_surface`, `archive`, `workflow`
+- Provenance: `human-led method decision with implementation decision`
+- Decision:
+  - treat this stale-slice closure pattern as human-led:
+    - the human lead approved the one-explorer, one-integrator closure shape
+    - Codex executed, formalized, and validated the repo-facing adjustment
+  - when a live slice is interrupted and later resumes as stale work:
+    - use at most one read-only explorer to map the slice
+    - keep the actual closure in one hand
+  - if the stale slice is still fully Beta 1-valid at the route floor:
+    - bulk-close the route floor
+    - archive the stale tone queue instead of pretending it is fresh tandem
+      review work
+  - keep `RETAIN / EVICT` for fresh failed tone rows, not for stale route-valid
+    backlog that no longer belongs in the active tone lane
+- Validation:
+  - `make eval-review-sample EVAL_LIMIT=12`
+  - `make research-beta1 EVAL_LIMIT=152`
+  - `make session-status`
+  - `PYTHONPATH=src .venv/bin/python ./scripts/check_end_runtime_state.py --strict`
+- Why: The interrupted slice after output `19846` had already generated `152`
+  bounded live rows and was fully Beta 1-valid, but it was no longer a fresh
+  tandem-review surface. Bulk route close plus tone archive preserved the route
+  evidence, cleared the runtime gate back to zero pending, and avoided turning
+  stale rows into fake fresh tone work.

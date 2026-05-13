@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-12
+Last updated: 2026-05-13
 
 ## Start Here
 
@@ -23,7 +23,7 @@ Last updated: 2026-05-12
 ## Current State
 
 Scorey is a small rigged rock, paper, scissors toy with a working runtime, a
-settled local eval lane, and an active live review queue.
+settled local eval lane, and a closed live review surface.
 
 The core tracked surfaces are:
 
@@ -149,13 +149,13 @@ A first eval storage lane now exists:
   - `0` pending
 - the live review queue now exists:
   - `2076` total live rows
-  - `1924` pass
+  - `2076` pass
   - `0` fail
-  - `152` pending beab route reviews
+  - `0` pending beab route reviews
 - the active tone queue now exists on top of the route-pass live rows:
   - `304` tone pass
   - `559` tone fail
-  - `1061` archived tone rows
+  - `1213` archived tone rows
   - `0` pending tone reviews on route-passed live rows
   - explicit tone fail dispositions now exist on the fresh post-surface lane:
     - `196` evict
@@ -230,14 +230,20 @@ A first eval storage lane now exists:
   - paper-only balance:
     - `paper/paper`: `144`
     - `rock/paper`: `150`
-  - after output `19843`: `155` new live rows completed generation on the fresh mixed post-correction run
-  - current mixed-run balance:
+  - after output `19846`: `152` new live rows from an interrupted mixed slice were later audit-closed as fully Beta 1-valid stale route rows
+  - stale-slice balance:
     - `paper/paper`: `21`
     - `paper/scissors`: `27`
-    - `rock/paper`: `31`
-    - `rock/rock`: `25`
+    - `rock/paper`: `30`
+    - `rock/rock`: `24`
     - `scissors/rock`: `27`
-    - `scissors/scissors`: `24`
+    - `scissors/scissors`: `23`
+  - stale-slice closure:
+    - `152` route pass
+    - `152` archived tone rows
+    - `0` fresh pending route reviews
+    - `0` fresh pending tone reviews
+    - `0` fresh pending fail dispositions
   - the fresh mixed review slice is now open:
     - `3` route pass
     - `0` route fail
