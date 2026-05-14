@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 ## Start Here
 
@@ -16,6 +16,8 @@ Last updated: 2026-05-13
 3. Run session preflight:
   - `make doctor-env`
   - `make start-runtime-check`
+  - `make caffeinate`
+  - `make caffeinate-status`
   - `make session-status`
 4. Treat the tracked docs as current project state.
 5. State the active kernel before changing files.
@@ -39,6 +41,7 @@ A small operator surface now exists:
 - `make rituals`
 - `make caffeinate`
 - `make caffeinate-status`
+- `make decaffeinate-status`
 - `make decaffeinate`
 - `make doctor-env`
 - `make start-runtime-check`
@@ -68,6 +71,7 @@ A small operator surface now exists:
 - `make end`
 - `make end-preflight`
 - `make end-runtime-check`
+- `make end-git-check`
 
 Repo automation is now in place:
 
@@ -354,9 +358,10 @@ Choose one lane at a time:
   - keep one narrow binary focus active at a time
 - operators:
   - keep the Makefile small and useful
-  - preserve `eod` as a first-class closeout command
+  - preserve `make end` as the first-class closeout command
   - keep display-sleep control explicit and managed
-  - let `eod` clear stray background `caffeinate` processes
+  - let `make end` clear Scorey's repo-managed `caffeinate` process
+  - report unmanaged `caffeinate` processes without adopting or stopping them
   - keep live-token visibility explicit before and during live eval work
 - docs:
   - keep tracked docs aligned with what actually exists

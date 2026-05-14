@@ -115,6 +115,23 @@ scorey.
 The runtime owns the labels, ordering, and composition. The score line must
 present Scorey as ahead after the round.
 
+## Operator Surface
+
+- Startup ritual: `make start`
+- Day-close routine: `make end`
+- Branch-local closeout validation: `make end-preflight`
+- Clean-main closeout gate: `make end-git-check`
+- Managed wake lock:
+  - `make caffeinate`
+  - `make caffeinate-status`
+  - `make decaffeinate-status`
+  - `make decaffeinate`
+- Start runtime gate: `make start-runtime-check`
+- End runtime gate: `make end-runtime-check`
+- Baseline validation: `make check`
+- Environment sanity: `make doctor-env`
+- Compact operator sheet: `make rituals`
+
 ## Eval Path
 
 Eval data now lives in `.local/evals.sqlite`.
