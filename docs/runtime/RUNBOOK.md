@@ -11,6 +11,10 @@ For the compact session-open/session-close sheet, use
 
 ## Start A Session
 
+Fast path:
+
+- `make start`
+
 1. Read the tracked instruction surface:
   - from the final `STOP` block in `make start`
   - `README.md`
@@ -26,19 +30,19 @@ For the compact session-open/session-close sheet, use
 3. Run session preflight:
   - `make doctor-env`
   - `make start-runtime-check`
+  - `make caffeinate`
+  - `make caffeinate-status`
   - `make session-status`
 4. Treat the tracked docs as current project state.
 5. Install or refresh the local environment:
   - `make install`
-6. Keep the display awake during active work on macOS:
-  - `make caffeinate`
-7. Add live runtime credentials when needed:
+6. Add live runtime credentials when needed:
   - put `OPENAI_API_KEY` in the repo `.env`
   - or export it in the shell
-8. For any live API work, keep token monitoring available when needed:
+7. For any live API work, keep token monitoring available when needed:
   - use `make open-limits` or `make open-usage` directly when a tighter check is enough
   - use `make open-cost-console` only when you actually want the full dashboard set
-9. State the active kernel before editing tracked files.
+8. State the active kernel before editing tracked files.
 
 ## Everyday Commands
 

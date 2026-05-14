@@ -59,6 +59,17 @@ The operator commands, eval workflow, and setup checks live in the
 [runtime runbook](./docs/runtime/RUNBOOK.md). The compact day-open/day-close
 sheet lives in [Start / End Reference](./docs/runtime/START_END_REFERENCE.md).
 
+Core operator commands:
+
+```sh
+make start
+make end-preflight
+make end-git-check
+make caffeinate-status
+make decaffeinate
+make check
+```
+
 ## Read Next
 
 - [docs/research/README.md](./docs/research/README.md)

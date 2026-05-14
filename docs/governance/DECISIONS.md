@@ -864,3 +864,42 @@ into implementation authorship.
   tandem-review surface. Bulk route close plus tone archive preserved the route
   evidence, cleared the runtime gate back to zero pending, and avoided turning
   stale rows into fake fresh tone work.
+
+## D-049: Align the full start/end operator surface with the repo family
+
+- Date: `2026-05-14`
+- Category: `workflow_environment`
+- Tags: `operator_surface`, `start_end`, `wake_lock`, `repo_family`
+- Provenance: `human-led operator decision with implementation decision`
+- Decision:
+  - align Scorey with the shared repo-family operator target contract:
+    - `make start`
+    - `make end`
+    - `make end-preflight`
+    - `make end-git-check`
+    - `make caffeinate`
+    - `make caffeinate-status`
+    - `make decaffeinate-status`
+    - `make decaffeinate`
+    - `make doctor-env`
+    - `make session-status`
+    - `make rituals`
+  - keep Scorey's runtime gates inside the repo-specific start/end path:
+    - `make start-runtime-check`
+    - `make end-runtime-check`
+  - keep `make end` as the strict clean-main closeout command
+  - keep `make end-preflight` for branch-local validation before clean-main
+    enforcement
+  - make wake-lock ownership PID-scoped:
+    - repo-managed PIDs may be stopped by the repo
+    - unmanaged `caffeinate` processes are reported but not adopted or stopped
+- Validation:
+  - shared target matrix check
+  - `bash -n scripts/start_of_day_routine.sh scripts/end_of_day_routine.sh`
+  - `make doctor-env`
+  - `markdownlint-cli2 README.md 'docs/**/*.md'`
+  - `make check`
+  - `make end-git-check` on synced `main`
+- Why: Scorey already had runtime-gated session open and close. The alignment
+  pass made the shared operator vocabulary match the rest of the toy family
+  while preserving Scorey's stricter live-slice gates.
