@@ -39,6 +39,11 @@ Source of truth:
 
 - [scripts/start_of_day_routine.sh](../../scripts/start_of_day_routine.sh)
 
+Wake-lock rule:
+
+- `make caffeinate` records only this repo's managed PID
+- unmanaged `caffeinate` processes are reported but never adopted or stopped
+
 ## End
 
 Command:
