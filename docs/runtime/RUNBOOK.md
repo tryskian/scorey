@@ -54,6 +54,7 @@ For the compact session-open/session-close sheet, use
 | keep the display awake on macOS                                       | `make caffeinate`                                                                                                                  |
 | show display wake-lock status on macOS                                | `make caffeinate-status`                                                                                                           |
 | release the display wake lock                                         | `make decaffeinate`                                                                                                                |
+| alias wake-lock status for closeout language                          | `make decaffeinate-status`                                                                                                         |
 | check the environment                                                 | `make doctor-env`                                                                                                                  |
 | run the start-of-day runtime gate                                     | `make start-runtime-check`                                                                                                         |
 | show session status                                                   | `make session-status`                                                                                                              |
