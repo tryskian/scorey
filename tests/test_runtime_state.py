@@ -133,7 +133,7 @@ class RuntimeStateTests(TestCase):
                 repo_root=repo_root,
                 db_path=db_path,
                 process_commands=(
-                    "74885 /Users/tryskian/Github/scorey/.venv/bin/python "
+                    "74885 /abs/path/to/scorey/.venv/bin/python "
                     "-m scorey eval-sample-live --duration-seconds 3600",
                 ),
             )

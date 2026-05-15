@@ -25,15 +25,17 @@ make --no-print-directory caffeinate-status
 echo "[start] 6/7 session-status"
 make --no-print-directory session-status
 
-echo "[start] 7/7 STOP"
-echo "[start] read these docs:"
-echo "  - README.md"
-echo "  - docs/governance/CHARTER.md"
-echo "  - docs/governance/DECISIONS.md"
-echo "  - docs/runtime/RUNBOOK.md"
-echo "  - docs/runtime/ARCHITECTURE.md"
-echo "  - docs/governance/SESSION_HANDOFF.md"
-echo "[start] before any repo action:"
-echo "  1. give the startup read"
-echo "  2. name exactly one active kernel"
-echo "  3. do not branch, search, or edit until that is stated"
+echo "[start] 7/7 REHYDRATE PROMPT"
+cat <<'EOF'
+Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md.
+
+In 5 bullets: current state, risks, and next kernel.
+
+Before starting implementation, confirm environment/workspace context: canonical repo path is /abs/path/to/scorey, confirm host vs devcontainer mode, confirm active git branch, and say whether the thread is on clean main or a feature branch.
+
+Apply no-guessing controls: prefer repo-scoped edits and do not modify user shell profile file or global VS Code settings unless explicitly approved in-chat.
+
+Run in one active kernel at a time.
+
+Then execute the Next Kernel from SESSION_HANDOFF with minimal behavior drift and full validation.
+EOF
