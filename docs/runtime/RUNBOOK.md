@@ -16,7 +16,7 @@ Fast path:
 - `make start`
 
 1. Read the tracked instruction surface:
-  - from the final `STOP` block in `make start`
+  - from the final rehydrate prompt in `make start`
   - `README.md`
   - `docs/governance/CHARTER.md`
   - `docs/governance/DECISIONS.md`
@@ -42,7 +42,11 @@ Fast path:
 7. For any live API work, keep token monitoring available when needed:
   - use `make open-limits` or `make open-usage` directly when a tighter check is enough
   - use `make open-cost-console` only when you actually want the full dashboard set
-8. State the active kernel before editing tracked files.
+8. Apply the no-guessing controls:
+  - prefer repo-scoped edits
+  - do not modify user shell profile files or global VS Code settings without explicit approval in-chat
+9. Run one active kernel at a time.
+10. Then execute the `Next Kernel` from `SESSION_HANDOFF` with full validation.
 
 ## Everyday Commands
 

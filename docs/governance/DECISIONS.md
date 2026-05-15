@@ -730,8 +730,7 @@ into implementation authorship.
 - Tags: `worktrees`, `eval_storage`, `operator_surface`, `live_sampling`
 - Provenance: `implementation decision`
 - Decision:
-  - treat `/Users/tryskian/Github/scorey/.local/evals.sqlite` as the canonical
-    live eval surface
+  - treat `<repo-root>/.local/evals.sqlite` as the canonical live eval surface
   - when a live lane runs from a secondary worktree, bind that worktree
     `.local` directory back to the canonical repo `.local` before launch
   - keep worktree live lanes on the canonical repo `.env` and `.venv` when they
@@ -903,3 +902,42 @@ into implementation authorship.
 - Why: Scorey already had runtime-gated session open and close. The alignment
   pass made the shared operator vocabulary match the rest of the toy family
   while preserving Scorey's stricter live-slice gates.
+
+## D-050: Add path leak guards and replace the old startup STOP block with one canonical rehydrate prompt
+
+- Date: `2026-05-15`
+- Category: `workflow_environment`
+- Tags: `operator_surface`, `rehydrate_prompt`, `path_hygiene`, `repo_hygiene`
+- Provenance: `human-led operator decision with implementation decision`
+- Decision:
+  - add repo-native path leak checks:
+    - tracked scope for CI and tracked repo truth
+    - local scope for repo-owned private lanes such as `.history`, `.local`, and `docs/peanut`
+  - fail the markdown/docs CI lane if tracked path leaks are present
+  - add path leak checks to `make end` and `make end-preflight`
+  - keep `make start` mechanical:
+    - workspace context
+    - `make doctor-env`
+    - `make start-runtime-check`
+    - `make caffeinate`
+    - `make caffeinate-status`
+    - `make session-status`
+  - replace the old final `STOP` block with one canonical rehydrate prompt
+  - the rehydrate prompt must tell the agent to:
+    - read `README.md`, `CHARTER`, `DECISIONS`, `ARCHITECTURE`, `RUNBOOK`, and `SESSION_HANDOFF`
+    - return 5 bullets covering current state, risks, and next kernel
+    - confirm repo path, host vs devcontainer mode, active branch, and whether the thread is on clean `main` or a feature branch
+    - apply the no-guessing controls
+    - run one active kernel at a time
+    - execute the `Next Kernel` from `SESSION_HANDOFF` with full validation
+- Validation:
+  - `bash -n scripts/start_of_day_routine.sh scripts/end_of_day_routine.sh`
+  - `python ./scripts/path_leak_check.py --scope tracked`
+  - `python ./scripts/path_leak_check.py --scope local`
+  - `python -m unittest tests.test_path_leak_check`
+  - `make start`
+  - `make end-preflight`
+- Why: Scorey had already aligned its operator surface, but it was still
+  missing fail-closed path hygiene and was still ending `make start` with the
+  older scripted STOP text. The stricter family standard is a short mechanical
+  bootstrap plus one reusable rehydrate contract.
