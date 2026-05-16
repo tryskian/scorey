@@ -10,12 +10,14 @@ Raw run notes and scratch material stay out of the tracked research surface unti
 
 Current tracked research beta:
 
-- `Research Beta 3.0`
-- `tone first`
+- `Research Beta 4.0`
+- `abstract tone measurement`
 
 Current question:
 
-Can Scorey hold its voice once route validity and pick legibility are no longer the open question?
+Can Scorey hold its voice once route validity and pick legibility are no
+longer the open question, without live prompt anchors contaminating the
+measurement surface?
 
 Current finding:
 
@@ -74,12 +76,17 @@ Current finding:
     - `rock/rock`: `25`
     - `scissors/rock`: `27`
     - `scissors/scissors`: `24`
-  - `Research Beta 3.0` is now defined as a positive-only tone lens:
+  - `Research Beta 3.0` established the tone-first lane as a positive-only
+    lens:
   - `pick-aware`
   - `playful`
   - `confident`
   - `coherent`
   - `imaginative`
+  - `Research Beta 4.0` pins a new method boundary inside that widened lane:
+    - `3.0` kept phrase-anchored live prompt residue
+    - `4.0` removes hard-coded phrase anchors and keeps findings in tracked
+      research docs instead of the generator contract
   - the widened tone queue is now separating real signal:
     - `863` rows judged
     - `304` pass
@@ -136,6 +143,15 @@ Current finding:
     - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
     - the current weak pattern has tightened from `real one` / `napkin` into mostly cross-object coherence drift with a smaller same-pick object-shape drift
     - the newest mixed run has not relapsed into `real one` / `napkin`; its first fail is smaller same-pick `rock/rock` object-shape drift around `cracked bottle cap`
+    - the first fresh `Research Beta 4.0` tranche is now underway after output
+      `19998`:
+      - `7` route pass
+      - `5` tone pass
+      - `2` tone fail
+      - `2` retain
+      - `0` evict
+      - no `real one` / `napkin` relapse in the judged slice
+      - the retained weak seam is still cross-object coherence drift
   - inside the isolated paper-only tone lane:
     - `722` route-passed paper rows total
     - `566` judged
@@ -169,12 +185,14 @@ Current clean lane:
 | `Research Beta 1.0` | Does Scorey choose a valid rigged route? | The first gate narrowed to pick routing only. |
 | `Research Beta 2.0` | Can one object hold a stable win/loss lane? | Explicit local pair cycles isolate one object across both roles in one focused lane. |
 | `Research Beta 3.0` | Can Scorey keep its own voice once routing is settled? | The live judged lane keeps the route floor but switches the verdict lens to tone first. |
+| `Research Beta 4.0` | What changes when tone-first measurement drops phrase anchors? | The live judged lane keeps the same route floor and tone lens, but the generator contract shifts to abstract constraints aligned to the Polinko method. |
 
 Read in order:
 
 1. [Research Beta 1.0: Pick Routing First](./BETA_1_PICK_ROUTING.md)
 2. [Research Beta 2.0: Focused Object Lanes](./BETA_2_OBJECT_LANES.md)
 3. [Research Beta 3.0: Tone First](./BETA_3_TONE_FIRST.md)
+4. [Research Beta 4.0: Abstract Tone Measurement](./BETA_4_ABSTRACT_TONE_MEASUREMENT.md)
 
 ## How To Read The Betas
 
@@ -185,6 +203,7 @@ Each beta marks a real change in what the evaluation is asking:
 - `Research Beta 1.0` proved route validity at the pick level
 - `Research Beta 2.0` keeps the same gate but changes the sampling shape to inspect one object lane at a time
 - `Research Beta 3.0` keeps the live route floor but changes the verdict lens to Scorey's voice
+- `Research Beta 4.0` keeps the tone-first question but changes the live generator contract from phrase-anchored to de-anchored measurement
 - failed rows now stay binary first and then move through `RETAIN / EVICT` as
   the disposition layer
 
@@ -197,12 +216,14 @@ flowchart LR
   B1["Research Beta 1.0<br/>pick routing only"]
   B2["Research Beta 2.0<br/>focused object lanes"]
   B3["Research Beta 3.0<br/>tone first"]
+  B4["Research Beta 4.0<br/>abstract tone measurement"]
 
   S1["six valid pass pairs<br/>and nothing else"]
   S2["one object isolated<br/>across win and loss roles"]
   S3["five positive tone traits<br/>on judged live rounds"]
+  S4["same tone bar<br/>without phrase anchors<br/>in the live generator"]
 
-  B1 --> S1 --> B2 --> S2 --> B3 --> S3
+  B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4
 ```
 
 ## Plans

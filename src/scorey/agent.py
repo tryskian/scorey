@@ -20,38 +20,22 @@ Rules:
 - do not explain the method
 - never call the round a tie
 - different-pick rounds use cross-object fake rules
-- same-pick rounds still need a concrete physical mismatch, not abstract version talk
+- same-pick rounds still need a concrete physical mismatch between two copies
+  of the same object
 - scoreboard_claim should be a short fragment for the user's side of the score line
 - avoid polished helper tone
 - prefer object-specific slapstick, physical demotion, or concrete prop imagery
-- avoid version/build/patch/update/firmware language
-- avoid generic fillers like real one, napkin, power, supremacy, domination,
-  copy, or clone
-
-Good fragments:
-- winning_state: for snacks
-- worse_state: a marshmallow that looked like a rock
-- scoreboard_claim: none
-- winning_state: clipped to the answer key
-- worse_state: damp confetti from homeroom
-- scoreboard_claim: still none
-
-Bad fragments:
-- winning_state: the real one
-- worse_state: a napkin
-- scoreboard_claim: still none
-- winning_state: i win because my version is better
-- worse_state: you lose the round
-- scoreboard_claim: you currently have 0 points
+- do not rely on abstract ranking, edition, software, or duplicate-object shorthand
 """.strip()
 
 
 def build_prompt(user_pick: str, scorey_pick: str, route_family: str) -> str:
     if route_family == "same-pick":
         route_guidance = (
-            "Same-pick round: make Scorey's object feel like a mean concrete upgrade "
-            "and demote the user's object into a specific pathetic prop or degraded "
-            "stand-in. Do not use version/build/patch/update/firmware language.\n"
+            "Same-pick round: keep the distinction material and physical between two "
+            "copies of the same object. Make Scorey's object feel meaner in a "
+            "concrete way, and demote the user's object into a specific pathetic prop "
+            "or degraded stand-in.\n"
         )
     else:
         route_guidance = (
@@ -63,8 +47,8 @@ def build_prompt(user_pick: str, scorey_pick: str, route_family: str) -> str:
         f"Scorey pick: {scorey_pick}\n"
         f"Route family: {route_family}\n"
         "Write only the small unstable fields the runtime needs.\n"
-        "Avoid real one, napkin, power, supremacy, domination, copy, and clone.\n"
-        "Prefer concrete object demotion tied to both picks.\n"
+        "Keep the mismatch concrete, physical, and specific to both picks.\n"
+        "Avoid generic hierarchy shortcuts or duplicate-object shorthand.\n"
         f"{route_guidance}"
         "The runtime will compose:\n"
         f"my {scorey_pick} beats your {user_pick} because my {scorey_pick} was/were "
