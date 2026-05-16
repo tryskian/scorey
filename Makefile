@@ -293,12 +293,7 @@ rituals:
 	@cat docs/runtime/START_END_REFERENCE.md
 
 end:
-	@set -eu; \
-	STATUS=0; \
-	./scripts/end_of_day_routine.sh || STATUS=$$?; \
-	$(MAKE) --no-print-directory decaffeinate || true; \
-	$(MAKE) --no-print-directory session-status || true; \
-	exit $$STATUS
+	./scripts/end_of_day_routine.sh
 
 end-preflight:
 	end_SKIP_GIT_CHECK=1 ./scripts/end_of_day_routine.sh

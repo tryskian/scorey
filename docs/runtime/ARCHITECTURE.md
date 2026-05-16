@@ -1,79 +1,56 @@
 # Architecture
 
-This is the fast map of Scorey's stable shape.
+This page is the structural map of the tracked system.
 
-The runtime and first eval lane now exist. This file records what is already
-real and what is still intentionally narrow.
+- Use `docs/runtime/RUNBOOK.md` for operator procedure.
+- Use `docs/governance/SESSION_HANDOFF.md` for the active slice.
 
-## System Map
+## Top-Level Map
 
-| Surface | Role |
-| --- | --- |
-| `README.md` | public framing and current repo entrypoint |
-| `pyproject.toml` | package metadata and dependency pins |
-| `Makefile` | small operator command surface |
-| `docs/governance/CHARTER.md` | durable rules and scope |
-| `docs/governance/DECISIONS.md` | durable runtime and eval decisions |
-| `docs/governance/SESSION_HANDOFF.md` | current checkpoint and next kernel |
-| `docs/runtime/ARCHITECTURE.md` | stable system map |
-| `docs/runtime/RUNBOOK.md` | operator procedure and validation |
-| `docs/runtime/START_END_REFERENCE.md` | compact day-open and day-close operator sheet |
-| `docs/research/README.md` | current research framing |
-| `docs/diagrams/PIPELINE.md` | canonical round and eval flow |
-| `scripts/` | operator helpers for environment checks, session open, and end-of-day closeout |
-| `src/scorey/config.py` | fixed picks, routing rules, and settings |
-| `src/scorey/pipeline.py` | deterministic local fixtures and final round composition |
-| `src/scorey/agent.py` | structured live round-field generation through the OpenAI Agents SDK |
-| `src/scorey/eval_gates.py` | explicit eval truth tables and gate helpers |
-| `src/scorey/eval_db.py` | local SQLite eval storage |
-| `src/scorey/eval_sampling.py` | local and live eval population helpers |
-| `src/scorey/main.py` | app loop and `play` operator command |
-| `tests/` | contract and CLI tests |
-| `output/jupyter-notebook/` | follow-along notebooks and lightweight research walkthroughs |
+- `README.md`
+  - public framing and current entrypoint
+- `pyproject.toml`
+  - package metadata and dependency pins
+- `Makefile`
+  - operator command surface
+- `scripts/`
+  - environment, runtime-state, and closeout helpers
+- `src/scorey/config.py`
+  - fixed picks, routing rules, and settings
+- `src/scorey/pipeline.py`
+  - deterministic local fixtures and round composition
+- `src/scorey/agent.py`
+  - structured live round-field generation
+- `src/scorey/eval_gates.py`
+  - explicit eval truth tables and gate helpers
+- `src/scorey/eval_db.py`
+  - local SQLite eval storage
+- `src/scorey/eval_sampling.py`
+  - local and live eval population helpers
+- `src/scorey/main.py`
+  - app loop and operator commands
+- `tests/`
+  - contract and CLI regression checks
+- `docs/`
+  - governance, runtime references, research notes, and diagrams
+- `output/jupyter-notebook/`
+  - follow-along notebooks over tracked module functions
 
-## Default App Path
+## Runtime Flow
 
-The default user path is bare `scorey`.
-
-It opens a persistent local CLI loop with:
-
-- a responsive startup banner with narrower fallbacks
-- a fixed `you:` selector for:
-  - `rock`
-  - `paper`
-  - `scissors`
-- an inactive `me:` slot before reveal
-- `enter` as the primary action
-- `esc` as the explicit exit path
-- Scorey's pick revealed before the ruling text lands
-- a visible inline wait state while generation runs
-- the ruling line and score revealed in-place under the picks
-- `press enter to play again or esc to exit` as the replay footer
-
-The app loop also supports a non-TTY fallback prompt path.
-
-The startup banner keeps the same compact CLI family shape:
-
-- boxed header when the terminal is wide enough
-- stacked header when the box would be too tight
-- minimal header on narrower widths
-- repo line dropped only on very small terminals
-- bold accent styling only on the repo line
-
-## Generation Path
-
-The current generation shape is:
-
-1. The user selects `rock`, `paper`, or `scissors`.
-2. The runtime validates the fixed pick.
-3. Scorey routes to an allowed Scorey pick.
-4. The app reveals Scorey's pick in the `me:` slot.
-5. The route defines the matchup frame for the round.
-6. The live model generates only the unstable unfair round state it needs as
-   structured fields.
-7. The runtime composes the final round shape.
-
-The exact boundary is now part of the tracked contract.
+1. Bare `scorey` enters the local CLI loop in `main.py`.
+2. The user selects one fixed pick:
+   - `rock`
+   - `paper`
+   - `scissors`
+3. The runtime validates the selected pick.
+4. The runtime routes to an allowed Scorey pick.
+5. The runtime reveals Scorey's pick and route frame.
+6. The live model generates only the unstable round fields:
+   - `winning_state`
+   - `worse_state`
+   - `scoreboard_claim`
+7. The runtime composes the final unfair round.
 
 ## Round Contract
 
@@ -85,7 +62,8 @@ Allowed routes:
 | `paper` | `rock`, `paper` | cross-object, same-pick |
 | `scissors` | `paper`, `scissors` | cross-object, same-pick |
 
-Same-pick rounds are valid Scorey wins. They do not fall back to tie logic.
+Same-pick rounds are valid Scorey wins. They are part of the contract rather
+than a fallback tie path.
 
 Ownership boundary:
 
@@ -93,184 +71,73 @@ Ownership boundary:
 | --- | --- | --- |
 | `user_pick` | runtime | preserve the selected fixed pick |
 | `scorey_pick` | runtime | enforce valid routing |
-| `route_family` | runtime | distinguish cross-object from same-pick logic |
+| `route_family` | runtime | distinguish cross-object and same-pick logic |
 | `winning_state` | model | explain why Scorey's version wins |
 | `worse_state` | model | explain why the user's version loses |
-| `scoreboard_claim` | model | provide a small unfair score-side claim |
-| final round template | runtime | compose labels, prose shape, and closing tag |
+| `scoreboard_claim` | model | provide the small unfair score-side claim |
+| final round composition | runtime | output labels, prose shape, and closing tag |
 
-Current final round shape:
+## Data Surfaces
 
-```text
-you: [rock|paper|scissors]
-me: [rock|paper|scissors]
-
-my [scorey pick] beats your [user pick] because my [scorey pick] was/were [winning state] and your [user pick] was/were [worse state].
-
-me: [scorey score], you: [scoreboard claim]
-
-scorey.
-```
-
-The runtime owns the labels, ordering, and composition. The score line must
-present Scorey as ahead after the round.
-
-## Operator Surface
-
-- Startup ritual: `make start`
-- Day-close routine: `make end`
-- Branch-local closeout validation: `make end-preflight`
-- Clean-main closeout gate: `make end-git-check`
-- Managed wake lock:
-  - `make caffeinate`
-  - `make caffeinate-status`
-  - `make decaffeinate-status`
-  - `make decaffeinate`
-- Start runtime gate: `make start-runtime-check`
-- End runtime gate: `make end-runtime-check`
-- Baseline validation: `make check`
-- Environment sanity: `make doctor-env`
-- Compact operator sheet: `make rituals`
-
-## Eval Path
-
-Eval data now lives in `.local/evals.sqlite`.
-
-For canonical repo work, that path is the one active eval surface.
-
-If a live lane runs from a secondary worktree, that worktree must bind its
-`.local` directory back to the canonical repo `.local` before launch. The live
-queue should not fork into parallel SQLite files.
-
-The current tracked shape is intentionally small:
-
-- generated or recorded rounds live in `eval_outputs`
-- human judgments are append-only in `eval_judgments`
-- lens-specific judgments are append-only in `eval_lens_judgments`
-- post-fail lens dispositions are append-only in `eval_lens_failure_dispositions`
-- archived stale failed dispositions are append-only in
-  `eval_lens_failure_disposition_archives`
-- the current top-level verdict is mirrored onto the output row for fast listing
-- verdicts stay binary:
+- live eval store:
+  - `.local/evals.sqlite`
+- active round rows:
+  - `eval_outputs`
+- top-level judgments:
+  - `eval_judgments`
+- lens-specific judgments:
+  - `eval_lens_judgments`
+- failed-lens dispositions:
+  - `eval_lens_failure_dispositions`
+- archived stale failed dispositions:
+  - `eval_lens_failure_disposition_archives`
+- current top-level verdict mirrors onto the output row for fast listing
+- current route verdict values:
   - `pass`
   - `fail`
-- failure disposition stays method-level:
+  - `pending`
+- failure disposition values after tone `fail`:
   - `retain`
   - `evict`
 
-The current row shape records:
+Canonical repo work uses the repo `.local` surface. Secondary worktrees should
+bind back to the canonical queue state before live eval work.
 
-- `user_pick`
-- `scorey_pick`
-- `route_family`
-- `round_text`
-- `source_mode`
-- `model`
-- `current_verdict`
-- `current_note`
+## Placement Rules
 
-The top-level verdict still means the route-valid floor.
+- runtime config and contract logic:
+  - `src/scorey/config.py`
+- deterministic local round composition:
+  - `src/scorey/pipeline.py`
+- live field generation:
+  - `src/scorey/agent.py`
+- app loop and operator commands:
+  - `src/scorey/main.py`
+- eval storage and sampling:
+  - `src/scorey/eval_db.py`
+  - `src/scorey/eval_sampling.py`
+- operator helpers and closeout checks:
+  - `scripts/`
+- tracked repo truth:
+  - `docs/`
+- local and private notes:
+  - `docs/peanut/`
 
-`current_verdict` is now explicit all the way through the runtime:
+## Governance Flow
 
-- `pass`
-- `fail`
-- `pending`
+- `CHARTER`
+  - durable rules and collaboration model
+- `DECISIONS`
+  - durable decision history
+- `SESSION_HANDOFF`
+  - active slice and carryover
+- `RUNBOOK`
+  - operator procedure
+- `START_END_REFERENCE`
+  - compact command card
+- `docs/research/`
+  - tracked beta findings
+- `docs/diagrams/PIPELINE.md`
+  - canonical round and eval flow
 
-Pending route rows should use the literal `pending` value, not `NULL`, so the
-operator surface, direct SQL reads, and later lenses all agree on the active
-queue state.
-
-`RETAIN / EVICT` does not introduce a third verdict value. It is the explicit
-disposition layer applied after a `fail`:
-
-- `retain` means the failure still belongs in the active lane as live evidence
-- `evict` means the failure proved the lane definition is wrong upstream, so
-  the correction belongs in routing, scope, or another runtime boundary before
-  rerun
-
-Later lenses can add their own append-only review surface without overwriting that first judgment.
-
-The first notebook lane lives in
-`output/jupyter-notebook/scorey-eval-db-walkthrough.ipynb` and uses the same
-module functions as the runtime surface.
-
-The first named eval gate is `Research Beta 1.0`.
-
-It only judges the pick pair in `scorey_pick, user_pick` order.
-
-`pass` pairs:
-
-- `paper, scissors`
-- `rock, paper`
-- `scissors, rock`
-- `paper, paper`
-- `rock, rock`
-- `scissors, scissors`
-
-`fail` pairs:
-
-- every other `scorey_pick, user_pick` pair
-
-The next named review lane is `Research Beta 3.0`.
-
-It keeps the route-pass floor and judges live rows through five positive-only tone traits:
-
-- `pick-aware`
-- `playful`
-- `confident`
-- `coherent`
-- `imaginative`
-
-The local sampling lane now has two named deterministic patterns:
-
-- `baseline` cycles the fixed picks through the narrow local fixtures and is
-  best read as population/soak coverage
-- `research-beta-1-coverage` cycles all six `Research Beta 1.0` pass pairs evenly
-
-It also accepts explicit local pair cycles in `scorey_pick,user_pick` order for
-focused lanes like `rock,paper` plus `scissors,rock`.
-
-None of these local lanes are diversity claims.
-
-The live sampling lane now records real generated rounds into the same DB:
-
-- it cycles user picks in user order by default:
-  - `rock`
-  - `paper`
-  - `scissors`
-- it lets Scorey choose a valid live route for each user pick
-- it records `source_mode=live` with the active model name
-- it preserves the same `Research Beta 1.0` pass/fail counters for immediate route readback
-
-## Contracts
-
-- The runtime stays local and CLI-first.
-- The default runtime path stays agent-backed.
-- The deterministic local path stays beside the live path.
-- The prompt surface stays fixed to `rock`, `paper`, and `scissors`.
-- Valid Scorey routes stay narrow and same-pick rounds are not ties.
-- The runtime owns route enforcement and final round composition.
-- The local path stays deterministic.
-- The default user path opens the app loop.
-- Operator commands stay separate from the app loop.
-- Eval storage stays local and SQLite-backed.
-- Eval verdicts stay binary:
-  - `pass`
-  - `fail`
-- Failed seams use explicit disposition:
-  - `retain`
-  - `evict`
-
-## Docs Ownership
-
-| Doc | Job |
-| --- | --- |
-| `README.md` | public framing and entrypoint |
-| `docs/governance/CHARTER.md` | durable rules and working model |
-| `docs/governance/DECISIONS.md` | durable engineering, runtime, and eval decisions |
-| `docs/governance/SESSION_HANDOFF.md` | current checkpoint and next lane |
-| `docs/runtime/ARCHITECTURE.md` | stable system map |
-| `docs/runtime/RUNBOOK.md` | operator procedure and validation |
-| `docs/research/README.md` | current research framing |
-| `docs/diagrams/PIPELINE.md` | canonical round and eval flow |
+Policy changes are complete when the affected surfaces agree.
