@@ -29,10 +29,12 @@ if ! git remote get-url "$REMOTE" >/dev/null 2>&1; then
 	fail "remote $REMOTE is not configured"
 fi
 
-git fetch --quiet "$REMOTE" "$BRANCH"
-
 local_sha="$(git rev-parse "refs/heads/$BRANCH")"
-remote_sha="$(git rev-parse "refs/remotes/$REMOTE/$BRANCH")"
+remote_sha="$(git ls-remote --exit-code --heads "$REMOTE" "$BRANCH" | awk '{print $1}')"
+
+if [ -z "$remote_sha" ]; then
+	fail "could not resolve $REMOTE/$BRANCH"
+fi
 
 if [ "$local_sha" != "$remote_sha" ]; then
 	fail "local $BRANCH is not synced with $REMOTE/$BRANCH"
