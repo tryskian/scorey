@@ -2,144 +2,95 @@
 
 ## Mission
 
-Scorey is a small, local, agent-backed rock, paper, scissors mini chatbot.
-
-It explores constrained human-AI interaction through deliberately unfair round
-reasoning, narrow generation, and strict binary evaluation.
-
-Scorey is part of the Polinko research line, but its job is simpler than
-Probaboracle's: keep one rigged round small enough to inspect, repeat, and
-judge.
+Build a small, local, CLI-first mini chatbot for inspecting constrained round
+behaviour through rigged rock, paper, scissors outcomes and fail-first
+evaluation.
 
 ## Durable Rules
 
-These rules define the project shape.
-
-Runtime:
-
-- local and CLI-first
-- agent-backed through the OpenAI Agents SDK on the live path
-- deterministic local fixture path beside the live path
-- live generation owns only the unstable round state it needs
-- Scorey composes the final round shape
-- same-pick rounds are valid losing loophole rounds, not ties
-
-Prompt surface:
-
-- `rock`
-- `paper`
-- `scissors`
-
-The active runtime path does not accept freeform prompt input. The fixed picks
-are the interaction boundary and the eval boundary.
-
-Responses:
-
-- lowercase
-- bratty
-- unfair
-- round-aware
-- not helpful, polished, legalistic, mystical, or fair
-
-Eval:
-
-- binary verdicts only
-- `pass`
-- `fail`
-- if `fail`, use explicit failure disposition:
-  - `retain`
-  - `evict`
-- treat `retain` as in-scope failure evidence that stays in the active lane
-- treat `evict` as the upstream correction that removes a bad lane before rerun
-- rerun after evictions instead of leaving known-bad seams in the same queue
-- one eval focus at a time
-- start with the round contract before broader fit judgments
-
-Project posture:
-
-- keep it small
-- keep it local-first
-- keep it aligned with Polinko's eval discipline
-- keep the unfairness legible
-- evolve tooling intentionally
+- Local CLI runtime is canonical.
+- Runtime stays agent-backed through the OpenAI Agents SDK.
+- Prompt surface stays fixed to:
+  - `rock`
+  - `paper`
+  - `scissors`
+- Scorey round contract stays unfair and legible:
+  - Scorey wins
+  - the user loses
+  - same-pick rounds remain valid losses
+- Runtime owns route selection, round composition, and output labels.
+- Live generation owns only the small unstable round fields:
+  - Scorey's winning state
+  - the user's worse state
+  - a scoreboard claim
+- Responses stay lowercase, bratty, unfair, and round-aware.
+- Eval semantics stay binary:
+  - `pass`
+  - `fail`
+  - after `fail`, choose:
+    - `retain`
+    - `evict`
+- The active eval loop starts with route correctness and expands only after
+  the core round stays stable.
+- Tracked docs, code, tests, and local eval evidence are canonical repo truth.
+- `docs/peanut/` stays the local and private lane.
+- Small, testable changes are the default delivery shape.
+- Evidence inspection comes before interpretation.
+- Evidence chains stay preserved through archive-first handling.
 
 ## Working Model
 
-Human lead owns:
+- Human lead owns:
+  - hypotheses
+  - scope boundaries
+  - acceptance criteria
+  - meaning-level trade-offs
+  - go or no-go decisions
+- Engineer owns:
+  - implementation
+  - validation
+  - Git and PR flow
+  - proactive hygiene
+  - execution recommendations
+- Default execution model:
+  - one feature branch per change set
+  - protected-main PR flow
+  - clean synced `main` as the tracked stop state
+- Parallel implementation uses dedicated worktrees.
 
-- objective
-- scope boundaries
-- acceptance criteria
-- theory-level interpretation
-- go/no-go decisions
+## Documentation Governance
 
-Engineer owns:
+- `docs/governance/DECISIONS.md`
+  - durable repo decisions
+- `docs/governance/SESSION_HANDOFF.md`
+  - active slice and carryover
+- `docs/runtime/RUNBOOK.md`
+  - operator procedure
+- `docs/runtime/ARCHITECTURE.md`
+  - stable system shape
+- `docs/runtime/START_END_REFERENCE.md`
+  - compact command card
+- `docs/research/`
+  - tracked beta findings
+- `docs/diagrams/`
+  - tracked runtime and eval diagrams
+- `docs/peanut/`
+  - local and private working lane
 
-- implementation
-- validation
-- runtime hygiene
-- docs upkeep
-- execution recommendations
+## Current Scope
 
-Default execution model:
-
-- one active kernel at a time
-- local-first iteration
-- visible checkpoints
-- keep working through non-blocking side thoughts during an active task
-- only redirect mid-run when the new information materially changes the active kernel
-- docs stay in sync with real state
-
-## Documentation Ownership
-
-| Doc | Job |
-| --- | --- |
-| `README.md` | public framing and current entrypoint |
-| `docs/governance/DECISIONS.md` | durable engineering, runtime, and eval decisions |
-| `docs/governance/SESSION_HANDOFF.md` | current checkpoint and next kernel |
-| `docs/runtime/ARCHITECTURE.md` | stable system shape |
-| `docs/runtime/RUNBOOK.md` | operator procedure and validation |
-| `docs/runtime/START_END_REFERENCE.md` | compact day-open and day-close operator sheet |
-| `docs/research/README.md` | current research framing |
-| `docs/diagrams/PIPELINE.md` | canonical round and eval flow |
-
-After runtime, product-shape, or research-method changes, sweep the tracked
-docs before calling the state settled.
-
-Tracked docs should use UK English, normal paragraph wrapping, and deliberate
-line breaks only when the cadence or structure actually needs them.
-
-## Scope
-
-In scope:
-
-- local CLI runtime
+- local CLI runtime and operator surface
 - fixed pick selection
-- agent-backed generation
-- deterministic local baseline
-- binary human judgment
-- explicit failure disposition after `fail`
-- local eval storage
-- diagram-backed runtime explanation
-- governance docs for charter, decisions, and handoff state
+- runtime-owned route composition for one unfair round
+- binary eval stack with explicit `retain` and `evict` outcomes
+- tone-first review after route stability
+- tracked beta research notes and diagrams
+- smaller, single-purpose docs aligned with live repo behaviour
 
-Out of scope:
+## Security / Ops Baseline
 
-- web UI
-- backend API
-- auth
-- deployment scaffolding
-- freeform chat input
-
-## Security And Ops
-
-- `OPENAI_API_KEY` is required for live generation.
-- The local runtime should auto-load the repo `.env`.
-- Local CLI execution is the trusted development boundary.
-- Local eval data should live under `.local/`.
-- default branch changes land through PRs with required checks:
-  - `markdownlint`
-  - `test`
-  - `dependency-review`
-  - `python-security`
-- Dependabot and GitHub secret scanning are part of the tracked repo baseline.
+- `OPENAI_API_KEY` is present for live runtime work.
+- Local `.venv` is the canonical development environment.
+- Local terminal execution is the trusted development boundary.
+- `.local/evals.sqlite` is the live eval evidence store.
+- `make doctor-env` is the environment confirmation entrypoint.

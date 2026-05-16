@@ -1,72 +1,48 @@
 # Start / End Reference
 
-This is the compact operator sheet for the canonical day-open/day-close
-commands.
+This is the compact command card for opening and closing a working session.
 
 ## Start
 
-Command:
-
-```bash
-make start
-```
-
-Sequence:
-
-1. Print workspace context:
-  - repo root
-  - active branch
-  - `git status --short --branch`
-2. Run the startup safety path:
-  - `make doctor-env`
-  - `make start-runtime-check`
-  - `make caffeinate`
-  - `make caffeinate-status`
-  - `make session-status`
-3. Stop before repo action:
-  - print the canonical rehydrate prompt
-  - the prompt tells the agent to:
-    - read `README.md`, `CHARTER`, `DECISIONS`, `RUNBOOK`, `ARCHITECTURE`, and `SESSION_HANDOFF`
-    - return 5 bullets covering current state, risks, and next kernel
-    - confirm repo path, host vs devcontainer mode, active branch, and whether the thread is on clean `main` or a feature branch
-    - apply the no-guessing controls
-    - run one active kernel at a time
-    - execute the `Next Kernel` from `SESSION_HANDOFF` with full validation
-
-Source of truth:
-
-- [scripts/start_of_day_routine.sh](../../scripts/start_of_day_routine.sh)
-
-Wake-lock rule:
-
-- `make caffeinate` records only this repo's managed PID
-- unmanaged `caffeinate` processes are reported but never adopted or stopped
+1. Read:
+   - `README.md`
+   - `docs/governance/CHARTER.md`
+   - `docs/governance/DECISIONS.md`
+   - `docs/runtime/ARCHITECTURE.md`
+   - `docs/runtime/RUNBOOK.md`
+   - `docs/governance/SESSION_HANDOFF.md`
+2. Confirm repo or worktree context and active branch.
+3. State:
+   - current state
+   - risks
+   - next kernel
+   - repo or worktree context
+   - active branch
+4. Run:
+   - `make doctor-env`
+   - `make start-runtime-check`
+   - `make caffeinate`
+   - `make caffeinate-status`
+   - `make session-status`
 
 ## End
 
-Command:
+1. Run:
+   - `make end-docs-check`
+   - `make doctor-env`
+   - `make path-leak-check`
+   - `make path-leak-audit-local`
+   - `make check`
+   - `make end-runtime-check`
+2. Stop the repo-managed wake lock:
+   - `make decaffeinate`
+   - `make decaffeinate-status`
+3. Finish on clean synced `main`:
+   - `make end-git-check`
 
-```bash
-make end
-```
+## Wrapper Shortcuts
 
-Sequence:
-
-1. Run the closeout safety path:
-  - docs truth check
-  - environment check
-  - tracked path leak check
-  - local path leak audit
-  - full repo validation
-  - runtime completion gate
-  - session snapshot
-  - git closeout check
-2. Release the managed wake lock:
-  - `make decaffeinate`
-3. Print the final repo state:
-  - `make session-status`
-
-Source of truth:
-
-- [scripts/end_of_day_routine.sh](../../scripts/end_of_day_routine.sh)
-- [Makefile](../../Makefile)
+- `make start`
+  - runs the start command sequence and prints the rehydrate prompt
+- `make end`
+  - runs the closeout command sequence and final Git check
