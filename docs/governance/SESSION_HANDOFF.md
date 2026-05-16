@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-15
+Last updated: 2026-05-16
 
 ## Start Here
 
@@ -31,7 +31,9 @@ Last updated: 2026-05-15
 
 Scorey is a small, local, agent-backed rock, paper, scissors mini chatbot with
 a real runtime, a settled route-valid floor, and a tracked tone lane on top of
-the route pass surface.
+the route pass surface. The current feature branch is carrying the `Research
+Beta 4.0` abstract tone measurement boundary, the first fully closed `4.0`
+slice, and the first isolated fail-family run.
 
 The core tracked shape is:
 
@@ -46,24 +48,85 @@ The core tracked shape is:
 - tone failures use explicit `retain` or `evict`
 
 Canonical live work stays on the repo `.local` surface. Secondary worktrees use
-the canonical queue state rather than forking a second eval store.
+the canonical queue state rather than forking a second eval store, while
+keeping local `.venv` environments.
+
+Current runtime truth:
+
+- `live_batch: closed`
+- `route_pending=0`
+- `tone_pending=0`
+- `disposition_pending=0`
+- live totals:
+  - `2294` route pass
+  - `0` fail
+  - `0` pending
+- tone totals:
+  - `454` pass
+  - `627` fail
+  - `1213` archived
+  - `0` pending
+- disposition totals:
+  - `72` retain
+  - `196` evict
+  - `359` archived
+  - `0` pending
+
+Current `Research Beta 4.0` tranche after output `19998`:
+
+- `69` route pass
+- `47` tone pass
+- `22` tone fail
+- `22` retain
+- `0` evict
+- `0` pending at any active layer
+- no `real one` / `napkin` relapse across the closed slice
+- weak seam still reads as cross-object coherence drift
+- restored interrupted segment after output `20005` closed at:
+  - `62` route pass
+  - `42` tone pass
+  - `20` tone fail
+  - `20` retain
+  - `0` evict
+- first isolated fail-family run after output `20139` closed at:
+  - family: `cross-object coherence drift`
+  - `77` route pass
+  - `50` tone pass
+  - `27` tone fail
+  - `27` retain
+  - `0` evict
+  - fail mix:
+    - `26` `cross-object coherence drift`
+    - `1` `anchor relapse`
+
+Reusable worktrees currently kept warm:
+
+- `/Users/tryskian/.codex/worktrees/scorey-canonical-env`
+- `/Users/tryskian/.codex/worktrees/scorey-fresh-mixed-run`
+
+Both are normalized to:
+
+- local `.venv`
+- canonical repo `.env`
+- canonical repo `.local`
+- clean `make doctor-env`
+- clean `make session-status`
 
 ## Active Kernel
 
-- align Scorey to the updated docs standard
-- keep the morning process and end target aligned with the house contract
-- reset the tracked docs stack one file at a time
-- keep Scorey's real runtime gates visible where they reflect live behaviour
+- keep the handoff and research notes truthful to the first isolated
+  fail-family result
+- preserve the explicit comparison boundary between anchored `3.0` and
+  abstract `4.0`
+- keep the live pair-cycle surface available for isolated short runs:
+  - `make eval-sample-live EVAL_PAIRS='...'`
 
 ## Next Slice
 
-1. Replace tracked `SESSION_HANDOFF.md`.
-2. Replace tracked `ARCHITECTURE.md`.
-3. Replace tracked `CHARTER.md`.
-4. Replace tracked `START_END_REFERENCE.md`.
-5. Replace tracked `DECISIONS.md`.
-6. Sweep the research docs after the core stack is clean.
-7. Validate after each replace.
+1. Package the `Beta 4.0` boundary, live pair-cycle support, and first
+   isolated cross-object run.
+2. Merge to clean synced `main`.
+3. Open the next isolated short run for the remaining same-pick fail family.
 
 ## Guardrails
 

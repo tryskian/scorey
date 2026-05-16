@@ -38,8 +38,8 @@ Current finding:
   - `0` fail
   - `0` pending
 - the live surface has now widened again:
-  - `2076` live rows recorded
-  - `2076` beab pass at the route-and-legibility floor
+  - `2294` live rows recorded
+  - `2294` beab pass at the route-and-legibility floor
   - `0` beab fail
   - `0` pending route review
   - pair balances below stay in `scorey/user` order to match `Research Beta 1.0` pass pairs
@@ -88,9 +88,9 @@ Current finding:
     - `4.0` removes hard-coded phrase anchors and keeps findings in tracked
       research docs instead of the generator contract
   - the widened tone queue is now separating real signal:
-    - `863` rows judged
-    - `304` pass
-    - `559` fail
+    - `1081` rows judged
+    - `454` pass
+    - `627` fail
     - `1213` archived out of the active tone queue
     - `0` route-passed live rows still pending tone review
     - the first fresh post-surface run is fully closed:
@@ -143,15 +143,36 @@ Current finding:
     - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
     - the current weak pattern has tightened from `real one` / `napkin` into mostly cross-object coherence drift with a smaller same-pick object-shape drift
     - the newest mixed run has not relapsed into `real one` / `napkin`; its first fail is smaller same-pick `rock/rock` object-shape drift around `cracked bottle cap`
-    - the first fresh `Research Beta 4.0` tranche is now underway after output
-      `19998`:
-      - `7` route pass
-      - `5` tone pass
-      - `2` tone fail
-      - `2` retain
+    - the first fresh `Research Beta 4.0` tranche after output `19998` is now
+      fully closed:
+      - `69` route pass
+      - `47` tone pass
+      - `22` tone fail
+      - `22` retain
       - `0` evict
-      - no `real one` / `napkin` relapse in the judged slice
+      - no `real one` / `napkin` relapse in the closed slice
       - the retained weak seam is still cross-object coherence drift
+      - the restored interrupted segment inside that tranche closed at:
+        - `62` route pass
+        - `42` tone pass
+        - `20` tone fail
+        - `20` retain
+        - `0` evict
+      - the restored interrupted segment showed a full `20` / `20`
+        fail-to-retain rate instead of noise or evictions
+      - the first isolated fail-family run after output `20139` is also fully
+        closed:
+        - family: `cross-object coherence drift`
+        - `77` route pass
+        - `50` tone pass
+        - `27` tone fail
+        - `27` retain
+        - `0` evict
+        - fail mix stayed narrow:
+          - `26` `cross-object coherence drift`
+          - `1` `anchor relapse`
+      - the live operator surface can now open explicit isolated runs through
+        pair cycles instead of only user-pick cycles
   - inside the isolated paper-only tone lane:
     - `722` route-passed paper rows total
     - `566` judged
@@ -177,6 +198,9 @@ Current clean lane:
 - keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active growth surface
 - widen into scoreboard or prose judgement only after the tone lane earns it
+- `Research Beta 4.0` is now the active comparison surface against the
+  anchored `3.0` lane
+- the next isolated short run should target the remaining same-pick drift lane
 
 ## Beta Map
 

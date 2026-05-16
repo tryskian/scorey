@@ -238,3 +238,17 @@ handoff or branch history instead.
   the clean Polinko-aligned comparison surface. Splitting them keeps the
   method boundary explicit and makes anchored versus abstract results
   directly comparable.
+
+## D-018: Active fail families get isolated short measurement runs
+
+- Date: `2026-05-16`
+- Category: `eval_quality`
+- Tags: `fail_families`, `isolated_runs`, `measurement_shape`
+- Provenance: `human-led method decision`
+- Decision: Once a mixed run identifies the active fail families, the next
+  eval pass should split them into individual short runs, one fail family at a
+  time, instead of immediately widening back to another broad mixed run.
+- Why: This keeps the evidence surface narrow enough to read clearly. It makes
+  retained failures easier to compare across runs, reduces queue bloat, and
+  shows whether a weak seam is still coherent under isolation or only looked
+  strong inside the mixed batch.

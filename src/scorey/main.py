@@ -261,6 +261,13 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="USER_PICK",
         help="Repeat to provide an explicit user-pick cycle in user order.",
     )
+    eval_sample_live_parser.add_argument(
+        "--pair",
+        action="append",
+        default=[],
+        metavar="SCOREY_PICK,USER_PICK",
+        help="Repeat to provide an explicit live pair cycle in scorey/user order.",
+    )
 
     return parser
 
@@ -1165,16 +1172,23 @@ def command_eval_sample_live(
     duration_seconds: float | None,
     interval_seconds: float,
     user_picks: list[str],
+    pair_specs: list[str],
 ) -> int:
     try:
+        if user_picks and pair_specs:
+            raise ValueError("Provide either --pick or --pair, not both.")
         user_pick_cycle = (
             explicit_user_pick_cycle(tuple(user_picks)) if user_picks else None
+        )
+        pair_cycle = (
+            explicit_local_sample_pairs(tuple(pair_specs)) if pair_specs else None
         )
         summary = sample_live_eval_outputs(
             count=count,
             duration_seconds=duration_seconds,
             interval_seconds=interval_seconds,
             user_pick_cycle=user_pick_cycle,
+            pair_cycle=pair_cycle,
         )
     except Exception as exc:
         print(str(exc), file=sys.stderr)
@@ -1187,7 +1201,11 @@ def command_eval_sample_live(
     )
     db_path = default_eval_db_path()
     print(f"live eval sample complete: {mode_label}")
-    if user_pick_cycle is not None:
+    if pair_cycle is not None:
+        print(
+            "pairs=" + " ".join(format_local_sample_pair(pair) for pair in pair_cycle)
+        )
+    elif user_pick_cycle is not None:
         print("user_picks=" + " ".join(user_pick_cycle))
     else:
         print("user_picks=rock paper scissors")
@@ -1255,6 +1273,7 @@ def main(argv: list[str] | None = None) -> int:
             duration_seconds=args.duration_seconds,
             interval_seconds=args.interval_seconds,
             user_picks=args.pick,
+            pair_specs=args.pair,
         )
     parser.print_help()
     return 1

@@ -8,11 +8,12 @@ phrase anchors?
 
 ## Short Answer
 
-Started, and the first judged tranche already looks different.
+Started, and the first closed tranche plus the first isolated fail-family run
+already look different.
 
 The same-pick lane is materially stronger, there is no early `real one` /
-`napkin` relapse, and the retained weak seam is currently cross-object
-coherence drift.
+`napkin` relapse across the closed slice, and the retained weak seam is still
+cross-object coherence drift.
 
 ## Eval Shape
 
@@ -54,20 +55,54 @@ flowchart LR
 
 The first fresh `4.0` mixed tranche begins after output `19998`.
 
-Current judged slice:
+That tranche is now fully closed:
 
-- `7` route pass
-- `5` tone pass
-- `2` tone fail
-- `2` retain
+- `69` route pass
+- `47` tone pass
+- `22` tone fail
+- `22` retain
+- `0` evict
+- `0` fresh pending route reviews
+- `0` fresh pending tone reviews
+- `0` fresh pending fail dispositions
+
+Inside that first closed tranche, the restored interrupted segment after
+output `20005` closed at:
+
+- `62` route pass
+- `42` tone pass
+- `20` tone fail
+- `20` retain
 - `0` evict
 
-What that first slice shows:
+What that first closed slice shows:
 
 - same-pick rows are stronger and more physical
-- no `real one` / `napkin` relapse appears in the judged slice
+- no `real one` / `napkin` relapse appears across the closed slice
 - the weak seam is still cross-object coherence drift
-- the weak seam is being retained as active evidence, not evicted
+- the fails were coherent enough to keep in-lane:
+  - `20` fail
+  - `20` retain
+  - `0` evict
+
+The first isolated fail-family run then narrowed directly onto the active weak
+surface after output `20139`:
+
+- family: `cross-object coherence drift`
+- `77` route pass
+- `50` tone pass
+- `27` tone fail
+- `27` retain
+- `0` evict
+
+Inside that isolated run, the fail mix stayed narrow:
+
+- `26` `cross-object coherence drift`
+- `1` `anchor relapse`
+
+That isolation run matters because it did not collapse into random noise when
+the mixed lane was stripped away. The family kept producing the same kind of
+retain-worthy failure under direct pressure.
 
 `Research Beta 3.0` and `Research Beta 4.0` ask the same tone-first question,
 but they do not produce the same kind of evidence.
@@ -114,17 +149,19 @@ That breaks the intended family method.
 ## What It Still Cannot Show
 
 - whether the stronger same-pick signal will hold across the full batch
-- whether cross-object coherence drift is now the dominant durable seam
+- whether cross-object coherence drift remains the dominant durable seam after
+  one isolated pass
 - whether the next move should be another fresh measurement run or an upstream
   correction
-- whether a narrower post-4.0 isolation lane will still be needed
+- whether the remaining same-pick drift still deserves its own isolated lane
 
 ## What Changed Next
 
-The live task under `Research Beta 4.0` is straightforward:
+The live task under `Research Beta 4.0` is now straightforward:
 
-1. keep the mixed batch running only long enough to get a signal shape
-2. judge in tandem while it fills
+1. keep the mixed run only long enough to identify the active fail families
+2. split retained seams into isolated short runs one family at a time
 3. keep route, tone, and disposition pending counts explicit
 4. do not package until the fresh slice returns to `0` pending
-5. compare the resulting seam directly against the `3.0` anchored surface
+5. compare each isolated fail-family result directly against the anchored
+   `3.0` surface

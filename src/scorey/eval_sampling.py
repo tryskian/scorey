@@ -201,6 +201,7 @@ def sample_live_eval_outputs(
     duration_seconds: float | None = None,
     interval_seconds: float = 0.0,
     user_pick_cycle: tuple[str, ...] | None = None,
+    pair_cycle: tuple[tuple[str, str], ...] | None = None,
     model: str | None = None,
     time_fn: Callable[[], float] = time.monotonic,
     sleep_fn: Callable[[float], None] = time.sleep,
@@ -232,8 +233,11 @@ def sample_live_eval_outputs(
         if deadline is not None and time_fn() >= deadline:
             break
 
-        user_pick = pick_cycle[index % len(pick_cycle)]
-        scorey_pick = choose_scorey_pick(user_pick)
+        if pair_cycle is not None:
+            scorey_pick, user_pick = pair_cycle[index % len(pair_cycle)]
+        else:
+            user_pick = pick_cycle[index % len(pick_cycle)]
+            scorey_pick = choose_scorey_pick(user_pick)
         route_family = "same-pick" if user_pick == scorey_pick else "cross-object"
         fields = generate_live_round_fields(
             settings,
