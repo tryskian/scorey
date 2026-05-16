@@ -2,39 +2,30 @@
 
 ## What This Beta Asked
 
-Can Scorey keep its own voice once route validity and pick legibility are no longer the open question?
+Can Scorey keep its own voice once route validity and pick legibility are no
+longer the open question?
 
 ## Short Answer
 
-Started, separating real signal, but not settled.
+Yes as a real signal surface.
 
-The tone lane now has real separation, and the widened live tone surface is
-fully dispositioned. The stale queue is closed, and the first fresh mixed
-post-correction run has now reopened a narrow active review slice.
+No as a settled lane.
+
+The tone pass now separates clear strengths from clear misses, but the lane is
+still earning its correction threshold.
 
 ## Eval Shape
 
-`Research Beta 3.0` keeps the live route-valid floor from the earlier betas, but changes the verdict question.
-
-It judges each live round through five positive-only traits:
-
-- `pick-aware`
-- `playful`
-- `confident`
-- `coherent`
-- `imaginative`
-
-Its failure handling is now two-stage:
-
-- `PASS / FAIL` at the tone gate
-- if `FAIL`, then `RETAIN / EVICT`
-
-What stays out of scope:
-
-- scoreboard judgement as its own lane
-- broader prose judgement as its own lane
-
-## Diagram
+- keep the live route-valid floor from the earlier betas
+- judge each live round through five positive-only traits:
+  - `pick-aware`
+  - `playful`
+  - `confident`
+  - `coherent`
+  - `imaginative`
+- keep failure handling two-stage:
+  - `PASS / FAIL`
+  - if `FAIL`, then `RETAIN / EVICT`
 
 ```mermaid
 flowchart LR
@@ -55,165 +46,38 @@ flowchart LR
   T --> I
 ```
 
-## What It Showed
+## Current Signal
 
-This beta has now started, and the first widened tone queue is not an all-pass surface.
-
-Its starting surface was the already-judged live queue:
-
-- `395` live rows
-- `395` beab pass under the current narrow route-and-legibility lens
-- `0` fail
-- `0` pending
-
-Since then, seven more completed live runs have widened the active surface:
-
-- `12` new live rows after output `18317`
-- `257` new live rows after output `18329`
-- `294` new live rows after output `18586`
-- `294` new paper-only live rows after output `18880`
-- `170` new live rows after output `19174`
-- `157` new live rows after output `19344`
-- `342` new live rows after output `19501`
-- all seven completed runs stayed entirely inside the valid `Research Beta 1.0` route set
-
-The current live snapshot is now:
-
-- `2076` live rows recorded
-- `2076` beab pass at the route-and-legibility floor
-- `0` beab fail
-- `0` pending route review
-- pair balances below stay in `scorey/user` order to match `Research Beta 1.0`
-  pass pairs
-- the newest paper-only batch stayed inside the expected paper route families:
-  - `paper/paper`: `144`
-  - `rock/paper`: `150`
-- the first mixed post-surface run also stayed inside the valid route families:
-  - `paper/paper`: `34`
-  - `paper/scissors`: `24`
-  - `rock/paper`: `23`
-  - `rock/rock`: `29`
-  - `scissors/rock`: `28`
-  - `scissors/scissors`: `32`
-- the newest post-evict run also stayed inside the valid route families:
-  - `paper/paper`: `25`
-  - `paper/scissors`: `21`
-  - `rock/paper`: `27`
-  - `rock/rock`: `27`
-  - `scissors/rock`: `26`
-  - `scissors/scissors`: `31`
-- the newest mixed run after output `19843` also stayed inside the valid route families:
-  - `paper/paper`: `21`
-  - `paper/scissors`: `27`
-  - `rock/paper`: `31`
-  - `rock/rock`: `25`
-  - `scissors/rock`: `27`
-  - `scissors/scissors`: `24`
-
-The current tone lane now records:
-
-- `863` rows judged
-- `304` tone pass
-- `559` tone fail
-- `1213` tone rows archived out of the active queue
-- `0` route-passed live rows still pending tone review
-- the first fresh post-surface live run is now fully closed:
-  - `170` route pass
-  - `66` tone pass
-  - `104` tone fail
-  - `104` evict
-  - `0` fresh pending route reviews
-  - `0` fresh pending tone reviews
-  - `0` fresh pending fail dispositions
-- the next post-evict run is also fully closed:
-  - `157` route pass
-  - `65` tone pass
-  - `92` tone fail
-  - `92` evict
-  - `0` fresh pending route reviews
-  - `0` fresh pending tone reviews
-  - `0` fresh pending fail dispositions
-- the corrected two-hour live batch after output `19501` is wind-down-closed:
-  - `342` route pass
-  - `5` tone pass
-  - `3` tone fail
-  - `334` archived at wind-down before full tone review
-  - `3` retain
-  - `0` evict
-  - `0` fresh pending route reviews
-  - `0` fresh pending tone reviews
-  - `0` fresh pending fail dispositions
-- the newest mixed run after output `19843` is now fully closed in two phases:
-  - first judged tranche:
-    - `3` route pass
-    - `2` tone pass
-    - `1` tone fail
-    - `1` retain
-  - stale remainder after output `19846`:
-    - `152` route pass
-    - `152` archived tone rows
-  - full run closeout:
-    - `155` route pass
-    - `2` tone pass
-    - `1` tone fail
-    - `152` archived tone rows
-    - `1` retain
-    - `0` evict
-    - `0` fresh pending route reviews
-    - `0` fresh pending tone reviews
-    - `0` fresh pending fail dispositions
-- historical pre-surface tone fails no longer sit in the active disposition queue:
-  - `359` stale failed rows are archived out of that surface
-- the strongest pass pattern is object-specific slapstick or physical demotion that still tracks both picks
-- the weak pattern has tightened from generic `real one` / `napkin` toward cross-object coherence drift, with a smaller same-pick object-shape drift
-- the newest mixed run has not relapsed into `real one` / `napkin`; its first fail is smaller same-pick `rock/rock` object-shape drift around `cracked bottle cap`
-
-Inside the paper-only lane, the first isolated judged surface is now:
-
-- `722` route-passed paper rows total
-- `566` judged paper-only tone rows
-- `185` pass
-- `381` fail
-- `156` archived out of the active paper queue
-- `0` pending
-- `my paper was the real one and your paper was a napkin` is still a weak fail
-- `my rock was stone-cold advantage and your paper was a napkin` is still a stronger pass
-- the seam is not "napkin" by itself
-- the seam is the thinner paper/paper framing around `real one`
-
-So the open question is no longer whether Scorey stayed on-pick. It is whether Scorey sounds like Scorey once that floor is already satisfied.
+- live route floor is fully closed:
+  - `2076 pass / 0 fail / 0 pending`
+- the active widened tone lane now has real separation:
+  - `304 pass / 559 fail / 1213 archived / 0 pending`
+- the paper-only isolated slice remains the clearest seam-finding lane:
+  - `185 pass / 381 fail / 156 archived / 0 pending`
+- the strongest pass pattern is object-specific slapstick or physical demotion
+  that still tracks both picks
+- the weakest active seam is mostly cross-object coherence drift, with a
+  smaller same-pick object-shape seam
+- the newest mixed fail surface did not relapse into `real one` or `napkin`
+  drift; its first fail was a smaller `rock/rock` object-shape miss around
+  `cracked bottle cap`
 
 ## Why It Matters
 
 Tone is the cleanest next widening step.
 
-It is more specific than a broad prose pass, and it stays closer to the object's identity than a scoreboard-first lane would.
-
-## What It Could Not Show
-
-- scoreboard quality as its own judged lane
-- broader prose quality as its own judged lane
-- whether the five-point tone bar will stay stable across a larger judged queue
-- whether later lenses will need a different sampling shape
-- whether tone review can keep up once live generation widens again
+It stays closer to Scorey's identity than a scoreboard-first or prose-first
+lane, and it creates a sharper decision boundary for upstream correction.
 
 ## What Changed Next
 
-The next useful move is no longer to close the `19843` run. That run is now
-fully closed, and the live task is to decide what fresh measurement or
-upstream correction lane should follow it.
+The next useful move is fresh measurement or upstream correction, not more
+stale backlog traversal.
 
-That now includes a sharper failure rule:
+That means:
 
-- keep the fresh-slice closure rule in place while the sampler work is still recent:
-  - `PASS / FAIL`
-  - then `RETAIN / EVICT` on fresh failures
-  - do not package until route, tone, and failure-disposition pending counts return to `0`
-- if an interrupted slice has gone stale but is still fully Beta 1-valid at the route floor:
-  - bulk-close the route floor
-  - archive the stale tone queue instead of treating it as fresh tandem review
-- retain failures that still belong in the active lane as live evidence
-- evict failures that prove the paper seam or another lane boundary needs an
-  upstream correction before rerun
-- archive stale failed rows out of the active disposition queue when they are no
-  longer the live work surface
+- keep the fresh-slice closure rule in place
+- use `retain` when the seam still belongs in the active lane
+- use `evict` when the seam proves the lane boundary itself needs correction
+- widen into scoreboard or broader prose judgment only after the tone lane
+  settles

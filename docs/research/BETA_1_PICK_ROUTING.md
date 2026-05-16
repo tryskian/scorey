@@ -6,14 +6,15 @@ Does Scorey choose a valid rigged route for the selected user pick?
 
 ## Short Answer
 
-Yes. The first gate held once the eval lane stopped treating the three local fixtures as if they were the whole pass table.
+Yes.
+
+The first gate held once the eval lane stopped treating the three local
+fixtures as if they were the whole pass table.
 
 ## Eval Shape
 
-`Research Beta 1.0` judges the pick pair only.
-
-It reads every row in `scorey_pick, user_pick` order.
-
+- judge the pick pair only
+- read rows in `scorey_pick, user_pick` order
 - `pass`:
   - `paper, scissors`
   - `rock, paper`
@@ -23,14 +24,6 @@ It reads every row in `scorey_pick, user_pick` order.
   - `scissors, scissors`
 - `fail`:
   - every other `scorey_pick, user_pick` pair
-
-What stays out of scope:
-
-- round prose
-- tone
-- scoreboard claim
-
-## Diagram
 
 ```mermaid
 flowchart LR
@@ -45,31 +38,26 @@ flowchart LR
   G --> F
 ```
 
-## What It Showed
+## Current Signal
 
-The first long local soak proved the storage lane and gate, but only hit a narrow deterministic subset:
+- the first long local soak proved the storage lane and gate:
+  - `3578` local rows
+  - all pass
+  - only three valid pass pairs appeared
+- the six-pair coverage sampler then closed the full table:
+  - `3582` `local-research-beta-1-coverage-batch` rows
+  - `597` rows for each valid pass pair
+  - newest readback stayed all-pass
 
-- `3578` local rows
-- all pass
-- only three valid pass pairs appeared
+## Why It Matters
 
-That led to the six-pair coverage sampler:
+This beta proved more than “Scorey can pass.”
 
-- `3582` `local-research-beta-1-coverage-batch` rows
-- `597` rows for each valid pass pair
-- newest readback stayed all-pass
-
-So the result of `Research Beta 1.0` is not just that Scorey can pass. It is that the full pass table now has a stable deterministic coverage lane.
-
-## What It Could Not Show
-
-- live model behaviour
-- round prose quality
-- tone stability
-- scoreboard quality
+It established a stable deterministic coverage lane for the full routing table,
+which made later object and tone questions worth asking.
 
 ## What Changed Next
 
-Once the full pass table was stable, the next question stopped being “is the route valid at all?” and became “can one object stay stable when it is isolated across both roles?”
-
-That shift is `Research Beta 2.0`.
+Once the full pass table was stable, the next question stopped being “is the
+route valid at all?” and became “can one object stay stable when it is
+isolated across both roles?”

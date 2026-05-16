@@ -2,33 +2,23 @@
 
 ## What This Beta Asked
 
-Can one object stay stable when Scorey is forced to show it as both a win and a loss?
+Can one object stay stable when Scorey is forced to show it as both a win and
+a loss?
 
 ## Short Answer
 
 Yes on the local deterministic path.
 
-The focused pair-cycle method held cleanly across all three completed object lanes.
+The focused pair-cycle method held cleanly across all three completed object
+lanes.
 
 ## Eval Shape
 
-`Research Beta 2.0` keeps the `Research Beta 1.0` routing gate, but changes the sampling architecture.
-
-Instead of asking for the full pass table at once, it isolates one object through an explicit local pair cycle.
-
-For each lane:
-
-- one pair shows the object as Scorey's winning pick
-- one pair shows the same object as the user's losing pick
-
-What stays out of scope:
-
-- full-table coverage
-- prose quality
-- tone
-- scoreboard claim
-
-## Diagram
+- keep the `Research Beta 1.0` routing gate
+- isolate one object through an explicit local pair cycle
+- for each lane:
+  - one pair shows the object as Scorey's winning pick
+  - one pair shows the same object as the user's losing pick
 
 ```mermaid
 flowchart LR
@@ -42,75 +32,34 @@ flowchart LR
   L --> X --> G
 ```
 
-## What It Showed
+## Current Signal
 
-The first focused rock lane produced:
-
-- `3568` rows in the one-hour run
-- `3580` total `local-explicit-pair-cycle-batch` rows including the short validation sample
-- `1790` rows of `rock/paper`
-- `1790` rows of `scissors/rock`
-
-The newest readback on that lane remained all-pass under `Research Beta 1.0`.
-
-The focused paper lane then produced:
-
-- `3579` rows in the long run after the short validation sample
-- `1790` rows of `paper/scissors`
-- `1789` rows of `rock/paper`
-- the newest readback on that lane remained all-pass under `Research Beta 1.0`
-
-The focused scissors lane then produced:
-
-- `3579` rows in the long run after the short validation sample
-- `1790` rows of `scissors/rock`
-- `1789` rows of `paper/scissors`
-- the newest readback on that lane remained all-pass under `Research Beta 1.0`
-
-The local deterministic queue is now fully judged:
-
-- `17,922` pass
-- `0` fail
-- `0` pending
-- the reviewed local notes now cover:
-  - `local-fixture-batch`
-  - `local-research-beta-1-coverage-batch`
-  - `local-explicit-pair-cycle-batch`
-
-So the important result here is not just balance. It is that the repo now has a clean way to isolate one object lane without inventing a new named sampler every time.
+- focused rock lane:
+  - `1790` rows of `rock/paper`
+  - `1790` rows of `scissors/rock`
+- focused paper lane:
+  - `1790` rows of `paper/scissors`
+  - `1789` rows of `rock/paper`
+- focused scissors lane:
+  - `1790` rows of `scissors/rock`
+  - `1789` rows of `paper/scissors`
+- the local deterministic queue is fully judged:
+  - `17,922 pass / 0 fail / 0 pending`
+- the route-valid live read that followed stayed clean:
+  - `395 pass / 0 fail / 0 pending`
 
 ## Why It Matters
 
-This beta separates two different questions:
+This beta separated two different questions:
 
 - can Scorey choose a valid rigged route at all
 - can one object stay stable when it appears on both sides of that rigged logic
 
-That makes the next move cleaner. Local deterministic balance is no longer the open question.
-
-## What It Could Not Show
-
-- broader prose quality
-- tone stability
-- scoreboard judgment
-- whether the live path stays stable beyond the current narrow judged live queue
+It also proved that the repo could isolate one object lane without inventing a
+new named sampler every time.
 
 ## What Changed Next
 
-All three object lanes are now complete on the local path.
-
-The widened live queue has now been recorded and fully judged through the real API path:
-
-- `395` live rows
-- `395` beab pass
-- `0` beab fail
-- `0` beab pending
-- pair balance stayed entirely inside the valid `Research Beta 1.0` route set:
-  - `56` rows of `paper/paper`
-  - `53` rows of `paper/scissors`
-  - `75` rows of `rock/paper`
-  - `74` rows of `rock/rock`
-  - `59` rows of `scissors/rock`
-  - `78` rows of `scissors/scissors`
-
-So the next useful move is no longer more local repetition or more narrow live route review. It is `Research Beta 3.0`: a tone-first pass on judged live rows using a positive-only bar of `pick-aware`, `playful`, `confident`, `coherent`, and `imaginative`.
+Once local lane balance and the first live route-valid surface both held, the
+next useful widening step was no longer more route pressure. It was a tone
+question on judged live rows.
