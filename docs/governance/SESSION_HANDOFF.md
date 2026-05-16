@@ -101,8 +101,8 @@ Current `Research Beta 4.0` tranche after output `19998`:
 
 Reusable worktrees currently kept warm:
 
-- `/Users/tryskian/.codex/worktrees/scorey-canonical-env`
-- `/Users/tryskian/.codex/worktrees/scorey-fresh-mixed-run`
+- `scorey-canonical-env`
+- `scorey-fresh-mixed-run`
 
 Both are normalized to:
 
