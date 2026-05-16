@@ -207,3 +207,48 @@ handoff or branch history instead.
   - tracked `CHARTER.md`: `85 insertions`, `134 deletions`
   - tracked `START_END_REFERENCE.md`: `40 insertions`, `64 deletions`
   - tracked `DECISIONS.md`: `147 insertions`, `912 deletions`
+
+## D-016: Live prompt surfaces stay abstract and de-anchored
+
+- Date: `2026-05-16`
+- Category: `eval_quality`
+- Tags: `prompt_contract`, `deanchoring`, `measurement_integrity`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: Live generator instructions and per-round prompts must stay on
+  abstract constraints rather than hard-coded phrase blacklists, canned good
+  fragments, or canned bad fragments.
+- Why: Phrase-specific anchoring contaminates the measurement surface. It can
+  manufacture the very fallback seams the eval lane is supposed to observe,
+  especially in same-pick rounds. That breaks the intended family method by
+  turning discovered failure language into part of the generator itself.
+  Findings belong in tracked research docs, not in the live generator
+  contract.
+
+## D-017: Pin Beta 4.0 as the abstract measurement boundary
+
+- Date: `2026-05-16`
+- Category: `eval_quality`
+- Tags: `beta_boundary`, `abstract_measurement`, `comparison_surface`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: The shift from phrase-anchored tone-first measurement to abstract
+  tone measurement is tracked as `Research Beta 4.0`, not as a minor update
+  inside `Research Beta 3.0`.
+- Why: This changes what the evidence means. `Research Beta 3.0` remains the
+  historical anchored comparison surface, while `Research Beta 4.0` becomes
+  the clean Polinko-aligned comparison surface. Splitting them keeps the
+  method boundary explicit and makes anchored versus abstract results
+  directly comparable.
+
+## D-018: Active fail families get isolated short measurement runs
+
+- Date: `2026-05-16`
+- Category: `eval_quality`
+- Tags: `fail_families`, `isolated_runs`, `measurement_shape`
+- Provenance: `human-led method decision`
+- Decision: Once a mixed run identifies the active fail families, the next
+  eval pass should split them into individual short runs, one fail family at a
+  time, instead of immediately widening back to another broad mixed run.
+- Why: This keeps the evidence surface narrow enough to read clearly. It makes
+  retained failures easier to compare across runs, reduces queue bloat, and
+  shows whether a weak seam is still coherent under isolation or only looked
+  strong inside the mixed batch.

@@ -12,6 +12,9 @@ The tone lane now has real separation, and the widened live tone surface is
 fully dispositioned. The stale queue is closed, and the first fresh mixed
 post-correction run has now reopened a narrow active review slice.
 
+This beta now serves as the anchored historical comparison surface. The active
+successor is [`Research Beta 4.0`](./BETA_4_ABSTRACT_TONE_MEASUREMENT.md).
+
 ## Eval Shape
 
 `Research Beta 3.0` keeps the live route-valid floor from the earlier betas, but changes the verdict question.

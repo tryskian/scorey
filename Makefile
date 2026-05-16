@@ -173,7 +173,7 @@ eval-sample-local:
 	PYTHONPATH=src $(PY) -m scorey eval-sample-local $(if $(EVAL_DURATION_SECONDS),--duration-seconds $(EVAL_DURATION_SECONDS),--count $(EVAL_COUNT)) --interval-seconds $(EVAL_INTERVAL_SECONDS) $(if $(strip $(EVAL_PAIRS)),$(foreach pair,$(EVAL_PAIRS),--pair $(pair)),--pattern $(EVAL_PATTERN))
 
 eval-sample-live:
-	PYTHONPATH=src $(PY) -m scorey eval-sample-live $(if $(EVAL_DURATION_SECONDS),--duration-seconds $(EVAL_DURATION_SECONDS),--count $(EVAL_COUNT)) --interval-seconds $(EVAL_INTERVAL_SECONDS) $(foreach pick,$(EVAL_USER_PICKS),--pick $(pick))
+	PYTHONPATH=src $(PY) -m scorey eval-sample-live $(if $(EVAL_DURATION_SECONDS),--duration-seconds $(EVAL_DURATION_SECONDS),--count $(EVAL_COUNT)) --interval-seconds $(EVAL_INTERVAL_SECONDS) $(if $(strip $(EVAL_PAIRS)),$(foreach pair,$(EVAL_PAIRS),--pair $(pair)),$(foreach pick,$(EVAL_USER_PICKS),--pick $(pick)))
 
 open-limits:
 	@set -eu; \

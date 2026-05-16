@@ -1,6 +1,6 @@
 # Scorey
 
-[![Research Beta](https://img.shields.io/badge/research_beta-3.0%20tone%20first-E15759)](./docs/research/README.md)
+[![Research Beta](https://img.shields.io/badge/research_beta-4.0%20abstract%20tone%20measurement-E15759)](./docs/research/README.md)
 [![Polinko toy factory](https://img.shields.io/badge/polinko_toy_factory-active-4C956C)](https://github.com/tryskian/polinko)
 
 ## rock, paper, scissors, scorey
@@ -20,12 +20,13 @@ It only accepts three picks:
 
 Current tracked research beta:
 
-- `Research Beta 3.0`
-- `tone first`
+- `Research Beta 4.0`
+- `abstract tone measurement`
 
 That narrow surface is the point. Scorey is not trying to be a general chat tool or a generic joke machine. It is a small instrument for studying whether a model can preserve a rigged round, stay pick-specific, and keep unfair logic legible inside tight interaction guardrails.
 
-In this repo, major betas are research architectures, and minor versions tighten the active method without changing the whole eval shape.
+In this repo, a new beta gets pinned when the method change alters what the
+evidence means, not just when wording or procedure gets tidier.
 
 ## What This Repo Demonstrates
 

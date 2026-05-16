@@ -804,3 +804,42 @@ class MainCommandTests(TestCase):
             output,
         )
         self.assertIn(f"db={db_path}", output)
+
+    def test_eval_sample_live_reports_explicit_pairs(self) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with patch(
+                    "scorey.main.sample_live_eval_outputs",
+                    return_value=EvalSampleSummary(
+                        recorded=2,
+                        first_output_id=201,
+                        last_output_id=202,
+                        research_beta_1_pass=2,
+                        research_beta_1_fail=0,
+                        elapsed_seconds=0.5,
+                    ),
+                ):
+                    with redirect_stdout(stdout):
+                        result = main(
+                            [
+                                "eval-sample-live",
+                                "--count",
+                                "2",
+                                "--pair",
+                                "rock,paper",
+                                "--pair",
+                                "paper,scissors",
+                            ]
+                        )
+
+        self.assertEqual(result, 0)
+        output = stdout.getvalue()
+        self.assertIn("live eval sample complete: count=2", output)
+        self.assertIn("pairs=rock/paper paper/scissors", output)
+        self.assertIn(
+            "recorded=2 research_beta_1_pass=2 research_beta_1_fail=0",
+            output,
+        )
+        self.assertIn(f"db={db_path}", output)
