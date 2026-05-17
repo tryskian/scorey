@@ -23,6 +23,10 @@ Current staging question:
 Should Scorey move bounded non-OCR judgment from the row to the pulse, so
 run-level seam density matters more than single-row replay?
 
+Current staged pulse target:
+
+- `cross-object coherence drift`
+
 Current finding:
 
 - `Research Beta 1.0` proved the narrow routing contract
@@ -194,6 +198,7 @@ Current clean lane:
   phrase anchors
 - the next method question is whether bounded non-OCR runs should move from
   row verdicts to pulse verdicts
+- the first staged pulse target is `cross-object coherence drift`
 - keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active
   growth surface

@@ -267,3 +267,16 @@ handoff or branch history instead.
   `Beta 4.0` remains the finished row-level baseline, while `Beta 5.0` begins
   only when pulse evidence exists on the live surface instead of only in the
   hypothesis note.
+
+## D-020: Pre-Beta 5.0 pulse counting stays anchor-versus-seam
+
+- Date: `2026-05-17`
+- Category: `eval_quality`
+- Tags: `pulse_counting`, `evidence_taxonomy`, `exclusions`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: Pre-`Beta 5.0` pulse review counts only `anchor` and
+  `counted seam` rows toward the pulse verdict. `excluded noise` stays
+  auditable, reported by reason, and outside the counted total.
+- Why: This keeps bounded run judgment strict without hiding row evidence.
+  The pulse stays binary at the run level, but the row surface remains visible
+  enough to audit how a pass or fail was produced.
