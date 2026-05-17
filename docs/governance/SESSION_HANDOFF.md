@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-16
+Last updated: 2026-05-17
 
 ## Start Here
 
@@ -105,6 +105,10 @@ Current staged next lane:
 - `fail-pressure pulse`
 - status:
   - hypothesis translated into Scorey terms
+  - pulse evidence taxonomy now defined
+  - exclusion reasons now defined
+  - first staged target family pinned:
+    - `cross-object coherence drift`
   - not promoted to `Beta 5.0`
   - no pulse run started yet
 
@@ -124,7 +128,7 @@ Both are normalized to:
 ## Active Kernel
 
 - keep `Beta 4.0` frozen as closed evidence
-- stage the pulse method cleanly without promoting `Beta 5.0` yet
+- finish locking the staged pulse contract before any live `5.0` run
 - preserve the explicit comparison boundary:
   - anchored `3.0`
   - abstract row-level `4.0`
@@ -132,9 +136,12 @@ Both are normalized to:
 
 ## Next Slice
 
-1. Finish the pre-`Beta 5.0` docs transition.
-2. Decide whether pulse staging needs a durable decision entry before any run.
-3. Promote to `Beta 5.0` only when the first real pulse run starts.
+1. Package the `pre-Beta 5.0` contract checkpoint.
+2. Decide whether pulse review needs a dedicated operator surface or can ride
+   the current isolated pair-cycle lane cleanly.
+3. Launch the first real pulse run on:
+   - `cross-object coherence drift`
+4. Promote to `Beta 5.0` only when that first pulse run starts.
 
 ## Guardrails
 
