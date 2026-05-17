@@ -31,9 +31,9 @@ Last updated: 2026-05-16
 
 Scorey is a small, local, agent-backed rock, paper, scissors mini chatbot with
 a real runtime, a settled route-valid floor, and a tracked tone lane on top of
-the route pass surface. The current feature branch is carrying the `Research
-Beta 4.0` abstract tone measurement boundary, the first fully closed `4.0`
-slice, and the first isolated fail-family run.
+the route pass surface. `Research Beta 4.0` is now closed as the row-level
+abstract measurement surface. The next staged lane is `pre-Beta 5.0`
+fail-pressure pulse.
 
 The core tracked shape is:
 
@@ -99,6 +99,15 @@ Current `Research Beta 4.0` tranche after output `19998`:
     - `26` `cross-object coherence drift`
     - `1` `anchor relapse`
 
+Current staged next lane:
+
+- `pre-Beta 5.0`
+- `fail-pressure pulse`
+- status:
+  - hypothesis translated into Scorey terms
+  - not promoted to `Beta 5.0`
+  - no pulse run started yet
+
 Reusable worktrees currently kept warm:
 
 - `scorey-canonical-env`
@@ -114,19 +123,18 @@ Both are normalized to:
 
 ## Active Kernel
 
-- keep the handoff and research notes truthful to the first isolated
-  fail-family result
-- preserve the explicit comparison boundary between anchored `3.0` and
-  abstract `4.0`
-- keep the live pair-cycle surface available for isolated short runs:
-  - `make eval-sample-live EVAL_PAIRS='...'`
+- keep `Beta 4.0` frozen as closed evidence
+- stage the pulse method cleanly without promoting `Beta 5.0` yet
+- preserve the explicit comparison boundary:
+  - anchored `3.0`
+  - abstract row-level `4.0`
+  - staged pulse-level pre-`5.0`
 
 ## Next Slice
 
-1. Package the `Beta 4.0` boundary, live pair-cycle support, and first
-   isolated cross-object run.
-2. Merge to clean synced `main`.
-3. Open the next isolated short run for the remaining same-pick fail family.
+1. Finish the pre-`Beta 5.0` docs transition.
+2. Decide whether pulse staging needs a durable decision entry before any run.
+3. Promote to `Beta 5.0` only when the first real pulse run starts.
 
 ## Guardrails
 
