@@ -96,21 +96,46 @@ Reporting shape:
 ## Diagram
 
 ```mermaid
-flowchart LR
-  P["bounded pulse"]
-  R["rows inside pulse"]
-  A["anchor"]
-  C["counted seam"]
-  E["excluded noise"]
-  V["pulse verdict<br/>PASS or FAIL"]
+flowchart TD
+  A["Isolated pair-cycle run<br/>paper/scissors<br/>rock/paper<br/>scissors/rock"]
+  B["Bounded pulse<br/>about 15 rows"]
+  C{"Review each row"}
+  D["Anchor"]
+  E["Counted seam"]
+  F["Excluded noise"]
+  G["Exclusion reason<br/>route_floor_failure<br/>operator_artifact<br/>off_target_failure"]
+  H["Anchor tally"]
+  I["Counted seam tally"]
+  J["Excluded tally by reason"]
+  K["Counted total<br/>anchors + counted seams"]
+  L{"Pulse verdict"}
+  M["PASS<br/>anchors > seams"]
+  N["FAIL<br/>seams >= anchors"]
+  O["Research report<br/>raw rows<br/>counted total<br/>excluded by reason<br/>pulse verdict"]
 
-  P --> R
-  R --> A
-  R --> C
-  R --> E
-  A --> V
-  C --> V
+  A --> B --> C
+  C --> D --> H
+  C --> E --> I
+  C --> F --> G --> J
+  H --> K
+  I --> K
+  H --> L
+  I --> L
+  L --> M
+  L --> N
+  J --> O
+  K --> O
+  M --> O
+  N --> O
 ```
+
+Reading note:
+
+- the pair cycle defines the family under pressure
+- raw rows are everything inside the bounded pulse
+- only `anchor` and `counted seam` rows enter the verdict math
+- excluded rows stay visible by reason, but do not alter the counted total
+- the report has to show both the pulse verdict and how that verdict was made
 
 ## What This Would Change
 
