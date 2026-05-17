@@ -6,18 +6,22 @@ Each beta is a distinct eval approach. This folder preserves the method shifts t
 
 Raw run notes and scratch material stay out of the tracked research surface until they become evidence.
 
-## Current Beta
+## Current Stage
 
-Current tracked research beta:
+Current staged research lane:
+
+- `pre-Beta 5.0`
+- `fail-pressure pulse`
+
+Most recently closed beta:
 
 - `Research Beta 4.0`
 - `abstract tone measurement`
 
-Current question:
+Current staging question:
 
-Can Scorey hold its voice once route validity and pick legibility are no
-longer the open question, without live prompt anchors contaminating the
-measurement surface?
+Should Scorey move bounded non-OCR judgment from the row to the pulse, so
+run-level seam density matters more than single-row replay?
 
 Current finding:
 
@@ -183,24 +187,19 @@ Current finding:
 
 Current clean lane:
 
-- the route floor was fully caught up through output `19843` before the newest run started
-- the isolated paper-only run remains the clean seam-finding lane for the
-  current `real one` / `napkin` pattern
-- the latest corrected live run is wind-down-closed even though only the first
-  judged tranche was tone-reviewed
-- the next mixed live run after output `19843` is now fully closed
-- the first `3` route-pass rows were judged directly for tone
-- the remaining `152` route-valid stale rows were audit-closed and tone-archived instead of being treated as fake fresh review work
-- treat tone failures through explicit disposition:
-  - `retain` when the seam still belongs in the active lane
-  - `evict` when the seam proves the lane definition itself is wrong
-- stale historical failed rows can be archived out of the active disposition queue
+- `Research Beta 4.0` is closed as the row-level abstract measurement
+  baseline
+- `pre-Beta 5.0` is the active staged lane
+- the next method question is no longer whether tone can be measured without
+  phrase anchors
+- the next method question is whether bounded non-OCR runs should move from
+  row verdicts to pulse verdicts
 - keep route and legibility as the floor even if the next lens widens
-- keep the local deterministic queue as baseline evidence, not as the active growth surface
-- widen into scoreboard or prose judgement only after the tone lane earns it
-- `Research Beta 4.0` is now the active comparison surface against the
-  anchored `3.0` lane
-- the next isolated short run should target the remaining same-pick drift lane
+- keep the local deterministic queue as baseline evidence, not as the active
+  growth surface
+- keep row-level `PASS / FAIL` plus `RETAIN / EVICT` as the closed `4.0`
+  comparison surface
+- promote to `Beta 5.0` only when the first real pulse run starts
 
 ## Beta Map
 
@@ -211,16 +210,24 @@ Current clean lane:
 | `Research Beta 3.0` | Can Scorey keep its own voice once routing is settled? | The live judged lane keeps the route floor but switches the verdict lens to tone first. |
 | `Research Beta 4.0` | What changes when tone-first measurement drops phrase anchors? | The live judged lane keeps the same route floor and tone lens, but the generator contract shifts to abstract constraints aligned to the Polinko method. |
 
+Staged next lane:
+
+- `pre-Beta 5.0`
+- [Fail-Pressure Pulse](./PRE_BETA_5_FAIL_PRESSURE_PULSE.md)
+- bounded non-OCR runs stay in staging until the first real pulse run starts
+
 Read in order:
 
 1. [Research Beta 1.0: Pick Routing First](./BETA_1_PICK_ROUTING.md)
 2. [Research Beta 2.0: Focused Object Lanes](./BETA_2_OBJECT_LANES.md)
 3. [Research Beta 3.0: Tone First](./BETA_3_TONE_FIRST.md)
 4. [Research Beta 4.0: Abstract Tone Measurement](./BETA_4_ABSTRACT_TONE_MEASUREMENT.md)
+5. [Pre-Beta 5.0: Fail-Pressure Pulse](./PRE_BETA_5_FAIL_PRESSURE_PULSE.md)
 
-## How To Read The Betas
+## How To Read The Betas And Stages
 
-These betas are research architectures. They are not app release versions, package versions, branch names, or one more sweep.
+These betas and staged notes are research architectures. They are not app
+release versions, package versions, branch names, or one more sweep.
 
 Each beta marks a real change in what the evaluation is asking:
 
@@ -230,6 +237,8 @@ Each beta marks a real change in what the evaluation is asking:
 - `Research Beta 4.0` keeps the tone-first question but changes the live generator contract from phrase-anchored to de-anchored measurement
 - failed rows now stay binary first and then move through `RETAIN / EVICT` as
   the disposition layer
+- `pre-Beta 5.0` is a staging surface, not an active beta; it defines the
+  pulse hypothesis without claiming pulse evidence yet
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 

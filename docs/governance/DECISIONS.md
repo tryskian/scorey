@@ -252,3 +252,18 @@ handoff or branch history instead.
   retained failures easier to compare across runs, reduces queue bloat, and
   shows whether a weak seam is still coherent under isolation or only looked
   strong inside the mixed batch.
+
+## D-019: Stage fail-pressure pulse as pre-Beta 5.0
+
+- Date: `2026-05-16`
+- Category: `eval_quality`
+- Tags: `pre_beta`, `pulse_measurement`, `staging_boundary`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: Treat fail-pressure pulse as a staged pre-`Beta 5.0` method lane
+  until the first real pulse run starts. `Research Beta 4.0` stays closed as
+  the row-level abstract measurement baseline.
+- Why: This is a real method transition, but it is not active evidence yet.
+  Keeping pulse judgment in pre-beta form preserves the comparison boundary:
+  `Beta 4.0` remains the finished row-level baseline, while `Beta 5.0` begins
+  only when pulse evidence exists on the live surface instead of only in the
+  hypothesis note.
