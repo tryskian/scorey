@@ -16,4 +16,8 @@ updates:
       day: "monday"
       time: "09:00"
       timezone: "America/Toronto"
+    groups:
+      python-dependencies:
+        patterns:
+          - "*"
     open-pull-requests-limit: 5
