@@ -280,3 +280,30 @@ handoff or branch history instead.
 - Why: This keeps bounded run judgment strict without hiding row evidence.
   The pulse stays binary at the run level, but the row surface remains visible
   enough to audit how a pass or fail was produced.
+
+## D-021: Local tooling targets mirror closeout and CI gates
+
+- Date: `2026-05-21`
+- Category: `workflow_environment`
+- Tags: `tooling_baseline`, `closeout`, `security_gates`, `operator_surface`
+- Provenance: `human-led tooling hygiene decision with implementation decision`
+- Decision: Keep `Makefile` as the explicit operator surface for local
+  validation by adding first-class targets for:
+  - `make lint-docs`
+  - `make package-install-check`
+  - `make security-checks`
+  The end routine must call Make targets for docs linting, package build,
+  editable package import, runtime closeout, and dependency security checks.
+  `pip-audit` belongs in the dev dependency surface so local security checks
+  do not depend on ad hoc global tooling.
+- Validation:
+  - `make check`
+  - `make lint-docs`
+  - `make package-check`
+  - `make package-install-check`
+  - `make security-checks`
+  - `make end-preflight`
+- Why: Scorey already had real runtime closeout gates, but its local tooling
+  surface still left docs linting, package import smoke, and security audit
+  outside the canonical Make workflow. The toy repos need a small shared
+  baseline that is easy to repeat without changing runtime or eval behavior.

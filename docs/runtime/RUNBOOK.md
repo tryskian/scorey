@@ -129,8 +129,12 @@ Use this doc for operator procedure.
    - `make doctor-env`
    - `make path-leak-check`
    - `make path-leak-audit-local`
+   - `make lint-docs`
    - `make check`
+   - `make package-check`
+   - `make package-install-check`
    - `make end-runtime-check`
+   - `make security-checks`
 2. Package the branch when the kernel is ready.
 3. Merge through the protected-main flow.
 4. After merge, switch back to `main` and pull fast-forward only.
@@ -187,7 +191,15 @@ Use this doc for operator procedure.
   - current-truth docs freshness gate
 - `make end-runtime-check`
   - closeout runtime gate
+- `make lint-docs`
+  - tracked docs lint gate
 - `make check`
   - repo validation suite
+- `make package-check`
+  - distribution build check
+- `make package-install-check`
+  - editable package import smoke
+- `make security-checks`
+  - local dependency security check
 - `make end-git-check`
   - clean-main closeout check

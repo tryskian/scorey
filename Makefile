@@ -23,9 +23,11 @@ OPENAI_BILLING_URL ?= https://platform.openai.com/settings/organization/billing/
 CAFFEINATE_PID_FILE ?= /tmp/scorey-caffeinate.pid
 CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
 CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
+PIP_AUDIT_ARGS ?=
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
 .PHONY: install env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status decaffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
+.PHONY: lint-docs package-install-check python-security-check security-checks
 .PHONY: eval-review-sample
 
 install:
@@ -64,6 +66,9 @@ format:
 
 typecheck:
 	PYTHONPATH=src $(PY) -m mypy scripts src tests
+
+lint-docs:
+	npx --yes markdownlint-cli2 README.md docs/**/*.md
 
 precommit-install:
 	$(PY) -m pre_commit install --install-hooks --hook-type pre-commit --hook-type pre-push
@@ -117,6 +122,15 @@ check:
 
 package-check:
 	PYTHONPATH=src $(PY) -m build
+
+package-install-check:
+	$(PY) -m pip install --no-deps -e .
+	$(PY) -c "import importlib; importlib.import_module('scorey'); importlib.import_module('scorey.main')"
+
+python-security-check:
+	$(PY) -m pip_audit $(PIP_AUDIT_ARGS)
+
+security-checks: python-security-check
 
 app:
 	PYTHONPATH=src $(PY) -m scorey $(RUNTIME_ARGS)
