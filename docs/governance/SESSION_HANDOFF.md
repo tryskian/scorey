@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-18
+Last updated: 2026-05-21
 
 ## Start Here
 
@@ -161,8 +161,12 @@ Both are normalized to:
    - `make doctor-env`
    - `make path-leak-check`
    - `make path-leak-audit-local`
+   - `make lint-docs`
    - `make check`
+   - `make package-check`
+   - `make package-install-check`
    - `make end-runtime-check`
+   - `make security-checks`
 2. Stop the repo-managed wake lock:
    - `make decaffeinate`
    - `make decaffeinate-status`

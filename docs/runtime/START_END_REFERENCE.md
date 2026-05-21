@@ -32,8 +32,12 @@ This is the compact command card for opening and closing a working session.
    - `make doctor-env`
    - `make path-leak-check`
    - `make path-leak-audit-local`
+   - `make lint-docs`
    - `make check`
+   - `make package-check`
+   - `make package-install-check`
    - `make end-runtime-check`
+   - `make security-checks`
 2. Stop the repo-managed wake lock:
    - `make decaffeinate`
    - `make decaffeinate-status`

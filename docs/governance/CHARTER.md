@@ -94,3 +94,5 @@ evaluation.
 - Local terminal execution is the trusted development boundary.
 - `.local/evals.sqlite` is the live eval evidence store.
 - `make doctor-env` is the environment confirmation entrypoint.
+- Local validation exposes Make targets for docs linting, package checks, and
+  dependency security checks.
