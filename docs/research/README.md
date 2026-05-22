@@ -99,7 +99,7 @@ Current finding:
     - `1081` rows judged
     - `454` pass
     - `627` fail
-    - `1228` archived out of the active tone queue
+    - `1288` archived out of the active tone queue
     - `0` route-passed live rows still pending tone review
     - the first fresh post-surface run is fully closed:
       - `170` route pass
@@ -203,6 +203,39 @@ Current finding:
         - `off_target_failure=0`
         - counted total: `15`
         - verdict: `pass`
+      - the third real pulse run is now closed:
+        - family: `cross-object coherence drift`
+        - range: `20247-20261`
+        - raw: `15`
+        - anchors: `9`
+        - `counted_seams`: `6`
+        - `excluded_noise`: `0`
+        - `operator_artifact=0`
+        - `off_target_failure=0`
+        - counted total: `15`
+        - verdict: `pass`
+      - the fourth real pulse run is now closed:
+        - family: `cross-object coherence drift`
+        - range: `20262-20276`
+        - raw: `15`
+        - anchors: `9`
+        - `counted_seams`: `6`
+        - `excluded_noise`: `0`
+        - `operator_artifact=0`
+        - `off_target_failure=0`
+        - counted total: `15`
+        - verdict: `pass`
+      - the fifth real pulse run is now closed:
+        - family: `same-pick object-shape drift`
+        - range: `20277-20291`
+        - raw: `15`
+        - anchors: `15`
+        - `counted_seams`: `0`
+        - `excluded_noise`: `0`
+        - `operator_artifact=0`
+        - `off_target_failure=0`
+        - counted total: `15`
+        - verdict: `pass`
   - inside the isolated paper-only tone lane:
     - `722` route-passed paper rows total
     - `566` judged
@@ -230,9 +263,32 @@ Current clean lane:
   - `0` `excluded_noise`
   - counted total `15`
   - verdict `pass`
+- pulse `3` passed on repeated `cross-object coherence drift`:
+  - raw `15`
+  - `9` anchors
+  - `6` `counted_seams`
+  - `0` `excluded_noise`
+  - counted total `15`
+  - verdict `pass`
+- pulse `4` passed on repeated `cross-object coherence drift` again:
+  - raw `15`
+  - `9` anchors
+  - `6` `counted_seams`
+  - `0` `excluded_noise`
+  - counted total `15`
+  - verdict `pass`
+- pulse `5` passed on repeated `same-pick object-shape drift` again:
+  - raw `15`
+  - `15` anchors
+  - `0` `counted_seams`
+  - `0` `excluded_noise`
+  - counted total `15`
+  - verdict `pass`
 - the active contrast is now clear:
-  - cross-object remains the weaker family under pressure
-  - same-pick collapsed completely under pulse pressure
+  - cross-object remains the weaker family under pressure, now twice at the
+    same `9 / 6 / 0` pulse shape
+  - same-pick collapsed completely under pulse pressure, now twice at the
+    same `15 / 0 / 0` pulse shape
 - pulse closeout now also settles the legacy tone lane, so bounded pulse rows do
   not linger as tone-pending after review
 - keep route and legibility as the floor even if the next lens widens
@@ -259,6 +315,17 @@ Current active beta note:
 
 - `Research Beta 5.0`
 - [Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
+
+Current staged next lane:
+
+- `pre-Beta 6.0`
+- [Scoreboard Judgment](./PRE_BETA_6_SCOREBOARD_JUDGMENT.md)
+- first staged pass stays row-level on `scoreboard_claim`
+- bounded scoreboard runs close with `eval-scoreboard-close`
+- first bounded source pass already exists as operator proof:
+  - `20292-20306`
+  - `15` scoreboard pass
+  - `0` scoreboard fail
 
 Read in order:
 
@@ -322,6 +389,7 @@ Parked lanes:
   - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
   - only widen into scoreboard or prose judgement after the tone lane stabilises
+  - scoreboard judgment is now the staged next widening step
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them

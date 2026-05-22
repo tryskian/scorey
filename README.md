@@ -27,6 +27,12 @@ Current research lane:
 - `Research Beta 5.0`
 - `fail-pressure pulse`
 
+Current staged next lane:
+
+- `pre-Beta 6.0`
+- `scoreboard judgment`
+- bounded source runs close with `eval-scoreboard-close`
+
 Most recently closed beta:
 
 - `Research Beta 4.0`

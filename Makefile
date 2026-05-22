@@ -32,7 +32,7 @@ CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 PIP_AUDIT_ARGS ?=
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose eval-pulse-open eval-pulse-sample eval-pulse-judge eval-pulse-summary eval-pulse-close research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status decaffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
+.PHONY: install env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-scoreboard-sample eval-scoreboard-judge eval-scoreboard-archive eval-scoreboard-close eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose eval-pulse-open eval-pulse-sample eval-pulse-judge eval-pulse-summary eval-pulse-close research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status decaffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
 .PHONY: lint-docs package-install-check python-security-check security-checks
 .PHONY: eval-review-sample
 
@@ -173,6 +173,18 @@ eval-tone-judge:
 
 eval-tone-archive:
 	PYTHONPATH=src $(PY) -m scorey eval-tone-archive $(OUTPUT_ID) --note "$(NOTE)"
+
+eval-scoreboard-sample:
+	PYTHONPATH=src $(PY) -m scorey eval-scoreboard-sample --limit $(EVAL_LIMIT) $(foreach pick,$(EVAL_USER_PICKS),--pick $(pick))
+
+eval-scoreboard-judge:
+	PYTHONPATH=src $(PY) -m scorey eval-scoreboard-judge $(OUTPUT_ID) $(VERDICT) --note "$(NOTE)"
+
+eval-scoreboard-archive:
+	PYTHONPATH=src $(PY) -m scorey eval-scoreboard-archive $(OUTPUT_ID) --note "$(NOTE)"
+
+eval-scoreboard-close:
+	PYTHONPATH=src $(PY) -m scorey eval-scoreboard-close --first-output-id $(SCOREBOARD_FIRST_OUTPUT_ID) --last-output-id $(SCOREBOARD_LAST_OUTPUT_ID) $(if $(NOTE),--note "$(NOTE)",)
 
 eval-tone-disposition-sample:
 	PYTHONPATH=src $(PY) -m scorey eval-tone-disposition-sample --limit $(EVAL_LIMIT) $(foreach pick,$(EVAL_USER_PICKS),--pick $(pick))

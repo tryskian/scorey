@@ -8,6 +8,7 @@ from scorey.eval_db import (
     archive_failure_disposition_for_lens,
     archive_output_for_lens,
     close_pulse,
+    close_scoreboard_range,
     counts,
     create_pulse,
     init_db,
@@ -483,6 +484,138 @@ class EvalDbTests(TestCase):
             self.assertEqual(summary["evict"], 0)
             self.assertEqual(summary["pending"], 1)
             self.assertEqual(summary["archived"], 1)
+
+    def test_scoreboard_review_sample_and_counts_use_same_generic_lens_surface(
+        self,
+    ) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            judged_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="paper",
+                route_family="same-pick",
+                round_text="judged scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            archived_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="archived scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            active_id = record_output(
+                db_path,
+                user_pick="scissors",
+                scorey_pick="scissors",
+                route_family="same-pick",
+                round_text="active scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+
+            judge_output(db_path, judged_id, "pass", "route pass")
+            judge_output(db_path, archived_id, "pass", "route pass")
+            judge_output(db_path, active_id, "pass", "route pass")
+            judge_output_for_lens(
+                db_path,
+                judged_id,
+                lens="scoreboard",
+                verdict="pass",
+                note="compact unfair losing-side claim",
+            )
+            archive_output_for_lens(
+                db_path,
+                archived_id,
+                lens="scoreboard",
+                note="staged out of the first scoreboard lane",
+            )
+
+            rows = list_lens_review_sample(
+                db_path,
+                lens="scoreboard",
+                source_mode="live",
+                limit=5,
+            )
+            self.assertEqual(len(rows), 1)
+            self.assertEqual(int(rows[0]["id"]), active_id)
+
+            summary = lens_counts(
+                db_path,
+                lens="scoreboard",
+                source_mode="live",
+            )
+            self.assertEqual(summary["total"], 3)
+            self.assertEqual(summary["pass"], 1)
+            self.assertEqual(summary["fail"], 0)
+            self.assertEqual(summary["pending"], 1)
+            self.assertEqual(summary["archived"], 1)
+
+    def test_close_scoreboard_range_settles_tone_lane_after_row_level_review(
+        self,
+    ) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            first_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="first scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="second scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "pass", "route pass")
+            judge_output_for_lens(
+                db_path,
+                first_id,
+                lens="scoreboard",
+                verdict="pass",
+                note="compact unfair losing-side claim",
+            )
+            judge_output_for_lens(
+                db_path,
+                second_id,
+                lens="scoreboard",
+                verdict="pass",
+                note="compact unfair losing-side claim",
+            )
+
+            summary = close_scoreboard_range(
+                db_path,
+                first_output_id=first_id,
+                last_output_id=second_id,
+                note="settled by first bounded scoreboard run",
+            )
+
+            self.assertEqual(summary["total"], 2)
+            self.assertEqual(summary["pass"], 2)
+            self.assertEqual(summary["fail"], 0)
+            self.assertEqual(summary["pending"], 0)
+            self.assertEqual(summary["archived"], 0)
+            self.assertEqual(summary["settled_tone"], 2)
+
+            tone_summary = lens_counts(db_path, lens="tone", source_mode="live")
+            self.assertEqual(tone_summary["pending"], 0)
+            self.assertEqual(tone_summary["archived"], 2)
 
     def test_pulse_review_tracks_labels_exclusions_and_closeout(self) -> None:
         with TemporaryDirectory() as tmpdir:

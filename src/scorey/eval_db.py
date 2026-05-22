@@ -12,7 +12,7 @@ VERDICTS: tuple[str, ...] = ("pass", "fail")
 LIST_VERDICTS: tuple[str, ...] = VERDICTS + ("pending",)
 SOURCE_MODES: tuple[str, ...] = ("local", "live")
 ROUTE_FAMILIES: tuple[str, ...] = ("cross-object", "same-pick")
-LENSES: tuple[str, ...] = ("tone",)
+LENSES: tuple[str, ...] = ("tone", "scoreboard")
 DISPOSITIONS: tuple[str, ...] = ("retain", "evict")
 PULSE_LABELS: tuple[str, ...] = ("anchor", "counted_seam", "excluded_noise")
 COUNTED_PULSE_LABELS: tuple[str, ...] = ("anchor", "counted_seam")
@@ -21,8 +21,9 @@ PULSE_EXCLUSION_REASONS: tuple[str, ...] = (
     "off_target_failure",
 )
 PULSE_STATUSES: tuple[str, ...] = ("open", "closed")
+LENS_SQL_VALUES = ", ".join(f"'{lens}'" for lens in LENSES)
 
-SCHEMA = """
+SCHEMA = f"""
 CREATE TABLE IF NOT EXISTS eval_outputs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_pick TEXT NOT NULL
@@ -52,7 +53,7 @@ CREATE TABLE IF NOT EXISTS eval_judgments (
 CREATE TABLE IF NOT EXISTS eval_lens_judgments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
-    lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    lens TEXT NOT NULL CHECK (lens IN ({LENS_SQL_VALUES})),
     verdict TEXT NOT NULL CHECK (verdict IN ('pass', 'fail')),
     note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS eval_lens_judgments (
 CREATE TABLE IF NOT EXISTS eval_lens_archives (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
-    lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    lens TEXT NOT NULL CHECK (lens IN ({LENS_SQL_VALUES})),
     note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
     UNIQUE (output_id, lens)
@@ -71,7 +72,7 @@ CREATE TABLE IF NOT EXISTS eval_lens_archives (
 CREATE TABLE IF NOT EXISTS eval_lens_failure_dispositions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
-    lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    lens TEXT NOT NULL CHECK (lens IN ({LENS_SQL_VALUES})),
     disposition TEXT NOT NULL CHECK (disposition IN ('retain', 'evict')),
     note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
@@ -81,7 +82,7 @@ CREATE TABLE IF NOT EXISTS eval_lens_failure_dispositions (
 CREATE TABLE IF NOT EXISTS eval_lens_failure_disposition_archives (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
-    lens TEXT NOT NULL CHECK (lens IN ('tone')),
+    lens TEXT NOT NULL CHECK (lens IN ({LENS_SQL_VALUES})),
     note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
     UNIQUE (output_id, lens)
@@ -183,10 +184,34 @@ def _needs_pending_verdict_migration(conn: sqlite3.Connection) -> bool:
     return null_row is not None
 
 
+def _needs_lens_schema_migration(conn: sqlite3.Connection) -> bool:
+    for table_name in (
+        "eval_lens_judgments",
+        "eval_lens_archives",
+        "eval_lens_failure_dispositions",
+        "eval_lens_failure_disposition_archives",
+    ):
+        row = conn.execute(
+            """
+            SELECT sql
+            FROM sqlite_master
+            WHERE type = 'table' AND name = ?
+            """,
+            (table_name,),
+        ).fetchone()
+        if row is None:
+            continue
+        sql = str(row["sql"] or "").lower()
+        for lens in LENSES:
+            if f"'{lens}'" not in sql:
+                return True
+    return False
+
+
 def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
     conn.execute("PRAGMA foreign_keys = OFF")
     conn.executescript(
-        """
+        f"""
         CREATE TABLE eval_outputs_new (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_pick TEXT NOT NULL
@@ -218,7 +243,7 @@ def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             output_id INTEGER NOT NULL
                 REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
-            lens TEXT NOT NULL CHECK (lens IN ('tone')),
+            lens TEXT NOT NULL CHECK (lens IN ({LENS_SQL_VALUES})),
             verdict TEXT NOT NULL CHECK (verdict IN ('pass', 'fail')),
             note TEXT NOT NULL DEFAULT '',
             created_at TEXT NOT NULL,
@@ -229,7 +254,7 @@ def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             output_id INTEGER NOT NULL
                 REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
-            lens TEXT NOT NULL CHECK (lens IN ('tone')),
+            lens TEXT NOT NULL CHECK (lens IN ({LENS_SQL_VALUES})),
             note TEXT NOT NULL DEFAULT '',
             created_at TEXT NOT NULL,
             UNIQUE (output_id, lens)
@@ -239,7 +264,7 @@ def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             output_id INTEGER NOT NULL
                 REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
-            lens TEXT NOT NULL CHECK (lens IN ('tone')),
+            lens TEXT NOT NULL CHECK (lens IN ({LENS_SQL_VALUES})),
             disposition TEXT NOT NULL CHECK (disposition IN ('retain', 'evict')),
             note TEXT NOT NULL DEFAULT '',
             created_at TEXT NOT NULL,
@@ -250,7 +275,7 @@ def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             output_id INTEGER NOT NULL
                 REFERENCES eval_outputs_new(id) ON DELETE CASCADE,
-            lens TEXT NOT NULL CHECK (lens IN ('tone')),
+            lens TEXT NOT NULL CHECK (lens IN ({LENS_SQL_VALUES})),
             note TEXT NOT NULL DEFAULT '',
             created_at TEXT NOT NULL,
             UNIQUE (output_id, lens)
@@ -348,7 +373,7 @@ def _migrate_pending_verdict_schema(conn: sqlite3.Connection) -> None:
 
 def prepare_db(conn: sqlite3.Connection) -> None:
     conn.executescript(SCHEMA)
-    if _needs_pending_verdict_migration(conn):
+    if _needs_pending_verdict_migration(conn) or _needs_lens_schema_migration(conn):
         _migrate_pending_verdict_schema(conn)
 
 
@@ -832,6 +857,153 @@ def close_pulse(db_path: Path | None, pulse_id: int) -> dict[str, object]:
                 (utc_now(), pulse_id),
             )
     return pulse_summary(db_path, pulse_id)
+
+
+def close_scoreboard_range(
+    db_path: Path | None,
+    *,
+    first_output_id: int,
+    last_output_id: int,
+    note: str = "",
+) -> dict[str, int]:
+    if first_output_id > last_output_id:
+        raise ValueError(
+            "First output id must be less than or equal to last output id."
+        )
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+        range_counts = conn.execute(
+            """
+            SELECT
+                COUNT(*) AS total,
+                SUM(CASE WHEN current_verdict = 'pending' THEN 1 ELSE 0 END) AS pending,
+                SUM(CASE WHEN current_verdict = 'pass' THEN 1 ELSE 0 END) AS route_pass
+            FROM eval_outputs
+            WHERE id BETWEEN ? AND ?
+            """,
+            (first_output_id, last_output_id),
+        ).fetchone()
+        total = int(range_counts["total"] or 0) if range_counts is not None else 0
+        pending = int(range_counts["pending"] or 0) if range_counts is not None else 0
+        route_pass = (
+            int(range_counts["route_pass"] or 0) if range_counts is not None else 0
+        )
+        if total == 0:
+            raise ValueError("Scoreboard range does not contain any eval outputs.")
+        if pending:
+            raise ValueError(
+                "Scoreboard range still contains route-pending rows "
+                "and cannot close yet."
+            )
+        if route_pass != total:
+            raise ValueError(
+                "Scoreboard ranges must close over a fully route-pass range."
+            )
+
+        addressed_row = conn.execute(
+            """
+            SELECT COUNT(*) AS addressed
+            FROM eval_outputs output
+            LEFT JOIN eval_lens_judgments lens_judgments
+              ON lens_judgments.output_id = output.id
+             AND lens_judgments.lens = 'scoreboard'
+            LEFT JOIN eval_lens_archives lens_archives
+              ON lens_archives.output_id = output.id
+             AND lens_archives.lens = 'scoreboard'
+            WHERE output.id BETWEEN ? AND ?
+              AND (
+                    lens_judgments.output_id IS NOT NULL
+                 OR lens_archives.output_id IS NOT NULL
+              )
+            """,
+            (first_output_id, last_output_id),
+        ).fetchone()
+        addressed = (
+            int(addressed_row["addressed"] or 0) if addressed_row is not None else 0
+        )
+        if addressed != total:
+            raise ValueError(
+                "Scoreboard range still has pending scoreboard rows "
+                "and cannot close yet."
+            )
+
+        judgment_rows = conn.execute(
+            """
+            SELECT verdict, COUNT(*) AS count
+            FROM eval_lens_judgments
+            WHERE lens = 'scoreboard'
+              AND output_id BETWEEN ? AND ?
+            GROUP BY verdict
+            """,
+            (first_output_id, last_output_id),
+        ).fetchall()
+        archive_row = conn.execute(
+            """
+            SELECT COUNT(*) AS archived
+            FROM eval_lens_archives
+            WHERE lens = 'scoreboard'
+              AND output_id BETWEEN ? AND ?
+            """,
+            (first_output_id, last_output_id),
+        ).fetchone()
+
+        tone_archive_note = (
+            note
+            or f"settled by bounded scoreboard range {first_output_id}-{last_output_id}"
+        )
+        conn.execute(
+            """
+            INSERT INTO eval_lens_archives (
+                output_id,
+                lens,
+                note,
+                created_at
+            )
+            SELECT
+                output.id,
+                'tone',
+                ?,
+                ?
+            FROM eval_outputs output
+            LEFT JOIN eval_lens_judgments lens_judgments
+              ON lens_judgments.output_id = output.id
+             AND lens_judgments.lens = 'tone'
+            LEFT JOIN eval_lens_archives lens_archives
+              ON lens_archives.output_id = output.id
+             AND lens_archives.lens = 'tone'
+            WHERE output.id BETWEEN ? AND ?
+              AND output.current_verdict = 'pass'
+              AND lens_judgments.output_id IS NULL
+              AND lens_archives.output_id IS NULL
+            """,
+            (
+                tone_archive_note,
+                utc_now(),
+                first_output_id,
+                last_output_id,
+            ),
+        )
+        settled_row = conn.execute("SELECT changes() AS count").fetchone()
+
+    pass_count = 0
+    fail_count = 0
+    for row in judgment_rows:
+        if row["verdict"] == "pass":
+            pass_count = int(row["count"] or 0)
+        elif row["verdict"] == "fail":
+            fail_count = int(row["count"] or 0)
+    archived_count = int(archive_row["archived"] or 0) if archive_row is not None else 0
+    settled_tone = int(settled_row["count"] or 0) if settled_row is not None else 0
+
+    return {
+        "total": total,
+        "pass": pass_count,
+        "fail": fail_count,
+        "pending": total - pass_count - fail_count - archived_count,
+        "archived": archived_count,
+        "settled_tone": settled_tone,
+    }
 
 
 def list_outputs(

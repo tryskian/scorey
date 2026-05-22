@@ -58,13 +58,13 @@ Current runtime truth:
 - `tone_pending=0`
 - `disposition_pending=0`
 - live totals:
-  - `2324` route pass
+  - `2369` route pass
   - `0` fail
   - `0` pending
 - tone totals:
   - `454` pass
   - `627` fail
-  - `1243` archived
+  - `1288` archived
   - `0` pending
 - disposition totals:
   - `72` retain
@@ -125,6 +125,42 @@ Current `Research Beta 5.0` pulse results:
     - `off_target_failure=0`
   - counted total: `15`
   - verdict: `pass`
+- pulse `3`:
+  - family: `cross-object coherence drift`
+  - range: `20247-20261`
+  - raw: `15`
+  - anchors: `9`
+  - `counted_seams`: `6`
+  - `excluded_noise`: `0`
+  - exclusions:
+    - `operator_artifact=0`
+    - `off_target_failure=0`
+  - counted total: `15`
+  - verdict: `pass`
+- pulse `4`:
+  - family: `cross-object coherence drift`
+  - range: `20262-20276`
+  - raw: `15`
+  - anchors: `9`
+  - `counted_seams`: `6`
+  - `excluded_noise`: `0`
+  - exclusions:
+    - `operator_artifact=0`
+    - `off_target_failure=0`
+  - counted total: `15`
+  - verdict: `pass`
+- pulse `5`:
+  - family: `same-pick object-shape drift`
+  - range: `20277-20291`
+  - raw: `15`
+  - anchors: `15`
+  - `counted_seams`: `0`
+  - `excluded_noise`: `0`
+  - exclusions:
+    - `operator_artifact=0`
+    - `off_target_failure=0`
+  - counted total: `15`
+  - verdict: `pass`
 
 Worktree note:
 
@@ -135,23 +171,37 @@ Worktree note:
 ## Active Kernel
 
 - keep `Beta 4.0` frozen as closed evidence
-- keep `Beta 5.0` active on the first real pulse evidence
+- keep `Beta 5.0` active on the five-pulse bounded evidence surface
 - preserve the explicit comparison boundary:
   - anchored `3.0`
   - abstract row-level `4.0`
   - pulse-level `5.0`
-- package the current two-pulse `Beta 5.0` checkpoint
+- stage scoreboard judgment as the next widening lens without promoting it yet
+- keep the first scoreboard lane row-level on `scoreboard_claim`
+- keep bounded scoreboard runs explicit with `eval-scoreboard-close`
+- treat the first bounded scoreboard source run as operator proof, not a
+  promotion event:
+  - range `20292-20306`
+  - `15` scoreboard pass
+  - `0` scoreboard fail
 
 ## Next Slice
 
-1. Package the current two-pulse `Beta 5.0` checkpoint.
-2. Choose the next active fail family after the current pulse contrast.
-3. Compare the next pulse verdict against:
-   - pulse `1`
-   - pulse `2`
-   - the closed `Beta 4.0` row-level baseline
-4. Confirm repeated pulses keep the runtime closed at `0` pending across route,
-   tone, and disposition.
+1. Keep `Beta 5.0` active as the closed pulse baseline:
+   - pulse `1`: cross-object `8 / 5 / 2`
+   - pulse `2`: same-pick `15 / 0 / 0`
+   - pulse `3`: cross-object `9 / 6 / 0`
+   - pulse `4`: cross-object `9 / 6 / 0`
+   - pulse `5`: same-pick `15 / 0 / 0`
+2. Keep `pre-Beta 6.0` staged as scoreboard judgment.
+3. Re-run a fresh bounded scoreboard source pass on the formalized closeout
+   surface:
+   - row-level verdict on `scoreboard_claim`
+   - bounded source family: cross-object coherence drift
+   - close it with `eval-scoreboard-close`
+4. Confirm bounded scoreboard closeout keeps the runtime closed at `0` pending
+   across route, tone, and disposition.
+5. Only then decide whether `Beta 6.0` starts.
 
 ## Guardrails
 

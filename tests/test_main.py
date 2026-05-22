@@ -8,7 +8,13 @@ from typing import TextIO, cast
 from unittest import TestCase
 from unittest.mock import patch
 
-from scorey.eval_db import init_db, judge_output, judge_output_for_lens, record_output
+from scorey.eval_db import (
+    init_db,
+    judge_output,
+    judge_output_for_lens,
+    lens_counts,
+    record_output,
+)
 from scorey.eval_sampling import EvalSampleSummary
 from scorey.main import (
     build_round_scene_lines,
@@ -571,6 +577,170 @@ class MainCommandTests(TestCase):
         self.assertIn("tone counts: total=2 pass=0 fail=0 pending=1 archived=1", output)
         self.assertIn("active tone row", output)
         self.assertNotIn("archived tone row", output.split("tone sample:")[-1])
+
+    def test_eval_scoreboard_sample_judge_and_archive_cover_row_level_lane(
+        self,
+    ) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            archived_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="paper",
+                route_family="same-pick",
+                round_text="archived scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judged_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="rock",
+                route_family="same-pick",
+                round_text="judged scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            active_id = record_output(
+                db_path,
+                user_pick="scissors",
+                scorey_pick="scissors",
+                route_family="same-pick",
+                round_text="active scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, archived_id, "pass", "route pass")
+            judge_output(db_path, judged_id, "pass", "route pass")
+            judge_output(db_path, active_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    archive_result = main(
+                        [
+                            "eval-scoreboard-archive",
+                            str(archived_id),
+                            "--note",
+                            "staged out of the first scoreboard lane",
+                        ]
+                    )
+                    judge_result = main(
+                        [
+                            "eval-scoreboard-judge",
+                            str(judged_id),
+                            "pass",
+                            "--note",
+                            "compact unfair losing-side claim",
+                        ]
+                    )
+                    sample_result = main(["eval-scoreboard-sample", "--limit", "5"])
+
+        self.assertEqual(archive_result, 0)
+        self.assertEqual(judge_result, 0)
+        self.assertEqual(sample_result, 0)
+        output = stdout.getvalue()
+        self.assertIn(
+            f"archived scoreboard output {archived_id}",
+            output,
+        )
+        self.assertIn(
+            f"judged scoreboard output {judged_id}: pass",
+            output,
+        )
+        self.assertIn(
+            "scoreboard counts: total=3 pass=1 fail=0 pending=1 archived=1",
+            output,
+        )
+        self.assertIn("active scoreboard row", output)
+        self.assertNotIn(
+            "archived scoreboard row", output.split("scoreboard sample:")[-1]
+        )
+
+    def test_eval_scoreboard_close_settles_tone_lane_after_row_level_review(
+        self,
+    ) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            first_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="first bounded scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="second bounded scoreboard row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    judge_first_result = main(
+                        [
+                            "eval-scoreboard-judge",
+                            str(first_id),
+                            "pass",
+                            "--note",
+                            "compact unfair losing-side claim",
+                        ]
+                    )
+                    judge_second_result = main(
+                        [
+                            "eval-scoreboard-judge",
+                            str(second_id),
+                            "fail",
+                            "--note",
+                            "contradictory losing-side claim",
+                        ]
+                    )
+                    close_result = main(
+                        [
+                            "eval-scoreboard-close",
+                            "--first-output-id",
+                            str(first_id),
+                            "--last-output-id",
+                            str(second_id),
+                            "--note",
+                            "settled by first bounded scoreboard run",
+                        ]
+                    )
+
+            tone_summary = lens_counts(db_path, lens="tone")
+
+        self.assertEqual(judge_first_result, 0)
+        self.assertEqual(judge_second_result, 0)
+        self.assertEqual(close_result, 0)
+        self.assertEqual(int(tone_summary["pending"] or 0), 0)
+        self.assertEqual(int(tone_summary["archived"] or 0), 2)
+        output = stdout.getvalue()
+        self.assertIn(
+            f"judged scoreboard output {first_id}: pass",
+            output,
+        )
+        self.assertIn(
+            f"judged scoreboard output {second_id}: fail",
+            output,
+        )
+        self.assertIn(
+            f"closed scoreboard range {first_id}-{second_id}",
+            output,
+        )
+        self.assertIn(
+            "scoreboard range counts: total=2 pass=1 fail=1 pending=0",
+            output,
+        )
+        self.assertIn("settled tone rows: 2", output)
 
     def test_eval_tone_disposition_sample_dispose_and_archive_cover_failed_rows(
         self,
