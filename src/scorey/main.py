@@ -16,7 +16,9 @@ from scorey.config import Settings, load_settings, require_openai_api_key
 from scorey.eval_db import (
     archive_failure_disposition_for_lens,
     archive_output_for_lens,
+    close_prose_range,
     close_pulse,
+    close_scoreboard_range,
     counts,
     create_pulse,
     default_eval_db_path,
@@ -183,6 +185,112 @@ def build_parser() -> argparse.ArgumentParser:
         "--note",
         required=True,
         help="Short note explaining why the pending tone row is being archived.",
+    )
+
+    eval_scoreboard_sample_parser = subparsers.add_parser(
+        "eval-scoreboard-sample",
+        help=(
+            "List a stratified pending scoreboard review sample from live "
+            "route-pass rows."
+        ),
+    )
+    eval_scoreboard_sample_parser.add_argument("--limit", type=int, default=12)
+    eval_scoreboard_sample_parser.add_argument(
+        "--pick",
+        action="append",
+        default=[],
+        choices=APP_PICKS,
+        metavar="USER_PICK",
+        help="Repeat to narrow the scoreboard sample to one or more user picks.",
+    )
+
+    eval_scoreboard_judge_parser = subparsers.add_parser(
+        "eval-scoreboard-judge",
+        help="Record a scoreboard verdict for one eval output.",
+    )
+    eval_scoreboard_judge_parser.add_argument("output_id", type=int)
+    eval_scoreboard_judge_parser.add_argument("verdict", choices=("pass", "fail"))
+    eval_scoreboard_judge_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short scoreboard note explaining the verdict.",
+    )
+
+    eval_scoreboard_archive_parser = subparsers.add_parser(
+        "eval-scoreboard-archive",
+        help="Archive one pending scoreboard row out of the active review surface.",
+    )
+    eval_scoreboard_archive_parser.add_argument("output_id", type=int)
+    eval_scoreboard_archive_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short note explaining why the pending scoreboard row is archived.",
+    )
+    eval_scoreboard_close_parser = subparsers.add_parser(
+        "eval-scoreboard-close",
+        help="Close one bounded scoreboard source range once every row is addressed.",
+    )
+    eval_scoreboard_close_parser.add_argument(
+        "--first-output-id", required=True, type=int
+    )
+    eval_scoreboard_close_parser.add_argument(
+        "--last-output-id", required=True, type=int
+    )
+    eval_scoreboard_close_parser.add_argument(
+        "--note",
+        default="",
+        help="Optional note for settling untouched tone rows in the range.",
+    )
+
+    eval_prose_sample_parser = subparsers.add_parser(
+        "eval-prose-sample",
+        help=(
+            "List a stratified pending broader-prose review sample from live "
+            "route-pass rows."
+        ),
+    )
+    eval_prose_sample_parser.add_argument("--limit", type=int, default=12)
+    eval_prose_sample_parser.add_argument(
+        "--pick",
+        action="append",
+        default=[],
+        choices=APP_PICKS,
+        metavar="USER_PICK",
+        help="Repeat to narrow the prose sample to one or more user picks.",
+    )
+
+    eval_prose_judge_parser = subparsers.add_parser(
+        "eval-prose-judge",
+        help="Record a broader-prose verdict for one eval output.",
+    )
+    eval_prose_judge_parser.add_argument("output_id", type=int)
+    eval_prose_judge_parser.add_argument("verdict", choices=("pass", "fail"))
+    eval_prose_judge_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short prose note explaining the verdict.",
+    )
+
+    eval_prose_archive_parser = subparsers.add_parser(
+        "eval-prose-archive",
+        help="Archive one pending prose row out of the active review surface.",
+    )
+    eval_prose_archive_parser.add_argument("output_id", type=int)
+    eval_prose_archive_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short note explaining why the pending prose row is archived.",
+    )
+    eval_prose_close_parser = subparsers.add_parser(
+        "eval-prose-close",
+        help="Close one bounded prose source range once every row is addressed.",
+    )
+    eval_prose_close_parser.add_argument("--first-output-id", required=True, type=int)
+    eval_prose_close_parser.add_argument("--last-output-id", required=True, type=int)
+    eval_prose_close_parser.add_argument(
+        "--note",
+        default="",
+        help="Optional note for settling untouched lower-lens rows in the range.",
     )
 
     eval_tone_disposition_sample_parser = subparsers.add_parser(
@@ -1032,36 +1140,41 @@ def command_eval_judge(output_id: int, verdict: str, note: str) -> int:
     return 0
 
 
-def command_eval_tone_sample(limit: int, user_picks: list[str]) -> int:
+def command_eval_lens_sample(
+    lens: str,
+    *,
+    limit: int,
+    user_picks: list[str],
+) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
     resolved_user_picks = tuple(user_picks) if user_picks else None
     summary = lens_counts(
         db_path,
-        lens="tone",
+        lens=lens,
         source_mode="live",
         user_picks=resolved_user_picks,
     )
     archived_suffix = f" archived={summary['archived']}" if summary["archived"] else ""
     print(
-        "tone counts: "
+        f"{lens} counts: "
         f"total={summary['total']} pass={summary['pass']} "
         f"fail={summary['fail']} pending={summary['pending']}{archived_suffix}"
     )
-    print(f"tone sample: newest pending live row per model/pair (limit={limit})")
+    print(f"{lens} sample: newest pending live row per model/pair (limit={limit})")
     if resolved_user_picks is not None:
         print(f"user_picks={' '.join(resolved_user_picks)}")
 
     rows = list_lens_review_sample(
         db_path,
-        lens="tone",
+        lens=lens,
         source_mode="live",
         limit=limit,
         user_picks=resolved_user_picks,
     )
     if not rows:
         print("")
-        print("no pending tone eval outputs.")
+        print(f"no pending {lens} eval outputs.")
         return 0
 
     print("")
@@ -1072,14 +1185,14 @@ def command_eval_tone_sample(limit: int, user_picks: list[str]) -> int:
     return 0
 
 
-def command_eval_tone_judge(output_id: int, verdict: str, note: str) -> int:
+def command_eval_lens_judge(lens: str, output_id: int, verdict: str, note: str) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
     try:
         judge_output_for_lens(
             db_path,
             output_id,
-            lens="tone",
+            lens=lens,
             verdict=verdict,
             note=note,
         )
@@ -1087,31 +1200,135 @@ def command_eval_tone_judge(output_id: int, verdict: str, note: str) -> int:
         print(str(exc), file=sys.stderr)
         return 1
 
-    print(f"judged tone output {output_id}: {verdict}")
+    print(f"judged {lens} output {output_id}: {verdict}")
     print(f"note: {note}")
     print("")
     print(_format_eval_row(db_path, output_id))
     return 0
 
 
-def command_eval_tone_archive(output_id: int, note: str) -> int:
+def command_eval_lens_archive(lens: str, output_id: int, note: str) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
     try:
         archive_output_for_lens(
             db_path,
             output_id,
-            lens="tone",
+            lens=lens,
             note=note,
         )
     except Exception as exc:
         print(str(exc), file=sys.stderr)
         return 1
 
-    print(f"archived tone output {output_id}")
+    print(f"archived {lens} output {output_id}")
     print(f"note: {note}")
     print("")
     print(_format_eval_row(db_path, output_id))
+    return 0
+
+
+def command_eval_tone_sample(limit: int, user_picks: list[str]) -> int:
+    return command_eval_lens_sample("tone", limit=limit, user_picks=user_picks)
+
+
+def command_eval_tone_judge(output_id: int, verdict: str, note: str) -> int:
+    return command_eval_lens_judge("tone", output_id, verdict, note)
+
+
+def command_eval_tone_archive(output_id: int, note: str) -> int:
+    return command_eval_lens_archive("tone", output_id, note)
+
+
+def command_eval_scoreboard_sample(limit: int, user_picks: list[str]) -> int:
+    return command_eval_lens_sample("scoreboard", limit=limit, user_picks=user_picks)
+
+
+def command_eval_scoreboard_judge(output_id: int, verdict: str, note: str) -> int:
+    return command_eval_lens_judge("scoreboard", output_id, verdict, note)
+
+
+def command_eval_scoreboard_archive(output_id: int, note: str) -> int:
+    return command_eval_lens_archive("scoreboard", output_id, note)
+
+
+def command_eval_scoreboard_close(
+    *,
+    first_output_id: int,
+    last_output_id: int,
+    note: str,
+) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        summary = close_scoreboard_range(
+            db_path,
+            first_output_id=first_output_id,
+            last_output_id=last_output_id,
+            note=note,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"closed scoreboard range {first_output_id}-{last_output_id}")
+    if note:
+        print(f"note: {note}")
+    print(
+        "scoreboard range counts: "
+        f"total={summary['total']} pass={summary['pass']} "
+        f"fail={summary['fail']} pending={summary['pending']}"
+        + (f" archived={summary['archived']}" if summary["archived"] else "")
+    )
+    print(f"settled tone rows: {summary['settled_tone']}")
+    return 0
+
+
+def command_eval_prose_sample(limit: int, user_picks: list[str]) -> int:
+    return command_eval_lens_sample("prose", limit=limit, user_picks=user_picks)
+
+
+def command_eval_prose_judge(output_id: int, verdict: str, note: str) -> int:
+    return command_eval_lens_judge("prose", output_id, verdict, note)
+
+
+def command_eval_prose_archive(output_id: int, note: str) -> int:
+    return command_eval_lens_archive("prose", output_id, note)
+
+
+def command_eval_prose_close(
+    *,
+    first_output_id: int,
+    last_output_id: int,
+    note: str,
+) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        summary = close_prose_range(
+            db_path,
+            first_output_id=first_output_id,
+            last_output_id=last_output_id,
+            note=note,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"closed prose range {first_output_id}-{last_output_id}")
+    if note:
+        print(f"note: {note}")
+    print(
+        "prose range counts: "
+        f"total={summary['total']} pass={summary['pass']} "
+        f"fail={summary['fail']} pending={summary['pending']}"
+        + (f" archived={summary['archived']}" if summary["archived"] else "")
+    )
+    print(
+        "settled lower-lens rows: "
+        f"tone={summary['settled_tone']} "
+        f"scoreboard={summary['settled_scoreboard']}"
+    )
     return 0
 
 
@@ -1449,6 +1666,38 @@ def main(argv: list[str] | None = None) -> int:
         return command_eval_tone_judge(args.output_id, args.verdict, args.note)
     if args.command == "eval-tone-archive":
         return command_eval_tone_archive(args.output_id, args.note)
+    if args.command == "eval-scoreboard-sample":
+        return command_eval_scoreboard_sample(args.limit, args.pick)
+    if args.command == "eval-scoreboard-judge":
+        return command_eval_scoreboard_judge(
+            args.output_id,
+            args.verdict,
+            args.note,
+        )
+    if args.command == "eval-scoreboard-archive":
+        return command_eval_scoreboard_archive(args.output_id, args.note)
+    if args.command == "eval-scoreboard-close":
+        return command_eval_scoreboard_close(
+            first_output_id=args.first_output_id,
+            last_output_id=args.last_output_id,
+            note=args.note,
+        )
+    if args.command == "eval-prose-sample":
+        return command_eval_prose_sample(args.limit, args.pick)
+    if args.command == "eval-prose-judge":
+        return command_eval_prose_judge(
+            args.output_id,
+            args.verdict,
+            args.note,
+        )
+    if args.command == "eval-prose-archive":
+        return command_eval_prose_archive(args.output_id, args.note)
+    if args.command == "eval-prose-close":
+        return command_eval_prose_close(
+            first_output_id=args.first_output_id,
+            last_output_id=args.last_output_id,
+            note=args.note,
+        )
     if args.command == "eval-tone-disposition-sample":
         return command_eval_tone_disposition_sample(args.limit, args.pick)
     if args.command == "eval-tone-disposition-archive":

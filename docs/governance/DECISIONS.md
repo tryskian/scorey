@@ -306,3 +306,90 @@ handoff or branch history instead.
   surface still left docs linting, package import smoke, and security audit
   outside the canonical Make workflow. The toy repos need a small shared
   baseline that is easy to repeat without changing runtime or eval behavior.
+
+## D-022: Scoreboard judgment is the staged next lens after Beta 5.0 pulse
+
+- Date: `2026-05-21`
+- Category: `eval_quality`
+- Tags: `next_lens`, `scoreboard`, `beta_staging`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: After the active `Beta 5.0` pulse surface stabilizes, the staged
+  next widening step is scoreboard judgment rather than broad prose judgment.
+  It remains staged until the first clean bounded scoreboard run closes on the
+  formalized scoreboard surface.
+- Why: Scoreboard judgment is the smaller next lens. It stays tied to the
+  explicit `scoreboard_claim` field that already exists in the runtime
+  contract, so it widens the evidence surface without immediately reopening
+  the whole round prose as one broad quality question.
+
+## D-023: The first scoreboard lane stays row-level
+
+- Date: `2026-05-21`
+- Category: `eval_quality`
+- Tags: `scoreboard`, `row_level`, `next_lens`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: The first scoreboard judgment lane should stay row-level on
+  `scoreboard_claim`. Bounded runs can still source the rows, but the
+  scoreboard verdict itself should not inherit pulse math on the first pass.
+- Why: `scoreboard_claim` is already a small explicit field in the runtime
+  contract. It should prove it deserves its own lane before adding another
+  pulse layer on top. This keeps the widening step smaller than full prose and
+  simpler than repeating `Beta 5.0` mechanics by habit.
+
+## D-024: Scoreboard close settles untouched tone rows in-range
+
+- Date: `2026-05-21`
+- Category: `eval_runtime`
+- Tags: `scoreboard`, `closeout`, `queue_hygiene`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: Bounded scoreboard runs close through an explicit scoreboard-close
+  step that settles any still-untouched tone rows inside that bounded range
+  out of the active tone queue.
+- Why: Scoreboard is a row-level lens on `scoreboard_claim`, not a request to
+  reopen legacy tone review by accident. Bounded scoreboard work needs the same
+  clean-runtime closeout discipline as pulse work so the live queue returns to
+  `0` pending at route, tone, and disposition after the bounded read ends.
+
+## D-025: Beta 6.0 starts on scoreboard judgment
+
+- Date: `2026-05-21`
+- Category: `eval_quality`
+- Tags: `beta_boundary`, `scoreboard`, `row_level`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: `Research Beta 6.0` starts once the scoreboard lane has both a
+  locked row-level contract and a clean bounded closeout proof on live
+  evidence. In Scorey, that boundary is now met by the two bounded cross-object
+  scoreboard passes, including the formalized closeout run on `20307-20321`.
+- Why: The scoreboard lane is no longer just staging. It already proved it can
+  produce clear row-level evidence and return the runtime to `0` pending
+  without reopening the legacy tone queue. That changes what the evidence means
+  and therefore justifies a real beta boundary.
+
+## D-026: Broader prose judgment is the staged next lens after Beta 6.0
+
+- Date: `2026-05-21`
+- Category: `eval_quality`
+- Tags: `next_lens`, `prose`, `beta_staging`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: After the active `Beta 6.0` scoreboard surface stabilizes, the
+  staged next widening step is broader prose judgment rather than more
+  scoreboard repetition on the same tested families.
+- Why: Scoreboard has now collapsed twice on both cross-object and same-pick.
+  The next honest question is whether the broader round prose can still hold
+  rigged-round logic once the judged surface widens above `scoreboard_claim`.
+
+## D-027: Beta 7.0 starts on broader prose judgment
+
+- Date: `2026-05-21`
+- Category: `eval_quality`
+- Tags: `beta_boundary`, `prose`, `row_level`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: `Research Beta 7.0` starts once the broader prose lane has both a
+  locked row-level contract and a clean bounded closeout proof on live
+  evidence. In Scorey, that boundary is now met by the first bounded
+  cross-object prose pass on `20352-20366`, which closed at `9` pass / `6`
+  fail and returned the runtime to `0` pending.
+- Why: The broader prose lane is no longer just a staged widening idea. It now
+  changes what the evidence means by proving that cross-object pressure
+  reappears above `scoreboard_claim` even after the scoreboard lane collapsed
+  cleanly on the same families.

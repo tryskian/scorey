@@ -58,13 +58,13 @@ Current runtime truth:
 - `tone_pending=0`
 - `disposition_pending=0`
 - live totals:
-  - `2324` route pass
+  - `2369` route pass
   - `0` fail
   - `0` pending
 - tone totals:
   - `454` pass
   - `627` fail
-  - `1243` archived
+  - `1288` archived
   - `0` pending
 - disposition totals:
   - `72` retain
@@ -125,6 +125,42 @@ Current `Research Beta 5.0` pulse results:
     - `off_target_failure=0`
   - counted total: `15`
   - verdict: `pass`
+- pulse `3`:
+  - family: `cross-object coherence drift`
+  - range: `20247-20261`
+  - raw: `15`
+  - anchors: `9`
+  - `counted_seams`: `6`
+  - `excluded_noise`: `0`
+  - exclusions:
+    - `operator_artifact=0`
+    - `off_target_failure=0`
+  - counted total: `15`
+  - verdict: `pass`
+- pulse `4`:
+  - family: `cross-object coherence drift`
+  - range: `20262-20276`
+  - raw: `15`
+  - anchors: `9`
+  - `counted_seams`: `6`
+  - `excluded_noise`: `0`
+  - exclusions:
+    - `operator_artifact=0`
+    - `off_target_failure=0`
+  - counted total: `15`
+  - verdict: `pass`
+- pulse `5`:
+  - family: `same-pick object-shape drift`
+  - range: `20277-20291`
+  - raw: `15`
+  - anchors: `15`
+  - `counted_seams`: `0`
+  - `excluded_noise`: `0`
+  - exclusions:
+    - `operator_artifact=0`
+    - `off_target_failure=0`
+  - counted total: `15`
+  - verdict: `pass`
 
 Worktree note:
 
@@ -135,23 +171,58 @@ Worktree note:
 ## Active Kernel
 
 - keep `Beta 4.0` frozen as closed evidence
-- keep `Beta 5.0` active on the first real pulse evidence
+- keep `Beta 5.0` frozen as the most recently closed pulse baseline
 - preserve the explicit comparison boundary:
   - anchored `3.0`
   - abstract row-level `4.0`
   - pulse-level `5.0`
-- package the current two-pulse `Beta 5.0` checkpoint
+- keep `Beta 6.0` frozen as the most recently closed scoreboard baseline
+- activate `Beta 7.0` as broader prose judgment
+- keep the broader prose lane row-level on the round body around the score line
+- keep bounded prose runs explicit with `eval-prose-close`
+- hold the starting `Beta 7.0` evidence surface at:
+  - range `20352-20366`
+  - `9` prose pass
+  - `6` prose fail
+  - `15` untouched tone rows settled by prose closeout
+  - `15` untouched scoreboard rows settled by prose closeout
+  - range `20367-20381`
+  - `15` prose pass
+  - `0` prose fail
+  - `15` untouched tone rows settled by prose closeout
+  - `15` untouched scoreboard rows settled by prose closeout
+  - range `20382-20396`
+  - `9` prose pass
+  - `6` prose fail
+  - `15` untouched tone rows settled by prose closeout
+  - `15` untouched scoreboard rows settled by prose closeout
 
 ## Next Slice
 
-1. Package the current two-pulse `Beta 5.0` checkpoint.
-2. Choose the next active fail family after the current pulse contrast.
-3. Compare the next pulse verdict against:
-   - pulse `1`
-   - pulse `2`
-   - the closed `Beta 4.0` row-level baseline
-4. Confirm repeated pulses keep the runtime closed at `0` pending across route,
-   tone, and disposition.
+1. Keep `Beta 5.0` as the closed pulse baseline:
+   - pulse `1`: cross-object `8 / 5 / 2`
+   - pulse `2`: same-pick `15 / 0 / 0`
+   - pulse `3`: cross-object `9 / 6 / 0`
+   - pulse `4`: cross-object `9 / 6 / 0`
+   - pulse `5`: same-pick `15 / 0 / 0`
+2. Keep `Beta 6.0` as the closed scoreboard baseline.
+3. Keep the four bounded scoreboard source passes as the closed evidence
+   surface below `Beta 7.0`:
+   - `20292-20306`: `15` pass / `0` fail
+   - `20307-20321`: `15` pass / `0` fail
+   - `20322-20336`: `15` pass / `0` fail
+   - `20337-20351`: `15` pass / `0` fail
+4. Keep `Beta 7.0` active as broader prose judgment.
+5. Use the opening broader prose source passes as the active evidence surface:
+   - `20352-20366`: `9` pass / `6` fail
+   - `20367-20381`: `15` pass / `0` fail
+   - `20382-20396`: `9` pass / `6` fail
+6. Hold the current broader prose contrast:
+   - cross-object prose has reopened pressure at `9 / 6` and repeated there
+   - same-pick prose has collapsed at `15 / 0`
+7. Decide whether this is enough stable `Beta 7.0` evidence to package now or
+   whether one more cross-object replay is worth the cost before widening
+   again.
 
 ## Guardrails
 

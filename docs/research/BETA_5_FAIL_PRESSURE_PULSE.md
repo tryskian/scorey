@@ -205,6 +205,83 @@ So the early `Beta 5.0` read is now sharper:
 - same-pick object-shape drift does not currently behave like an active pulse
   family at all
 
+The third real `Beta 5.0` pulse then repeated the first cross-object family
+instead of widening immediately:
+
+- `pulse_id=3`
+- family: `cross-object coherence drift`
+- range: `20247-20261`
+- raw: `15`
+- anchors: `9`
+- `counted_seams`: `6`
+- `excluded_noise`: `0`
+- exclusions:
+  - `operator_artifact=0`
+  - `off_target_failure=0`
+- counted total: `15`
+- verdict: `pass`
+
+That repeat matters more than the raw `pass` label.
+
+It shows the same family still carrying real pressure under repetition:
+
+- no operator washout
+- no off-target exclusion padding
+- all `15` rows stayed countable
+- the weaker seam remained visible as counted pressure instead of collapsing
+
+The fourth real `Beta 5.0` pulse then repeated the same cross-object family
+one more time instead of widening yet:
+
+- `pulse_id=4`
+- family: `cross-object coherence drift`
+- range: `20262-20276`
+- raw: `15`
+- anchors: `9`
+- `counted_seams`: `6`
+- `excluded_noise`: `0`
+- exclusions:
+  - `operator_artifact=0`
+  - `off_target_failure=0`
+- counted total: `15`
+- verdict: `pass`
+
+That fourth pass matters because it held the exact same pressure profile as
+pulse `3`.
+
+So the four-pulse picture is now:
+
+- pulse `1`: cross-object passes at `8 / 5 / 2`
+- pulse `2`: same-pick passes at `15 / 0 / 0`
+- pulse `3`: cross-object passes again at `9 / 6 / 0`
+- pulse `4`: cross-object passes again at `9 / 6 / 0`
+
+The fifth real `Beta 5.0` pulse then repeated the same-pick family instead of
+opening a new seam:
+
+- `pulse_id=5`
+- family: `same-pick object-shape drift`
+- range: `20277-20291`
+- raw: `15`
+- anchors: `15`
+- `counted_seams`: `0`
+- `excluded_noise`: `0`
+- exclusions:
+  - `operator_artifact=0`
+  - `off_target_failure=0`
+- counted total: `15`
+- verdict: `pass`
+
+That fifth pass matters because it repeated the same collapse as pulse `2`.
+
+So the five-pulse picture is now:
+
+- pulse `1`: cross-object passes at `8 / 5 / 2`
+- pulse `2`: same-pick passes at `15 / 0 / 0`
+- pulse `3`: cross-object passes again at `9 / 6 / 0`
+- pulse `4`: cross-object passes again at `9 / 6 / 0`
+- pulse `5`: same-pick passes again at `15 / 0 / 0`
+
 ## Why It Matters
 
 This is a method change, not just a reporting layer.
@@ -226,6 +303,8 @@ That makes bounded run claims harder to fake:
 - exclusions stay auditable instead of disappearing into the total
 - weaker-looking families can collapse quickly instead of consuming long
   row-level review queues
+- repeated pulses can show whether a weak family is actually durable or only
+  looked noisy in one bounded slice
 
 ## What It Still Cannot Show
 
@@ -235,15 +314,58 @@ That makes bounded run claims harder to fake:
 - whether exclusion rates stay low outside this first pulse
 - whether repeated pulse closeout keeps the legacy tone lane fully settled
   instead of reintroducing queue residue
+- whether cross-object coherence drift will eventually fail at the pulse level
+  if counted seam pressure keeps persisting under repetition
+- whether the repeated `9 / 6 / 0` cross-object profile is now stable enough
+  to widen to a new family
+- whether the repeated `15 / 0 / 0` same-pick profile is now stable enough to
+  leave that family closed for a while
 
 ## What Changed Next
 
-The next `Beta 5.0` work is now straightforward:
+`Beta 5.0` is now stable enough to widen carefully without promoting the next
+lens too early.
 
-1. choose the next active fail family after the current pulse comparison
-2. compare that pulse verdict against:
-   - pulse `1`
-   - pulse `2`
-   - the closed `Beta 4.0` row-level baseline
-3. confirm repeated pulse closeout keeps the runtime at `0` pending across
-   route, tone, and disposition
+The next staged lane is scoreboard judgment:
+
+- still row-level
+- still bounded by the same isolated source shape
+- still staged, not active `Beta 6.0`
+
+The first bounded scoreboard source pass after output `20291` already happened:
+
+- range: `20292-20306`
+- `15` scoreboard pass
+- `0` scoreboard fail
+
+That source pass mattered because it exposed the remaining scoreboard seam:
+
+- bounded scoreboard review was real
+- but bounded scoreboard closeout was not yet explicit
+- untouched tone rows in-range had to be settled manually
+
+That seam is now formalized with `eval-scoreboard-close`.
+
+So the next clean kernel is no longer another pulse repeat. The scoreboard lane
+has now been staged twice on bounded cross-object source runs:
+
+- `20292-20306`: `15` scoreboard pass, `0` scoreboard fail
+- `20307-20321`: `15` scoreboard pass, `0` scoreboard fail
+
+The second run mattered more than the first because it closed on the explicit
+scoreboard-close surface:
+
+- range closeout succeeded cleanly
+- `15` untouched tone rows were settled automatically
+- runtime returned to `0` pending across route, tone, and disposition
+
+That promotion decision is now resolved.
+
+The two bounded scoreboard passes were enough to activate `Research Beta 6.0`
+as the next lens:
+
+- `20292-20306`: `15` scoreboard pass / `0` scoreboard fail
+- `20307-20321`: `15` scoreboard pass / `0` scoreboard fail
+
+So `Beta 5.0` now closes as the pulse baseline for comparison, and the next
+real work moves onto active scoreboard judgment.

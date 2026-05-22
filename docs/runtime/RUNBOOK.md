@@ -198,6 +198,26 @@ Use this doc for operator procedure.
   - current-truth docs freshness gate
 - `make end-runtime-check`
   - closeout runtime gate
+- `make eval-scoreboard-sample`
+  - list newest pending live row per model/pair for scoreboard review
+- `make eval-scoreboard-judge`
+  - record a row-level scoreboard verdict on `scoreboard_claim`
+- `make eval-scoreboard-archive`
+  - archive one pending scoreboard row out of the active review surface
+- `make eval-scoreboard-close`
+  - close one bounded scoreboard source range once every row is addressed
+  - settle any still-untouched tone rows in that range out of the active tone
+    queue
+- `make eval-prose-sample`
+  - list newest pending live row per model/pair for broader prose review
+- `make eval-prose-judge`
+  - record a row-level prose verdict on the round body around the score line
+- `make eval-prose-archive`
+  - archive one pending prose row out of the active review surface
+- `make eval-prose-close`
+  - close one bounded prose source range once every row is addressed
+  - settle any still-untouched tone and scoreboard rows in that range out of
+    the active lower-lens queues
 - `make eval-pulse-open`
   - open one bounded pulse over a route-pass output range
 - `make eval-pulse-sample`
