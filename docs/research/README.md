@@ -310,22 +310,17 @@ Current clean lane:
 | `Research Beta 3.0` | Can Scorey keep its own voice once routing is settled? | The live judged lane keeps the route floor but switches the verdict lens to tone first. |
 | `Research Beta 4.0` | What changes when tone-first measurement drops phrase anchors? | The live judged lane keeps the same route floor and tone lens, but the generator contract shifts to abstract constraints aligned to the Polinko method. |
 | `Research Beta 5.0` | What changes when bounded fail pressure becomes the binary unit? | The live isolated lane keeps the route floor, but rows become pulse evidence and the pulse becomes the `PASS / FAIL` unit. |
+| `Research Beta 6.0` | Does the scoreboard fragment deserve its own judged lane? | The bounded isolated lane keeps the route floor, but the active verdict resets to row-level `PASS / FAIL` on `scoreboard_claim`. |
 
 Current active beta note:
 
+- `Research Beta 6.0`
+- [Scoreboard Judgment](./BETA_6_SCOREBOARD_JUDGMENT.md)
+
+Most recently closed beta:
+
 - `Research Beta 5.0`
 - [Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
-
-Current staged next lane:
-
-- `pre-Beta 6.0`
-- [Scoreboard Judgment](./PRE_BETA_6_SCOREBOARD_JUDGMENT.md)
-- first staged pass stays row-level on `scoreboard_claim`
-- bounded scoreboard runs close with `eval-scoreboard-close`
-- first bounded source pass already exists as operator proof:
-  - `20292-20306`
-  - `15` scoreboard pass
-  - `0` scoreboard fail
 
 Read in order:
 
@@ -334,6 +329,7 @@ Read in order:
 3. [Research Beta 3.0: Tone First](./BETA_3_TONE_FIRST.md)
 4. [Research Beta 4.0: Abstract Tone Measurement](./BETA_4_ABSTRACT_TONE_MEASUREMENT.md)
 5. [Research Beta 5.0: Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
+6. [Research Beta 6.0: Scoreboard Judgment](./BETA_6_SCOREBOARD_JUDGMENT.md)
 
 ## How To Read The Betas And Stages
 
@@ -353,6 +349,8 @@ Each beta marks a real change in what the evaluation is asking:
   - `anchor`
   - `counted_seam`
   - `excluded_noise`
+- `Research Beta 6.0` keeps the bounded source shape but narrows the verdict
+  back down to row-level `PASS / FAIL` on `scoreboard_claim`
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 

@@ -346,9 +346,26 @@ That source pass mattered because it exposed the remaining scoreboard seam:
 
 That seam is now formalized with `eval-scoreboard-close`.
 
-So the next clean kernel is no longer another pulse repeat. It is:
+So the next clean kernel is no longer another pulse repeat. The scoreboard lane
+has now been staged twice on bounded cross-object source runs:
 
-1. keep the five-pulse `Beta 5.0` surface as the active baseline
-2. re-run a bounded scoreboard source pass on the new closeout surface
-3. confirm the scoreboard lane can close cleanly back to `0` pending
-4. then decide whether `Beta 6.0` starts
+- `20292-20306`: `15` scoreboard pass, `0` scoreboard fail
+- `20307-20321`: `15` scoreboard pass, `0` scoreboard fail
+
+The second run mattered more than the first because it closed on the explicit
+scoreboard-close surface:
+
+- range closeout succeeded cleanly
+- `15` untouched tone rows were settled automatically
+- runtime returned to `0` pending across route, tone, and disposition
+
+That promotion decision is now resolved.
+
+The two bounded scoreboard passes were enough to activate `Research Beta 6.0`
+as the next lens:
+
+- `20292-20306`: `15` scoreboard pass / `0` scoreboard fail
+- `20307-20321`: `15` scoreboard pass / `0` scoreboard fail
+
+So `Beta 5.0` now closes as the pulse baseline for comparison, and the next
+real work moves onto active scoreboard judgment.

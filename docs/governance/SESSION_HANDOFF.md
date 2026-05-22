@@ -171,37 +171,39 @@ Worktree note:
 ## Active Kernel
 
 - keep `Beta 4.0` frozen as closed evidence
-- keep `Beta 5.0` active on the five-pulse bounded evidence surface
+- keep `Beta 5.0` frozen as the most recently closed pulse baseline
 - preserve the explicit comparison boundary:
   - anchored `3.0`
   - abstract row-level `4.0`
   - pulse-level `5.0`
-- stage scoreboard judgment as the next widening lens without promoting it yet
-- keep the first scoreboard lane row-level on `scoreboard_claim`
+- activate `Beta 6.0` as scoreboard judgment
+- keep the scoreboard lane row-level on `scoreboard_claim`
 - keep bounded scoreboard runs explicit with `eval-scoreboard-close`
-- treat the first bounded scoreboard source run as operator proof, not a
-  promotion event:
+- hold the starting `Beta 6.0` evidence surface at:
   - range `20292-20306`
   - `15` scoreboard pass
   - `0` scoreboard fail
+  - range `20307-20321`
+  - `15` scoreboard pass
+  - `0` scoreboard fail
+  - `15` untouched tone rows settled by scoreboard closeout
 
 ## Next Slice
 
-1. Keep `Beta 5.0` active as the closed pulse baseline:
+1. Keep `Beta 5.0` as the closed pulse baseline:
    - pulse `1`: cross-object `8 / 5 / 2`
    - pulse `2`: same-pick `15 / 0 / 0`
    - pulse `3`: cross-object `9 / 6 / 0`
    - pulse `4`: cross-object `9 / 6 / 0`
    - pulse `5`: same-pick `15 / 0 / 0`
-2. Keep `pre-Beta 6.0` staged as scoreboard judgment.
-3. Re-run a fresh bounded scoreboard source pass on the formalized closeout
+2. Keep `Beta 6.0` active as scoreboard judgment.
+3. Use the two bounded scoreboard source passes as the opening evidence
    surface:
-   - row-level verdict on `scoreboard_claim`
-   - bounded source family: cross-object coherence drift
-   - close it with `eval-scoreboard-close`
-4. Confirm bounded scoreboard closeout keeps the runtime closed at `0` pending
-   across route, tone, and disposition.
-5. Only then decide whether `Beta 6.0` starts.
+   - `20292-20306`: `15` pass / `0` fail
+   - `20307-20321`: `15` pass / `0` fail
+4. Decide whether to repeat scoreboard on the same cross-object family or
+   widen it to a second family.
+5. Keep runtime closed at `0` pending across route, tone, and disposition.
 
 ## Guardrails
 

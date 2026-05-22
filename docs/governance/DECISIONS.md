@@ -349,3 +349,18 @@ handoff or branch history instead.
   reopen legacy tone review by accident. Bounded scoreboard work needs the same
   clean-runtime closeout discipline as pulse work so the live queue returns to
   `0` pending at route, tone, and disposition after the bounded read ends.
+
+## D-025: Beta 6.0 starts on scoreboard judgment
+
+- Date: `2026-05-21`
+- Category: `eval_quality`
+- Tags: `beta_boundary`, `scoreboard`, `row_level`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: `Research Beta 6.0` starts once the scoreboard lane has both a
+  locked row-level contract and a clean bounded closeout proof on live
+  evidence. In Scorey, that boundary is now met by the two bounded cross-object
+  scoreboard passes, including the formalized closeout run on `20307-20321`.
+- Why: The scoreboard lane is no longer just staging. It already proved it can
+  produce clear row-level evidence and return the runtime to `0` pending
+  without reopening the legacy tone queue. That changes what the evidence means
+  and therefore justifies a real beta boundary.
