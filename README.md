@@ -1,6 +1,6 @@
 # Scorey
 
-[![Research Stage](https://img.shields.io/badge/research_stage-pre--Beta%205.0%20fail--pressure%20pulse-E15759)](./docs/research/README.md)
+[![Research Stage](https://img.shields.io/badge/research_stage-Research%20Beta%205.0%20fail--pressure%20pulse-E15759)](./docs/research/README.md)
 [![Polinko toy factory](https://img.shields.io/badge/polinko_toy_factory-active-4C956C)](https://github.com/tryskian/polinko)
 ![Maintenance](https://img.shields.io/badge/maintenance-in%20progress-F28E2B)
 
@@ -22,9 +22,9 @@ It only accepts three picks:
 - `paper`
 - `scissors`
 
-Current staged research lane:
+Current research lane:
 
-- `pre-Beta 5.0`
+- `Research Beta 5.0`
 - `fail-pressure pulse`
 
 Most recently closed beta:
@@ -35,11 +35,10 @@ Most recently closed beta:
 That narrow surface is the point. Scorey is not trying to be a general chat tool or a generic joke machine. It is a small instrument for studying whether a model can preserve a rigged round, stay pick-specific, and keep unfair logic legible inside tight interaction guardrails.
 
 In this repo, a new beta gets pinned when the method change alters what the
-evidence means, not just when wording or procedure gets tidier. Pre-beta
-staging notes can hold the next method boundary before the first real evidence
-run starts.
+evidence means, not just when wording or procedure gets tidier.
 
-`Beta 5.0` does not begin until the first real fail-pressure pulse run starts.
+`Research Beta 5.0` began with the first real fail-pressure pulse on the
+isolated cross-object family.
 
 ## What This Repo Demonstrates
 

@@ -16,18 +16,23 @@ from scorey.config import Settings, load_settings, require_openai_api_key
 from scorey.eval_db import (
     archive_failure_disposition_for_lens,
     archive_output_for_lens,
+    close_pulse,
     counts,
+    create_pulse,
     default_eval_db_path,
     get_output,
     init_db,
     judge_output,
     judge_output_for_lens,
+    judge_output_for_pulse,
     lens_counts,
     lens_failure_disposition_counts,
     list_lens_failure_disposition_sample,
     list_lens_review_sample,
     list_outputs,
+    list_pulse_review_sample,
     list_review_sample,
+    pulse_summary,
     record_failure_disposition_for_lens,
 )
 from scorey.eval_gates import (
@@ -268,6 +273,61 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="SCOREY_PICK,USER_PICK",
         help="Repeat to provide an explicit live pair cycle in scorey/user order.",
     )
+
+    eval_pulse_open_parser = subparsers.add_parser(
+        "eval-pulse-open",
+        help="Open one bounded pulse over a route-pass output range.",
+    )
+    eval_pulse_open_parser.add_argument("--first-output-id", required=True, type=int)
+    eval_pulse_open_parser.add_argument("--last-output-id", required=True, type=int)
+    eval_pulse_open_parser.add_argument(
+        "--target-family",
+        required=True,
+        help="Short name for the active pulse seam family.",
+    )
+    eval_pulse_open_parser.add_argument(
+        "--note",
+        default="",
+        help="Optional operator note for the pulse range.",
+    )
+
+    eval_pulse_sample_parser = subparsers.add_parser(
+        "eval-pulse-sample",
+        help="List newest unlabeled rows inside one pulse.",
+    )
+    eval_pulse_sample_parser.add_argument("pulse_id", type=int)
+    eval_pulse_sample_parser.add_argument("--limit", type=int, default=12)
+
+    eval_pulse_judge_parser = subparsers.add_parser(
+        "eval-pulse-judge",
+        help="Label one row inside a pulse as anchor, counted_seam, or excluded_noise.",
+    )
+    eval_pulse_judge_parser.add_argument("pulse_id", type=int)
+    eval_pulse_judge_parser.add_argument("output_id", type=int)
+    eval_pulse_judge_parser.add_argument(
+        "label",
+        choices=("anchor", "counted_seam", "excluded_noise"),
+    )
+    eval_pulse_judge_parser.add_argument(
+        "--reason",
+        default="",
+        help=(
+            "Required for excluded_noise: one of operator_artifact "
+            "or off_target_failure."
+        ),
+    )
+
+    eval_pulse_summary_parser = subparsers.add_parser(
+        "eval-pulse-summary",
+        help="Print raw, counted, excluded, and verdict totals for one pulse.",
+    )
+    eval_pulse_summary_parser.add_argument("pulse_id", type=int)
+
+    eval_pulse_close_parser = subparsers.add_parser(
+        "eval-pulse-close",
+        help="Close one pulse once every row in range has a pulse label.",
+    )
+    eval_pulse_close_parser.add_argument("pulse_id", type=int)
 
     return parser
 
@@ -826,6 +886,34 @@ def _format_eval_row(db_path: Path, row_id: int) -> str:
     return "\n".join(lines)
 
 
+def _format_pulse_label(label: str) -> str:
+    return label
+
+
+def _print_pulse_summary(summary: dict[str, object]) -> None:
+    print(
+        f"pulse [{summary['id']}] target_family={summary['target_family']} "
+        f"range={summary['first_output_id']}-{summary['last_output_id']} "
+        f"status={summary['status']}"
+    )
+    print(
+        "pulse counts: "
+        f"raw={summary['raw_total']} "
+        f"anchors={summary['anchor']} "
+        f"counted_seams={summary['counted_seam']} "
+        f"excluded_noise={summary['excluded_noise']} "
+        f"counted_total={summary['counted_total']} "
+        f"pending={summary['pending']} "
+        f"verdict={summary['verdict']}"
+    )
+    excluded_by_reason = summary["excluded_by_reason"]
+    if not isinstance(excluded_by_reason, dict):
+        return
+    print("excluded_by_reason:")
+    for reason, count in excluded_by_reason.items():
+        print(f"- {reason}={count}")
+
+
 def command_eval_list(limit: int, verdict: str | None) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
@@ -1113,6 +1201,118 @@ def command_eval_tone_disposition_archive(output_id: int, note: str) -> int:
     return 0
 
 
+def command_eval_pulse_open(
+    *,
+    first_output_id: int,
+    last_output_id: int,
+    target_family: str,
+    note: str,
+) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        pulse_id = create_pulse(
+            db_path,
+            target_family=target_family,
+            first_output_id=first_output_id,
+            last_output_id=last_output_id,
+            note=note,
+        )
+        summary = pulse_summary(db_path, pulse_id)
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"opened pulse {pulse_id}")
+    if note:
+        print(f"note: {note}")
+    _print_pulse_summary(summary)
+    return 0
+
+
+def command_eval_pulse_sample(pulse_id: int, limit: int) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        summary = pulse_summary(db_path, pulse_id)
+        rows = list_pulse_review_sample(db_path, pulse_id=pulse_id, limit=limit)
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    _print_pulse_summary(summary)
+    print(f"pulse sample: newest unlabeled row in range (limit={limit})")
+    if not rows:
+        print("")
+        print("no pending pulse rows.")
+        return 0
+
+    print("")
+    for index, row in enumerate(rows):
+        if index > 0:
+            print("")
+        print(_format_eval_row(db_path, int(row["id"])))
+    return 0
+
+
+def command_eval_pulse_judge(
+    pulse_id: int,
+    output_id: int,
+    label: str,
+    reason: str,
+) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        judge_output_for_pulse(
+            db_path,
+            pulse_id,
+            output_id,
+            label=label,
+            reason=reason,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(
+        f"judged pulse output {output_id} in pulse {pulse_id}: "
+        f"{_format_pulse_label(label)}"
+    )
+    if reason:
+        print(f"reason: {reason}")
+    print("")
+    print(_format_eval_row(db_path, output_id))
+    return 0
+
+
+def command_eval_pulse_summary(pulse_id: int) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        summary = pulse_summary(db_path, pulse_id)
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    _print_pulse_summary(summary)
+    return 0
+
+
+def command_eval_pulse_close(pulse_id: int) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        summary = close_pulse(db_path, pulse_id)
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"closed pulse {pulse_id}")
+    _print_pulse_summary(summary)
+    return 0
+
+
 def command_eval_sample_local(
     *,
     count: int | None,
@@ -1259,6 +1459,26 @@ def main(argv: list[str] | None = None) -> int:
             args.disposition,
             args.note,
         )
+    if args.command == "eval-pulse-open":
+        return command_eval_pulse_open(
+            first_output_id=args.first_output_id,
+            last_output_id=args.last_output_id,
+            target_family=args.target_family,
+            note=args.note,
+        )
+    if args.command == "eval-pulse-sample":
+        return command_eval_pulse_sample(args.pulse_id, args.limit)
+    if args.command == "eval-pulse-judge":
+        return command_eval_pulse_judge(
+            args.pulse_id,
+            args.output_id,
+            args.label,
+            args.reason,
+        )
+    if args.command == "eval-pulse-summary":
+        return command_eval_pulse_summary(args.pulse_id)
+    if args.command == "eval-pulse-close":
+        return command_eval_pulse_close(args.pulse_id)
     if args.command == "eval-sample-local":
         return command_eval_sample_local(
             count=args.count,

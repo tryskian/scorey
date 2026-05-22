@@ -31,9 +31,9 @@ Last updated: 2026-05-21
 
 Scorey is a small, local, agent-backed rock, paper, scissors mini chatbot with
 a real runtime, a settled route-valid floor, and a tracked tone lane on top of
-the route pass surface. `Research Beta 4.0` is now closed as the row-level
-abstract measurement surface. The next staged lane is `pre-Beta 5.0`
-fail-pressure pulse.
+the route pass surface. `Research Beta 4.0` is closed as the row-level
+abstract measurement surface. `Research Beta 5.0` is now active as the
+fail-pressure pulse lane.
 
 The core tracked shape is:
 
@@ -58,13 +58,13 @@ Current runtime truth:
 - `tone_pending=0`
 - `disposition_pending=0`
 - live totals:
-  - `2294` route pass
+  - `2324` route pass
   - `0` fail
   - `0` pending
 - tone totals:
   - `454` pass
   - `627` fail
-  - `1213` archived
+  - `1243` archived
   - `0` pending
 - disposition totals:
   - `72` retain
@@ -99,49 +99,59 @@ Current `Research Beta 4.0` tranche after output `19998`:
     - `26` `cross-object coherence drift`
     - `1` `anchor relapse`
 
-Current staged next lane:
+Current `Research Beta 5.0` pulse results:
 
-- `pre-Beta 5.0`
-- `fail-pressure pulse`
-- status:
-  - hypothesis translated into Scorey terms
-  - pulse evidence taxonomy now defined
-  - exclusion reasons now defined
-  - first staged target family pinned:
-    - `cross-object coherence drift`
-  - not promoted to `Beta 5.0`
-  - no pulse run started yet
+- pulse `1`:
+  - family: `cross-object coherence drift`
+  - range: `20217-20231`
+  - raw: `15`
+  - anchors: `8`
+  - `counted_seams`: `5`
+  - `excluded_noise`: `2`
+  - exclusions:
+    - `operator_artifact=2`
+    - `off_target_failure=0`
+  - counted total: `13`
+  - verdict: `pass`
+- pulse `2`:
+  - family: `same-pick object-shape drift`
+  - range: `20232-20246`
+  - raw: `15`
+  - anchors: `15`
+  - `counted_seams`: `0`
+  - `excluded_noise`: `0`
+  - exclusions:
+    - `operator_artifact=0`
+    - `off_target_failure=0`
+  - counted total: `15`
+  - verdict: `pass`
 
-Reusable worktrees currently kept warm:
+Worktree note:
 
-- `scorey-canonical-env`
-- `scorey-fresh-mixed-run`
-
-Both are normalized to:
-
-- local `.venv`
-- canonical repo `.env`
-- canonical repo `.local`
-- clean `make doctor-env`
-- clean `make session-status`
+- use the canonical repo root unless a new kernel explicitly opens a fresh
+  worktree lane
+- do not treat old side worktrees as warm pulse lanes by default
 
 ## Active Kernel
 
 - keep `Beta 4.0` frozen as closed evidence
-- finish locking the staged pulse contract before any live `5.0` run
+- keep `Beta 5.0` active on the first real pulse evidence
 - preserve the explicit comparison boundary:
   - anchored `3.0`
   - abstract row-level `4.0`
-  - staged pulse-level pre-`5.0`
+  - pulse-level `5.0`
+- package the current two-pulse `Beta 5.0` checkpoint
 
 ## Next Slice
 
-1. Package the `pre-Beta 5.0` contract checkpoint.
-2. Decide whether pulse review needs a dedicated operator surface or can ride
-   the current isolated pair-cycle lane cleanly.
-3. Launch the first real pulse run on:
-   - `cross-object coherence drift`
-4. Promote to `Beta 5.0` only when that first pulse run starts.
+1. Package the current two-pulse `Beta 5.0` checkpoint.
+2. Choose the next active fail family after the current pulse contrast.
+3. Compare the next pulse verdict against:
+   - pulse `1`
+   - pulse `2`
+   - the closed `Beta 4.0` row-level baseline
+4. Confirm repeated pulses keep the runtime closed at `0` pending across route,
+   tone, and disposition.
 
 ## Guardrails
 

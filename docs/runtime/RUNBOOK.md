@@ -112,15 +112,22 @@ Use this doc for operator procedure.
 ## Protected Main PR Flow
 
 1. Work on a feature branch.
-2. Commit locally.
-3. Push the branch.
-4. Open a PR to `main`.
-5. Wait for required checks.
-6. Merge through the protected-main flow.
-7. Sync local `main`:
+2. Serialize git write actions.
+   - Do not parallelize `git add`, `git commit`, `git push`, branch switches,
+     merges, rebases, or PR creation.
+   - Use:
+     - `git add ...`
+     - verify staged state with `git status --short` or `git diff --cached --stat`
+     - `git commit ...`
+3. Commit locally.
+4. Push the branch.
+5. Open a PR to `main`.
+6. Wait for required checks.
+7. Merge through the protected-main flow.
+8. Sync local `main`:
    - `git switch main`
    - `git pull --ff-only`
-8. Final local repo state is clean and synced with `origin/main`.
+9. Final local repo state is clean and synced with `origin/main`.
 
 ## End Of Day
 
@@ -191,6 +198,18 @@ Use this doc for operator procedure.
   - current-truth docs freshness gate
 - `make end-runtime-check`
   - closeout runtime gate
+- `make eval-pulse-open`
+  - open one bounded pulse over a route-pass output range
+- `make eval-pulse-sample`
+  - list newest unlabeled rows inside one pulse
+- `make eval-pulse-judge`
+  - label one row as `anchor`, `counted_seam`, or `excluded_noise`
+- `make eval-pulse-summary`
+  - report raw rows, counted totals, exclusions, and pulse verdict
+- `make eval-pulse-close`
+  - close one pulse once every row in range has a pulse label
+  - settle any still-unreviewed legacy tone rows in that pulse range out of the
+    active tone queue
 - `make lint-docs`
   - tracked docs lint gate
 - `make check`
