@@ -128,7 +128,7 @@ Both are normalized to:
 ## Active Kernel
 
 - keep `Beta 4.0` frozen as closed evidence
-- finish locking the staged pulse contract before any live `5.0` run
+- package the staged pulse operator surface before any live `5.0` run
 - preserve the explicit comparison boundary:
   - anchored `3.0`
   - abstract row-level `4.0`
@@ -136,11 +136,10 @@ Both are normalized to:
 
 ## Next Slice
 
-1. Package the `pre-Beta 5.0` contract checkpoint.
-2. Decide whether pulse review needs a dedicated operator surface or can ride
-   the current isolated pair-cycle lane cleanly.
-3. Launch the first real pulse run on:
+1. Package the `pre-Beta 5.0` pulse operator surface checkpoint.
+2. Launch the first real pulse run on:
    - `cross-object coherence drift`
+3. Report pulse verdicts against the closed `Beta 4.0` row-level baseline.
 4. Promote to `Beta 5.0` only when that first pulse run starts.
 
 ## Guardrails

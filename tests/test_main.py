@@ -694,6 +694,114 @@ class MainCommandTests(TestCase):
         )
         self.assertIn("pending tone fail row", output)
 
+    def test_eval_pulse_commands_cover_open_sample_judge_summary_and_close(
+        self,
+    ) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            anchor_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="anchor row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            seam_id = record_output(
+                db_path,
+                user_pick="scissors",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="counted seam row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            artifact_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="operator artifact row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, anchor_id, "pass", "route pass")
+            judge_output(db_path, seam_id, "pass", "route pass")
+            judge_output(db_path, artifact_id, "pass", "route pass")
+
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    open_result = main(
+                        [
+                            "eval-pulse-open",
+                            "--first-output-id",
+                            str(anchor_id),
+                            "--last-output-id",
+                            str(artifact_id),
+                            "--target-family",
+                            "cross-object coherence drift",
+                            "--note",
+                            "first bounded pulse",
+                        ]
+                    )
+                    sample_result = main(["eval-pulse-sample", "1", "--limit", "5"])
+                    judge_anchor_result = main(
+                        ["eval-pulse-judge", "1", str(anchor_id), "anchor"]
+                    )
+                    judge_seam_result = main(
+                        ["eval-pulse-judge", "1", str(seam_id), "counted_seam"]
+                    )
+                    judge_fail_result = main(
+                        [
+                            "eval-pulse-judge",
+                            "1",
+                            str(artifact_id),
+                            "excluded_noise",
+                            "--reason",
+                            "operator_artifact",
+                        ]
+                    )
+                    summary_result = main(["eval-pulse-summary", "1"])
+                    close_result = main(["eval-pulse-close", "1"])
+
+        self.assertEqual(open_result, 0)
+        self.assertEqual(sample_result, 0)
+        self.assertEqual(judge_anchor_result, 0)
+        self.assertEqual(judge_seam_result, 0)
+        self.assertEqual(judge_fail_result, 0)
+        self.assertEqual(summary_result, 0)
+        self.assertEqual(close_result, 0)
+        output = stdout.getvalue()
+        self.assertIn("opened pulse 1", output)
+        self.assertIn(
+            (
+                "pulse [1] target_family=cross-object coherence drift "
+                "range=1-3 status=open"
+            ),
+            output,
+        )
+        self.assertIn("pulse sample: newest unlabeled row in range", output)
+        self.assertIn("operator artifact row", output)
+        self.assertIn("judged pulse output 1 in pulse 1: anchor", output)
+        self.assertIn("judged pulse output 2 in pulse 1: counted seam", output)
+        self.assertIn(
+            "judged pulse output 3 in pulse 1: excluded noise",
+            output,
+        )
+        self.assertIn("reason: operator_artifact", output)
+        self.assertIn(
+            (
+                "pulse counts: raw=3 anchors=1 counted_seams=1 "
+                "excluded_noise=1 counted_total=2 pending=0 verdict=fail"
+            ),
+            output,
+        )
+        self.assertIn("closed pulse 1", output)
+
     def test_eval_sample_local_records_rows(self) -> None:
         stdout = io.StringIO()
         with TemporaryDirectory() as tmpdir:

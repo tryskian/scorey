@@ -191,6 +191,16 @@ Use this doc for operator procedure.
   - current-truth docs freshness gate
 - `make end-runtime-check`
   - closeout runtime gate
+- `make eval-pulse-open`
+  - open one bounded pulse over a route-pass output range
+- `make eval-pulse-sample`
+  - list newest unlabeled rows inside one pulse
+- `make eval-pulse-judge`
+  - label one row as `anchor`, `counted_seam`, or `excluded_noise`
+- `make eval-pulse-summary`
+  - report raw rows, counted totals, exclusions, and pulse verdict
+- `make eval-pulse-close`
+  - close one pulse once every row in range has a pulse label
 - `make lint-docs`
   - tracked docs lint gate
 - `make check`

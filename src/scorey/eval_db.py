@@ -14,6 +14,13 @@ SOURCE_MODES: tuple[str, ...] = ("local", "live")
 ROUTE_FAMILIES: tuple[str, ...] = ("cross-object", "same-pick")
 LENSES: tuple[str, ...] = ("tone",)
 DISPOSITIONS: tuple[str, ...] = ("retain", "evict")
+PULSE_LABELS: tuple[str, ...] = ("anchor", "counted_seam", "excluded_noise")
+COUNTED_PULSE_LABELS: tuple[str, ...] = ("anchor", "counted_seam")
+PULSE_EXCLUSION_REASONS: tuple[str, ...] = (
+    "operator_artifact",
+    "off_target_failure",
+)
+PULSE_STATUSES: tuple[str, ...] = ("open", "closed")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS eval_outputs (
@@ -78,6 +85,37 @@ CREATE TABLE IF NOT EXISTS eval_lens_failure_disposition_archives (
     note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
     UNIQUE (output_id, lens)
+);
+
+CREATE TABLE IF NOT EXISTS eval_pulses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    target_family TEXT NOT NULL,
+    first_output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE RESTRICT,
+    last_output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE RESTRICT,
+    note TEXT NOT NULL DEFAULT '',
+    status TEXT NOT NULL DEFAULT 'open'
+        CHECK (status IN ('open', 'closed')),
+    created_at TEXT NOT NULL,
+    closed_at TEXT,
+    CHECK (first_output_id <= last_output_id)
+);
+
+CREATE TABLE IF NOT EXISTS eval_pulse_judgments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pulse_id INTEGER NOT NULL REFERENCES eval_pulses(id) ON DELETE CASCADE,
+    output_id INTEGER NOT NULL REFERENCES eval_outputs(id) ON DELETE CASCADE,
+    label TEXT NOT NULL
+        CHECK (label IN ('anchor', 'counted_seam', 'excluded_noise')),
+    reason TEXT NOT NULL DEFAULT ''
+        CHECK (
+            reason = ''
+            OR reason IN (
+                'operator_artifact',
+                'off_target_failure'
+            )
+        ),
+    created_at TEXT NOT NULL,
+    UNIQUE (pulse_id, output_id)
 );
 """
 
@@ -321,6 +359,49 @@ def init_db(db_path: Path | None = None) -> Path:
     return resolved
 
 
+def _validate_pulse_label(label: str) -> None:
+    if label not in PULSE_LABELS:
+        raise ValueError(f"Unsupported pulse label '{label}'.")
+
+
+def _validate_pulse_reason(label: str, reason: str, current_verdict: str) -> None:
+    if current_verdict != "pass":
+        raise ValueError("Only route-pass rows may enter a Scorey pulse.")
+
+    if label == "excluded_noise":
+        if reason not in PULSE_EXCLUSION_REASONS:
+            supported = ", ".join(PULSE_EXCLUSION_REASONS)
+            raise ValueError(
+                f"Excluded pulse rows require one of these reasons: {supported}."
+            )
+        return
+
+    if reason:
+        raise ValueError("Pulse reasons are only valid for the excluded_noise label.")
+
+
+def _get_pulse_row(conn: sqlite3.Connection, pulse_id: int) -> sqlite3.Row:
+    pulse = conn.execute(
+        """
+        SELECT
+            id,
+            target_family,
+            first_output_id,
+            last_output_id,
+            note,
+            status,
+            created_at,
+            closed_at
+        FROM eval_pulses
+        WHERE id = ?
+        """,
+        (pulse_id,),
+    ).fetchone()
+    if pulse is None:
+        raise ValueError(f"Pulse id {pulse_id} does not exist.")
+    return pulse
+
+
 def record_output(
     db_path: Path | None,
     *,
@@ -390,6 +471,298 @@ def record_round_state(
         source_mode=source_mode,
         model=model,
     )
+
+
+def create_pulse(
+    db_path: Path | None,
+    *,
+    target_family: str,
+    first_output_id: int,
+    last_output_id: int,
+    note: str = "",
+) -> int:
+    if not target_family.strip():
+        raise ValueError("Pulse target family must be non-empty.")
+    if first_output_id > last_output_id:
+        raise ValueError("Pulse first output id must be less than or equal to last.")
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+
+        first_row = conn.execute(
+            "SELECT id FROM eval_outputs WHERE id = ?",
+            (first_output_id,),
+        ).fetchone()
+        if first_row is None:
+            raise ValueError(f"Output id {first_output_id} does not exist.")
+
+        last_row = conn.execute(
+            "SELECT id FROM eval_outputs WHERE id = ?",
+            (last_output_id,),
+        ).fetchone()
+        if last_row is None:
+            raise ValueError(f"Output id {last_output_id} does not exist.")
+
+        range_counts = conn.execute(
+            """
+            SELECT
+                COUNT(*) AS total,
+                SUM(CASE WHEN current_verdict = 'pending' THEN 1 ELSE 0 END)
+                    AS pending,
+                SUM(CASE WHEN current_verdict = 'pass' THEN 1 ELSE 0 END)
+                    AS route_pass
+            FROM eval_outputs
+            WHERE id BETWEEN ? AND ?
+            """,
+            (first_output_id, last_output_id),
+        ).fetchone()
+        total = int(range_counts["total"] or 0) if range_counts is not None else 0
+        pending = int(range_counts["pending"] or 0) if range_counts is not None else 0
+        route_pass = (
+            int(range_counts["route_pass"] or 0) if range_counts is not None else 0
+        )
+        if total == 0:
+            raise ValueError("Pulse range does not contain any eval outputs.")
+        if pending:
+            raise ValueError(
+                "Pulse range still contains route-pending rows and cannot open yet."
+            )
+        if route_pass != total:
+            raise ValueError("Scorey pulses must open over a fully route-pass range.")
+
+        existing = conn.execute(
+            """
+            SELECT id
+            FROM eval_pulses
+            WHERE target_family = ?
+              AND first_output_id = ?
+              AND last_output_id = ?
+              AND status = 'open'
+            """,
+            (target_family, first_output_id, last_output_id),
+        ).fetchone()
+        if existing is not None:
+            raise ValueError(
+                "An open pulse already exists for this target family and range."
+            )
+
+        cursor = conn.execute(
+            """
+            INSERT INTO eval_pulses (
+                target_family,
+                first_output_id,
+                last_output_id,
+                note,
+                status,
+                created_at
+            ) VALUES (?, ?, ?, ?, 'open', ?)
+            """,
+            (target_family, first_output_id, last_output_id, note, utc_now()),
+        )
+        if cursor.lastrowid is None:
+            raise RuntimeError("Failed to retrieve inserted pulse id.")
+        return cursor.lastrowid
+
+
+def list_pulse_review_sample(
+    db_path: Path | None,
+    *,
+    pulse_id: int,
+    limit: int = 12,
+) -> list[sqlite3.Row]:
+    if limit < 1:
+        raise ValueError("Limit must be at least 1.")
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+        pulse = _get_pulse_row(conn, pulse_id)
+        rows = conn.execute(
+            """
+            SELECT
+                id,
+                user_pick,
+                scorey_pick,
+                route_family,
+                round_text,
+                source_mode,
+                model,
+                current_verdict,
+                current_note,
+                created_at
+            FROM eval_outputs
+            WHERE id BETWEEN ? AND ?
+              AND NOT EXISTS (
+                    SELECT 1
+                    FROM eval_pulse_judgments pulse_judgments
+                    WHERE pulse_judgments.pulse_id = ?
+                      AND pulse_judgments.output_id = eval_outputs.id
+              )
+            ORDER BY id DESC
+            LIMIT ?
+            """,
+            (
+                int(pulse["first_output_id"]),
+                int(pulse["last_output_id"]),
+                pulse_id,
+                limit,
+            ),
+        ).fetchall()
+    return list(rows)
+
+
+def judge_output_for_pulse(
+    db_path: Path | None,
+    pulse_id: int,
+    output_id: int,
+    *,
+    label: str,
+    reason: str = "",
+) -> None:
+    _validate_pulse_label(label)
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+        pulse = _get_pulse_row(conn, pulse_id)
+        if pulse["status"] != "open":
+            raise ValueError(f"Pulse id {pulse_id} is closed and cannot take labels.")
+
+        row = conn.execute(
+            """
+            SELECT id, current_verdict
+            FROM eval_outputs
+            WHERE id = ?
+            """,
+            (output_id,),
+        ).fetchone()
+        if row is None:
+            raise ValueError(f"Output id {output_id} does not exist.")
+        if not (
+            int(pulse["first_output_id"]) <= output_id <= int(pulse["last_output_id"])
+        ):
+            raise ValueError(
+                f"Output id {output_id} is outside pulse {pulse_id}'s range."
+            )
+        current_verdict = str(row["current_verdict"])
+        if current_verdict == "pending":
+            raise ValueError(
+                f"Output id {output_id} is still route-pending and cannot join a pulse."
+            )
+
+        _validate_pulse_reason(label, reason, current_verdict)
+
+        conn.execute(
+            """
+            INSERT INTO eval_pulse_judgments (
+                pulse_id,
+                output_id,
+                label,
+                reason,
+                created_at
+            ) VALUES (?, ?, ?, ?, ?)
+            """,
+            (pulse_id, output_id, label, reason, utc_now()),
+        )
+
+
+def pulse_summary(db_path: Path | None, pulse_id: int) -> dict[str, object]:
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+        pulse = _get_pulse_row(conn, pulse_id)
+
+        raw_row = conn.execute(
+            """
+            SELECT COUNT(*) AS total
+            FROM eval_outputs
+            WHERE id BETWEEN ? AND ?
+            """,
+            (pulse["first_output_id"], pulse["last_output_id"]),
+        ).fetchone()
+        raw_total = int(raw_row["total"] or 0) if raw_row is not None else 0
+
+        label_rows = conn.execute(
+            """
+            SELECT
+                label,
+                COUNT(*) AS count
+            FROM eval_pulse_judgments
+            WHERE pulse_id = ?
+            GROUP BY label
+            """,
+            (pulse_id,),
+        ).fetchall()
+        reason_rows = conn.execute(
+            """
+            SELECT
+                reason,
+                COUNT(*) AS count
+            FROM eval_pulse_judgments
+            WHERE pulse_id = ?
+              AND label = 'excluded_noise'
+            GROUP BY reason
+            """,
+            (pulse_id,),
+        ).fetchall()
+
+    label_counts = {label: 0 for label in PULSE_LABELS}
+    for row in label_rows:
+        label_counts[str(row["label"])] = int(row["count"] or 0)
+
+    excluded_by_reason = {reason: 0 for reason in PULSE_EXCLUSION_REASONS}
+    for row in reason_rows:
+        excluded_by_reason[str(row["reason"])] = int(row["count"] or 0)
+
+    counted_total = sum(label_counts[label] for label in COUNTED_PULSE_LABELS)
+    pending = raw_total - sum(label_counts.values())
+    if pending > 0:
+        verdict = "pending"
+    elif label_counts["anchor"] > label_counts["counted_seam"]:
+        verdict = "pass"
+    else:
+        verdict = "fail"
+
+    return {
+        "id": int(pulse["id"]),
+        "target_family": str(pulse["target_family"]),
+        "first_output_id": int(pulse["first_output_id"]),
+        "last_output_id": int(pulse["last_output_id"]),
+        "note": str(pulse["note"]),
+        "status": str(pulse["status"]),
+        "created_at": str(pulse["created_at"]),
+        "closed_at": None if pulse["closed_at"] is None else str(pulse["closed_at"]),
+        "raw_total": raw_total,
+        "anchor": label_counts["anchor"],
+        "counted_seam": label_counts["counted_seam"],
+        "excluded_noise": label_counts["excluded_noise"],
+        "excluded_by_reason": excluded_by_reason,
+        "counted_total": counted_total,
+        "pending": pending,
+        "verdict": verdict,
+    }
+
+
+def close_pulse(db_path: Path | None, pulse_id: int) -> dict[str, object]:
+    summary = pulse_summary(db_path, pulse_id)
+    pending = summary["pending"]
+    if not isinstance(pending, int):
+        raise RuntimeError("Pulse summary pending count must be an int.")
+    if pending > 0:
+        raise ValueError(
+            f"Pulse id {pulse_id} still has pending rows and cannot close yet."
+        )
+
+    with closing(connect(db_path)) as conn, conn:
+        prepare_db(conn)
+        pulse = _get_pulse_row(conn, pulse_id)
+        if pulse["status"] != "closed":
+            conn.execute(
+                """
+                UPDATE eval_pulses
+                SET status = 'closed', closed_at = ?
+                WHERE id = ?
+                """,
+                (utc_now(), pulse_id),
+            )
+    return pulse_summary(db_path, pulse_id)
 
 
 def list_outputs(

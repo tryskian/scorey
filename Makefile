@@ -17,6 +17,12 @@ OUTPUT_ID ?=
 VERDICT ?=
 DISPOSITION ?=
 NOTE ?=
+PULSE_ID ?=
+PULSE_LABEL ?=
+PULSE_REASON ?=
+PULSE_TARGET_FAMILY ?=
+PULSE_FIRST_OUTPUT_ID ?=
+PULSE_LAST_OUTPUT_ID ?=
 OPENAI_LIMITS_URL ?= https://platform.openai.com/settings/organization/limits
 OPENAI_USAGE_URL ?= https://platform.openai.com/settings/organization/usage
 OPENAI_BILLING_URL ?= https://platform.openai.com/settings/organization/billing/overview
@@ -26,7 +32,7 @@ CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 PIP_AUDIT_ARGS ?=
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status decaffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
+.PHONY: install env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose eval-pulse-open eval-pulse-sample eval-pulse-judge eval-pulse-summary eval-pulse-close research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status decaffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
 .PHONY: lint-docs package-install-check python-security-check security-checks
 .PHONY: eval-review-sample
 
@@ -176,6 +182,21 @@ eval-tone-disposition-archive:
 
 eval-tone-dispose:
 	PYTHONPATH=src $(PY) -m scorey eval-tone-dispose $(OUTPUT_ID) $(DISPOSITION) --note "$(NOTE)"
+
+eval-pulse-open:
+	PYTHONPATH=src $(PY) -m scorey eval-pulse-open --first-output-id $(PULSE_FIRST_OUTPUT_ID) --last-output-id $(PULSE_LAST_OUTPUT_ID) --target-family "$(PULSE_TARGET_FAMILY)" $(if $(NOTE),--note "$(NOTE)",)
+
+eval-pulse-sample:
+	PYTHONPATH=src $(PY) -m scorey eval-pulse-sample $(PULSE_ID) --limit $(EVAL_LIMIT)
+
+eval-pulse-judge:
+	PYTHONPATH=src $(PY) -m scorey eval-pulse-judge $(PULSE_ID) $(OUTPUT_ID) $(PULSE_LABEL) $(if $(PULSE_REASON),--reason $(PULSE_REASON),)
+
+eval-pulse-summary:
+	PYTHONPATH=src $(PY) -m scorey eval-pulse-summary $(PULSE_ID)
+
+eval-pulse-close:
+	PYTHONPATH=src $(PY) -m scorey eval-pulse-close $(PULSE_ID)
 
 research-beta1:
 	PYTHONPATH=src $(PY) -m scorey research-beta-1 --limit $(EVAL_LIMIT)

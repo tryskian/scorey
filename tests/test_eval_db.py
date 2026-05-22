@@ -7,16 +7,21 @@ from unittest import TestCase
 from scorey.eval_db import (
     archive_failure_disposition_for_lens,
     archive_output_for_lens,
+    close_pulse,
     counts,
+    create_pulse,
     init_db,
     judge_output,
     judge_output_for_lens,
+    judge_output_for_pulse,
     lens_counts,
     lens_failure_disposition_counts,
     list_lens_failure_disposition_sample,
     list_lens_review_sample,
     list_outputs,
+    list_pulse_review_sample,
     list_review_sample,
+    pulse_summary,
     record_failure_disposition_for_lens,
     record_output,
 )
@@ -478,3 +483,147 @@ class EvalDbTests(TestCase):
             self.assertEqual(summary["evict"], 0)
             self.assertEqual(summary["pending"], 1)
             self.assertEqual(summary["archived"], 1)
+
+    def test_pulse_review_tracks_labels_exclusions_and_closeout(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            anchor_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="anchor row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            seam_id = record_output(
+                db_path,
+                user_pick="scissors",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="counted seam row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            off_target_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="off target row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            artifact_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="operator artifact row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+
+            judge_output(db_path, anchor_id, "pass", "route pass")
+            judge_output(db_path, seam_id, "pass", "route pass")
+            judge_output(db_path, off_target_id, "pass", "route pass")
+            judge_output(db_path, artifact_id, "pass", "route pass")
+
+            pulse_id = create_pulse(
+                db_path,
+                target_family="cross-object coherence drift",
+                first_output_id=anchor_id,
+                last_output_id=artifact_id,
+                note="first bounded pulse",
+            )
+
+            sample = list_pulse_review_sample(db_path, pulse_id=pulse_id, limit=10)
+            self.assertEqual(
+                [int(row["id"]) for row in sample],
+                [artifact_id, off_target_id, seam_id, anchor_id],
+            )
+
+            judge_output_for_pulse(db_path, pulse_id, anchor_id, label="anchor")
+            judge_output_for_pulse(
+                db_path,
+                pulse_id,
+                seam_id,
+                label="counted_seam",
+            )
+            judge_output_for_pulse(
+                db_path,
+                pulse_id,
+                off_target_id,
+                label="excluded_noise",
+                reason="off_target_failure",
+            )
+            judge_output_for_pulse(
+                db_path,
+                pulse_id,
+                artifact_id,
+                label="excluded_noise",
+                reason="operator_artifact",
+            )
+
+            summary = pulse_summary(db_path, pulse_id)
+            self.assertEqual(summary["target_family"], "cross-object coherence drift")
+            self.assertEqual(summary["status"], "open")
+            self.assertEqual(summary["raw_total"], 4)
+            self.assertEqual(summary["anchor"], 1)
+            self.assertEqual(summary["counted_seam"], 1)
+            self.assertEqual(summary["excluded_noise"], 2)
+            self.assertEqual(summary["counted_total"], 2)
+            self.assertEqual(summary["pending"], 0)
+            self.assertEqual(summary["verdict"], "fail")
+            self.assertEqual(
+                summary["excluded_by_reason"],
+                {
+                    "operator_artifact": 1,
+                    "off_target_failure": 1,
+                },
+            )
+
+            closed_summary = close_pulse(db_path, pulse_id)
+            self.assertEqual(closed_summary["status"], "closed")
+            self.assertIsNotNone(closed_summary["closed_at"])
+
+    def test_pulse_open_rejects_ranges_with_route_fail_rows(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            first_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="route pass row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="route fail row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "fail", "not a beta 1 route")
+
+            with self.assertRaises(ValueError) as exc:
+                create_pulse(
+                    db_path,
+                    target_family="cross-object coherence drift",
+                    first_output_id=first_id,
+                    last_output_id=second_id,
+                )
+
+            self.assertIn(
+                "Scorey pulses must open over a fully route-pass range.",
+                str(exc.exception),
+            )

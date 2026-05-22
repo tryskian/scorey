@@ -69,8 +69,6 @@ Evidence taxonomy:
 
 Exclusion reasons:
 
-- `route_floor_failure`
-  - the row fails the first gate and never reaches pulse counting
 - `operator_artifact`
   - the row is malformed, truncated, or otherwise not honestly reviewable
 - `off_target_failure`
@@ -103,7 +101,7 @@ flowchart TD
   D["Anchor"]
   E["Counted seam"]
   F["Excluded noise"]
-  G["Exclusion reason<br/>route_floor_failure<br/>operator_artifact<br/>off_target_failure"]
+  G["Exclusion reason<br/>operator_artifact<br/>off_target_failure"]
   H["Anchor tally"]
   I["Counted seam tally"]
   J["Excluded tally by reason"]
@@ -178,7 +176,6 @@ a stricter question:
 
 Before this becomes `Research Beta 5.0`, Scorey still needs:
 
-- one operator surface for pulse labeling and reporting
 - one first bounded pulse launched on the staged target family
 - explicit research reporting that compares pulse verdicts back to the closed
   `Beta 4.0` row-level baseline
