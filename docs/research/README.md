@@ -6,11 +6,11 @@ Each beta is a distinct eval approach. This folder preserves the method shifts t
 
 Raw run notes and scratch material stay out of the tracked research surface until they become evidence.
 
-## Current Stage
+## Current Beta
 
-Current staged research lane:
+Current research lane:
 
-- `pre-Beta 5.0`
+- `Research Beta 5.0`
 - `fail-pressure pulse`
 
 Most recently closed beta:
@@ -18,12 +18,12 @@ Most recently closed beta:
 - `Research Beta 4.0`
 - `abstract tone measurement`
 
-Current staging question:
+Current beta question:
 
-Should Scorey move bounded non-OCR judgment from the row to the pulse, so
-run-level seam density matters more than single-row replay?
+What changes now that bounded non-OCR runs use pulse verdicts instead of row
+verdicts once seam density matters more than single-row replay?
 
-Current staged pulse target:
+Current active pulse target:
 
 - `cross-object coherence drift`
 
@@ -46,8 +46,8 @@ Current finding:
   - `0` fail
   - `0` pending
 - the live surface has now widened again:
-  - `2294` live rows recorded
-  - `2294` beab pass at the route-and-legibility floor
+  - `2309` live rows recorded
+  - `2309` beab pass at the route-and-legibility floor
   - `0` beab fail
   - `0` pending route review
   - pair balances below stay in `scorey/user` order to match `Research Beta 1.0` pass pairs
@@ -99,7 +99,7 @@ Current finding:
     - `1081` rows judged
     - `454` pass
     - `627` fail
-    - `1213` archived out of the active tone queue
+    - `1228` archived out of the active tone queue
     - `0` route-passed live rows still pending tone review
     - the first fresh post-surface run is fully closed:
       - `170` route pass
@@ -181,6 +181,28 @@ Current finding:
           - `1` `anchor relapse`
       - the live operator surface can now open explicit isolated runs through
         pair cycles instead of only user-pick cycles
+      - the first real pulse run is now closed:
+        - family: `cross-object coherence drift`
+        - range: `20217-20231`
+        - raw: `15`
+        - anchors: `8`
+        - `counted_seams`: `5`
+        - `excluded_noise`: `2`
+        - `operator_artifact=2`
+        - `off_target_failure=0`
+        - counted total: `13`
+        - verdict: `pass`
+      - the second real pulse run is now closed:
+        - family: `same-pick object-shape drift`
+        - range: `20232-20246`
+        - raw: `15`
+        - anchors: `15`
+        - `counted_seams`: `0`
+        - `excluded_noise`: `0`
+        - `operator_artifact=0`
+        - `off_target_failure=0`
+        - counted total: `15`
+        - verdict: `pass`
   - inside the isolated paper-only tone lane:
     - `722` route-passed paper rows total
     - `566` judged
@@ -193,18 +215,35 @@ Current clean lane:
 
 - `Research Beta 4.0` is closed as the row-level abstract measurement
   baseline
-- `pre-Beta 5.0` is the active staged lane
-- the next method question is no longer whether tone can be measured without
-  phrase anchors
-- the next method question is whether bounded non-OCR runs should move from
-  row verdicts to pulse verdicts
-- the first staged pulse target is `cross-object coherence drift`
+- `Research Beta 5.0` is now active as the bounded pulse measurement lane
+- pulse `1` passed on `cross-object coherence drift`:
+  - raw `15`
+  - `8` anchors
+  - `5` `counted_seams`
+  - `2` `excluded_noise`
+  - counted total `13`
+  - verdict `pass`
+- pulse `2` passed on `same-pick object-shape drift`:
+  - raw `15`
+  - `15` anchors
+  - `0` `counted_seams`
+  - `0` `excluded_noise`
+  - counted total `15`
+  - verdict `pass`
+- the active contrast is now clear:
+  - cross-object remains the weaker family under pressure
+  - same-pick collapsed completely under pulse pressure
+- pulse closeout now also settles the legacy tone lane, so bounded pulse rows do
+  not linger as tone-pending after review
 - keep route and legibility as the floor even if the next lens widens
 - keep the local deterministic queue as baseline evidence, not as the active
   growth surface
 - keep row-level `PASS / FAIL` plus `RETAIN / EVICT` as the closed `4.0`
   comparison surface
-- promote to `Beta 5.0` only when the first real pulse run starts
+- keep pulse rows explicit as:
+  - `anchor`
+  - `counted_seam`
+  - `excluded_noise`
 
 ## Beta Map
 
@@ -214,12 +253,12 @@ Current clean lane:
 | `Research Beta 2.0` | Can one object hold a stable win/loss lane? | Explicit local pair cycles isolate one object across both roles in one focused lane. |
 | `Research Beta 3.0` | Can Scorey keep its own voice once routing is settled? | The live judged lane keeps the route floor but switches the verdict lens to tone first. |
 | `Research Beta 4.0` | What changes when tone-first measurement drops phrase anchors? | The live judged lane keeps the same route floor and tone lens, but the generator contract shifts to abstract constraints aligned to the Polinko method. |
+| `Research Beta 5.0` | What changes when bounded fail pressure becomes the binary unit? | The live isolated lane keeps the route floor, but rows become pulse evidence and the pulse becomes the `PASS / FAIL` unit. |
 
-Staged next lane:
+Current active beta note:
 
-- `pre-Beta 5.0`
-- [Fail-Pressure Pulse](./PRE_BETA_5_FAIL_PRESSURE_PULSE.md)
-- bounded non-OCR runs stay in staging until the first real pulse run starts
+- `Research Beta 5.0`
+- [Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
 
 Read in order:
 
@@ -227,7 +266,7 @@ Read in order:
 2. [Research Beta 2.0: Focused Object Lanes](./BETA_2_OBJECT_LANES.md)
 3. [Research Beta 3.0: Tone First](./BETA_3_TONE_FIRST.md)
 4. [Research Beta 4.0: Abstract Tone Measurement](./BETA_4_ABSTRACT_TONE_MEASUREMENT.md)
-5. [Pre-Beta 5.0: Fail-Pressure Pulse](./PRE_BETA_5_FAIL_PRESSURE_PULSE.md)
+5. [Research Beta 5.0: Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
 
 ## How To Read The Betas And Stages
 
@@ -242,8 +281,11 @@ Each beta marks a real change in what the evaluation is asking:
 - `Research Beta 4.0` keeps the tone-first question but changes the live generator contract from phrase-anchored to de-anchored measurement
 - failed rows now stay binary first and then move through `RETAIN / EVICT` as
   the disposition layer
-- `pre-Beta 5.0` is a staging surface, not an active beta; it defines the
-  pulse hypothesis without claiming pulse evidence yet
+- `Research Beta 5.0` moves the binary unit from the row to the bounded pulse
+  while keeping row evidence visible as:
+  - `anchor`
+  - `counted_seam`
+  - `excluded_noise`
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 
@@ -255,13 +297,15 @@ flowchart LR
   B2["Research Beta 2.0<br/>focused object lanes"]
   B3["Research Beta 3.0<br/>tone first"]
   B4["Research Beta 4.0<br/>abstract tone measurement"]
+  B5["Research Beta 5.0<br/>fail-pressure pulse"]
 
   S1["six valid pass pairs<br/>and nothing else"]
   S2["one object isolated<br/>across win and loss roles"]
   S3["five positive tone traits<br/>on judged live rounds"]
   S4["same tone bar<br/>without phrase anchors<br/>in the live generator"]
+  S5["bounded pulse verdicts<br/>with explicit row labels<br/>and exclusion reasons"]
 
-  B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4
+  B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4 --> B5 --> S5
 ```
 
 ## Plans

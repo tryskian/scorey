@@ -588,6 +588,9 @@ class EvalDbTests(TestCase):
             closed_summary = close_pulse(db_path, pulse_id)
             self.assertEqual(closed_summary["status"], "closed")
             self.assertIsNotNone(closed_summary["closed_at"])
+            tone_counts = lens_counts(db_path, lens="tone", source_mode="live")
+            self.assertEqual(tone_counts["pending"], 0)
+            self.assertEqual(tone_counts["archived"], 4)
 
     def test_pulse_open_rejects_ranges_with_route_fail_rows(self) -> None:
         with TemporaryDirectory() as tmpdir:
@@ -625,5 +628,52 @@ class EvalDbTests(TestCase):
 
             self.assertIn(
                 "Scorey pulses must open over a fully route-pass range.",
+                str(exc.exception),
+            )
+
+    def test_pulse_open_rejects_ranges_already_in_tone_lane(self) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            first_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="already judged tone row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="fresh row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "pass", "route pass")
+            judge_output_for_lens(
+                db_path,
+                first_id,
+                lens="tone",
+                verdict="pass",
+                note="tone pass",
+            )
+
+            with self.assertRaises(ValueError) as exc:
+                create_pulse(
+                    db_path,
+                    target_family="cross-object coherence drift",
+                    first_output_id=first_id,
+                    last_output_id=second_id,
+                )
+
+            self.assertIn(
+                "Scorey pulses must open over rows that are still outside "
+                "the tone lane.",
                 str(exc.exception),
             )

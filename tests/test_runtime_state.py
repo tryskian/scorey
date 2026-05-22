@@ -3,9 +3,12 @@ from tempfile import TemporaryDirectory
 from unittest import TestCase
 
 from scorey.eval_db import (
+    close_pulse,
+    create_pulse,
     init_db,
     judge_output,
     judge_output_for_lens,
+    judge_output_for_pulse,
     record_failure_disposition_for_lens,
     record_output,
 )
@@ -158,3 +161,56 @@ class RuntimeStateTests(TestCase):
             self.assertTrue(state.in_secondary_worktree)
             self.assertFalse(state.local_dir_is_symlink)
             self.assertTrue(state.split_db_risk)
+
+    def test_collect_runtime_state_treats_closed_pulse_rows_as_not_tone_pending(
+        self,
+    ) -> None:
+        with TemporaryDirectory() as tmpdir:
+            repo_root = Path(tmpdir)
+            db_path = repo_root / ".local" / "evals.sqlite"
+            init_db(db_path)
+
+            first_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="anchor row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="seam row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "pass", "route pass")
+
+            pulse_id = create_pulse(
+                db_path,
+                target_family="cross-object coherence drift",
+                first_output_id=first_id,
+                last_output_id=second_id,
+            )
+            judge_output_for_pulse(db_path, pulse_id, first_id, label="anchor")
+            judge_output_for_pulse(
+                db_path,
+                pulse_id,
+                second_id,
+                label="counted_seam",
+            )
+            close_pulse(db_path, pulse_id)
+
+            state = collect_runtime_state(
+                repo_root=repo_root,
+                db_path=db_path,
+                process_commands=(),
+            )
+
+            self.assertEqual(state.batch_state, "closed")
+            self.assertEqual(state.active_tone_pending, 0)

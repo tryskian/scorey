@@ -787,9 +787,9 @@ class MainCommandTests(TestCase):
         self.assertIn("pulse sample: newest unlabeled row in range", output)
         self.assertIn("operator artifact row", output)
         self.assertIn("judged pulse output 1 in pulse 1: anchor", output)
-        self.assertIn("judged pulse output 2 in pulse 1: counted seam", output)
+        self.assertIn("judged pulse output 2 in pulse 1: counted_seam", output)
         self.assertIn(
-            "judged pulse output 3 in pulse 1: excluded noise",
+            "judged pulse output 3 in pulse 1: excluded_noise",
             output,
         )
         self.assertIn("reason: operator_artifact", output)

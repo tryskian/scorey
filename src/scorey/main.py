@@ -300,7 +300,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     eval_pulse_judge_parser = subparsers.add_parser(
         "eval-pulse-judge",
-        help="Label one row inside a pulse as anchor, counted seam, or excluded noise.",
+        help="Label one row inside a pulse as anchor, counted_seam, or excluded_noise.",
     )
     eval_pulse_judge_parser.add_argument("pulse_id", type=int)
     eval_pulse_judge_parser.add_argument("output_id", type=int)
@@ -887,7 +887,7 @@ def _format_eval_row(db_path: Path, row_id: int) -> str:
 
 
 def _format_pulse_label(label: str) -> str:
-    return label.replace("_", " ")
+    return label
 
 
 def _print_pulse_summary(summary: dict[str, object]) -> None:

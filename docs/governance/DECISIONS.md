@@ -253,29 +253,28 @@ handoff or branch history instead.
   shows whether a weak seam is still coherent under isolation or only looked
   strong inside the mixed batch.
 
-## D-019: Stage fail-pressure pulse as pre-Beta 5.0
+## D-019: Pin fail-pressure pulse as Research Beta 5.0
 
-- Date: `2026-05-16`
+- Date: `2026-05-21`
 - Category: `eval_quality`
-- Tags: `pre_beta`, `pulse_measurement`, `staging_boundary`
+- Tags: `beta_boundary`, `pulse_measurement`, `active_method`
 - Provenance: `human-led method decision with implementation decision`
-- Decision: Treat fail-pressure pulse as a staged pre-`Beta 5.0` method lane
-  until the first real pulse run starts. `Research Beta 4.0` stays closed as
-  the row-level abstract measurement baseline.
-- Why: This is a real method transition, but it is not active evidence yet.
-  Keeping pulse judgment in pre-beta form preserves the comparison boundary:
-  `Beta 4.0` remains the finished row-level baseline, while `Beta 5.0` begins
-  only when pulse evidence exists on the live surface instead of only in the
-  hypothesis note.
+- Decision: Treat fail-pressure pulse as active `Research Beta 5.0` once the
+  first bounded pulse is run and closed on the live surface. `Research Beta
+  4.0` stays closed as the row-level abstract measurement baseline.
+- Why: The first real pulse changed what the evidence means. `Beta 4.0`
+  remains the finished row-level comparison surface, while `Beta 5.0` becomes
+  the active pulse-level comparison surface once pulse evidence exists instead
+  of only a staged hypothesis note.
 
-## D-020: Pre-Beta 5.0 pulse counting stays anchor-versus-seam
+## D-020: Beta 5.0 pulse counting stays anchor-versus-seam
 
 - Date: `2026-05-17`
 - Category: `eval_quality`
 - Tags: `pulse_counting`, `evidence_taxonomy`, `exclusions`
 - Provenance: `human-led method decision with implementation decision`
-- Decision: Pre-`Beta 5.0` pulse review counts only `anchor` and
-  `counted seam` rows toward the pulse verdict. `excluded noise` stays
+- Decision: `Research Beta 5.0` pulse review counts only `anchor` and
+  `counted_seam` rows toward the pulse verdict. `excluded_noise` stays
   auditable, reported by reason, and outside the counted total.
 - Why: This keeps bounded run judgment strict without hiding row evidence.
   The pulse stays binary at the run level, but the row surface remains visible

@@ -530,6 +530,39 @@ def create_pulse(
         if route_pass != total:
             raise ValueError("Scorey pulses must open over a fully route-pass range.")
 
+        existing_tone_lane = conn.execute(
+            """
+            SELECT 1
+            FROM eval_outputs output
+            LEFT JOIN eval_lens_judgments lens_judgments
+              ON lens_judgments.output_id = output.id
+             AND lens_judgments.lens = 'tone'
+            LEFT JOIN eval_lens_archives lens_archives
+              ON lens_archives.output_id = output.id
+             AND lens_archives.lens = 'tone'
+            LEFT JOIN eval_lens_failure_dispositions failure_dispositions
+              ON failure_dispositions.output_id = output.id
+             AND failure_dispositions.lens = 'tone'
+            LEFT JOIN eval_lens_failure_disposition_archives failure_archives
+              ON failure_archives.output_id = output.id
+             AND failure_archives.lens = 'tone'
+            WHERE output.id BETWEEN ? AND ?
+              AND (
+                    lens_judgments.output_id IS NOT NULL
+                 OR lens_archives.output_id IS NOT NULL
+                 OR failure_dispositions.output_id IS NOT NULL
+                 OR failure_archives.output_id IS NOT NULL
+              )
+            LIMIT 1
+            """,
+            (first_output_id, last_output_id),
+        ).fetchone()
+        if existing_tone_lane is not None:
+            raise ValueError(
+                "Scorey pulses must open over rows that are still outside "
+                "the tone lane."
+            )
+
         existing = conn.execute(
             """
             SELECT id
@@ -753,6 +786,42 @@ def close_pulse(db_path: Path | None, pulse_id: int) -> dict[str, object]:
     with closing(connect(db_path)) as conn, conn:
         prepare_db(conn)
         pulse = _get_pulse_row(conn, pulse_id)
+        tone_archive_note = (
+            "settled by pulse "
+            f"{pulse_id} ({summary['target_family']}, verdict={summary['verdict']})"
+        )
+        conn.execute(
+            """
+            INSERT INTO eval_lens_archives (
+                output_id,
+                lens,
+                note,
+                created_at
+            )
+            SELECT
+                output.id,
+                'tone',
+                ?,
+                ?
+            FROM eval_outputs output
+            LEFT JOIN eval_lens_judgments lens_judgments
+              ON lens_judgments.output_id = output.id
+             AND lens_judgments.lens = 'tone'
+            LEFT JOIN eval_lens_archives lens_archives
+              ON lens_archives.output_id = output.id
+             AND lens_archives.lens = 'tone'
+            WHERE output.id BETWEEN ? AND ?
+              AND output.current_verdict = 'pass'
+              AND lens_judgments.output_id IS NULL
+              AND lens_archives.output_id IS NULL
+            """,
+            (
+                tone_archive_note,
+                utc_now(),
+                int(pulse["first_output_id"]),
+                int(pulse["last_output_id"]),
+            ),
+        )
         if pulse["status"] != "closed":
             conn.execute(
                 """
