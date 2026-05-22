@@ -742,6 +742,171 @@ class MainCommandTests(TestCase):
         )
         self.assertIn("settled tone rows: 2", output)
 
+    def test_eval_prose_sample_judge_archive_and_close_cover_row_level_lane(
+        self,
+    ) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            archived_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="archived prose row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judged_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="judged prose row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            active_id = record_output(
+                db_path,
+                user_pick="scissors",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="active prose row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, archived_id, "pass", "route pass")
+            judge_output(db_path, judged_id, "pass", "route pass")
+            judge_output(db_path, active_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    archive_result = main(
+                        [
+                            "eval-prose-archive",
+                            str(archived_id),
+                            "--note",
+                            "staged out of the first prose lane",
+                        ]
+                    )
+                    judge_result = main(
+                        [
+                            "eval-prose-judge",
+                            str(judged_id),
+                            "pass",
+                            "--note",
+                            "coherent unfair prose",
+                        ]
+                    )
+                    sample_result = main(["eval-prose-sample", "--limit", "5"])
+
+        self.assertEqual(archive_result, 0)
+        self.assertEqual(judge_result, 0)
+        self.assertEqual(sample_result, 0)
+        output = stdout.getvalue()
+        self.assertIn(
+            f"archived prose output {archived_id}",
+            output,
+        )
+        self.assertIn(
+            f"judged prose output {judged_id}: pass",
+            output,
+        )
+        self.assertIn(
+            "prose counts: total=3 pass=1 fail=0 pending=1 archived=1",
+            output,
+        )
+        self.assertIn("active prose row", output)
+        self.assertNotIn("archived prose row", output.split("prose sample:")[-1])
+
+    def test_eval_prose_close_settles_tone_and_scoreboard_lanes(
+        self,
+    ) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            first_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="first bounded prose row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="second bounded prose row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    judge_first_result = main(
+                        [
+                            "eval-prose-judge",
+                            str(first_id),
+                            "pass",
+                            "--note",
+                            "coherent unfair prose",
+                        ]
+                    )
+                    judge_second_result = main(
+                        [
+                            "eval-prose-judge",
+                            str(second_id),
+                            "fail",
+                            "--note",
+                            "generic filler drift",
+                        ]
+                    )
+                    close_result = main(
+                        [
+                            "eval-prose-close",
+                            "--first-output-id",
+                            str(first_id),
+                            "--last-output-id",
+                            str(second_id),
+                            "--note",
+                            "settled by first bounded prose run",
+                        ]
+                    )
+
+            tone_summary = lens_counts(db_path, lens="tone")
+            scoreboard_summary = lens_counts(db_path, lens="scoreboard")
+
+        self.assertEqual(judge_first_result, 0)
+        self.assertEqual(judge_second_result, 0)
+        self.assertEqual(close_result, 0)
+        self.assertEqual(int(tone_summary["pending"] or 0), 0)
+        self.assertEqual(int(tone_summary["archived"] or 0), 2)
+        self.assertEqual(int(scoreboard_summary["pending"] or 0), 0)
+        self.assertEqual(int(scoreboard_summary["archived"] or 0), 2)
+        output = stdout.getvalue()
+        self.assertIn(
+            f"judged prose output {first_id}: pass",
+            output,
+        )
+        self.assertIn(
+            f"judged prose output {second_id}: fail",
+            output,
+        )
+        self.assertIn(
+            f"closed prose range {first_id}-{second_id}",
+            output,
+        )
+        self.assertIn(
+            "prose range counts: total=2 pass=1 fail=1 pending=0",
+            output,
+        )
+        self.assertIn("settled lower-lens rows: tone=2 scoreboard=2", output)
+
     def test_eval_tone_disposition_sample_dispose_and_archive_cover_failed_rows(
         self,
     ) -> None:

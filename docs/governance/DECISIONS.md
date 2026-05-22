@@ -364,3 +364,32 @@ handoff or branch history instead.
   produce clear row-level evidence and return the runtime to `0` pending
   without reopening the legacy tone queue. That changes what the evidence means
   and therefore justifies a real beta boundary.
+
+## D-026: Broader prose judgment is the staged next lens after Beta 6.0
+
+- Date: `2026-05-21`
+- Category: `eval_quality`
+- Tags: `next_lens`, `prose`, `beta_staging`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: After the active `Beta 6.0` scoreboard surface stabilizes, the
+  staged next widening step is broader prose judgment rather than more
+  scoreboard repetition on the same tested families.
+- Why: Scoreboard has now collapsed twice on both cross-object and same-pick.
+  The next honest question is whether the broader round prose can still hold
+  rigged-round logic once the judged surface widens above `scoreboard_claim`.
+
+## D-027: Beta 7.0 starts on broader prose judgment
+
+- Date: `2026-05-21`
+- Category: `eval_quality`
+- Tags: `beta_boundary`, `prose`, `row_level`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: `Research Beta 7.0` starts once the broader prose lane has both a
+  locked row-level contract and a clean bounded closeout proof on live
+  evidence. In Scorey, that boundary is now met by the first bounded
+  cross-object prose pass on `20352-20366`, which closed at `9` pass / `6`
+  fail and returned the runtime to `0` pending.
+- Why: The broader prose lane is no longer just a staged widening idea. It now
+  changes what the evidence means by proving that cross-object pressure
+  reappears above `scoreboard_claim` even after the scoreboard lane collapsed
+  cleanly on the same families.

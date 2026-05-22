@@ -176,17 +176,21 @@ Worktree note:
   - anchored `3.0`
   - abstract row-level `4.0`
   - pulse-level `5.0`
-- activate `Beta 6.0` as scoreboard judgment
-- keep the scoreboard lane row-level on `scoreboard_claim`
-- keep bounded scoreboard runs explicit with `eval-scoreboard-close`
-- hold the starting `Beta 6.0` evidence surface at:
-  - range `20292-20306`
-  - `15` scoreboard pass
-  - `0` scoreboard fail
-  - range `20307-20321`
-  - `15` scoreboard pass
-  - `0` scoreboard fail
-  - `15` untouched tone rows settled by scoreboard closeout
+- keep `Beta 6.0` frozen as the most recently closed scoreboard baseline
+- activate `Beta 7.0` as broader prose judgment
+- keep the broader prose lane row-level on the round body around the score line
+- keep bounded prose runs explicit with `eval-prose-close`
+- hold the starting `Beta 7.0` evidence surface at:
+  - range `20352-20366`
+  - `9` prose pass
+  - `6` prose fail
+  - `15` untouched tone rows settled by prose closeout
+  - `15` untouched scoreboard rows settled by prose closeout
+  - range `20367-20381`
+  - `15` prose pass
+  - `0` prose fail
+  - `15` untouched tone rows settled by prose closeout
+  - `15` untouched scoreboard rows settled by prose closeout
 
 ## Next Slice
 
@@ -196,14 +200,22 @@ Worktree note:
    - pulse `3`: cross-object `9 / 6 / 0`
    - pulse `4`: cross-object `9 / 6 / 0`
    - pulse `5`: same-pick `15 / 0 / 0`
-2. Keep `Beta 6.0` active as scoreboard judgment.
-3. Use the two bounded scoreboard source passes as the opening evidence
-   surface:
+2. Keep `Beta 6.0` as the closed scoreboard baseline.
+3. Keep the four bounded scoreboard source passes as the closed evidence
+   surface below `Beta 7.0`:
    - `20292-20306`: `15` pass / `0` fail
    - `20307-20321`: `15` pass / `0` fail
-4. Decide whether to repeat scoreboard on the same cross-object family or
-   widen it to a second family.
-5. Keep runtime closed at `0` pending across route, tone, and disposition.
+   - `20322-20336`: `15` pass / `0` fail
+   - `20337-20351`: `15` pass / `0` fail
+4. Keep `Beta 7.0` active as broader prose judgment.
+5. Use the opening broader prose source passes as the active evidence surface:
+   - `20352-20366`: `9` pass / `6` fail
+   - `20367-20381`: `15` pass / `0` fail
+6. Hold the current broader prose contrast:
+   - cross-object prose has reopened pressure at `9 / 6`
+   - same-pick prose has collapsed at `15 / 0`
+7. Repeat `cross-object coherence drift` next to see whether the wider prose
+   seam stabilizes at the same pressured shape under replay.
 
 ## Guardrails
 

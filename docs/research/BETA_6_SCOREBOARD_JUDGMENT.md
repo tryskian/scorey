@@ -9,18 +9,20 @@ open the next lens on `scoreboard_claim` before widening to broader prose?
 
 ## Short Answer
 
-Started, and the first two bounded scoreboard runs pass cleanly.
+Closed, and the first four bounded scoreboard runs passed cleanly.
 
-`Research Beta 6.0` is now active because the scoreboard lane is no longer just
-contract staging. It has:
+`Research Beta 6.0` opened because the scoreboard lane was no longer just
+contract staging. It had:
 
 - a locked row-level scoreboard contract
 - explicit bounded closeout on `eval-scoreboard-close`
-- two bounded cross-object scoreboard passes:
+- four bounded scoreboard passes:
   - `20292-20306`: `15` pass / `0` fail
   - `20307-20321`: `15` pass / `0` fail
+  - `20322-20336`: `15` pass / `0` fail
+  - `20337-20351`: `15` pass / `0` fail
 
-The second run is the real start marker because it closed on the formalized
+The second run was the real start marker because it closed on the formalized
 surface and settled `15` untouched tone rows automatically.
 
 ## Eval Shape
@@ -104,15 +106,25 @@ Reading note:
 
 ## What It Showed
 
-The first two bounded `Beta 6.0` scoreboard runs are now closed on the same
-cross-object source family after output `20291`:
+The first four bounded `Beta 6.0` scoreboard runs are now closed after output
+`20291`:
 
-- first bounded source pass:
+- first bounded cross-object source pass:
   - range: `20292-20306`
   - `15` scoreboard pass
   - `0` scoreboard fail
-- second bounded source pass:
+- second bounded cross-object source pass:
   - range: `20307-20321`
+  - `15` scoreboard pass
+  - `0` scoreboard fail
+  - `15` untouched tone rows settled by scoreboard closeout
+- third bounded same-pick source pass:
+  - range: `20322-20336`
+  - `15` scoreboard pass
+  - `0` scoreboard fail
+  - `15` untouched tone rows settled by scoreboard closeout
+- fourth bounded same-pick source pass:
+  - range: `20337-20351`
   - `15` scoreboard pass
   - `0` scoreboard fail
   - `15` untouched tone rows settled by scoreboard closeout
@@ -129,9 +141,11 @@ The live signal is very clear:
 
 - the scoreboard lane is strong enough to stand on its own
 - it is narrower and cleaner than reopening full prose
-- its current weak signal is not obvious on the cross-object family yet
+- its current weak signal is not obvious on either tested family yet
+- both tested family shapes have now collapsed twice at the scoreboard layer
 
-That is enough to justify a real beta boundary.
+That was enough to justify the beta boundary. `Beta 6.0` is now the most
+recently closed baseline below broader prose judgment.
 
 ## Why It Matters
 
@@ -151,25 +165,22 @@ without blurring it into the whole round voice again.
 
 ## What It Still Cannot Show
 
-- whether scoreboard judgment stays this clean outside the cross-object family
+- whether scoreboard judgment stays this clean outside the cross-object and
+  same-pick families
 - whether repeated scoreboard runs on cross-object eventually expose a thinner
   weak seam the way pulse did
-- whether same-pick scoreboard remains fully collapsed too
+- whether same-pick scoreboard remains this fully collapsed on repeat
 - whether scoreboard remains strong enough that the next widening step should
   skip straight to broader prose
 
 ## What Changed Next
 
-`Research Beta 6.0` is active now, so the next work is no longer promotion
-staging.
+`Research Beta 6.0` is closed now, and the next work moved one layer wider:
 
-The next clean questions are:
-
-1. repeat the scoreboard lane on the same cross-object family or widen it to a
-   second family
-2. compare scoreboard collapse against the pulse contrast:
-   - cross-object pulse pressure persisted at `8 / 5 / 2`, then `9 / 6 / 0`,
-     then `9 / 6 / 0`
-   - scoreboard on the same cross-object family is currently `15 / 0` twice
-3. decide whether the next widening step should stay on scoreboard longer or
-   move toward broader prose
+1. promote `Beta 7.0` as broader prose judgment on the same bounded-source
+   discipline
+2. keep the scoreboard contrast explicit underneath it:
+   - cross-object scoreboard: `15 / 0`, then `15 / 0`
+   - same-pick scoreboard: `15 / 0`, then `15 / 0`
+3. use that closed collapse as the baseline beneath the first broader prose
+   split on `20352-20366` at `9 / 6`

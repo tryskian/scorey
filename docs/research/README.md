@@ -311,16 +311,20 @@ Current clean lane:
 | `Research Beta 4.0` | What changes when tone-first measurement drops phrase anchors? | The live judged lane keeps the same route floor and tone lens, but the generator contract shifts to abstract constraints aligned to the Polinko method. |
 | `Research Beta 5.0` | What changes when bounded fail pressure becomes the binary unit? | The live isolated lane keeps the route floor, but rows become pulse evidence and the pulse becomes the `PASS / FAIL` unit. |
 | `Research Beta 6.0` | Does the scoreboard fragment deserve its own judged lane? | The bounded isolated lane keeps the route floor, but the active verdict resets to row-level `PASS / FAIL` on `scoreboard_claim`. |
+| `Research Beta 7.0` | What reopens once the judged surface widens above the scoreboard? | The bounded isolated lane keeps the route floor, but the active verdict widens from `scoreboard_claim` to the broader round prose around the score line. |
 
 Current active beta note:
 
-- `Research Beta 6.0`
-- [Scoreboard Judgment](./BETA_6_SCOREBOARD_JUDGMENT.md)
+- `Research Beta 7.0`
+- [Broader Prose Judgment](./BETA_7_BROADER_PROSE_JUDGMENT.md)
+- opening broader prose evidence:
+  - `20352-20366`: `9` pass / `6` fail
+  - `20367-20381`: `15` pass / `0` fail
 
 Most recently closed beta:
 
-- `Research Beta 5.0`
-- [Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
+- `Research Beta 6.0`
+- [Scoreboard Judgment](./BETA_6_SCOREBOARD_JUDGMENT.md)
 
 Read in order:
 
@@ -330,6 +334,7 @@ Read in order:
 4. [Research Beta 4.0: Abstract Tone Measurement](./BETA_4_ABSTRACT_TONE_MEASUREMENT.md)
 5. [Research Beta 5.0: Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
 6. [Research Beta 6.0: Scoreboard Judgment](./BETA_6_SCOREBOARD_JUDGMENT.md)
+7. [Research Beta 7.0: Broader Prose Judgment](./BETA_7_BROADER_PROSE_JUDGMENT.md)
 
 ## How To Read The Betas And Stages
 
@@ -351,6 +356,8 @@ Each beta marks a real change in what the evaluation is asking:
   - `excluded_noise`
 - `Research Beta 6.0` keeps the bounded source shape but narrows the verdict
   back down to row-level `PASS / FAIL` on `scoreboard_claim`
+- `Research Beta 7.0` keeps the bounded source shape but widens the verdict
+  above `scoreboard_claim` to the broader round prose around the score line
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 
@@ -363,14 +370,18 @@ flowchart LR
   B3["Research Beta 3.0<br/>tone first"]
   B4["Research Beta 4.0<br/>abstract tone measurement"]
   B5["Research Beta 5.0<br/>fail-pressure pulse"]
+  B6["Research Beta 6.0<br/>scoreboard judgment"]
+  B7["Research Beta 7.0<br/>broader prose judgment"]
 
   S1["six valid pass pairs<br/>and nothing else"]
   S2["one object isolated<br/>across win and loss roles"]
   S3["five positive tone traits<br/>on judged live rounds"]
   S4["same tone bar<br/>without phrase anchors<br/>in the live generator"]
   S5["bounded pulse verdicts<br/>with explicit row labels<br/>and exclusion reasons"]
+  S6["scoreboard_claim holds<br/>as a row-level lane<br/>across tested families"]
+  S7["broader prose reopens<br/>cross-object pressure<br/>at 9 pass / 6 fail"]
 
-  B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4 --> B5 --> S5
+  B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4 --> B5 --> S5 --> B6 --> S6 --> B7 --> S7
 ```
 
 ## Plans
@@ -386,8 +397,8 @@ Parked lanes:
   - keep using those route-passed live rows as the tone-first evidence surface
   - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
-  - only widen into scoreboard or prose judgement after the tone lane stabilises
-  - scoreboard judgment is now the staged next widening step
+  - broader prose judgment is now the active widening step
+  - no later widening lane is staged yet
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them
