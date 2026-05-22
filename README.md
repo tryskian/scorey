@@ -30,6 +30,7 @@ Current research lane:
 - opening bounded evidence:
   - `20352-20366`: `9` pass / `6` fail
   - `20367-20381`: `15` pass / `0` fail
+  - `20382-20396`: `9` pass / `6` fail
 
 Most recently closed beta:
 

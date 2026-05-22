@@ -18,13 +18,15 @@ just staging. It now has:
 
 - a locked row-level prose contract
 - explicit bounded closeout on `eval-prose-close`
-- a first real bounded prose contrast:
+- a real bounded prose contrast:
   - `20352-20366`: `9` pass / `6` fail
   - `20367-20381`: `15` pass / `0` fail
+  - `20382-20396`: `9` pass / `6` fail
 
 That opening contrast matters because the lower scoreboard lane had already
 collapsed twice at `15 / 0` on both tested families. The broader prose lens
-reintroduced pressure only when the family was cross-object.
+reintroduced pressure only when the family was cross-object, and the same
+pressure shape repeated on replay.
 
 ## Eval Shape
 
@@ -108,8 +110,8 @@ Reading note:
 
 ## What It Showed
 
-The first two bounded `Beta 7.0` prose runs are now closed after output
-`20351`:
+The first three bounded `Beta 7.0` prose runs are now closed after output
+`20381`:
 
 - first bounded cross-object prose source pass:
   - range: `20352-20366`
@@ -119,6 +121,10 @@ The first two bounded `Beta 7.0` prose runs are now closed after output
   - range: `20367-20381`
   - `15` prose pass
   - `0` prose fail
+- third bounded cross-object prose source pass:
+  - range: `20382-20396`
+  - `9` prose pass
+  - `6` prose fail
 
 The fail mix in the cross-object run was the old seam again:
 
@@ -142,7 +148,8 @@ And both closeouts proved the new operator surface end to end:
 That is the important contrast against the closed `Beta 6.0` surface:
 
 - scoreboard on both tested families had already collapsed twice at `15 / 0`
-- broader prose on cross-object immediately reopened pressure at `9 / 6`
+- broader prose on cross-object reopened pressure at `9 / 6` and repeated at
+  the same `9 / 6` shape
 - broader prose on same-pick stayed collapsed at `15 / 0`
 
 So the cross-object seam was never truly gone. It was just narrower than the
@@ -166,11 +173,14 @@ That gives the repo a sharper layered story:
   body
 - broader prose shows same-pick is still collapsed even after the judged
   surface widens
+- broader prose now shows the cross-object seam is stable enough to repeat as a
+  bounded pressured shape, not just a one-off flare
 
 ## What It Still Cannot Show
 
-- whether repeated cross-object prose runs stabilize at the same `9 / 6` shape
 - whether a still-wider lens would reveal a new family above prose
+- whether cross-object prose keeps holding at `9 / 6` or drifts again under a
+  third replay
 
 ## What Changed Next
 
@@ -179,13 +189,13 @@ staging.
 
 The next clean questions are:
 
-1. repeat the bounded cross-object prose lens to see whether `9 / 6` is stable
-   under replay
-2. compare the now-closed prose contrast directly against the closed `Beta 6.0`
+1. compare the now-closed prose contrast directly against the closed `Beta 6.0`
    scoreboard collapse:
    - cross-object scoreboard: `15 / 0`, then `15 / 0`
    - same-pick scoreboard: `15 / 0`, then `15 / 0`
-   - cross-object prose: `9 / 6`
+   - cross-object prose: `9 / 6`, then `9 / 6`
    - same-pick prose: `15 / 0`
-3. decide whether broader prose leaves cross-object as the only durable weak
+2. decide whether broader prose leaves cross-object as the only durable weak
    family above the scoreboard layer
+3. package this `Beta 7.0` checkpoint or choose whether one more cross-object
+   replay is worth the cost before widening again

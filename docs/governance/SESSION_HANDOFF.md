@@ -191,6 +191,11 @@ Worktree note:
   - `0` prose fail
   - `15` untouched tone rows settled by prose closeout
   - `15` untouched scoreboard rows settled by prose closeout
+  - range `20382-20396`
+  - `9` prose pass
+  - `6` prose fail
+  - `15` untouched tone rows settled by prose closeout
+  - `15` untouched scoreboard rows settled by prose closeout
 
 ## Next Slice
 
@@ -211,11 +216,13 @@ Worktree note:
 5. Use the opening broader prose source passes as the active evidence surface:
    - `20352-20366`: `9` pass / `6` fail
    - `20367-20381`: `15` pass / `0` fail
+   - `20382-20396`: `9` pass / `6` fail
 6. Hold the current broader prose contrast:
-   - cross-object prose has reopened pressure at `9 / 6`
+   - cross-object prose has reopened pressure at `9 / 6` and repeated there
    - same-pick prose has collapsed at `15 / 0`
-7. Repeat `cross-object coherence drift` next to see whether the wider prose
-   seam stabilizes at the same pressured shape under replay.
+7. Decide whether this is enough stable `Beta 7.0` evidence to package now or
+   whether one more cross-object replay is worth the cost before widening
+   again.
 
 ## Guardrails
 
