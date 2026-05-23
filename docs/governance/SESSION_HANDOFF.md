@@ -228,6 +228,10 @@ Worktree note:
    - not mean
    - not smug
    - not condescending
+9. Treat the first staged family as:
+   - `cross-object coherence drift`
+10. Use the staged note as the next contract surface:
+   - `docs/research/PRE_BETA_8_MENACE_JUDGMENT.md`
 
 ## Guardrails
 

@@ -75,6 +75,13 @@ Current active beta note:
   - `20367-20381`: `15` pass / `0` fail
   - `20382-20396`: `9` pass / `6` fail
 
+Current staged next lane:
+
+- `pre-Beta 8.0`
+- [Menace Judgment](./PRE_BETA_8_MENACE_JUDGMENT.md)
+- first staged family:
+  - `cross-object coherence drift`
+
 Most recently closed beta:
 
 - `Research Beta 6.0`
@@ -89,6 +96,7 @@ Read in order:
 5. [Research Beta 5.0: Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
 6. [Research Beta 6.0: Scoreboard Judgment](./BETA_6_SCOREBOARD_JUDGMENT.md)
 7. [Research Beta 7.0: Broader Prose Judgment](./BETA_7_BROADER_PROSE_JUDGMENT.md)
+8. [Pre-Beta 8.0: Menace Judgment](./PRE_BETA_8_MENACE_JUDGMENT.md)
 
 ## How To Read The Betas And Stages
 
@@ -152,7 +160,7 @@ Parked lanes:
   - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
   - broader prose judgment is now the active widening step
-  - `pre-Beta 8.0` menace judgment is the next staged lane to define
+  - `pre-Beta 8.0` menace judgment is the next staged lane
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them

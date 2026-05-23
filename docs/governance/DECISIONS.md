@@ -393,3 +393,19 @@ handoff or branch history instead.
   changes what the evidence means by proving that cross-object pressure
   reappears above `scoreboard_claim` even after the scoreboard lane collapsed
   cleanly on the same families.
+
+## D-028: Menace judgment is the staged next lens after Beta 7.0
+
+- Date: `2026-05-22`
+- Category: `eval_quality`
+- Tags: `next_lens`, `menace`, `beta_staging`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: After the active `Beta 7.0` broader prose surface stabilizes, the
+  staged next widening step is menace judgment rather than more prose replay on
+  the same tested family shape.
+- Why: `Beta 7.0` already showed the structural contrast clearly:
+  cross-object reopens at `9 / 6` while same-pick stays collapsed at `15 / 0`.
+  The next honest question is no longer only whether the round body is
+  coherent. It is whether the full visible round lands as the right kind of
+  compact rigged-round menace without drifting into smugness, cruelty, or
+  generic filler.
