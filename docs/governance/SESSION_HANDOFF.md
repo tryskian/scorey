@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-21
+Last updated: 2026-05-22
 
 ## Start Here
 
@@ -32,8 +32,9 @@ Last updated: 2026-05-21
 Scorey is a small, local, agent-backed rock, paper, scissors mini chatbot with
 a real runtime, a settled route-valid floor, and a tracked tone lane on top of
 the route pass surface. `Research Beta 4.0` is closed as the row-level
-abstract measurement surface. `Research Beta 5.0` is now active as the
-fail-pressure pulse lane.
+abstract measurement surface. `Research Beta 5.0` is closed as the
+fail-pressure pulse baseline, `Research Beta 6.0` is closed as the scoreboard
+baseline, and `Research Beta 7.0` is the current active broader prose lane.
 
 The core tracked shape is:
 
@@ -58,13 +59,13 @@ Current runtime truth:
 - `tone_pending=0`
 - `disposition_pending=0`
 - live totals:
-  - `2369` route pass
+  - `2474` route pass
   - `0` fail
   - `0` pending
 - tone totals:
   - `454` pass
   - `627` fail
-  - `1288` archived
+  - `1393` archived
   - `0` pending
 - disposition totals:
   - `72` retain
