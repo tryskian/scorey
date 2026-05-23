@@ -48,7 +48,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines[0], "┌──────────────────────────────────────────────────────────────┐"
         )
-        self.assertIn("SCOREY RESEARCH BETA 7.0", lines[1])
+        self.assertIn("SCOREY RESEARCH PRE-BETA 8.0", lines[1])
 
     def test_choose_banner_lines_uses_stacked_header_when_mid_width(self) -> None:
         lines = choose_banner_lines(terminal_width=56)
@@ -56,7 +56,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "SCOREY RESEARCH BETA 7.0",
+                "SCOREY RESEARCH PRE-BETA 8.0",
                 "scorey keeps the score and you've already lost.",
                 "github.com/tryskian/scorey",
             ),
@@ -68,7 +68,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "scorey research beta 7.0",
+                "scorey research pre-beta 8.0",
                 "scorey keeps the score and",
                 "you've already lost.",
                 "sorry.",
@@ -82,7 +82,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "scorey research beta 7.0",
+                "scorey research pre-beta 8.0",
                 "scorey keeps the score and",
                 "you've already lost.",
                 "sorry.",

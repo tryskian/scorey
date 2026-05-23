@@ -34,7 +34,8 @@ a real runtime, a settled route-valid floor, and a tracked tone lane on top of
 the route pass surface. `Research Beta 4.0` is closed as the row-level
 abstract measurement surface. `Research Beta 5.0` is closed as the
 fail-pressure pulse baseline, `Research Beta 6.0` is closed as the scoreboard
-baseline, and `Research Beta 7.0` is the current active broader prose lane.
+baseline, `Research Beta 7.0` is closed as the broader prose baseline, and
+`pre-Beta 8.0` is the current staged menace lane.
 
 The core tracked shape is:
 
@@ -172,16 +173,16 @@ Worktree note:
 ## Active Kernel
 
 - keep `Beta 4.0` frozen as closed evidence
-- keep `Beta 5.0` frozen as the most recently closed pulse baseline
+- keep `Beta 5.0` frozen as the closed pulse baseline
 - preserve the explicit comparison boundary:
   - anchored `3.0`
   - abstract row-level `4.0`
   - pulse-level `5.0`
-- keep `Beta 6.0` frozen as the most recently closed scoreboard baseline
-- activate `Beta 7.0` as broader prose judgment
+- keep `Beta 6.0` frozen as the closed scoreboard baseline
+- keep `Beta 7.0` frozen as the closed broader prose baseline
 - keep the broader prose lane row-level on the round body around the score line
 - keep bounded prose runs explicit with `eval-prose-close`
-- hold the starting `Beta 7.0` evidence surface at:
+- hold the closed `Beta 7.0` evidence surface at:
   - range `20352-20366`
   - `9` prose pass
   - `6` prose fail
@@ -197,6 +198,11 @@ Worktree note:
   - `6` prose fail
   - `15` untouched tone rows settled by prose closeout
   - `15` untouched scoreboard rows settled by prose closeout
+- keep `pre-Beta 8.0` staged as menace judgment on the full visible round
+- keep the first staged menace family at:
+  - `cross-object coherence drift`
+- use the staged note as the current contract surface:
+  - `docs/research/PRE_BETA_8_MENACE_JUDGMENT.md`
 
 ## Next Slice
 
@@ -213,8 +219,8 @@ Worktree note:
    - `20307-20321`: `15` pass / `0` fail
    - `20322-20336`: `15` pass / `0` fail
    - `20337-20351`: `15` pass / `0` fail
-4. Keep `Beta 7.0` active as broader prose judgment.
-5. Use the opening broader prose source passes as the active evidence surface:
+4. Keep `Beta 7.0` closed as the broader prose baseline.
+5. Use the bounded broader prose source passes as the closed evidence surface:
    - `20352-20366`: `9` pass / `6` fail
    - `20367-20381`: `15` pass / `0` fail
    - `20382-20396`: `9` pass / `6` fail
@@ -223,15 +229,17 @@ Worktree note:
    - same-pick prose has collapsed at `15 / 0`
 7. Record that the newer eval gates are performing cleanly across pulse,
    scoreboard, and prose closeout.
-8. Stage `pre-Beta 8.0` as menace judgment above broader prose:
+8. Keep `pre-Beta 8.0` staged as menace judgment above broader prose:
    - compact rigged-round menace
    - not mean
    - not smug
    - not condescending
 9. Treat the first staged family as:
    - `cross-object coherence drift`
-10. Use the staged note as the next contract surface:
+10. Use the staged note as the current contract surface:
    - `docs/research/PRE_BETA_8_MENACE_JUDGMENT.md`
+11. Next real research kernel:
+   - first bounded menace source pass on `cross-object coherence drift`
 
 ## Guardrails
 
