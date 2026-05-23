@@ -221,9 +221,13 @@ Worktree note:
 6. Hold the current broader prose contrast:
    - cross-object prose has reopened pressure at `9 / 6` and repeated there
    - same-pick prose has collapsed at `15 / 0`
-7. Decide whether this is enough stable `Beta 7.0` evidence to package now or
-   whether one more cross-object replay is worth the cost before widening
-   again.
+7. Record that the newer eval gates are performing cleanly across pulse,
+   scoreboard, and prose closeout.
+8. Stage `pre-Beta 8.0` as menace judgment above broader prose:
+   - compact rigged-round menace
+   - not mean
+   - not smug
+   - not condescending
 
 ## Guardrails
 
