@@ -6,28 +6,29 @@ Each beta is a distinct eval approach. This folder preserves the method shifts t
 
 Raw run notes and scratch material stay out of the tracked research surface until they become evidence.
 
-## Current Beta
+## Current Stage
 
-Current research lane:
+Current staged lane:
+
+- `pre-Beta 8.0`
+- `menace judgment`
+
+Most recently closed beta:
 
 - `Research Beta 7.0`
 - `broader prose judgment`
 
-Most recently closed beta:
+Current staged question:
 
-- `Research Beta 6.0`
-- `scoreboard judgment`
+Once broader prose has stabilized as the next live weak surface, can Scorey
+judge the quality of its compact rigged-round menace rather than only the
+coherence of its prose?
 
-Current beta question:
-
-What reopens once the judged surface widens above `scoreboard_claim` to the
-broader round prose around the score line?
-
-Current active family:
+Current staged family:
 
 - `cross-object coherence drift`
 
-Current active contrast:
+Most recently closed contrast:
 
 - cross-object prose:
   - `20352-20366`: `9` pass / `6` fail
@@ -50,7 +51,7 @@ Current finding:
   - same-pick prose stayed collapsed at `15 / 0`
   - the cross-object prose split repeated at the same `9 / 6` shape
 - the newer bounded eval gates are now performing well enough to support the
-  next staged widening step above prose
+  staged menace lens above prose
 - runtime is currently closed at `0` pending across route, tone, and
   disposition
 
@@ -66,16 +67,7 @@ Current finding:
 | `Research Beta 6.0` | Does the scoreboard fragment deserve its own judged lane? | The bounded isolated lane keeps the route floor, but the active verdict resets to row-level `PASS / FAIL` on `scoreboard_claim`. |
 | `Research Beta 7.0` | What reopens once the judged surface widens above the scoreboard? | The bounded isolated lane keeps the route floor, but the active verdict widens from `scoreboard_claim` to the broader round prose around the score line. |
 
-Current active beta note:
-
-- `Research Beta 7.0`
-- [Broader Prose Judgment](./BETA_7_BROADER_PROSE_JUDGMENT.md)
-- opening broader prose evidence:
-  - `20352-20366`: `9` pass / `6` fail
-  - `20367-20381`: `15` pass / `0` fail
-  - `20382-20396`: `9` pass / `6` fail
-
-Current staged next lane:
+Current staged note:
 
 - `pre-Beta 8.0`
 - [Menace Judgment](./PRE_BETA_8_MENACE_JUDGMENT.md)
@@ -84,8 +76,12 @@ Current staged next lane:
 
 Most recently closed beta:
 
-- `Research Beta 6.0`
-- [Scoreboard Judgment](./BETA_6_SCOREBOARD_JUDGMENT.md)
+- `Research Beta 7.0`
+- [Broader Prose Judgment](./BETA_7_BROADER_PROSE_JUDGMENT.md)
+- closed broader prose evidence:
+  - `20352-20366`: `9` pass / `6` fail
+  - `20367-20381`: `15` pass / `0` fail
+  - `20382-20396`: `9` pass / `6` fail
 
 Read in order:
 
@@ -159,8 +155,8 @@ Parked lanes:
   - keep using those route-passed live rows as the tone-first evidence surface
   - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
-  - broader prose judgment is now the active widening step
-  - `pre-Beta 8.0` menace judgment is the next staged lane
+  - broader prose judgment is now the most recently closed widening step
+  - `pre-Beta 8.0` menace judgment is the current staged lane
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them

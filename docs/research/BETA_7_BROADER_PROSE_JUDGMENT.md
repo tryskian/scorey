@@ -10,10 +10,10 @@ round prose?
 
 ## Short Answer
 
-Started, and the first bounded prose run immediately reopened the old
-cross-object seam.
+Closed, and broader prose reopened the old cross-object seam at a stable
+`9 / 6` split while same-pick stayed collapsed.
 
-`Research Beta 7.0` is now active because the broader prose lane is no longer
+`Research Beta 7.0` is now closed because the broader prose lane is no longer
 just staging. It now has:
 
 - a locked row-level prose contract
@@ -186,15 +186,13 @@ That gives the repo a sharper layered story:
 
 ## What It Still Cannot Show
 
-- whether a still-wider lens would reveal a new family above prose
-- whether cross-object prose keeps holding at `9 / 6` on further replay
+- whether a narrower menace-quality lens changes the verdict meaning again
+- whether the full visible round can be judged as compact rigged-round menace
+  without smuggling in smugness, cruelty, or filler
 
 ## What Changed Next
 
-`Research Beta 7.0` is active now, so the next work is no longer promotion
-staging.
-
-The next clean questions are:
+`Research Beta 7.0` is closed now, and the next clean questions are:
 
 1. compare the now-closed prose contrast directly against the closed `Beta 6.0`
    scoreboard collapse:
@@ -202,9 +200,7 @@ The next clean questions are:
    - same-pick scoreboard: `15 / 0`, then `15 / 0`
    - cross-object prose: `9 / 6`, then `9 / 6`
    - same-pick prose: `15 / 0`
-2. decide whether broader prose leaves cross-object as the only durable weak
-   family above the scoreboard layer
-3. use that cleaner gate confidence to stage `pre-Beta 8.0` as menace
+2. use that cleaner gate confidence to stage `pre-Beta 8.0` as menace
    judgment:
    - not mean
    - not smug
