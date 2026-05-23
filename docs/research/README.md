@@ -10,296 +10,47 @@ Raw run notes and scratch material stay out of the tracked research surface unti
 
 Current research lane:
 
-- `Research Beta 5.0`
-- `fail-pressure pulse`
+- `Research Beta 7.0`
+- `broader prose judgment`
 
 Most recently closed beta:
 
-- `Research Beta 4.0`
-- `abstract tone measurement`
+- `Research Beta 6.0`
+- `scoreboard judgment`
 
 Current beta question:
 
-What changes now that bounded non-OCR runs use pulse verdicts instead of row
-verdicts once seam density matters more than single-row replay?
+What reopens once the judged surface widens above `scoreboard_claim` to the
+broader round prose around the score line?
 
-Current active pulse target:
+Current active family:
 
 - `cross-object coherence drift`
 
+Current active contrast:
+
+- cross-object prose:
+  - `20352-20366`: `9` pass / `6` fail
+  - `20382-20396`: `9` pass / `6` fail
+- same-pick prose:
+  - `20367-20381`: `15` pass / `0` fail
+
 Current finding:
 
-- `Research Beta 1.0` proved the narrow routing contract
-- `Research Beta 2.0` showed that each object lane can hold cleanly on the local deterministic path
-- all three focused lanes completed with stable balance under the same routing gate:
-  - rock:
-    - `1790` rows of `rock/paper`
-    - `1790` rows of `scissors/rock`
-  - paper:
-    - `1790` rows of `paper/scissors`
-    - `1789` rows of `rock/paper`
-  - scissors:
-    - `1790` rows of `scissors/rock`
-    - `1789` rows of `paper/scissors`
-- the local deterministic queue is now fully judged:
-  - `17,922` pass
-  - `0` fail
-  - `0` pending
-- the live surface has now widened again:
-  - `2309` live rows recorded
-  - `2309` beab pass at the route-and-legibility floor
-  - `0` beab fail
-  - `0` pending route review
-  - pair balances below stay in `scorey/user` order to match `Research Beta 1.0` pass pairs
-  - eight recent completed live runs all stayed entirely inside the valid `Research Beta 1.0` route set:
-    - after output `18317`: `12` new live rows
-    - after output `18329`: `257` new live rows
-    - after output `18586`: `294` new live rows
-    - after output `18880`: `294` new paper-only live rows
-    - after output `19174`: `170` new live rows
-    - after output `19344`: `157` new live rows
-    - after output `19501`: `342` new live rows
-    - after output `19843`: `155` new mixed live rows
-  - the paper-only run stayed inside the expected paper route families:
-    - `paper/paper`: `144`
-    - `rock/paper`: `150`
-  - the first mixed post-surface run also stayed inside the valid route families:
-    - `paper/paper`: `34`
-    - `paper/scissors`: `24`
-    - `rock/paper`: `23`
-    - `rock/rock`: `29`
-    - `scissors/rock`: `28`
-    - `scissors/scissors`: `32`
-  - the next post-evict run also stayed inside the valid route families:
-    - `paper/paper`: `25`
-    - `paper/scissors`: `21`
-    - `rock/paper`: `27`
-    - `rock/rock`: `27`
-    - `scissors/rock`: `26`
-    - `scissors/scissors`: `31`
-  - the newest mixed run also stayed inside the valid route families:
-    - `paper/paper`: `21`
-    - `paper/scissors`: `27`
-    - `rock/paper`: `31`
-    - `rock/rock`: `25`
-    - `scissors/rock`: `27`
-    - `scissors/scissors`: `24`
-  - `Research Beta 3.0` established the tone-first lane as a positive-only
-    lens:
-  - `pick-aware`
-  - `playful`
-  - `confident`
-  - `coherent`
-  - `imaginative`
-  - `Research Beta 4.0` pins a new method boundary inside that widened lane:
-    - `3.0` kept phrase-anchored live prompt residue
-    - `4.0` removes hard-coded phrase anchors and keeps findings in tracked
-      research docs instead of the generator contract
-  - the widened tone queue is now separating real signal:
-    - `1081` rows judged
-    - `454` pass
-    - `627` fail
-    - `1288` archived out of the active tone queue
-    - `0` route-passed live rows still pending tone review
-    - the first fresh post-surface run is fully closed:
-      - `170` route pass
-      - `66` tone pass
-      - `104` tone fail
-      - `104` evict
-      - `0` fresh pending route reviews
-      - `0` fresh pending tone reviews
-      - `0` fresh pending fail dispositions
-    - the next post-evict run is also fully closed:
-      - `157` route pass
-      - `65` tone pass
-      - `92` tone fail
-      - `92` evict
-      - `0` fresh pending route reviews
-      - `0` fresh pending tone reviews
-      - `0` fresh pending fail dispositions
-    - the corrected two-hour tone batch after output `19501` is route-closed and wind-down-closed:
-      - `342` route pass
-      - `5` tone pass
-      - `3` tone fail
-      - `334` archived at wind-down before full tone review
-      - `3` retain
-      - `0` evict
-      - `0` fresh pending route reviews
-      - `0` fresh pending tone reviews
-      - `0` fresh pending fail dispositions
-    - the newest mixed run after output `19843` is now fully closed in two phases:
-      - first judged tranche:
-        - `3` route pass
-        - `2` tone pass
-        - `1` tone fail
-        - `1` retain
-      - stale remainder after output `19846`:
-        - `152` route pass
-        - `152` archived tone rows
-      - full run closeout:
-        - `155` route pass
-        - `2` tone pass
-        - `1` tone fail
-        - `152` archived tone rows
-        - `1` retain
-        - `0` evict
-        - `0` fresh pending route reviews
-        - `0` fresh pending tone reviews
-        - `0` fresh pending fail dispositions
-    - older pre-surface tone fails no longer sit in the active disposition queue:
-      - `359` stale failed rows are now archived out of that surface
-    - the current pass signal is object-specific slapstick or physical demotion that still tracks both picks
-    - the current weak pattern has tightened from `real one` / `napkin` into mostly cross-object coherence drift with a smaller same-pick object-shape drift
-    - the newest mixed run has not relapsed into `real one` / `napkin`; its first fail is smaller same-pick `rock/rock` object-shape drift around `cracked bottle cap`
-    - the first fresh `Research Beta 4.0` tranche after output `19998` is now
-      fully closed:
-      - `69` route pass
-      - `47` tone pass
-      - `22` tone fail
-      - `22` retain
-      - `0` evict
-      - no `real one` / `napkin` relapse in the closed slice
-      - the retained weak seam is still cross-object coherence drift
-      - the restored interrupted segment inside that tranche closed at:
-        - `62` route pass
-        - `42` tone pass
-        - `20` tone fail
-        - `20` retain
-        - `0` evict
-      - the restored interrupted segment showed a full `20` / `20`
-        fail-to-retain rate instead of noise or evictions
-      - the first isolated fail-family run after output `20139` is also fully
-        closed:
-        - family: `cross-object coherence drift`
-        - `77` route pass
-        - `50` tone pass
-        - `27` tone fail
-        - `27` retain
-        - `0` evict
-        - fail mix stayed narrow:
-          - `26` `cross-object coherence drift`
-          - `1` `anchor relapse`
-      - the live operator surface can now open explicit isolated runs through
-        pair cycles instead of only user-pick cycles
-      - the first real pulse run is now closed:
-        - family: `cross-object coherence drift`
-        - range: `20217-20231`
-        - raw: `15`
-        - anchors: `8`
-        - `counted_seams`: `5`
-        - `excluded_noise`: `2`
-        - `operator_artifact=2`
-        - `off_target_failure=0`
-        - counted total: `13`
-        - verdict: `pass`
-      - the second real pulse run is now closed:
-        - family: `same-pick object-shape drift`
-        - range: `20232-20246`
-        - raw: `15`
-        - anchors: `15`
-        - `counted_seams`: `0`
-        - `excluded_noise`: `0`
-        - `operator_artifact=0`
-        - `off_target_failure=0`
-        - counted total: `15`
-        - verdict: `pass`
-      - the third real pulse run is now closed:
-        - family: `cross-object coherence drift`
-        - range: `20247-20261`
-        - raw: `15`
-        - anchors: `9`
-        - `counted_seams`: `6`
-        - `excluded_noise`: `0`
-        - `operator_artifact=0`
-        - `off_target_failure=0`
-        - counted total: `15`
-        - verdict: `pass`
-      - the fourth real pulse run is now closed:
-        - family: `cross-object coherence drift`
-        - range: `20262-20276`
-        - raw: `15`
-        - anchors: `9`
-        - `counted_seams`: `6`
-        - `excluded_noise`: `0`
-        - `operator_artifact=0`
-        - `off_target_failure=0`
-        - counted total: `15`
-        - verdict: `pass`
-      - the fifth real pulse run is now closed:
-        - family: `same-pick object-shape drift`
-        - range: `20277-20291`
-        - raw: `15`
-        - anchors: `15`
-        - `counted_seams`: `0`
-        - `excluded_noise`: `0`
-        - `operator_artifact=0`
-        - `off_target_failure=0`
-        - counted total: `15`
-        - verdict: `pass`
-  - inside the isolated paper-only tone lane:
-    - `722` route-passed paper rows total
-    - `566` judged
-    - `185` pass
-    - `381` fail
-    - `156` archived after the failure seam was established
-    - `0` pending
-
-Current clean lane:
-
-- `Research Beta 4.0` is closed as the row-level abstract measurement
+- `Research Beta 4.0` stays closed as the row-level abstract measurement
   baseline
-- `Research Beta 5.0` is now active as the bounded pulse measurement lane
-- pulse `1` passed on `cross-object coherence drift`:
-  - raw `15`
-  - `8` anchors
-  - `5` `counted_seams`
-  - `2` `excluded_noise`
-  - counted total `13`
-  - verdict `pass`
-- pulse `2` passed on `same-pick object-shape drift`:
-  - raw `15`
-  - `15` anchors
-  - `0` `counted_seams`
-  - `0` `excluded_noise`
-  - counted total `15`
-  - verdict `pass`
-- pulse `3` passed on repeated `cross-object coherence drift`:
-  - raw `15`
-  - `9` anchors
-  - `6` `counted_seams`
-  - `0` `excluded_noise`
-  - counted total `15`
-  - verdict `pass`
-- pulse `4` passed on repeated `cross-object coherence drift` again:
-  - raw `15`
-  - `9` anchors
-  - `6` `counted_seams`
-  - `0` `excluded_noise`
-  - counted total `15`
-  - verdict `pass`
-- pulse `5` passed on repeated `same-pick object-shape drift` again:
-  - raw `15`
-  - `15` anchors
-  - `0` `counted_seams`
-  - `0` `excluded_noise`
-  - counted total `15`
-  - verdict `pass`
-- the active contrast is now clear:
-  - cross-object remains the weaker family under pressure, now twice at the
-    same `9 / 6 / 0` pulse shape
-  - same-pick collapsed completely under pulse pressure, now twice at the
-    same `15 / 0 / 0` pulse shape
-- pulse closeout now also settles the legacy tone lane, so bounded pulse rows do
-  not linger as tone-pending after review
-- keep route and legibility as the floor even if the next lens widens
-- keep the local deterministic queue as baseline evidence, not as the active
-  growth surface
-- keep row-level `PASS / FAIL` plus `RETAIN / EVICT` as the closed `4.0`
-  comparison surface
-- keep pulse rows explicit as:
-  - `anchor`
-  - `counted_seam`
-  - `excluded_noise`
+- `Research Beta 5.0` stays closed as the bounded pulse baseline:
+  - cross-object pressure held at `8 / 5 / 2`, then `9 / 6 / 0`, then `9 / 6 / 0`
+  - same-pick collapsed at `15 / 0 / 0`, then `15 / 0 / 0`
+- `Research Beta 6.0` stays closed as the scoreboard baseline:
+  - cross-object scoreboard: `15 / 0`, then `15 / 0`
+  - same-pick scoreboard: `15 / 0`, then `15 / 0`
+- `Research Beta 7.0` is the first wider prose lane above scoreboard:
+  - cross-object prose reopened pressure at `9 / 6`
+  - same-pick prose stayed collapsed at `15 / 0`
+  - the cross-object prose split repeated at the same `9 / 6` shape
+- runtime is currently closed at `0` pending across route, tone, and
+  disposition
 
 ## Beta Map
 
