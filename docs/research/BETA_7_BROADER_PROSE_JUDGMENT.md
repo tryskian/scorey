@@ -179,8 +179,7 @@ That gives the repo a sharper layered story:
 ## What It Still Cannot Show
 
 - whether a still-wider lens would reveal a new family above prose
-- whether cross-object prose keeps holding at `9 / 6` or drifts again under a
-  third replay
+- whether cross-object prose keeps holding at `9 / 6` on further replay
 
 ## What Changed Next
 
@@ -197,5 +196,4 @@ The next clean questions are:
    - same-pick prose: `15 / 0`
 2. decide whether broader prose leaves cross-object as the only durable weak
    family above the scoreboard layer
-3. package this `Beta 7.0` checkpoint or choose whether one more cross-object
-   replay is worth the cost before widening again
+3. decide whether the next move is another widening step or a fresh staged lane
