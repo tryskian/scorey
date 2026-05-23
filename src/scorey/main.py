@@ -62,14 +62,14 @@ from scorey.pipeline import (
 
 APP_PICKS: tuple[str, ...] = ("rock", "paper", "scissors")
 APP_BANNER_INNER_WIDTH = 62
-APP_BANNER_TITLE = "SCOREY RESEARCH BETA 3.0"
+APP_BANNER_TITLE = "SCOREY RESEARCH BETA 7.0"
 APP_BANNER_TAGLINE = "scorey keeps the score and you've already lost."
 APP_BANNER_REPO = "github.com/tryskian/scorey"
 APP_BANNER_REPO_URL = "https://github.com/tryskian/scorey"
 APP_BANNER_BOX_WIDTH = APP_BANNER_INNER_WIDTH + 2
 APP_BANNER_STACKED_WIDTH = len(APP_BANNER_TAGLINE)
 APP_BANNER_MINIMAL_WIDTH = len(APP_BANNER_REPO)
-APP_BANNER_MINIMAL_TITLE = "scorey research beta 3.0"
+APP_BANNER_MINIMAL_TITLE = "scorey research beta 7.0"
 APP_BANNER_MINIMAL_TAGLINE_LINES: tuple[str, ...] = (
     "scorey keeps the score and",
     "you've already lost.",
