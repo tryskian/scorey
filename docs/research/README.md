@@ -49,6 +49,8 @@ Current finding:
   - cross-object prose reopened pressure at `9 / 6`
   - same-pick prose stayed collapsed at `15 / 0`
   - the cross-object prose split repeated at the same `9 / 6` shape
+- the newer bounded eval gates are now performing well enough to support the
+  next staged widening step above prose
 - runtime is currently closed at `0` pending across route, tone, and
   disposition
 
@@ -150,7 +152,7 @@ Parked lanes:
   - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
   - broader prose judgment is now the active widening step
-  - no later widening lane is staged yet
+  - `pre-Beta 8.0` menace judgment is the next staged lane to define
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them
