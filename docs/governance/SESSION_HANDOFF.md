@@ -203,6 +203,13 @@ Worktree note:
   - `cross-object coherence drift`
 - use the staged note as the current contract surface:
   - `docs/research/PRE_BETA_8_MENACE_JUDGMENT.md`
+- keep the local template-contract lane in `docs/peanut/research/templates/`
+  as the current private staging surface for the next tracked docs pass
+- current local template set:
+  - `README.md`
+  - `boundary.md`
+  - `lane.md`
+  - `hypothesis.md`
 
 ## Next Slice
 
@@ -238,7 +245,14 @@ Worktree note:
    - `cross-object coherence drift`
 10. Use the staged note as the current contract surface:
    - `docs/research/PRE_BETA_8_MENACE_JUDGMENT.md`
-11. Next real research kernel:
+11. Next tracked docs kernel:
+   - adapt the governance and research docs category by category from the local
+     peanut template contract
+12. First tracked docs pass:
+   - `docs/governance/CHARTER.md`
+   - `docs/runtime/ARCHITECTURE.md`
+   - then smaller truth-sync passes on `DECISIONS.md` and `SESSION_HANDOFF.md`
+13. Next real research kernel after the docs pass:
    - first bounded menace source pass on `cross-object coherence drift`
 
 ## Guardrails
