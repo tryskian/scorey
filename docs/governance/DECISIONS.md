@@ -93,7 +93,7 @@ handoff or branch history instead.
 - Tags: `route_floor`, `tone_first`, `beta_method`
 - Decision: Route correctness remains the first gate, and tone-first remains
   the active widened review lens once the route floor is stable.
-- Why: This keeps the method sequence clear and prevents wider judgment from
+- Why: This keeps the method sequence clear and prevents wider judgement from
   obscuring the core round contract.
 
 ## D-007: Local deterministic runs are baseline evidence and live batches are the growth surface
@@ -276,7 +276,7 @@ handoff or branch history instead.
 - Decision: `Research Beta 5.0` pulse review counts only `anchor` and
   `counted_seam` rows toward the pulse verdict. `excluded_noise` stays
   auditable, reported by reason, and outside the counted total.
-- Why: This keeps bounded run judgment strict without hiding row evidence.
+- Why: This keeps bounded run judgement strict without hiding row evidence.
   The pulse stays binary at the run level, but the row surface remains visible
   enough to audit how a pass or fail was produced.
 
@@ -305,19 +305,19 @@ handoff or branch history instead.
 - Why: Scorey already had real runtime closeout gates, but its local tooling
   surface still left docs linting, package import smoke, and security audit
   outside the canonical Make workflow. The toy repos need a small shared
-  baseline that is easy to repeat without changing runtime or eval behavior.
+  baseline that is easy to repeat without changing runtime or eval behaviour.
 
-## D-022: Scoreboard judgment is the staged next lens after Beta 5.0 pulse
+## D-022: Scoreboard judgement is the staged next lens after Beta 5.0 pulse
 
 - Date: `2026-05-21`
 - Category: `eval_quality`
 - Tags: `next_lens`, `scoreboard`, `beta_staging`
 - Provenance: `human-led method decision with implementation decision`
 - Decision: After the active `Beta 5.0` pulse surface stabilizes, the staged
-  next widening step is scoreboard judgment rather than broad prose judgment.
+  next widening step is scoreboard judgement rather than broad prose judgement.
   It remains staged until the first clean bounded scoreboard run closes on the
   formalized scoreboard surface.
-- Why: Scoreboard judgment is the smaller next lens. It stays tied to the
+- Why: Scoreboard judgement is the smaller next lens. It stays tied to the
   explicit `scoreboard_claim` field that already exists in the runtime
   contract, so it widens the evidence surface without immediately reopening
   the whole round prose as one broad quality question.
@@ -328,7 +328,7 @@ handoff or branch history instead.
 - Category: `eval_quality`
 - Tags: `scoreboard`, `row_level`, `next_lens`
 - Provenance: `human-led method decision with implementation decision`
-- Decision: The first scoreboard judgment lane should stay row-level on
+- Decision: The first scoreboard judgement lane should stay row-level on
   `scoreboard_claim`. Bounded runs can still source the rows, but the
   scoreboard verdict itself should not inherit pulse math on the first pass.
 - Why: `scoreboard_claim` is already a small explicit field in the runtime
@@ -350,7 +350,7 @@ handoff or branch history instead.
   clean-runtime closeout discipline as pulse work so the live queue returns to
   `0` pending at route, tone, and disposition after the bounded read ends.
 
-## D-025: Beta 6.0 starts on scoreboard judgment
+## D-025: Beta 6.0 starts on scoreboard judgement
 
 - Date: `2026-05-21`
 - Category: `eval_quality`
@@ -365,20 +365,20 @@ handoff or branch history instead.
   without reopening the legacy tone queue. That changes what the evidence means
   and therefore justifies a real beta boundary.
 
-## D-026: Broader prose judgment is the staged next lens after Beta 6.0
+## D-026: Broader prose judgement is the staged next lens after Beta 6.0
 
 - Date: `2026-05-21`
 - Category: `eval_quality`
 - Tags: `next_lens`, `prose`, `beta_staging`
 - Provenance: `human-led method decision with implementation decision`
 - Decision: After the active `Beta 6.0` scoreboard surface stabilizes, the
-  staged next widening step is broader prose judgment rather than more
+  staged next widening step is broader prose judgement rather than more
   scoreboard repetition on the same tested families.
 - Why: Scoreboard has now collapsed twice on both cross-object and same-pick.
   The next honest question is whether the broader round prose can still hold
   rigged-round logic once the judged surface widens above `scoreboard_claim`.
 
-## D-027: Beta 7.0 starts on broader prose judgment
+## D-027: Beta 7.0 starts on broader prose judgement
 
 - Date: `2026-05-21`
 - Category: `eval_quality`
@@ -394,14 +394,14 @@ handoff or branch history instead.
   reappears above `scoreboard_claim` even after the scoreboard lane collapsed
   cleanly on the same families.
 
-## D-028: Menace judgment is the staged next lens after Beta 7.0
+## D-028: Menace judgement is the staged next lens after Beta 7.0
 
 - Date: `2026-05-22`
 - Category: `eval_quality`
 - Tags: `next_lens`, `menace`, `beta_staging`
 - Provenance: `human-led method decision with implementation decision`
 - Decision: After the active `Beta 7.0` broader prose surface stabilizes, the
-  staged next widening step is menace judgment rather than more prose replay on
+  staged next widening step is menace judgement rather than more prose replay on
   the same tested family shape.
 - Why: `Beta 7.0` already showed the structural contrast clearly:
   cross-object reopens at `9 / 6` while same-pick stays collapsed at `15 / 0`.

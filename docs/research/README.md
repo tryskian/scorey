@@ -11,12 +11,12 @@ Raw run notes and scratch material stay out of the tracked research surface unti
 Current staged lane:
 
 - `pre-Beta 8.0`
-- `menace judgment`
+- `menace judgement`
 
 Most recently closed beta:
 
 - `Research Beta 7.0`
-- `broader prose judgment`
+- `broader prose judgement`
 
 Current staged question:
 
@@ -70,14 +70,14 @@ Current finding:
 Current staged note:
 
 - `pre-Beta 8.0`
-- [Menace Judgment](./PRE_BETA_8_MENACE_JUDGMENT.md)
+- [Menace Judgement](./PRE_BETA_8_MENACE_JUDGMENT.md)
 - first staged family:
   - `cross-object coherence drift`
 
 Most recently closed beta:
 
 - `Research Beta 7.0`
-- [Broader Prose Judgment](./BETA_7_BROADER_PROSE_JUDGMENT.md)
+- [Broader Prose Judgement](./BETA_7_BROADER_PROSE_JUDGMENT.md)
 - closed broader prose evidence:
   - `20352-20366`: `9` pass / `6` fail
   - `20367-20381`: `15` pass / `0` fail
@@ -90,9 +90,9 @@ Read in order:
 3. [Research Beta 3.0: Tone First](./BETA_3_TONE_FIRST.md)
 4. [Research Beta 4.0: Abstract Tone Measurement](./BETA_4_ABSTRACT_TONE_MEASUREMENT.md)
 5. [Research Beta 5.0: Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
-6. [Research Beta 6.0: Scoreboard Judgment](./BETA_6_SCOREBOARD_JUDGMENT.md)
-7. [Research Beta 7.0: Broader Prose Judgment](./BETA_7_BROADER_PROSE_JUDGMENT.md)
-8. [Pre-Beta 8.0: Menace Judgment](./PRE_BETA_8_MENACE_JUDGMENT.md)
+6. [Research Beta 6.0: Scoreboard Judgement](./BETA_6_SCOREBOARD_JUDGMENT.md)
+7. [Research Beta 7.0: Broader Prose Judgement](./BETA_7_BROADER_PROSE_JUDGMENT.md)
+8. [Pre-Beta 8.0: Menace Judgement](./PRE_BETA_8_MENACE_JUDGMENT.md)
 
 ## How To Read The Betas And Stages
 
@@ -128,8 +128,8 @@ flowchart LR
   B3["Research Beta 3.0<br/>tone first"]
   B4["Research Beta 4.0<br/>abstract tone measurement"]
   B5["Research Beta 5.0<br/>fail-pressure pulse"]
-  B6["Research Beta 6.0<br/>scoreboard judgment"]
-  B7["Research Beta 7.0<br/>broader prose judgment"]
+  B6["Research Beta 6.0<br/>scoreboard judgement"]
+  B7["Research Beta 7.0<br/>broader prose judgement"]
 
   S1["six valid pass pairs<br/>and nothing else"]
   S2["one object isolated<br/>across win and loss roles"]
@@ -155,8 +155,8 @@ Parked lanes:
   - keep using those route-passed live rows as the tone-first evidence surface
   - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
-  - broader prose judgment is now the most recently closed widening step
-  - `pre-Beta 8.0` menace judgment is the current staged lane
+  - broader prose judgement is now the most recently closed widening step
+  - `pre-Beta 8.0` menace judgement is the current staged lane
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them

@@ -1,6 +1,6 @@
 # Scorey
 
-[![Research Stage](https://img.shields.io/badge/research_stage-pre--Beta%208.0%20menace%20judgment-E15759)](./docs/research/README.md)
+[![Research Stage](https://img.shields.io/badge/research_stage-pre--Beta%208.0%20menace%20judgement-E15759)](./docs/research/README.md)
 [![Polinko toy factory](https://img.shields.io/badge/polinko_toy_factory-active-4C956C)](https://github.com/tryskian/polinko)
 
 ## rock, paper, scissors, scorey
@@ -21,7 +21,7 @@ It only accepts three picks:
 Current stage:
 
 - `pre-Beta 8.0`
-- `menace judgment`
+- `menace judgement`
 - staged row-level lens on the quality of the visible round's menace
 - first staged family:
   - `cross-object coherence drift`
@@ -29,7 +29,7 @@ Current stage:
 Most recently closed beta:
 
 - `Research Beta 7.0`
-- `broader prose judgment`
+- `broader prose judgement`
 - closed bounded evidence:
   - `20352-20366`: `9` pass / `6` fail
   - `20367-20381`: `15` pass / `0` fail
@@ -48,14 +48,15 @@ closed `Beta 7.0` prose surface has already proven its structural contrast.
 
 - constrained round preservation through a fixed pick surface
 - runtime-owned routing and composition around one unfair round
-- binary eval lanes from pick routing to tone-first live review
-- explicit post-fail gate stack:
-  - `PASS / FAIL`
-  - if `FAIL`, then `RETAIN / EVICT`
-  - rerun
-  - `PASS / FAIL`
-- explicit archive cleanup when a pending review lane or stale failed
-  disposition lane should leave the active queue without becoming a verdict
+- bounded eval gates that widen one lens at a time:
+  - pick routing
+  - abstract tone measurement
+  - fail-pressure pulse
+  - scoreboard judgement
+  - broader prose judgement
+  - staged menace judgement
+- explicit closeout so bounded review lanes return to `0` pending when a slice
+  is done
 
 ## Run It
 

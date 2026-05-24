@@ -1,10 +1,10 @@
 <!-- @format -->
 
-# Research Beta 7.0: Broader Prose Judgment
+# Research Beta 7.0: Broader Prose Judgement
 
 ## What This Beta Asked
 
-Once scoreboard judgment has collapsed cleanly on the tested families, what
+Once scoreboard judgement has collapsed cleanly on the tested families, what
 reopens when Scorey widens the next lens from `scoreboard_claim` to the broader
 round prose?
 
@@ -166,10 +166,10 @@ prose lens.
 
 ## Why It Matters
 
-Broader prose judgment is earning a real beta boundary because it changes what
+Broader prose judgement is earning a real beta boundary because it changes what
 the evidence means.
 
-Scoreboard judgment told us that the explicit score-side fragment could hold
+Scoreboard judgement told us that the explicit score-side fragment could hold
 cleanly. `Beta 7.0` shows that this does not guarantee the broader round body
 holds once the judged surface widens above that fragment.
 
@@ -201,7 +201,7 @@ That gives the repo a sharper layered story:
    - cross-object prose: `9 / 6`, then `9 / 6`
    - same-pick prose: `15 / 0`
 2. use that cleaner gate confidence to stage `pre-Beta 8.0` as menace
-   judgment:
+   judgement:
    - not mean
    - not smug
    - not condescending

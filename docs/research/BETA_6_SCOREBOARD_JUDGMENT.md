@@ -1,6 +1,6 @@
 <!-- @format -->
 
-# Research Beta 6.0: Scoreboard Judgment
+# Research Beta 6.0: Scoreboard Judgement
 
 ## What This Beta Asked
 
@@ -34,7 +34,7 @@ surface and settled `15` untouched tone rows automatically.
 - keep bounded isolated runs
 - keep the live pair-cycle sampler
 - judge only `scoreboard_claim` as the active field
-- keep scoreboard judgment as a row-level lens
+- keep scoreboard judgement as a row-level lens
 - keep broader round prose out of scope
 
 First active source family:
@@ -145,13 +145,13 @@ The live signal is very clear:
 - both tested family shapes have now collapsed twice at the scoreboard layer
 
 That was enough to justify the beta boundary. `Beta 6.0` is now the most
-recently closed baseline below broader prose judgment.
+recently closed baseline below broader prose judgement.
 
 ## Why It Matters
 
-Scoreboard judgment is the clean next widening step because it is:
+Scoreboard judgement is the clean next widening step because it is:
 
-- smaller than full prose judgment
+- smaller than full prose judgement
 - already explicit in the runtime contract
 - already constrained to the user's losing side
 - easy to compare against bounded pulse results
@@ -165,7 +165,7 @@ without blurring it into the whole round voice again.
 
 ## What It Still Cannot Show
 
-- whether scoreboard judgment stays this clean outside the cross-object and
+- whether scoreboard judgement stays this clean outside the cross-object and
   same-pick families
 - whether repeated scoreboard runs on cross-object eventually expose a thinner
   weak seam the way pulse did
@@ -177,7 +177,7 @@ without blurring it into the whole round voice again.
 
 `Research Beta 6.0` is closed now, and the next work moved one layer wider:
 
-1. promote `Beta 7.0` as broader prose judgment on the same bounded-source
+1. promote `Beta 7.0` as broader prose judgement on the same bounded-source
    discipline
 2. keep the scoreboard contrast explicit underneath it:
    - cross-object scoreboard: `15 / 0`, then `15 / 0`

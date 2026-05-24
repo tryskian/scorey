@@ -92,7 +92,7 @@ That makes the next move cleaner. Local deterministic balance is no longer the o
 
 - broader prose quality
 - tone stability
-- scoreboard judgment
+- scoreboard judgement
 - whether the live path stays stable beyond the current narrow judged live queue
 
 ## What Changed Next

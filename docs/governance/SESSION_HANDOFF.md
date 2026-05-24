@@ -198,7 +198,7 @@ Worktree note:
   - `6` prose fail
   - `15` untouched tone rows settled by prose closeout
   - `15` untouched scoreboard rows settled by prose closeout
-- keep `pre-Beta 8.0` staged as menace judgment on the full visible round
+- keep `pre-Beta 8.0` staged as menace judgement on the full visible round
 - keep the first staged menace family at:
   - `cross-object coherence drift`
 - use the staged note as the current contract surface:
@@ -229,7 +229,7 @@ Worktree note:
    - same-pick prose has collapsed at `15 / 0`
 7. Record that the newer eval gates are performing cleanly across pulse,
    scoreboard, and prose closeout.
-8. Keep `pre-Beta 8.0` staged as menace judgment above broader prose:
+8. Keep `pre-Beta 8.0` staged as menace judgement above broader prose:
    - compact rigged-round menace
    - not mean
    - not smug
@@ -273,4 +273,4 @@ Worktree note:
 
 ## Copy/Paste Refresh Prompt
 
-`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Before starting implementation, confirm environment/workspace context: canonical repo path is /abs/path/to/scorey, confirm host vs devcontainer mode, confirm active git branch, and say whether the thread is on clean main or a feature branch. Apply no-guessing controls: prefer repo-scoped edits and preserve user shell profile files and global VS Code settings unless explicitly approved in-chat. Run in one active kernel at a time. Then execute the Next Kernel from SESSION_HANDOFF with minimal behavior drift and full validation.`
+`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Before starting implementation, confirm environment/workspace context: canonical repo path is /abs/path/to/scorey, confirm host vs devcontainer mode, confirm active git branch, and say whether the thread is on clean main or a feature branch. Apply no-guessing controls: prefer repo-scoped edits and preserve user shell profile files and global VS Code settings unless explicitly approved in-chat. Run in one active kernel at a time. Then execute the Next Kernel from SESSION_HANDOFF with minimal behaviour drift and full validation.`

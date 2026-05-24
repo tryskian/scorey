@@ -20,7 +20,7 @@ rows inside it.
 ## Eval Shape
 
 `Research Beta 5.0` keeps the isolated pair-cycle sampler from late
-`Research Beta 4.0`, but changes the unit of judgment:
+`Research Beta 4.0`, but changes the unit of judgement:
 
 - bounded non-OCR run
 - start small:
@@ -326,7 +326,7 @@ That makes bounded run claims harder to fake:
 `Beta 5.0` is now stable enough to widen carefully without promoting the next
 lens too early.
 
-The next staged lane is scoreboard judgment:
+The next staged lane is scoreboard judgement:
 
 - still row-level
 - still bounded by the same isolated source shape
@@ -368,4 +368,4 @@ as the next lens:
 - `20307-20321`: `15` scoreboard pass / `0` scoreboard fail
 
 So `Beta 5.0` now closes as the pulse baseline for comparison, and the next
-real work moves onto active scoreboard judgment.
+real work moves onto active scoreboard judgement.
