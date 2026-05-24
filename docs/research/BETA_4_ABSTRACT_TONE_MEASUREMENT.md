@@ -135,14 +135,14 @@ This is a research integrity correction, not just a prompt wording cleanup.
 If the live prompt contains phrase anchors from previously observed failures,
 the eval lane stops measuring cleanly. It starts comparing:
 
-- model behavior
+- model behaviour
 - plus prompt residue
 
 That breaks the intended family method.
 
 `Research Beta 4.0` restores the comparison we actually want:
 
-- live behavior under the same route floor
+- live behaviour under the same route floor
 - with the same tone bar
 - without hard-coded phrase steering
 

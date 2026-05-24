@@ -133,7 +133,7 @@ The first active eval kernel should stay narrow:
 - `fail`:
   - every other pick pair
 
-Broader taste judgments should only harden after the round contract is stable.
+Broader taste judgements should only harden after the round contract is stable.
 
 That gate stays binary first:
 

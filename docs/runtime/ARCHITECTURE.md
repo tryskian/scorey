@@ -83,9 +83,9 @@ Ownership boundary:
   - `.local/evals.sqlite`
 - active round rows:
   - `eval_outputs`
-- top-level judgments:
+- top-level judgements:
   - `eval_judgments`
-- lens-specific judgments:
+- lens-specific judgements:
   - `eval_lens_judgments`
 - failed-lens dispositions:
   - `eval_lens_failure_dispositions`

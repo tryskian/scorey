@@ -1,11 +1,11 @@
 <!-- @format -->
 
-# Pre-Beta 8.0: Menace Judgment
+# Pre-Beta 8.0: Menace Judgement
 
 ## What This Pre-Beta Asks
 
-Once broader prose has stabilized as the next live weak surface, can Scorey
-open a tighter judgment lane for the quality of its menace rather than only the
+Once broader prose has stabilised as the next live weak surface, can Scorey
+open a tighter judgement lane for the quality of its menace rather than only the
 coherence of its prose?
 
 ## Status
@@ -13,7 +13,7 @@ coherence of its prose?
 Staged, not active.
 
 `Research Beta 8.0` has not started yet. This note exists because the lower
-gates are now stable enough to support a wider judgment question without
+gates are now stable enough to support a wider judgement question without
 operator drift:
 
 - pulse closeout is stable
@@ -105,7 +105,7 @@ flowchart TD
 Reading note:
 
 - this lane is wider than prose coherence
-- it is still narrower than a loose whole-app personality judgment
+- it is still narrower than a loose whole-app personality judgement
 - it judges the quality of the visible menace, not general likability
 - it keeps the bounded source discipline that the newer gates already proved
 
@@ -123,7 +123,7 @@ That is a different evidence question.
 
 `Beta 7.0` already showed that the cross-object seam is structurally stable at
 `9 / 6`. `pre-Beta 8.0` would treat that as the entry point for a narrower
-voice-quality judgment above prose coherence.
+voice-quality judgement above prose coherence.
 
 ## Why It Matters
 
@@ -141,7 +141,7 @@ generic hostility.
 ## What It Still Needs
 
 - a locked row-level menace contract
-- a decision entry that makes menace judgment the staged next lane after
+- a decision entry that makes menace judgement the staged next lane after
   `Beta 7.0`
 - the exact bounded source plan for the first run
 - confirmation that the judged object is the full visible round, not just one
