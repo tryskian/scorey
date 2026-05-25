@@ -2,58 +2,56 @@
 
 Scorey keeps the tracked research lane small on purpose.
 
-Each beta is a distinct eval approach. This folder preserves the method shifts that changed what the evidence means.
+Each beta is a distinct eval approach. This folder preserves the method shifts
+that changed what the evidence means.
 
-Raw run notes and scratch material stay out of the tracked research surface until they become evidence.
+Raw run notes and scratch material stay out of the tracked research surface
+until they become evidence.
+
+| Surface | Current |
+| --- | --- |
+| Legend | [000_LEGEND.md](./000_LEGEND.md) |
+| Current staged boundary | [410_PB-MENACE_JUDGEMENT.md](./410_PB-MENACE_JUDGEMENT.md) |
+| Most recently closed boundary | [070_B-BROADER_PROSE_JUDGEMENT.md](./070_B-BROADER_PROSE_JUDGEMENT.md) |
+| Filename contract | `NNN_B-NAME.md` for beta boundaries, `NNN_PB-NAME.md` for staged pre-beta boundaries |
 
 ## Current Stage
 
-Current staged lane:
-
-- `pre-Beta 8.0`
-- `menace judgement`
-
-Most recently closed beta:
-
-- `Research Beta 7.0`
-- `broader prose judgement`
-
-Current staged question:
-
-Once broader prose has stabilized as the next live weak surface, can Scorey
-judge the quality of its compact rigged-round menace rather than only the
-coherence of its prose?
-
-Current staged family:
-
-- `cross-object coherence drift`
+| Surface | Current read |
+| --- | --- |
+| staged lane | `pre-Beta 8.0` menace judgement |
+| most recently closed beta | `Research Beta 7.0` broader prose judgement |
+| staged question | can Scorey judge the quality of its compact rigged-round menace rather than only the coherence of its prose? |
+| staged family | `cross-object coherence drift` |
 
 Most recently closed contrast:
 
-- cross-object prose:
-  - `20352-20366`: `9` pass / `6` fail
-  - `20382-20396`: `9` pass / `6` fail
-- same-pick prose:
-  - `20367-20381`: `15` pass / `0` fail
+| Family | Evidence |
+| --- | --- |
+| cross-object prose | `20352-20366: 9 / 6`; `20382-20396: 9 / 6` |
+| same-pick prose | `20367-20381: 15 / 0` |
 
 Current finding:
 
-- `Research Beta 4.0` stays closed as the row-level abstract measurement
-  baseline
-- `Research Beta 5.0` stays closed as the bounded pulse baseline:
-  - cross-object pressure held at `8 / 5 / 2`, then `9 / 6 / 0`, then `9 / 6 / 0`
-  - same-pick collapsed at `15 / 0 / 0`, then `15 / 0 / 0`
-- `Research Beta 6.0` stays closed as the scoreboard baseline:
-  - cross-object scoreboard: `15 / 0`, then `15 / 0`
-  - same-pick scoreboard: `15 / 0`, then `15 / 0`
-- `Research Beta 7.0` is the first wider prose lane above scoreboard:
-  - cross-object prose reopened pressure at `9 / 6`
-  - same-pick prose stayed collapsed at `15 / 0`
-  - the cross-object prose split repeated at the same `9 / 6` shape
-- the newer bounded eval gates are now performing well enough to support the
-  staged menace lens above prose
-- runtime is currently closed at `0` pending across route, tone, and
-  disposition
+| Layer | Current read |
+| --- | --- |
+| `Research Beta 4.0` | closed row-level abstract measurement baseline |
+| `Research Beta 5.0` | cross-object held at `8 / 5 / 2`, then `9 / 6 / 0`, then `9 / 6 / 0`; same-pick collapsed at `15 / 0 / 0`, then `15 / 0 / 0` |
+| `Research Beta 6.0` | cross-object scoreboard `15 / 0`, then `15 / 0`; same-pick scoreboard `15 / 0`, then `15 / 0` |
+| `Research Beta 7.0` | cross-object prose reopened at `9 / 6` and repeated there; same-pick stayed collapsed at `15 / 0` |
+| gate confidence | bounded pulse, scoreboard, and prose closeouts are performing cleanly enough to support the staged menace lens |
+| runtime | closed at `0` pending across route, tone, and disposition |
+
+Current contrast chart:
+
+```mermaid
+xychart-beta
+  title "Current cross-object versus same-pick contrast"
+  x-axis "Research layer" ["Beta 5 pulse", "Beta 6 scoreboard", "Beta 7 prose"]
+  y-axis "Pressure rows" 0 --> 7
+  bar "Cross-object pressure" [6, 0, 6]
+  bar "Same-pick pressure" [0, 0, 0]
+```
 
 ## Beta Map
 
@@ -70,14 +68,14 @@ Current finding:
 Current staged note:
 
 - `pre-Beta 8.0`
-- [Menace Judgement](./PRE_BETA_8_MENACE_JUDGMENT.md)
+- [Menace Judgement](./410_PB-MENACE_JUDGEMENT.md)
 - first staged family:
   - `cross-object coherence drift`
 
 Most recently closed beta:
 
 - `Research Beta 7.0`
-- [Broader Prose Judgement](./BETA_7_BROADER_PROSE_JUDGMENT.md)
+- [Broader Prose Judgement](./070_B-BROADER_PROSE_JUDGEMENT.md)
 - closed broader prose evidence:
   - `20352-20366`: `9` pass / `6` fail
   - `20367-20381`: `15` pass / `0` fail
@@ -85,14 +83,15 @@ Most recently closed beta:
 
 Read in order:
 
-1. [Research Beta 1.0: Pick Routing First](./BETA_1_PICK_ROUTING.md)
-2. [Research Beta 2.0: Focused Object Lanes](./BETA_2_OBJECT_LANES.md)
-3. [Research Beta 3.0: Tone First](./BETA_3_TONE_FIRST.md)
-4. [Research Beta 4.0: Abstract Tone Measurement](./BETA_4_ABSTRACT_TONE_MEASUREMENT.md)
-5. [Research Beta 5.0: Fail-Pressure Pulse](./BETA_5_FAIL_PRESSURE_PULSE.md)
-6. [Research Beta 6.0: Scoreboard Judgement](./BETA_6_SCOREBOARD_JUDGMENT.md)
-7. [Research Beta 7.0: Broader Prose Judgement](./BETA_7_BROADER_PROSE_JUDGMENT.md)
-8. [Pre-Beta 8.0: Menace Judgement](./PRE_BETA_8_MENACE_JUDGMENT.md)
+1. [Research Legend](./000_LEGEND.md)
+2. [Research Beta 1.0: Pick Routing First](./010_B-PICK_ROUTING.md)
+3. [Research Beta 2.0: Focused Object Lanes](./020_B-OBJECT_LANES.md)
+4. [Research Beta 3.0: Tone First](./030_B-TONE_FIRST.md)
+5. [Research Beta 4.0: Abstract Tone Measurement](./040_B-ABSTRACT_TONE_MEASUREMENT.md)
+6. [Research Beta 5.0: Fail-Pressure Pulse](./050_B-FAIL_PRESSURE_PULSE.md)
+7. [Research Beta 6.0: Scoreboard Judgement](./060_B-SCOREBOARD_JUDGEMENT.md)
+8. [Research Beta 7.0: Broader Prose Judgement](./070_B-BROADER_PROSE_JUDGEMENT.md)
+9. [Pre-Beta 8.0: Menace Judgement](./410_PB-MENACE_JUDGEMENT.md)
 
 ## How To Read The Betas And Stages
 

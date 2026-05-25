@@ -1,15 +1,22 @@
 # Research Beta 4.0: Abstract Tone Measurement
 
-## What This Beta Asked
+| Field | Value |
+| --- | --- |
+| Code | `040_B-ABSTRACT_TONE_MEASUREMENT` |
+| Category | `boundary` |
+| Status | `closed` |
+| Last evidence | `2026-05-16` |
+| Owns | the de-anchored tone-first measurement boundary. |
+
+## What This Beta Asks
 
 Can Scorey keep its own voice once route validity and pick legibility are
 settled, without contaminating the live measurement surface with hard-coded
 phrase anchors?
 
-## Short Answer
+## Status
 
-Started, and the first closed tranche plus the first isolated fail-family run
-already look different.
+Closed.
 
 The same-pick lane is materially stronger, there is no early `real one` /
 `napkin` relapse across the closed slice, and the retained weak seam is still
@@ -51,54 +58,66 @@ flowchart LR
   L --> R --> T --> A --> S
 ```
 
+Slice chart:
+
+```mermaid
+xychart-beta
+  title "Beta 4.0 closed slice reads"
+  x-axis "Slice type" ["mixed tranche", "restored segment", "isolated family"]
+  y-axis "Rows" 0 --> 80
+  bar "Tone pass" [47, 42, 50]
+  bar "Tone fail" [22, 20, 27]
+```
+
 ## What It Showed
 
 The first fresh `4.0` mixed tranche begins after output `19998`.
 
 That tranche is now fully closed:
 
-- `69` route pass
-- `47` tone pass
-- `22` tone fail
-- `22` retain
-- `0` evict
-- `0` fresh pending route reviews
-- `0` fresh pending tone reviews
-- `0` fresh pending fail dispositions
+| Slice | Route pass | Tone pass | Tone fail | Retain | Evict | Pending |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| first closed tranche after `19998` | `69` | `47` | `22` | `22` | `0` | `0` |
 
 Inside that first closed tranche, the restored interrupted segment after
 output `20005` closed at:
 
-- `62` route pass
-- `42` tone pass
-- `20` tone fail
-- `20` retain
-- `0` evict
+| Segment | Route pass | Tone pass | Tone fail | Retain | Evict |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| restored interrupted segment after `20005` | `62` | `42` | `20` | `20` | `0` |
 
 What that first closed slice shows:
 
-- same-pick rows are stronger and more physical
-- no `real one` / `napkin` relapse appears across the closed slice
-- the weak seam is still cross-object coherence drift
-- the fails were coherent enough to keep in-lane:
-  - `20` fail
-  - `20` retain
-  - `0` evict
+| Signal | Read |
+| --- | --- |
+| same-pick rows | stronger and more physical |
+| anchor relapse | no `real one` / `napkin` relapse across the closed slice |
+| active weak seam | `cross-object coherence drift` |
+| fail handling | `20` fail / `20` retain / `0` evict |
 
 The first isolated fail-family run then narrowed directly onto the active weak
 surface after output `20139`:
 
-- family: `cross-object coherence drift`
-- `77` route pass
-- `50` tone pass
-- `27` tone fail
-- `27` retain
-- `0` evict
+| Family | Route pass | Tone pass | Tone fail | Retain | Evict |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `cross-object coherence drift` | `77` | `50` | `27` | `27` | `0` |
 
 Inside that isolated run, the fail mix stayed narrow:
 
-- `26` `cross-object coherence drift`
-- `1` `anchor relapse`
+| Fail type | Count |
+| --- | ---: |
+| `cross-object coherence drift` | `26` |
+| `anchor relapse` | `1` |
+
+Fail-mix chart:
+
+```mermaid
+xychart-beta
+  title "Beta 4.0 isolated fail mix"
+  x-axis "Fail type" ["cross-object", "anchor relapse"]
+  y-axis "Rows" 0 --> 30
+  bar "Rows" [26, 1]
+```
 
 That isolation run matters because it did not collapse into random noise when
 the mixed lane was stripped away. The family kept producing the same kind of

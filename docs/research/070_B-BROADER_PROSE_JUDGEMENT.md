@@ -2,13 +2,21 @@
 
 # Research Beta 7.0: Broader Prose Judgement
 
-## What This Beta Asked
+| Field | Value |
+| --- | --- |
+| Code | `070_B-BROADER_PROSE_JUDGEMENT` |
+| Category | `boundary` |
+| Status | `closed` |
+| Last evidence | `2026-05-22` |
+| Owns | the broader prose judgement boundary above `scoreboard_claim`. |
+
+## What This Beta Asks
 
 Once scoreboard judgement has collapsed cleanly on the tested families, what
 reopens when Scorey widens the next lens from `scoreboard_claim` to the broader
 round prose?
 
-## Short Answer
+## Status
 
 Closed, and broader prose reopened the old cross-object seam at a stable
 `9 / 6` split while same-pick stayed collapsed.
@@ -100,6 +108,17 @@ flowchart TD
   F --> G --> H
 ```
 
+Run chart:
+
+```mermaid
+xychart-beta
+  title "Beta 7.0 prose contrast"
+  x-axis "Bounded run" ["cross 1", "same", "cross 2"]
+  y-axis "Rows" 0 --> 16
+  bar "Pass" [9, 15, 9]
+  bar "Fail" [6, 0, 6]
+```
+
 Reading note:
 
 - this lens is wider than scoreboard
@@ -113,23 +132,18 @@ Reading note:
 The first three bounded `Beta 7.0` prose runs are now closed after output
 `20381`:
 
-- first bounded cross-object prose source pass:
-  - range: `20352-20366`
-  - `9` prose pass
-  - `6` prose fail
-- second bounded same-pick prose source pass:
-  - range: `20367-20381`
-  - `15` prose pass
-  - `0` prose fail
-- third bounded cross-object prose source pass:
-  - range: `20382-20396`
-  - `9` prose pass
-  - `6` prose fail
+| Run | Family | Range | Prose pass | Prose fail |
+| --- | --- | --- | ---: | ---: |
+| first bounded source pass | cross-object | `20352-20366` | `9` | `6` |
+| second bounded source pass | same-pick | `20367-20381` | `15` | `0` |
+| third bounded source pass | cross-object | `20382-20396` | `9` | `6` |
 
 The fail mix in the cross-object run was the old seam again:
 
-- repeated cross-object causal drift
-- especially on `scissors/rock`
+| Fail family | Read |
+| --- | --- |
+| repeated seam | cross-object causal drift |
+| strongest pocket | `scissors/rock` |
 
 The same-pick run collapsed cleanly the way same-pick had already collapsed at
 the scoreboard layer:
@@ -140,10 +154,12 @@ the scoreboard layer:
 
 And both closeouts proved the new operator surface end to end:
 
-- the bounded prose ranges closed cleanly
-- `15` untouched tone rows were settled by prose closeout on each range
-- `15` untouched scoreboard rows were settled by prose closeout on each range
-- runtime returned to `0` pending
+| Closeout proof | Read |
+| --- | --- |
+| bounded prose ranges | closed cleanly |
+| untouched tone rows | `15` settled on each range |
+| untouched scoreboard rows | `15` settled on each range |
+| runtime state | returned to `0` pending |
 
 That matters beyond `Beta 7.0` itself:
 
@@ -155,10 +171,21 @@ That matters beyond `Beta 7.0` itself:
 
 That is the important contrast against the closed `Beta 6.0` surface:
 
-- scoreboard on both tested families had already collapsed twice at `15 / 0`
-- broader prose on cross-object reopened pressure at `9 / 6` and repeated at
-  the same `9 / 6` shape
-- broader prose on same-pick stayed collapsed at `15 / 0`
+| Layer | Cross-object | Same-pick |
+| --- | --- | --- |
+| scoreboard | `15 / 0`, then `15 / 0` | `15 / 0`, then `15 / 0` |
+| broader prose | `9 / 6`, then `9 / 6` | `15 / 0` |
+
+Layer-contrast chart:
+
+```mermaid
+xychart-beta
+  title "Beta 6 to Beta 7 pressure shift"
+  x-axis "Judgement layer" ["scoreboard", "broader prose"]
+  y-axis "Fail rows" 0 --> 7
+  bar "Cross-object" [0, 6]
+  bar "Same-pick" [0, 0]
+```
 
 So the cross-object seam was never truly gone. It was just narrower than the
 scoreboard lane, and same-pick still looks structurally sound under the wider

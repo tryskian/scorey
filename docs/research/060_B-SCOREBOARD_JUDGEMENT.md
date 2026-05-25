@@ -2,12 +2,20 @@
 
 # Research Beta 6.0: Scoreboard Judgement
 
-## What This Beta Asked
+| Field | Value |
+| --- | --- |
+| Code | `060_B-SCOREBOARD_JUDGEMENT` |
+| Category | `boundary` |
+| Status | `closed` |
+| Last evidence | `2026-05-21` |
+| Owns | the row-level scoreboard judgement boundary on `scoreboard_claim`. |
+
+## What This Beta Asks
 
 Once bounded pulse work has stabilized the active weak family, should Scorey
 open the next lens on `scoreboard_claim` before widening to broader prose?
 
-## Short Answer
+## Status
 
 Closed, and the first four bounded scoreboard runs passed cleanly.
 
@@ -96,6 +104,17 @@ flowchart TD
   F --> G --> H
 ```
 
+Run chart:
+
+```mermaid
+xychart-beta
+  title "Beta 6.0 scoreboard passes"
+  x-axis "Bounded run" ["cross 1", "cross 2", "same 1", "same 2"]
+  y-axis "Rows" 0 --> 16
+  bar "Pass" [15, 15, 15, 15]
+  bar "Fail" [0, 0, 0, 0]
+```
+
 Reading note:
 
 - this lens is narrower than prose
@@ -109,25 +128,12 @@ Reading note:
 The first four bounded `Beta 6.0` scoreboard runs are now closed after output
 `20291`:
 
-- first bounded cross-object source pass:
-  - range: `20292-20306`
-  - `15` scoreboard pass
-  - `0` scoreboard fail
-- second bounded cross-object source pass:
-  - range: `20307-20321`
-  - `15` scoreboard pass
-  - `0` scoreboard fail
-  - `15` untouched tone rows settled by scoreboard closeout
-- third bounded same-pick source pass:
-  - range: `20322-20336`
-  - `15` scoreboard pass
-  - `0` scoreboard fail
-  - `15` untouched tone rows settled by scoreboard closeout
-- fourth bounded same-pick source pass:
-  - range: `20337-20351`
-  - `15` scoreboard pass
-  - `0` scoreboard fail
-  - `15` untouched tone rows settled by scoreboard closeout
+| Run | Family | Range | Scoreboard pass | Scoreboard fail | Tone rows settled |
+| --- | --- | --- | ---: | ---: | ---: |
+| first bounded source pass | cross-object | `20292-20306` | `15` | `0` | `0` |
+| second bounded source pass | cross-object | `20307-20321` | `15` | `0` | `15` |
+| third bounded source pass | same-pick | `20322-20336` | `15` | `0` | `15` |
+| fourth bounded source pass | same-pick | `20337-20351` | `15` | `0` | `15` |
 
 That means the scoreboard field is currently behaving more like the collapsed
 same-pick pulse family than the pressured cross-object pulse family:
@@ -139,10 +145,22 @@ same-pick pulse family than the pressured cross-object pulse family:
 
 The live signal is very clear:
 
-- the scoreboard lane is strong enough to stand on its own
-- it is narrower and cleaner than reopening full prose
-- its current weak signal is not obvious on either tested family yet
-- both tested family shapes have now collapsed twice at the scoreboard layer
+| Signal | Read |
+| --- | --- |
+| lane strength | strong enough to stand on its own |
+| relative width | narrower and cleaner than reopening full prose |
+| weak signal | not obvious on either tested family yet |
+| tested-family result | both tested family shapes collapsed twice at the scoreboard layer |
+
+Closeout chart:
+
+```mermaid
+xychart-beta
+  title "Beta 6.0 tone rows settled on close"
+  x-axis "Bounded run" ["cross 1", "cross 2", "same 1", "same 2"]
+  y-axis "Rows" 0 --> 16
+  bar "Tone rows settled" [0, 15, 15, 15]
+```
 
 That was enough to justify the beta boundary. `Beta 6.0` is now the most
 recently closed baseline below broader prose judgement.
