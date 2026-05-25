@@ -2,6 +2,7 @@
 .env
 .env.*
 .venv/
+node_modules/
 .local/
 __pycache__/
 *.py[cod]
