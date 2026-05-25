@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-24
+Last updated: 2026-05-25
 
 ## Start Here
 
@@ -12,7 +12,7 @@ Last updated: 2026-05-24
    - `docs/runtime/RUNBOOK.md`
    - `docs/governance/SESSION_HANDOFF.md`
 2. Confirm execution context:
-   - repo root or dedicated worktree
+   - canonical repo root or dedicated worktree
    - active branch from `git branch --show-current`
 3. Return the startup breakdown:
    - current state
@@ -29,33 +29,35 @@ Last updated: 2026-05-24
 
 ## Current Snapshot
 
-Scorey is a small, local, agent-backed rock, paper, scissors mini chatbot with
-a real runtime, a settled route-valid floor, and a tracked tone lane on top of
-the route pass surface. `Research Beta 4.0` is closed as the row-level
-abstract measurement surface. `Research Beta 5.0` is closed as the
-fail-pressure pulse baseline, `Research Beta 6.0` is closed as the scoreboard
-baseline, `Research Beta 7.0` is closed as the broader prose baseline, and
-`pre-Beta 8.0` is the current staged menace lane.
+Scorey is a small local CLI research instrument for one unfair rock, paper,
+scissors round. `Research Beta 4.0` is closed as the abstract row-level
+measurement baseline. `Research Beta 5.0` is closed as the fail-pressure pulse
+baseline. `Research Beta 6.0` is closed as the scoreboard baseline.
+`Research Beta 7.0` is closed as the broader prose baseline. `pre-Beta 8.0` is
+the current staged menace lane.
 
-The core tracked shape is:
+Stable repo shape:
 
 - bare `scorey` opens the app loop
 - the runtime keeps picks fixed to:
   - `rock`
   - `paper`
   - `scissors`
-- the runtime owns routing and round composition
-- the live model owns only the small unstable round fields
-- route verdicts stay binary
-- tone failures use explicit `retain` or `evict`
-
-Canonical live work stays on the repo `.local` surface. Secondary worktrees use
-the canonical queue state rather than forking a second eval store, while
-keeping local `.venv` environments.
+- the runtime owns routing and final round composition
+- the live model owns only:
+  - `winning_state`
+  - `worse_state`
+  - `scoreboard_claim`
+- route stays the floor
+- tone remains the first widened row-level lens
+- failure handling stays explicit:
+  - `retain`
+  - `evict`
 
 Current runtime truth:
 
 - `live_batch: closed`
+- `batch_meta: missing`
 - `route_pending=0`
 - `tone_pending=0`
 - `disposition_pending=0`
@@ -74,186 +76,95 @@ Current runtime truth:
   - `359` archived
   - `0` pending
 
-Current `Research Beta 4.0` tranche after output `19998`:
+## Closed Evidence Surface
 
-- `69` route pass
-- `47` tone pass
-- `22` tone fail
-- `22` retain
-- `0` evict
-- `0` pending at any active layer
-- no `real one` / `napkin` relapse across the closed slice
-- weak seam still reads as cross-object coherence drift
-- restored interrupted segment after output `20005` closed at:
-  - `62` route pass
-  - `42` tone pass
-  - `20` tone fail
-  - `20` retain
-  - `0` evict
-- first isolated fail-family run after output `20139` closed at:
-  - family: `cross-object coherence drift`
-  - `77` route pass
-  - `50` tone pass
-  - `27` tone fail
-  - `27` retain
-  - `0` evict
-  - fail mix:
-    - `26` `cross-object coherence drift`
-    - `1` `anchor relapse`
+`Research Beta 5.0` pulse baseline:
 
-Current `Research Beta 5.0` pulse results:
+- cross-object:
+  - pulse `1`: `8 / 5 / 2`
+  - pulse `3`: `9 / 6 / 0`
+  - pulse `4`: `9 / 6 / 0`
+- same-pick:
+  - pulse `2`: `15 / 0 / 0`
+  - pulse `5`: `15 / 0 / 0`
 
-- pulse `1`:
-  - family: `cross-object coherence drift`
-  - range: `20217-20231`
-  - raw: `15`
-  - anchors: `8`
-  - `counted_seams`: `5`
-  - `excluded_noise`: `2`
-  - exclusions:
-    - `operator_artifact=2`
-    - `off_target_failure=0`
-  - counted total: `13`
-  - verdict: `pass`
-- pulse `2`:
-  - family: `same-pick object-shape drift`
-  - range: `20232-20246`
-  - raw: `15`
-  - anchors: `15`
-  - `counted_seams`: `0`
-  - `excluded_noise`: `0`
-  - exclusions:
-    - `operator_artifact=0`
-    - `off_target_failure=0`
-  - counted total: `15`
-  - verdict: `pass`
-- pulse `3`:
-  - family: `cross-object coherence drift`
-  - range: `20247-20261`
-  - raw: `15`
-  - anchors: `9`
-  - `counted_seams`: `6`
-  - `excluded_noise`: `0`
-  - exclusions:
-    - `operator_artifact=0`
-    - `off_target_failure=0`
-  - counted total: `15`
-  - verdict: `pass`
-- pulse `4`:
-  - family: `cross-object coherence drift`
-  - range: `20262-20276`
-  - raw: `15`
-  - anchors: `9`
-  - `counted_seams`: `6`
-  - `excluded_noise`: `0`
-  - exclusions:
-    - `operator_artifact=0`
-    - `off_target_failure=0`
-  - counted total: `15`
-  - verdict: `pass`
-- pulse `5`:
-  - family: `same-pick object-shape drift`
-  - range: `20277-20291`
-  - raw: `15`
-  - anchors: `15`
-  - `counted_seams`: `0`
-  - `excluded_noise`: `0`
-  - exclusions:
-    - `operator_artifact=0`
-    - `off_target_failure=0`
-  - counted total: `15`
-  - verdict: `pass`
+`Research Beta 6.0` scoreboard baseline:
 
-Worktree note:
+- `20292-20306`: `15` pass / `0` fail
+- `20307-20321`: `15` pass / `0` fail
+- `20322-20336`: `15` pass / `0` fail
+- `20337-20351`: `15` pass / `0` fail
 
-- use the canonical repo root unless a new kernel explicitly opens a fresh
-  worktree lane
-- do not treat old side worktrees as warm pulse lanes by default
+`Research Beta 7.0` broader prose baseline:
+
+- `20352-20366`: `9` pass / `6` fail
+- `20367-20381`: `15` pass / `0` fail
+- `20382-20396`: `9` pass / `6` fail
+
+Stable contrast:
+
+- cross-object prose reopens pressure at `9 / 6` and repeats there
+- same-pick prose collapses at `15 / 0`
+- newer bounded eval gates are performing cleanly across pulse, scoreboard,
+  and prose closeout
 
 ## Active Kernel
 
-- keep `Beta 4.0` frozen as closed evidence
-- keep `Beta 5.0` frozen as the closed pulse baseline
-- preserve the explicit comparison boundary:
-  - anchored `3.0`
-  - abstract row-level `4.0`
-  - pulse-level `5.0`
-- keep `Beta 6.0` frozen as the closed scoreboard baseline
-- keep `Beta 7.0` frozen as the closed broader prose baseline
-- keep the broader prose lane row-level on the round body around the score line
-- keep bounded prose runs explicit with `eval-prose-close`
-- hold the closed `Beta 7.0` evidence surface at:
-  - range `20352-20366`
-  - `9` prose pass
-  - `6` prose fail
-  - `15` untouched tone rows settled by prose closeout
-  - `15` untouched scoreboard rows settled by prose closeout
-  - range `20367-20381`
-  - `15` prose pass
-  - `0` prose fail
-  - `15` untouched tone rows settled by prose closeout
-  - `15` untouched scoreboard rows settled by prose closeout
-  - range `20382-20396`
-  - `9` prose pass
-  - `6` prose fail
-  - `15` untouched tone rows settled by prose closeout
-  - `15` untouched scoreboard rows settled by prose closeout
-- keep `pre-Beta 8.0` staged as menace judgement on the full visible round
-- keep the first staged menace family at:
+Tracked docs alignment branch:
+
+- branch: `codex/bigbrain/scorey-runtime-architecture-align`
+- checkpointed docs:
+  - `docs/runtime/ARCHITECTURE.md`
+  - `docs/runtime/RUNBOOK.md`
+  - `docs/runtime/START_END_REFERENCE.md`
+  - `docs/governance/CHARTER.md`
+  - `docs/governance/DECISIONS.md`
+- current remaining tracked doc:
+  - `docs/governance/SESSION_HANDOFF.md`
+
+Private staging surface:
+
+- `docs/peanut/research/templates/README.md`
+- `docs/peanut/research/templates/legend.md`
+- `docs/peanut/research/templates/boundary.md`
+- `docs/peanut/research/templates/lane.md`
+- `docs/peanut/research/templates/case.md`
+- `docs/peanut/research/templates/validation.md`
+- `docs/peanut/research/templates/hypothesis.md`
+- `docs/peanut/research/templates/backlog.md`
+
+Current staged research lane:
+
+- `pre-Beta 8.0`
+- `menace judgement`
+- judged surface:
+  - the full visible round
+- first staged family:
   - `cross-object coherence drift`
-- use the staged note as the current contract surface:
+- staged note:
   - `docs/research/PRE_BETA_8_MENACE_JUDGMENT.md`
-- keep the local template-contract lane in `docs/peanut/research/templates/`
-  as the current private staging surface for the next tracked docs pass
-- current local template set:
-  - `README.md`
-  - `boundary.md`
-  - `lane.md`
-  - `hypothesis.md`
 
 ## Next Slice
 
-1. Keep `Beta 5.0` as the closed pulse baseline:
-   - pulse `1`: cross-object `8 / 5 / 2`
-   - pulse `2`: same-pick `15 / 0 / 0`
-   - pulse `3`: cross-object `9 / 6 / 0`
-   - pulse `4`: cross-object `9 / 6 / 0`
-   - pulse `5`: same-pick `15 / 0 / 0`
-2. Keep `Beta 6.0` as the closed scoreboard baseline.
-3. Keep the four bounded scoreboard source passes as the closed evidence
-   surface below `Beta 7.0`:
-   - `20292-20306`: `15` pass / `0` fail
-   - `20307-20321`: `15` pass / `0` fail
-   - `20322-20336`: `15` pass / `0` fail
-   - `20337-20351`: `15` pass / `0` fail
-4. Keep `Beta 7.0` closed as the broader prose baseline.
-5. Use the bounded broader prose source passes as the closed evidence surface:
-   - `20352-20366`: `9` pass / `6` fail
-   - `20367-20381`: `15` pass / `0` fail
-   - `20382-20396`: `9` pass / `6` fail
-6. Hold the current broader prose contrast:
-   - cross-object prose has reopened pressure at `9 / 6` and repeated there
-   - same-pick prose has collapsed at `15 / 0`
-7. Record that the newer eval gates are performing cleanly across pulse,
-   scoreboard, and prose closeout.
-8. Keep `pre-Beta 8.0` staged as menace judgement above broader prose:
-   - compact rigged-round menace
+1. Finish the current tracked docs branch and merge it on clean synced `main`.
+2. Keep `Beta 5.0`, `Beta 6.0`, and `Beta 7.0` frozen as the closed evidence
+   ladder below menace.
+3. Start the first bounded `pre-Beta 8.0` menace source pass on
+   `cross-object coherence drift`.
+4. Read whether the visible round lands as the right compact rigged-round
+   menace:
    - not mean
    - not smug
    - not condescending
-9. Treat the first staged family as:
-   - `cross-object coherence drift`
-10. Use the staged note as the current contract surface:
-   - `docs/research/PRE_BETA_8_MENACE_JUDGMENT.md`
-11. Next tracked docs kernel:
-   - adapt the governance and research docs category by category from the local
-     peanut template contract
-12. First tracked docs pass:
-   - `docs/governance/CHARTER.md`
-   - `docs/runtime/ARCHITECTURE.md`
-   - then smaller truth-sync passes on `DECISIONS.md` and `SESSION_HANDOFF.md`
-13. Next real research kernel after the docs pass:
-   - first bounded menace source pass on `cross-object coherence drift`
+5. After the first menace read, decide whether:
+   - `pre-Beta 8.0` stays staged
+   - or `Research Beta 8.0` has actually started
+
+## Risks
+
+- low runtime risk: the queue is fully closed and there is no active sampler
+- small ops wrinkle: `make session-status` currently reports a stale
+  repo-managed `caffeinate` PID file
 
 ## Guardrails
 
@@ -262,8 +173,8 @@ Worktree note:
 - keep picks fixed to `rock`, `paper`, and `scissors`
 - keep one active kernel at a time
 - keep route validity as the first gate
-- keep tone review and failure disposition explicit
-- keep the canonical `.local` queue as the live eval surface
+- keep bounded closeout returning to `0` pending
+- keep `docs/peanut/` private unless the boundary is widened explicitly
 - keep tracked docs truthful to the current repo surface
 
 ## Close A Session
@@ -284,7 +195,3 @@ Worktree note:
    - `make decaffeinate-status`
 3. Finish on clean synced `main`:
    - `make end-git-check`
-
-## Copy/Paste Refresh Prompt
-
-`Read README.md, docs/governance/CHARTER.md, docs/governance/DECISIONS.md, docs/runtime/ARCHITECTURE.md, docs/runtime/RUNBOOK.md, and docs/governance/SESSION_HANDOFF.md. In 5 bullets: current state, risks, and next kernel. Before starting implementation, confirm environment/workspace context: canonical repo path is /abs/path/to/scorey, confirm host vs devcontainer mode, confirm active git branch, and say whether the thread is on clean main or a feature branch. Apply no-guessing controls: prefer repo-scoped edits and preserve user shell profile files and global VS Code settings unless explicitly approved in-chat. Run in one active kernel at a time. Then execute the Next Kernel from SESSION_HANDOFF with minimal behaviour drift and full validation.`
