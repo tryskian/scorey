@@ -110,17 +110,17 @@ Stable contrast:
 
 ## Active Kernel
 
-Tracked docs alignment branch:
+Tracked docs sync branch:
 
-- branch: `codex/bigbrain/scorey-runtime-architecture-align`
-- checkpointed docs:
-  - `docs/runtime/ARCHITECTURE.md`
-  - `docs/runtime/RUNBOOK.md`
-  - `docs/runtime/START_END_REFERENCE.md`
-  - `docs/governance/CHARTER.md`
+- branch: `codex/bigbrain/scorey-d3-chart-tooling`
+- tracked docs in play:
   - `docs/governance/DECISIONS.md`
-- current remaining tracked doc:
-  - `docs/governance/SESSION_HANDOFF.md`
+- tracked change:
+  - `D-029` locks the public research-note chart language to:
+    - `slope chart`
+    - `horizontal bar chart`
+    - `table heatmap`
+  - the `DECISIONS.md` header now matches the current boilerplate shape
 
 Private staging surface:
 
@@ -132,6 +132,7 @@ Private staging surface:
 - `docs/peanut/research/templates/validation.md`
 - `docs/peanut/research/templates/hypothesis.md`
 - `docs/peanut/research/templates/backlog.md`
+- `docs/peanut/research/chart-language.md`
 
 Current staged research lane:
 
