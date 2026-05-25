@@ -2,14 +2,22 @@
 
 # Research Beta 5.0: Fail-Pressure Pulse
 
-## What This Beta Asked
+| Field | Value |
+| --- | --- |
+| Code | `050_B-FAIL_PRESSURE_PULSE` |
+| Category | `boundary` |
+| Status | `closed` |
+| Last evidence | `2026-05-21` |
+| Owns | the bounded pulse boundary where the pulse becomes the binary unit. |
+
+## What This Beta Asks
 
 Should Scorey treat a bounded non-OCR run as the real binary unit once
 run-level seam density matters more than single-row replay?
 
-## Short Answer
+## Status
 
-Started, and the first real pulse passes.
+Closed.
 
 The first bounded cross-object pulse closed with `8` anchors, `5`
 `counted_seams`, `2` `excluded_noise`, and a `pass` verdict. That is a
@@ -122,6 +130,18 @@ flowchart TD
   N --> O
 ```
 
+Pulse chart:
+
+```mermaid
+xychart-beta
+  title "Beta 5.0 pulse pressure"
+  x-axis "Pulse run" ["P1 cross", "P2 same", "P3 cross", "P4 cross", "P5 same"]
+  y-axis "Rows" 0 --> 16
+  bar "Anchors" [8, 15, 9, 9, 15]
+  bar "Counted seams" [5, 0, 6, 6, 0]
+  bar "Excluded noise" [2, 0, 0, 0, 0]
+```
+
 Reading note:
 
 - the pair cycle defines the family under pressure
@@ -136,18 +156,14 @@ Reading note:
 The first real `Beta 5.0` pulse is now closed on the isolated cross-object
 family after output `20216`:
 
-- `pulse_id=1`
-- family: `cross-object coherence drift`
-- range: `20217-20231`
-- raw: `15`
-- anchors: `8`
-- `counted_seams`: `5`
-- `excluded_noise`: `2`
-- exclusions:
-  - `operator_artifact=2`
-  - `off_target_failure=0`
-- counted total: `13`
-- verdict: `pass`
+| Pulse | Family | Range | Raw | Anchors | `counted_seams` | `excluded_noise` | Counted total | Verdict |
+| ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `1` | `cross-object coherence drift` | `20217-20231` | `15` | `8` | `5` | `2` | `13` | `pass` |
+
+| Pulse `1` exclusion reason | Count |
+| --- | ---: |
+| `operator_artifact` | `2` |
+| `off_target_failure` | `0` |
 
 Inside that first pulse:
 
@@ -177,18 +193,9 @@ On the first bounded pulse, it did not. The pulse passed.
 The second real `Beta 5.0` pulse then moved directly onto the smaller
 same-pick seam after output `20231`:
 
-- `pulse_id=2`
-- family: `same-pick object-shape drift`
-- range: `20232-20246`
-- raw: `15`
-- anchors: `15`
-- `counted_seams`: `0`
-- `excluded_noise`: `0`
-- exclusions:
-  - `operator_artifact=0`
-  - `off_target_failure=0`
-- counted total: `15`
-- verdict: `pass`
+| Pulse | Family | Range | Raw | Anchors | `counted_seams` | `excluded_noise` | Counted total | Verdict |
+| ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `2` | `same-pick object-shape drift` | `20232-20246` | `15` | `15` | `0` | `0` | `15` | `pass` |
 
 That result is even stronger than pulse `1`.
 
@@ -208,18 +215,9 @@ So the early `Beta 5.0` read is now sharper:
 The third real `Beta 5.0` pulse then repeated the first cross-object family
 instead of widening immediately:
 
-- `pulse_id=3`
-- family: `cross-object coherence drift`
-- range: `20247-20261`
-- raw: `15`
-- anchors: `9`
-- `counted_seams`: `6`
-- `excluded_noise`: `0`
-- exclusions:
-  - `operator_artifact=0`
-  - `off_target_failure=0`
-- counted total: `15`
-- verdict: `pass`
+| Pulse | Family | Range | Raw | Anchors | `counted_seams` | `excluded_noise` | Counted total | Verdict |
+| ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `3` | `cross-object coherence drift` | `20247-20261` | `15` | `9` | `6` | `0` | `15` | `pass` |
 
 That repeat matters more than the raw `pass` label.
 
@@ -233,54 +231,47 @@ It shows the same family still carrying real pressure under repetition:
 The fourth real `Beta 5.0` pulse then repeated the same cross-object family
 one more time instead of widening yet:
 
-- `pulse_id=4`
-- family: `cross-object coherence drift`
-- range: `20262-20276`
-- raw: `15`
-- anchors: `9`
-- `counted_seams`: `6`
-- `excluded_noise`: `0`
-- exclusions:
-  - `operator_artifact=0`
-  - `off_target_failure=0`
-- counted total: `15`
-- verdict: `pass`
+| Pulse | Family | Range | Raw | Anchors | `counted_seams` | `excluded_noise` | Counted total | Verdict |
+| ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `4` | `cross-object coherence drift` | `20262-20276` | `15` | `9` | `6` | `0` | `15` | `pass` |
 
 That fourth pass matters because it held the exact same pressure profile as
 pulse `3`.
 
 So the four-pulse picture is now:
 
-- pulse `1`: cross-object passes at `8 / 5 / 2`
-- pulse `2`: same-pick passes at `15 / 0 / 0`
-- pulse `3`: cross-object passes again at `9 / 6 / 0`
-- pulse `4`: cross-object passes again at `9 / 6 / 0`
+| Pulse | Family | Read | Verdict |
+| ---: | --- | --- | --- |
+| `1` | cross-object | `8 / 5 / 2` | `pass` |
+| `2` | same-pick | `15 / 0 / 0` | `pass` |
+| `3` | cross-object | `9 / 6 / 0` | `pass` |
+| `4` | cross-object | `9 / 6 / 0` | `pass` |
 
 The fifth real `Beta 5.0` pulse then repeated the same-pick family instead of
 opening a new seam:
 
-- `pulse_id=5`
-- family: `same-pick object-shape drift`
-- range: `20277-20291`
-- raw: `15`
-- anchors: `15`
-- `counted_seams`: `0`
-- `excluded_noise`: `0`
-- exclusions:
-  - `operator_artifact=0`
-  - `off_target_failure=0`
-- counted total: `15`
-- verdict: `pass`
+| Pulse | Family | Range | Raw | Anchors | `counted_seams` | `excluded_noise` | Counted total | Verdict |
+| ---: | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| `5` | `same-pick object-shape drift` | `20277-20291` | `15` | `15` | `0` | `0` | `15` | `pass` |
 
 That fifth pass matters because it repeated the same collapse as pulse `2`.
 
 So the five-pulse picture is now:
 
-- pulse `1`: cross-object passes at `8 / 5 / 2`
-- pulse `2`: same-pick passes at `15 / 0 / 0`
-- pulse `3`: cross-object passes again at `9 / 6 / 0`
-- pulse `4`: cross-object passes again at `9 / 6 / 0`
-- pulse `5`: same-pick passes again at `15 / 0 / 0`
+| Family | Pulse read |
+| --- | --- |
+| cross-object | `8 / 5 / 2`, then `9 / 6 / 0`, then `9 / 6 / 0` |
+| same-pick | `15 / 0 / 0`, then `15 / 0 / 0` |
+
+Family-pressure chart:
+
+```mermaid
+xychart-beta
+  title "Beta 5.0 family seam pressure"
+  x-axis "Family" ["cross-object", "same-pick"]
+  y-axis "Counted seams" 0 --> 20
+  bar "Counted seams" [17, 0]
+```
 
 ## Why It Matters
 

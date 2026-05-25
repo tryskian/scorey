@@ -142,7 +142,7 @@ Current staged research lane:
 - first staged family:
   - `cross-object coherence drift`
 - staged note:
-  - `docs/research/PRE_BETA_8_MENACE_JUDGMENT.md`
+  - `docs/research/410_PB-MENACE_JUDGEMENT.md`
 
 ## Next Slice
 

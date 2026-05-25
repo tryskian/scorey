@@ -2,6 +2,14 @@
 
 # Pre-Beta 8.0: Menace Judgement
 
+| Field | Value |
+| --- | --- |
+| Code | `410_PB-MENACE_JUDGEMENT` |
+| Category | `boundary` |
+| Status | `staged` |
+| Last evidence | `2026-05-25` |
+| Owns | the staged menace-judgement boundary on the full visible round. |
+
 ## What This Pre-Beta Asks
 
 Once broader prose has stabilised as the next live weak surface, can Scorey
@@ -46,10 +54,9 @@ First staged source family:
 
 Why this family first:
 
-- it is still the only durable weak family above the lower lanes
-- it already reopens under broader prose while same-pick stays collapsed
-- it is the sharpest place to test whether menace quality is the real next seam
-  instead of another structural coherence problem
+| Family | Why it is first |
+| --- | --- |
+| `cross-object coherence drift` | the only durable weak family above the lower lanes; it already reopens under broader prose while same-pick stays collapsed; it is the sharpest place to test whether menace quality is the real next seam |
 
 First staged menace question:
 
@@ -61,21 +68,10 @@ Proposed row verdict:
 - `pass`
 - `fail`
 
-Proposed pass rules:
-
-- the round feels unfair in a compact deliberate way
-- the menace is playful, not mean
-- the voice is confident without sounding smug or superior
-- the pressure stays pick-specific and round-specific
-- the round does not bloat into explanation, lecturing, or generic aggression
-
-Proposed fail shape:
-
-- smug or superiority-performing voice
-- condescending or lecturey phrasing
-- generic aggression or insult without rigged-round character
-- prose too padded to feel like a tiny menace
-- structural drift severe enough that menace quality cannot be judged honestly
+| Verdict | Signal |
+| --- | --- |
+| `pass` | the round feels unfair in a compact deliberate way; the menace is playful not mean; the voice is confident without sounding smug or superior; the pressure stays pick-specific and round-specific; the round does not bloat into explanation, lecturing, or generic aggression |
+| `fail` | smug or superiority-performing voice; condescending or lecturey phrasing; generic aggression or insult without rigged-round character; prose too padded to feel like a tiny menace; structural drift severe enough that menace quality cannot be judged honestly |
 
 Packaging decision:
 
@@ -102,6 +98,16 @@ flowchart TD
   F --> G --> H
 ```
 
+Baseline chart:
+
+```mermaid
+xychart-beta
+  title "Pre-Beta 8 entry pressure from Beta 7.0"
+  x-axis "Family" ["cross-object", "same-pick"]
+  y-axis "Fail rows" 0 --> 7
+  bar "Broader prose fail rows" [6, 0]
+```
+
 Reading note:
 
 - this lane is wider than prose coherence
@@ -113,11 +119,9 @@ Reading note:
 
 If this lane starts, the repo would move from asking:
 
-- does the broader round body still hold its rigged logic?
-
-to asking:
-
-- does the broader round body feel like the right kind of Scorey menace?
+| From | To |
+| --- | --- |
+| does the broader round body still hold its rigged logic? | does the broader round body feel like the right kind of Scorey menace? |
 
 That is a different evidence question.
 
