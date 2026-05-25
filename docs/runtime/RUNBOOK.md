@@ -1,45 +1,43 @@
 # Runbook
 
-## When to Read This
-
 Use this doc for operator procedure.
 
-- `README.md`
-  - public framing and quick entrypoint
-- `docs/governance/CHARTER.md`
-  - durable rules and role split
-- `docs/runtime/ARCHITECTURE.md`
-  - stable system shape
-- `docs/governance/SESSION_HANDOFF.md`
-  - active slice and carryover
-- `docs/governance/DECISIONS.md`
-  - durable rationale for repo choices
-- `docs/runtime/START_END_REFERENCE.md`
-  - compact command card
+- Use `README.md` for public framing and the quick entrypoint.
+- Use `docs/runtime/ARCHITECTURE.md` for stable system shape.
+- Use `docs/governance/SESSION_HANDOFF.md` for the active kernel and carryover.
+- Use `docs/governance/DECISIONS.md` for durable rationale.
+- Use `docs/runtime/START_END_REFERENCE.md` for the compact command card.
+
+## Operating Posture
+
+Scorey stays small on purpose.
+
+The operator posture is:
+
+- one active kernel at a time
+- one feature branch per tracked change set
+- repo-scoped edits by default
+- inspect first, interpret second
+- clean synced `main` is the tracked stop state
+
+Local-only lane:
+
+- `docs/peanut/` stays private and ignored
 
 ## Branch, Worktree, and Scope Policy
 
 1. Canonical repo root is:
    - `/abs/path/to/scorey`
-2. Default workflow is one feature branch per change set:
+2. Default tracked workflow is:
    - `git switch -c codex/bigbrain/<task-name>`
 3. Start tracked edits from a feature branch.
-4. Use a dedicated worktree for parallel implementation tracks.
-5. Keep one logical task per branch.
-6. Keep one active kernel at a time.
-7. Secondary worktrees for live eval work should use:
+4. Use a dedicated worktree only for parallel implementation tracks.
+5. Secondary worktrees for live eval work should use:
    - local `.venv`
    - canonical repo `.local`
+6. Keep one logical task per branch.
 
-## Command Surface Rule
-
-1. Keep one atomic command per operator action.
-2. Keep operator thinking in procedure.
-3. Keep wrapper targets mechanical.
-4. Use `make session-status` as the live repo and runtime snapshot.
-5. Use runtime gates as repo behaviour checks, not as narrative.
-
-## Morning Startup Ritual
+## Morning Startup
 
 1. Read in this order:
    - `README.md`
@@ -48,16 +46,16 @@ Use this doc for operator procedure.
    - `docs/runtime/ARCHITECTURE.md`
    - `docs/runtime/RUNBOOK.md`
    - `docs/governance/SESSION_HANDOFF.md`
-2. Confirm execution context:
+2. Confirm:
    - canonical repo root or dedicated worktree
    - active branch from `git branch --show-current`
-3. Return the startup breakdown before implementation:
+3. Return before implementation:
    - current state
    - risks
    - next kernel
    - repo or worktree context
    - active branch
-4. Run session preflight:
+4. Run:
    - `make doctor-env`
    - `make start-runtime-check`
    - `make caffeinate`
@@ -65,69 +63,158 @@ Use this doc for operator procedure.
    - `make session-status`
 5. Install or refresh the environment when needed:
    - `make install`
-6. Add live runtime credentials when needed:
-   - repo `.env`
-   - or shell export
-7. For live API work, open cost surfaces only when needed:
-   - `make open-limits`
-   - `make open-usage`
-   - `make open-cost-console`
-
-## Environment Doctor
-
-1. Run:
-   - `make doctor-env`
-2. It checks:
-   - Python path
-   - venv
-   - package imports
-   - repo runtime files
-   - live credential visibility
-3. Resolve actionable issues before runtime or eval work.
 
 ## Inspect-First Rule
 
-1. Inspect named files, paths, screenshots, logs, reports, and transcripts
+1. Inspect named files, runtime state, logs, transcripts, and DB surfaces
    before interpretation.
-2. Use source evidence as the basis for interpretation.
+2. Prefer source evidence over memory when they disagree.
 3. State inspection status plainly.
 
 ## Command Ownership
 
-1. Human lead owns:
-   - objective
-   - scope
-   - acceptance criteria
-   - meaning-level trade-offs
-   - go or no-go decisions
-2. Engineer owns:
-   - implementation
-   - validation
-   - command execution
-   - Git and PR flow
-   - proactive hygiene
-3. Default mode is execution-first:
-   - do the work directly when asked
+Human lead owns:
 
-## Protected Main PR Flow
+- objective
+- scope
+- acceptance criteria
+- meaning-level trade-offs
+- go or no-go decisions
+
+Engineer owns:
+
+- implementation
+- validation
+- command execution
+- Git and PR flow
+- proactive hygiene
+
+Default mode is execution-first:
+
+- do the work directly when asked
+
+## Git Write Discipline
+
+Serialize git write actions.
+
+Do not parallelize:
+
+- `git add`
+- `git commit`
+- `git push`
+- branch switches
+- merges
+- rebases
+- PR creation
+
+Use:
+
+1. `git add ...`
+2. verify staged state with:
+   - `git status --short`
+   - or `git diff --cached --stat`
+3. `git commit ...`
+
+## Protected-Main Flow
 
 1. Work on a feature branch.
-2. Serialize git write actions.
-   - Do not parallelize `git add`, `git commit`, `git push`, branch switches,
-     merges, rebases, or PR creation.
-   - Use:
-     - `git add ...`
-     - verify staged state with `git status --short` or `git diff --cached --stat`
-     - `git commit ...`
-3. Commit locally.
-4. Push the branch.
-5. Open a PR to `main`.
-6. Wait for required checks.
-7. Merge through the protected-main flow.
-8. Sync local `main`:
+2. Commit locally.
+3. Push the branch.
+4. Open a PR to `main`.
+5. Wait for required checks.
+6. Merge through the protected-main flow.
+7. Sync local `main`:
    - `git switch main`
    - `git pull --ff-only`
-9. Final local repo state is clean and synced with `origin/main`.
+8. Final tracked repo state is:
+   - merged
+   - clean local `main`
+   - synced with `origin/main`
+
+## Runtime Gates
+
+Use gates as behaviour checks, not narrative.
+
+| Command | Job |
+| --- | --- |
+| `make doctor-env` | environment health check |
+| `make start-runtime-check` | start-of-day runtime safety gate |
+| `make end-runtime-check` | confirms the live slice is closed |
+| `make end-docs-check` | confirms tracked current-truth docs were refreshed today |
+| `make session-status` | compact repo and runtime snapshot |
+
+`make session-status` is the compact live surface for:
+
+- branch state
+- worktree cleanliness
+- runtime queue state
+- live batch boundary state
+
+## Evaluation Command Surface
+
+Top-level and tone review:
+
+| Command | Job |
+| --- | --- |
+| `make eval-init` | initialise the eval database schema |
+| `make eval-list` | list top-level judged rows |
+| `make eval-review-sample` | list pending top-level review sample |
+| `make eval-judge` | record top-level route verdict |
+| `make eval-tone-sample` | list pending tone review sample |
+| `make eval-tone-judge` | record tone verdict |
+| `make eval-tone-archive` | archive one pending tone row |
+| `make eval-tone-disposition-sample` | list failed tone rows that still need `retain` or `evict` |
+| `make eval-tone-disposition-archive` | archive one failed tone row from the disposition surface |
+| `make eval-tone-dispose` | record `retain` or `evict` for one failed tone row |
+
+Bounded widened lenses:
+
+| Command | Job |
+| --- | --- |
+| `make eval-scoreboard-sample` | list pending scoreboard review sample from live route-pass rows |
+| `make eval-scoreboard-judge` | record row-level scoreboard verdict on `scoreboard_claim` |
+| `make eval-scoreboard-archive` | archive one pending scoreboard row |
+| `make eval-scoreboard-close` | close one bounded scoreboard range and settle untouched tone rows in-range |
+| `make eval-prose-sample` | list pending broader-prose review sample from live route-pass rows |
+| `make eval-prose-judge` | record row-level prose verdict on the round body around the score line |
+| `make eval-prose-archive` | archive one pending prose row |
+| `make eval-prose-close` | close one bounded prose range and settle untouched lower-lens rows in-range |
+
+Pulse surface:
+
+| Command | Job |
+| --- | --- |
+| `make eval-pulse-open` | open one bounded pulse over a route-pass output range |
+| `make eval-pulse-sample` | list newest unlabeled rows inside one pulse |
+| `make eval-pulse-judge` | label one row as `anchor`, `counted_seam`, or `excluded_noise` |
+| `make eval-pulse-summary` | report raw rows, counted totals, exclusions, and pulse verdict |
+| `make eval-pulse-close` | close one pulse and settle untouched legacy tone rows in-range |
+
+Sampling surface:
+
+| Command | Job |
+| --- | --- |
+| `make eval-sample-local` | record deterministic local rounds |
+| `make eval-sample-live` | record live API rounds |
+
+## Validation Surface
+
+| Command | Job |
+| --- | --- |
+| `make lint-docs` | tracked docs lint gate |
+| `make check` | format, lint, typecheck, tests, and `git diff --check` |
+| `make package-check` | distribution build check |
+| `make package-install-check` | editable package import smoke |
+| `make security-checks` | local dependency security audit |
+
+## Wake-Lock Surface
+
+| Command | Job |
+| --- | --- |
+| `make caffeinate` | start repo-managed wake lock |
+| `make caffeinate-status` | report repo-managed wake-lock status |
+| `make decaffeinate` | stop repo-managed wake lock |
+| `make decaffeinate-status` | report closeout wake-lock status |
 
 ## End Of Day
 
@@ -150,95 +237,9 @@ Use this doc for operator procedure.
    - `make decaffeinate-status`
    - `make end-git-check`
 6. Update tracked handoff and research truth before stopping.
-7. End state is:
-   - merged
-   - clean local `main`
-   - synced with `origin/main`
 
-## Runtime Gate Notes
+The repo is closed only when:
 
-1. `make start-runtime-check` confirms the day can open safely.
-2. `make end-runtime-check` confirms the live slice is closed.
-3. `make end-docs-check` confirms tracked current-truth docs were refreshed
-   today.
-4. `make session-status` is the compact status surface for:
-   - branch state
-   - worktree cleanliness
-   - runtime queue state
-   - live batch boundary state
-
-## Local-Only Docs Policy
-
-1. `docs/peanut/` is the local and private lane.
-2. Use it for:
-   - interface sketches
-   - rough notes
-   - private scratch material
-3. Tracked docs remain canonical project truth.
-
-## Atomic Commands
-
-- `make install`
-  - install or refresh the local environment
-- `make doctor-env`
-  - environment health check
-- `make start-runtime-check`
-  - start-of-day runtime safety gate
-- `make session-status`
-  - live repo and runtime snapshot
-- `make caffeinate`
-  - start repo-managed wake lock
-- `make caffeinate-status`
-  - report repo-managed wake-lock status
-- `make decaffeinate`
-  - stop repo-managed wake lock
-- `make decaffeinate-status`
-  - report closeout wake-lock status
-- `make end-docs-check`
-  - current-truth docs freshness gate
-- `make end-runtime-check`
-  - closeout runtime gate
-- `make eval-scoreboard-sample`
-  - list newest pending live row per model/pair for scoreboard review
-- `make eval-scoreboard-judge`
-  - record a row-level scoreboard verdict on `scoreboard_claim`
-- `make eval-scoreboard-archive`
-  - archive one pending scoreboard row out of the active review surface
-- `make eval-scoreboard-close`
-  - close one bounded scoreboard source range once every row is addressed
-  - settle any still-untouched tone rows in that range out of the active tone
-    queue
-- `make eval-prose-sample`
-  - list newest pending live row per model/pair for broader prose review
-- `make eval-prose-judge`
-  - record a row-level prose verdict on the round body around the score line
-- `make eval-prose-archive`
-  - archive one pending prose row out of the active review surface
-- `make eval-prose-close`
-  - close one bounded prose source range once every row is addressed
-  - settle any still-untouched tone and scoreboard rows in that range out of
-    the active lower-lens queues
-- `make eval-pulse-open`
-  - open one bounded pulse over a route-pass output range
-- `make eval-pulse-sample`
-  - list newest unlabeled rows inside one pulse
-- `make eval-pulse-judge`
-  - label one row as `anchor`, `counted_seam`, or `excluded_noise`
-- `make eval-pulse-summary`
-  - report raw rows, counted totals, exclusions, and pulse verdict
-- `make eval-pulse-close`
-  - close one pulse once every row in range has a pulse label
-  - settle any still-unreviewed legacy tone rows in that pulse range out of the
-    active tone queue
-- `make lint-docs`
-  - tracked docs lint gate
-- `make check`
-  - repo validation suite
-- `make package-check`
-  - distribution build check
-- `make package-install-check`
-  - editable package import smoke
-- `make security-checks`
-  - local dependency security check
-- `make end-git-check`
-  - clean-main closeout check
+- `make end` has passed
+- local `main` is clean
+- local `main` is synced with `origin/main`

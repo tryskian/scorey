@@ -11,8 +11,10 @@ This is the compact command card for opening and closing a working session.
    - `docs/runtime/ARCHITECTURE.md`
    - `docs/runtime/RUNBOOK.md`
    - `docs/governance/SESSION_HANDOFF.md`
-2. Confirm repo or worktree context and active branch.
-3. State:
+2. Confirm:
+   - repo or worktree context
+   - active branch
+3. State before implementation:
    - current state
    - risks
    - next kernel
@@ -27,7 +29,7 @@ This is the compact command card for opening and closing a working session.
 
 ## End
 
-1. Run:
+1. Run branch-local validation:
    - `make end-docs-check`
    - `make doctor-env`
    - `make path-leak-check`
@@ -46,7 +48,15 @@ This is the compact command card for opening and closing a working session.
 
 ## Wrapper Shortcuts
 
-- `make start`
-  - runs the start command sequence and prints the rehydrate prompt
-- `make end`
-  - runs the closeout command sequence and final Git check
+| Command | Job |
+| --- | --- |
+| `make start` | runs the startup sequence and prints the rehydrate prompt |
+| `make end` | runs the full closeout sequence and final git check |
+
+## Close Condition
+
+The repo is closed only when:
+
+- `make end` has passed
+- local `main` is clean
+- local `main` is synced with `origin/main`

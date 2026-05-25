@@ -1,98 +1,122 @@
 # Scorey Charter
 
+This page owns durable rules, collaboration model, and document boundaries.
+
+- Use `docs/governance/DECISIONS.md` for durable decision history.
+- Use `docs/governance/SESSION_HANDOFF.md` for the active kernel and carryover.
+- Use `docs/runtime/ARCHITECTURE.md` for the stable system shape.
+- Use `docs/runtime/RUNBOOK.md` for operator procedure.
+- Use `docs/runtime/START_END_REFERENCE.md` for the compact command card.
+
 ## Mission
 
-Build a small, local, CLI-first mini chatbot for inspecting constrained round
-behaviour through rigged rock, paper, scissors outcomes and fail-first
-evaluation.
+Scorey is a small local CLI research instrument for one unfair rock, paper,
+scissors round.
 
-## Durable Rules
+The point is not breadth. The point is to keep the round narrow, legible, and
+comparable while bounded eval lenses test whether the visible result still
+holds together.
 
-- Local CLI runtime is canonical.
-- Runtime stays agent-backed through the OpenAI Agents SDK.
-- Prompt surface stays fixed to:
+## Core Round Contract
+
+- The local CLI runtime is canonical.
+- The fixed interaction boundary stays:
   - `rock`
   - `paper`
   - `scissors`
-- Scorey round contract stays unfair and legible:
-  - Scorey wins
-  - the user loses
-  - same-pick rounds remain valid losses
-- Runtime owns route selection, round composition, and output labels.
-- Live generation owns only the small unstable round fields:
-  - Scorey's winning state
-  - the user's worse state
-  - a scoreboard claim
-- Responses stay lowercase, bratty, unfair, and round-aware.
-- Eval semantics stay binary:
-  - `pass`
-  - `fail`
-  - after `fail`, choose:
-    - `retain`
-    - `evict`
-- The active eval loop starts with route correctness and expands only after
-  the core round stays stable.
-- Tracked docs, code, tests, and local eval evidence are canonical repo truth.
-- `docs/peanut/` stays the local and private lane.
-- Small, testable changes are the default delivery shape.
-- Evidence inspection comes before interpretation.
-- Evidence chains stay preserved through archive-first handling.
+- Scorey wins and the user loses.
+- Same-pick rounds are valid losses, not ties.
+- The runtime owns:
+  - route selection
+  - output labels
+  - final round composition
+- The live model owns only:
+  - `winning_state`
+  - `worse_state`
+  - `scoreboard_claim`
+- The visible round should stay compact, unfair, and round-aware.
+- Tracked repo truth lives in code, tests, docs, and local eval evidence.
 
-## Working Model
+## Evaluation Charter
 
-- Human lead owns:
-  - hypotheses
-  - scope boundaries
-  - acceptance criteria
-  - meaning-level trade-offs
-  - go or no-go decisions
-- Engineer owns:
-  - implementation
-  - validation
-  - Git and PR flow
-  - proactive hygiene
-  - execution recommendations
-- Default execution model:
-  - one feature branch per change set
-  - protected-main PR flow
-  - clean synced `main` as the tracked stop state
-- Parallel implementation uses dedicated worktrees.
+- Route validity stays the floor.
+- Tone stays the first widened row-level lens above route.
+- Failed tone rows stay explicit:
+  - `retain`
+  - `evict`
+- Widened lenses advance one layer at a time and must close back to
+  `0` pending.
+- Pulse stays the bounded run-level lens:
+  - rows are labelled as `anchor`, `counted_seam`, or `excluded_noise`
+  - only anchors and counted seams affect the pulse verdict
+- Scoreboard stays a row-level lens on `scoreboard_claim`.
+- Broader prose stays a row-level lens on the round body around the score
+  line.
+- Menace is the staged next lens on the full visible round.
 
-## Documentation Governance
+Current tracked method ladder:
 
-- `docs/governance/DECISIONS.md`
-  - durable repo decisions
-- `docs/governance/SESSION_HANDOFF.md`
-  - active slice and carryover
-- `docs/runtime/RUNBOOK.md`
-  - operator procedure
-- `docs/runtime/ARCHITECTURE.md`
-  - stable system shape
-- `docs/runtime/START_END_REFERENCE.md`
-  - compact command card
-- `docs/research/`
-  - tracked beta findings
-- `docs/diagrams/`
-  - tracked runtime and eval diagrams
-- `docs/peanut/`
-  - local and private working lane
+- `Research Beta 4.0`
+  - closed abstract tone measurement baseline
+- `Research Beta 5.0`
+  - closed fail-pressure pulse baseline
+- `Research Beta 6.0`
+  - closed scoreboard judgement baseline
+- `Research Beta 7.0`
+  - closed broader prose judgement baseline
+- `pre-Beta 8.0`
+  - staged menace judgement lane
 
-## Current Scope
+## Collaboration Model
 
-- local CLI runtime and operator surface
-- fixed pick selection
-- runtime-owned route composition for one unfair round
-- binary eval stack with explicit `retain` and `evict` outcomes
-- tone-first review after route stability
-- tracked beta research notes and diagrams
-- smaller, single-purpose docs aligned with live repo behaviour
+Human lead owns:
 
-## Security / Ops Baseline
+- hypotheses
+- scope boundaries
+- acceptance criteria
+- meaning-level trade-offs
+- go or no-go decisions
 
-- `OPENAI_API_KEY` is present for live runtime work.
+Engineer owns:
+
+- implementation
+- validation
+- Git and PR flow
+- proactive hygiene
+- execution recommendations
+
+Working shape:
+
+- one active kernel at a time
+- one tracked change set per feature branch
+- protected-main flow for tracked merges
+- clean synced `main` as the tracked stop state
+
+## Repo Truth Boundaries
+
+- Tracked repo docs and live repo state outrank memory when they disagree.
+- Stale tracked docs are defects.
+- `docs/peanut/` stays the local and private working lane.
+- Local eval evidence is part of repo truth, not disposable narration.
+
+## Document Roles
+
+| Surface | Owns |
+| --- | --- |
+| `CHARTER` | durable rules and collaboration model |
+| `DECISIONS` | durable decision history |
+| `SESSION_HANDOFF` | active kernel and carryover |
+| `ARCHITECTURE` | stable runtime shape |
+| `RUNBOOK` | operator procedure |
+| `START_END_REFERENCE` | compact command card |
+| `docs/research/` | tracked beta boundaries and evidence notes |
+| `docs/diagrams/` | tracked diagrams |
+| `docs/peanut/` | local and private working surfaces |
+
+## Ops Baseline
+
 - Local `.venv` is the canonical development environment.
-- Local terminal execution is the trusted development boundary.
-- `.local/evals.sqlite` is the live eval evidence store.
-- `make doctor-env` is the environment confirmation entrypoint.
-- Local validation exposes Make targets for docs linting, package checks, and
-  dependency security checks.
+- The repo `.local` surface is the canonical live eval store.
+- Secondary worktrees reuse the canonical repo `.local` surface for live eval
+  work.
+- A session is not closed until `make end` passes on clean synced `main`.
