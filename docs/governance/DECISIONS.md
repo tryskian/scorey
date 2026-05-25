@@ -1,39 +1,35 @@
 # Decisions Log
 
+This page holds durable repo decisions only.
+
+- Use `docs/governance/CHARTER.md` for durable rules and collaboration model.
+- Use `docs/governance/SESSION_HANDOFF.md` for the active kernel and carryover.
+- Use `docs/runtime/ARCHITECTURE.md` for the stable system shape.
+
 ## Taxonomy
 
 - `Category` values:
   - `runtime_engineering`
   - `eval_quality`
-  - `collaboration_method`
   - `evidence_governance`
   - `workflow_environment`
 - `Tags`:
   - lowercase snake_case labels for quick filtering
 
-## Entry Criteria
+## Entry Rule
 
-Add an entry only when the change is durable and still governs the repo.
+Add an entry only when the decision still governs the repo.
 
 Good fits:
 
-- collaboration model or control rights
-- repo workflow rules
-- runtime or eval contract changes
+- runtime contract changes
+- eval method boundaries
 - evidence handling rules
-- documentation governance rules
+- workflow or closeout rules
+- durable document-role changes
 
-Keep temporary wrapper churn, wording tweaks, branch-local cleanup,
-one-off debugging moves, and current-session handoff facts in the tracked
-handoff or branch history instead.
-
-## Entry Style
-
-- keep entries short and operational
-- one durable decision per entry
-- use one category
-- use 3 to 5 tags
-- keep `Decision` and `Why` tight
+Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and
+current-session facts out of this file.
 
 ## D-001: Local CLI runtime remains canonical
 
@@ -71,8 +67,8 @@ handoff or branch history instead.
 - Category: `runtime_engineering`
 - Tags: `runtime_ownership`, `structured_fields`, `model_boundary`
 - Decision: Runtime owns route selection, output labels, and final round
-  composition, while the live model supplies only Scorey's winning state, the
-  user's worse state, and a scoreboard claim.
+  composition, while the live model supplies only `winning_state`,
+  `worse_state`, and `scoreboard_claim`.
 - Why: This keeps the unstable model seam small and preserves an evalable
   round contract.
 
@@ -82,17 +78,17 @@ handoff or branch history instead.
 - Category: `eval_quality`
 - Tags: `binary_gate`, `retain_evict`, `lane_contract`
 - Decision: Route review and tone review both stay on `pass` / `fail`, and
-  every failure is handled through `retain` or `evict`.
+  every failed tone row is handled through `retain` or `evict`.
 - Why: This keeps the gate legible and preserves a clean loop for upstream
   failure handling.
 
-## D-006: Route validity remains the floor and tone-first is the active widened lens
+## D-006: Route validity remains the floor and tone-first stays the first widened lens
 
 - Date: `2026-05-15`
 - Category: `eval_quality`
 - Tags: `route_floor`, `tone_first`, `beta_method`
 - Decision: Route correctness remains the first gate, and tone-first remains
-  the active widened review lens once the route floor is stable.
+  the first widened review lens once the route floor is stable.
 - Why: This keeps the method sequence clear and prevents wider judgement from
   obscuring the core round contract.
 
@@ -121,7 +117,7 @@ handoff or branch history instead.
 - Category: `workflow_environment`
 - Tags: `protected_main`, `feature_branch`, `stop_state`
 - Decision: Tracked truth ends on clean synced `main` through feature
-  branches, PR checks, and protected-main merges.
+  branches, required checks, and protected-main merges.
 - Why: This keeps local and remote tracked truth aligned.
 
 ## D-010: `session-status` and runtime gates are the live operator snapshot
@@ -132,8 +128,8 @@ handoff or branch history instead.
 - Decision: `make session-status`, `make start-runtime-check`,
   `make end-runtime-check`, and `make end-docs-check` remain the compact live
   checks for repo cleanliness, queue state, and open or close safety.
-- Why: This repo uses a small operator surface to keep runtime truth visible
-  during active work.
+- Why: This keeps runtime truth visible during active work without widening the
+  operator surface unnecessarily.
 
 ## D-011: Secondary worktrees reuse the canonical eval store
 
@@ -155,16 +151,16 @@ handoff or branch history instead.
   the durable ledger.
 - Why: This keeps the docs stack legible and prevents overlap drift.
 
-## D-013: Startup and closeout are operator procedures backed by atomic commands
+## D-013: Startup and closeout remain real operator procedures
 
 - Date: `2026-05-15`
 - Category: `workflow_environment`
-- Tags: `startup`, `closeout`, `atomic_commands`
-- Decision: Startup is executed as reading and orientation backed by
-  `make doctor-env`, `make start-runtime-check`, wake-lock commands, and
-  `make session-status`, while closeout runs docs, runtime, path-leak, wake-lock,
-  and clean-main checks in sequence.
-- Why: This keeps the discipline in the real operator pass while the command
+- Tags: `startup`, `closeout`, `operator_surface`
+- Decision: Startup is a real read-and-check pass backed by `make doctor-env`,
+  `make start-runtime-check`, wake-lock commands, and `make session-status`.
+  Closeout is a real docs, runtime, wake-lock, and clean-main pass culminating
+  in `make end`.
+- Why: This keeps the discipline in the actual operator flow while the command
   surface stays small and honest.
 
 ## D-014: The tracked repo surface stays clean of local path leaks
@@ -183,30 +179,13 @@ handoff or branch history instead.
 - Category: `workflow_environment`
 - Tags: `docs_reset`, `focused_replace`, `downsizing`, `structure_alignment`
 - Decision: Reset the tracked docs stack by replacing each core doc with a
-  smaller single-purpose version aligned to the Polinko structure, while
+  smaller single-purpose version aligned to the family structure, while
   keeping Scorey's tracked handoff and live runtime gates where they still
   govern real repo behaviour.
 - Why: The stack had drifted into overlapping warehouse surfaces where
-  procedure, carryover, structure, and rationale were duplicating each other.
-  The reset keeps the docs truthful, smaller, and easier to use during active
+  procedure, carryover, structure, and rationale duplicated each other. The
+  reset keeps the docs truthful, smaller, and easier to use during active
   work.
-- How:
-  1. Align the morning process and `make end` implementation to the updated
-     house contract before rewriting the docs.
-  2. Replace tracked `RUNBOOK.md` with the smaller procedure-only version.
-  3. Replace tracked `SESSION_HANDOFF.md` with the smaller active-carryover
-     version.
-  4. Replace tracked `ARCHITECTURE.md` with the smaller structural version.
-  5. Replace tracked `CHARTER.md` with the smaller durable-rules version.
-  6. Replace tracked `START_END_REFERENCE.md` with the compact command card.
-  7. Replace tracked `DECISIONS.md` last with the compact durable ledger.
-- Diff Counts:
-  - tracked `RUNBOOK.md`: `183 insertions`, `386 deletions`
-  - tracked `SESSION_HANDOFF.md`: `78 insertions`, `375 deletions`
-  - tracked `ARCHITECTURE.md`: `116 insertions`, `249 deletions`
-  - tracked `CHARTER.md`: `85 insertions`, `134 deletions`
-  - tracked `START_END_REFERENCE.md`: `40 insertions`, `64 deletions`
-  - tracked `DECISIONS.md`: `147 insertions`, `912 deletions`
 
 ## D-016: Live prompt surfaces stay abstract and de-anchored
 
@@ -218,9 +197,7 @@ handoff or branch history instead.
   abstract constraints rather than hard-coded phrase blacklists, canned good
   fragments, or canned bad fragments.
 - Why: Phrase-specific anchoring contaminates the measurement surface. It can
-  manufacture the very fallback seams the eval lane is supposed to observe,
-  especially in same-pick rounds. That breaks the intended family method by
-  turning discovered failure language into part of the generator itself.
+  manufacture the same fallback seams the eval lane is supposed to observe.
   Findings belong in tracked research docs, not in the live generator
   contract.
 
@@ -235,9 +212,7 @@ handoff or branch history instead.
   inside `Research Beta 3.0`.
 - Why: This changes what the evidence means. `Research Beta 3.0` remains the
   historical anchored comparison surface, while `Research Beta 4.0` becomes
-  the clean Polinko-aligned comparison surface. Splitting them keeps the
-  method boundary explicit and makes anchored versus abstract results
-  directly comparable.
+  the clean comparison surface.
 
 ## D-018: Active fail families get isolated short measurement runs
 
@@ -248,10 +223,9 @@ handoff or branch history instead.
 - Decision: Once a mixed run identifies the active fail families, the next
   eval pass should split them into individual short runs, one fail family at a
   time, instead of immediately widening back to another broad mixed run.
-- Why: This keeps the evidence surface narrow enough to read clearly. It makes
-  retained failures easier to compare across runs, reduces queue bloat, and
-  shows whether a weak seam is still coherent under isolation or only looked
-  strong inside the mixed batch.
+- Why: This keeps the evidence surface narrow enough to read clearly and shows
+  whether a weak seam is coherent under isolation or only looked strong inside
+  the mixed batch.
 
 ## D-019: Pin fail-pressure pulse as Research Beta 5.0
 
@@ -264,8 +238,7 @@ handoff or branch history instead.
   4.0` stays closed as the row-level abstract measurement baseline.
 - Why: The first real pulse changed what the evidence means. `Beta 4.0`
   remains the finished row-level comparison surface, while `Beta 5.0` becomes
-  the active pulse-level comparison surface once pulse evidence exists instead
-  of only a staged hypothesis note.
+  the active pulse-level comparison surface.
 
 ## D-020: Beta 5.0 pulse counting stays anchor-versus-seam
 
@@ -277,8 +250,6 @@ handoff or branch history instead.
   `counted_seam` rows toward the pulse verdict. `excluded_noise` stays
   auditable, reported by reason, and outside the counted total.
 - Why: This keeps bounded run judgement strict without hiding row evidence.
-  The pulse stays binary at the run level, but the row surface remains visible
-  enough to audit how a pass or fail was produced.
 
 ## D-021: Local tooling targets mirror closeout and CI gates
 
@@ -287,25 +258,10 @@ handoff or branch history instead.
 - Tags: `tooling_baseline`, `closeout`, `security_gates`, `operator_surface`
 - Provenance: `human-led tooling hygiene decision with implementation decision`
 - Decision: Keep `Makefile` as the explicit operator surface for local
-  validation by adding first-class targets for:
-  - `make lint-docs`
-  - `make package-install-check`
-  - `make security-checks`
-  The end routine must call Make targets for docs linting, package build,
+  validation by exposing first-class targets for docs linting, package build,
   editable package import, runtime closeout, and dependency security checks.
-  `pip-audit` belongs in the dev dependency surface so local security checks
-  do not depend on ad hoc global tooling.
-- Validation:
-  - `make check`
-  - `make lint-docs`
-  - `make package-check`
-  - `make package-install-check`
-  - `make security-checks`
-  - `make end-preflight`
-- Why: Scorey already had real runtime closeout gates, but its local tooling
-  surface still left docs linting, package import smoke, and security audit
-  outside the canonical Make workflow. The toy repos need a small shared
-  baseline that is easy to repeat without changing runtime or eval behaviour.
+- Why: This keeps local validation repeatable and keeps closeout discipline on
+  the same small operator surface as the rest of the repo.
 
 ## D-022: Scoreboard judgement is the staged next lens after Beta 5.0 pulse
 
@@ -314,13 +270,11 @@ handoff or branch history instead.
 - Tags: `next_lens`, `scoreboard`, `beta_staging`
 - Provenance: `human-led method decision with implementation decision`
 - Decision: After the active `Beta 5.0` pulse surface stabilizes, the staged
-  next widening step is scoreboard judgement rather than broad prose judgement.
-  It remains staged until the first clean bounded scoreboard run closes on the
-  formalized scoreboard surface.
-- Why: Scoreboard judgement is the smaller next lens. It stays tied to the
-  explicit `scoreboard_claim` field that already exists in the runtime
-  contract, so it widens the evidence surface without immediately reopening
-  the whole round prose as one broad quality question.
+  next widening step is scoreboard judgement rather than broad prose
+  judgement.
+- Why: Scoreboard is the smaller next lens. It stays tied to the explicit
+  `scoreboard_claim` field without immediately reopening the whole round prose
+  as one broad quality question.
 
 ## D-023: The first scoreboard lane stays row-level
 
@@ -328,18 +282,16 @@ handoff or branch history instead.
 - Category: `eval_quality`
 - Tags: `scoreboard`, `row_level`, `next_lens`
 - Provenance: `human-led method decision with implementation decision`
-- Decision: The first scoreboard judgement lane should stay row-level on
-  `scoreboard_claim`. Bounded runs can still source the rows, but the
-  scoreboard verdict itself should not inherit pulse math on the first pass.
-- Why: `scoreboard_claim` is already a small explicit field in the runtime
-  contract. It should prove it deserves its own lane before adding another
-  pulse layer on top. This keeps the widening step smaller than full prose and
-  simpler than repeating `Beta 5.0` mechanics by habit.
+- Decision: The first scoreboard judgement lane stays row-level on
+  `scoreboard_claim`. Bounded runs can source the rows, but the scoreboard
+  verdict itself does not inherit pulse math on the first pass.
+- Why: This keeps the widening step smaller than full prose and simpler than
+  repeating `Beta 5.0` mechanics by habit.
 
 ## D-024: Scoreboard close settles untouched tone rows in-range
 
 - Date: `2026-05-21`
-- Category: `eval_runtime`
+- Category: `runtime_engineering`
 - Tags: `scoreboard`, `closeout`, `queue_hygiene`
 - Provenance: `human-led method decision with implementation decision`
 - Decision: Bounded scoreboard runs close through an explicit scoreboard-close
@@ -347,8 +299,7 @@ handoff or branch history instead.
   out of the active tone queue.
 - Why: Scoreboard is a row-level lens on `scoreboard_claim`, not a request to
   reopen legacy tone review by accident. Bounded scoreboard work needs the same
-  clean-runtime closeout discipline as pulse work so the live queue returns to
-  `0` pending at route, tone, and disposition after the bounded read ends.
+  clean closeout discipline as pulse work.
 
 ## D-025: Beta 6.0 starts on scoreboard judgement
 
@@ -358,12 +309,9 @@ handoff or branch history instead.
 - Provenance: `human-led method decision with implementation decision`
 - Decision: `Research Beta 6.0` starts once the scoreboard lane has both a
   locked row-level contract and a clean bounded closeout proof on live
-  evidence. In Scorey, that boundary is now met by the two bounded cross-object
-  scoreboard passes, including the formalized closeout run on `20307-20321`.
-- Why: The scoreboard lane is no longer just staging. It already proved it can
-  produce clear row-level evidence and return the runtime to `0` pending
-  without reopening the legacy tone queue. That changes what the evidence means
-  and therefore justifies a real beta boundary.
+  evidence.
+- Why: That changes what the evidence means and therefore justifies a real
+  beta boundary.
 
 ## D-026: Broader prose judgement is the staged next lens after Beta 6.0
 
@@ -374,9 +322,9 @@ handoff or branch history instead.
 - Decision: After the active `Beta 6.0` scoreboard surface stabilizes, the
   staged next widening step is broader prose judgement rather than more
   scoreboard repetition on the same tested families.
-- Why: Scoreboard has now collapsed twice on both cross-object and same-pick.
-  The next honest question is whether the broader round prose can still hold
-  rigged-round logic once the judged surface widens above `scoreboard_claim`.
+- Why: The next honest question is whether the broader round prose can still
+  hold rigged-round logic once the judged surface widens above
+  `scoreboard_claim`.
 
 ## D-027: Beta 7.0 starts on broader prose judgement
 
@@ -386,13 +334,10 @@ handoff or branch history instead.
 - Provenance: `human-led method decision with implementation decision`
 - Decision: `Research Beta 7.0` starts once the broader prose lane has both a
   locked row-level contract and a clean bounded closeout proof on live
-  evidence. In Scorey, that boundary is now met by the first bounded
-  cross-object prose pass on `20352-20366`, which closed at `9` pass / `6`
-  fail and returned the runtime to `0` pending.
-- Why: The broader prose lane is no longer just a staged widening idea. It now
+  evidence.
+- Why: The broader prose lane is no longer just a staged widening idea. It
   changes what the evidence means by proving that cross-object pressure
-  reappears above `scoreboard_claim` even after the scoreboard lane collapsed
-  cleanly on the same families.
+  reappears above `scoreboard_claim`.
 
 ## D-028: Menace judgement is the staged next lens after Beta 7.0
 
@@ -401,11 +346,8 @@ handoff or branch history instead.
 - Tags: `next_lens`, `menace`, `beta_staging`
 - Provenance: `human-led method decision with implementation decision`
 - Decision: After the active `Beta 7.0` broader prose surface stabilizes, the
-  staged next widening step is menace judgement rather than more prose replay on
-  the same tested family shape.
-- Why: `Beta 7.0` already showed the structural contrast clearly:
-  cross-object reopens at `9 / 6` while same-pick stays collapsed at `15 / 0`.
-  The next honest question is no longer only whether the round body is
-  coherent. It is whether the full visible round lands as the right kind of
-  compact rigged-round menace without drifting into smugness, cruelty, or
-  generic filler.
+  staged next widening step is menace judgement rather than more prose replay
+  on the same tested family shape.
+- Why: The next honest question is whether the full visible round lands as the
+  right kind of compact rigged-round menace without drifting into smugness,
+  cruelty, or generic filler.
