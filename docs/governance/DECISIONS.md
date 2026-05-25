@@ -1,20 +1,39 @@
 # Decisions Log
 
-This page holds durable repo decisions only.
+This file is the durable archive of Scorey's engineering, runtime, and eval decisions.
 
-- Use `docs/governance/CHARTER.md` for durable rules and collaboration model.
-- Use `docs/governance/SESSION_HANDOFF.md` for the active kernel and carryover.
-- Use `docs/runtime/ARCHITECTURE.md` for the stable system shape.
+## How To Use This File
+
+- Need the current durable rules:
+  - start with `docs/governance/CHARTER.md`
+- Need the current system shape:
+  - use `docs/runtime/ARCHITECTURE.md`
+- Need the active kernel and carryover:
+  - use `docs/governance/SESSION_HANDOFF.md`
+- Need the reasoning behind a repo choice:
+  - use this file
+
+Keep entries short, but informative enough to show what changed and why.
 
 ## Taxonomy
 
-- `Category` values:
-  - `runtime_engineering`
-  - `eval_quality`
-  - `evidence_governance`
-  - `workflow_environment`
-- `Tags`:
-  - lowercase snake_case labels for quick filtering
+- `runtime_engineering`
+- `eval_quality`
+- `evidence_governance`
+- `workflow_environment`
+
+## Provenance Rule
+
+Each decision should read as one of these:
+
+- `human-led method decision`
+  - the theory, bridge logic, or eval meaning came from the human lead
+- `repo formalization`
+  - the repo later encoded an already-active method or contract
+- `implementation decision`
+  - the engineering layer chose mechanics after the method was already set
+
+If a decision crosses layers, say so plainly instead of flattening the method into implementation authorship.
 
 ## Entry Rule
 
@@ -28,8 +47,7 @@ Good fits:
 - workflow or closeout rules
 - durable document-role changes
 
-Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and
-current-session facts out of this file.
+Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-session facts out of this file.
 
 ## D-001: Local CLI runtime remains canonical
 
@@ -351,3 +369,17 @@ current-session facts out of this file.
 - Why: The next honest question is whether the full visible round lands as the
   right kind of compact rigged-round menace without drifting into smugness,
   cruelty, or generic filler.
+
+## D-029: Research charts stay minimal and note-shaped
+
+- Date: `2026-05-25`
+- Category: `evidence_governance`
+- Tags: `research_docs`, `chart_language`, `observable_plot`, `visual_clarity`
+- Provenance: `human-led docs decision with implementation decision`
+- Decision: Public research-note charts use Observable Plot on top of D3 and
+  stay limited to `slope chart`, `horizontal bar chart`, and `table heatmap`.
+  When a chart adds no value over the evidence table, use a plain table
+  instead.
+- Why: Scorey's research data is small, discrete, and comparison-heavy. A
+  tight chart language keeps the notes visual without drifting into
+  decorative or overfit analytics surfaces.
