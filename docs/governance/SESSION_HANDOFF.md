@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-05-25
+Last updated: 2026-06-06
 
 ## Start Here
 
@@ -33,8 +33,8 @@ Scorey is a small local CLI research instrument for one unfair rock, paper,
 scissors round. `Research Beta 4.0` is closed as the abstract row-level
 measurement baseline. `Research Beta 5.0` is closed as the fail-pressure pulse
 baseline. `Research Beta 6.0` is closed as the scoreboard baseline.
-`Research Beta 7.0` is closed as the broader prose baseline. `pre-Beta 8.0` is
-the current staged menace lane.
+`Research Beta 7.0` is closed as the broader prose baseline. `Research Beta 8.0`
+is the current active menace lane.
 
 Stable repo shape:
 
@@ -110,17 +110,41 @@ Stable contrast:
 
 ## Active Kernel
 
-Tracked docs sync branch:
+Menace operator surface branch:
 
-- branch: `codex/bigbrain/scorey-d3-chart-tooling`
-- tracked docs in play:
+- branch: `codex/bigbrain/scorey-handoff-menace-sync`
+- tracked surfaces in play:
+  - `README.md`
+  - `docs/governance/CHARTER.md`
+  - `Makefile`
+  - `src/scorey/eval_db.py`
+  - `src/scorey/main.py`
+  - `tests/test_eval_db.py`
+  - `tests/test_main.py`
+  - `docs/runtime/ARCHITECTURE.md`
+  - `docs/runtime/RUNBOOK.md`
   - `docs/governance/DECISIONS.md`
+  - `docs/governance/SESSION_HANDOFF.md`
+  - `docs/research/000_LEGEND.md`
+  - `docs/research/README.md`
+  - `docs/research/080_B-MENACE_JUDGEMENT.md`
 - tracked change:
-  - `D-029` locks the public research-note chart language to:
-    - `slope chart`
-    - `horizontal bar chart`
-    - `table heatmap`
-  - the `DECISIONS.md` header now matches the current boilerplate shape
+  - menace is being formalised as a real bounded row-level lens on the full
+    visible round
+  - `eval-menace-sample`
+  - `eval-menace-judge`
+  - `eval-menace-archive`
+  - `eval-menace-close`
+  - menace closeout settles untouched `tone`, `scoreboard`, and `prose` rows
+    in-range
+  - `D-030` locks the row-level menace contract in the durable decisions ledger
+  - `D-031` starts `Research Beta 8.0` on menace judgement
+  - hardened cross-object menace repeat `20307-20321` closed at `11 / 4`
+  - first bounded menace read `20382-20396` closed at `9 / 6`
+  - second bounded menace read `20352-20366` closed at `11 / 4`
+  - first bounded same-pick menace read `20367-20381` closed at `15 / 0`
+  - the second read moved above the closed `Beta 7.0` prose surface and starts
+    `Research Beta 8.0`
 
 Private staging surface:
 
@@ -134,38 +158,37 @@ Private staging surface:
 - `docs/peanut/research/templates/backlog.md`
 - `docs/peanut/research/chart-language.md`
 
-Current staged research lane:
+Current active research lane:
 
-- `pre-Beta 8.0`
+- `Research Beta 8.0`
 - `menace judgement`
 - judged surface:
   - the full visible round
-- first staged family:
+- operator surface:
+  - locked
+- active family:
   - `cross-object coherence drift`
-- staged note:
-  - `docs/research/410_PB-MENACE_JUDGEMENT.md`
+- active note:
+  - `docs/research/080_B-MENACE_JUDGEMENT.md`
 
 ## Next Slice
 
-1. Finish the current tracked docs branch and merge it on clean synced `main`.
+1. Finish the current menace operator branch and merge it on clean synced
+   `main`.
 2. Keep `Beta 5.0`, `Beta 6.0`, and `Beta 7.0` frozen as the closed evidence
-   ladder below menace.
-3. Start the first bounded `pre-Beta 8.0` menace source pass on
-   `cross-object coherence drift`.
-4. Read whether the visible round lands as the right compact rigged-round
-   menace:
-   - not mean
-   - not smug
-   - not condescending
-5. After the first menace read, decide whether:
-   - `pre-Beta 8.0` stays staged
-   - or `Research Beta 8.0` has actually started
+   ladder below active menace.
+3. Same-pick menace is now confirmed collapsed at `15 / 0`, while
+   cross-object has hardened at `11 / 4` twice after one opening `9 / 6`.
+4. Package this `Beta 8.0` branch on clean synced `main`.
+5. After merge, decide whether the next kernel is:
+   - one more cross-object menace repeat from fresh live rows
+   - or the next staged lane above menace
 
 ## Risks
 
 - low runtime risk: the queue is fully closed and there is no active sampler
-- small ops wrinkle: `make session-status` currently reports a stale
-  repo-managed `caffeinate` PID file
+- small ops wrinkle: the repo-managed `caffeinate` PID file is still drifting
+  stale
 
 ## Guardrails
 

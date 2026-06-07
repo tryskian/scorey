@@ -383,3 +383,30 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
 - Why: Scorey's research data is small, discrete, and comparison-heavy. A
   tight chart language keeps the notes visual without drifting into
   decorative or overfit analytics surfaces.
+
+## D-030: Menace judgement stays row-level on the full visible round
+
+- Date: `2026-06-06`
+- Category: `eval_quality`
+- Tags: `menace`, `row_level`, `bounded_closeout`, `beta_staging`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: Menace judgement is formalised as a bounded
+  row-level lens on the full visible round, with explicit sample, judge,
+  archive, and close commands. Menace closeout settles untouched `tone`,
+  `scoreboard`, and `prose` rows inside the bounded range.
+- Why: This keeps the widening step tighter than a vague whole-app vibe read
+  while preserving the queue-hygiene discipline already proven by the lower
+  widened lenses.
+
+## D-031: Beta 8.0 starts on menace judgement
+
+- Date: `2026-06-06`
+- Category: `eval_quality`
+- Tags: `beta_boundary`, `menace`, `row_level`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: `Research Beta 8.0` starts once the menace lane has a locked
+  row-level contract, clean bounded closeout proof, and live evidence that is
+  meaningfully different from the closed `Beta 7.0` broader prose surface.
+- Why: The second bounded cross-object menace read changed what the evidence
+  means by improving one previously weak prose slice from `9 / 6` to `11 / 4`
+  under the menace lens.

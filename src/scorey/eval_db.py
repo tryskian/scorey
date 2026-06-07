@@ -13,7 +13,7 @@ VERDICTS: tuple[str, ...] = ("pass", "fail")
 LIST_VERDICTS: tuple[str, ...] = VERDICTS + ("pending",)
 SOURCE_MODES: tuple[str, ...] = ("local", "live")
 ROUTE_FAMILIES: tuple[str, ...] = ("cross-object", "same-pick")
-LENSES: tuple[str, ...] = ("tone", "scoreboard", "prose")
+LENSES: tuple[str, ...] = ("tone", "scoreboard", "prose", "menace")
 DISPOSITIONS: tuple[str, ...] = ("retain", "evict")
 PULSE_LABELS: tuple[str, ...] = ("anchor", "counted_seam", "excluded_noise")
 COUNTED_PULSE_LABELS: tuple[str, ...] = ("anchor", "counted_seam")
@@ -25,6 +25,7 @@ PULSE_STATUSES: tuple[str, ...] = ("open", "closed")
 LENS_CLOSE_SETTLE_ORDER: dict[str, tuple[str, ...]] = {
     "scoreboard": ("tone",),
     "prose": ("tone", "scoreboard"),
+    "menace": ("tone", "scoreboard", "prose"),
 }
 LENS_SQL_VALUES = ", ".join(f"'{lens}'" for lens in LENSES)
 
@@ -1078,6 +1079,33 @@ def close_prose_range(
         "archived": int(summary["archived"]),
         "settled_tone": int(settled_lenses.get("tone", 0)),
         "settled_scoreboard": int(settled_lenses.get("scoreboard", 0)),
+    }
+
+
+def close_menace_range(
+    db_path: Path | None,
+    *,
+    first_output_id: int,
+    last_output_id: int,
+    note: str = "",
+) -> dict[str, int]:
+    summary = _close_lens_range(
+        db_path,
+        lens="menace",
+        first_output_id=first_output_id,
+        last_output_id=last_output_id,
+        note=note,
+    )
+    settled_lenses = dict(summary["settled_lenses"])
+    return {
+        "total": int(summary["total"]),
+        "pass": int(summary["pass"]),
+        "fail": int(summary["fail"]),
+        "pending": int(summary["pending"]),
+        "archived": int(summary["archived"]),
+        "settled_tone": int(settled_lenses.get("tone", 0)),
+        "settled_scoreboard": int(settled_lenses.get("scoreboard", 0)),
+        "settled_prose": int(settled_lenses.get("prose", 0)),
     }
 
 

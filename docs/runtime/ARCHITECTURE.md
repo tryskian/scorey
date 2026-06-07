@@ -92,12 +92,13 @@ Ownership boundary:
 | failure disposition | failed tone row | `retain` / `evict` | explicit handling for tone failures |
 | scoreboard | row | bounded row-level lens on `scoreboard_claim` | closeout can settle untouched tone rows in-range |
 | prose | row | bounded row-level lens on broader round prose | closeout can settle untouched tone and scoreboard rows in-range |
+| menace | row | bounded row-level lens on the full visible round | closeout can settle untouched tone, scoreboard, and prose rows in-range |
 | pulse | bounded range | bounded pass/fail over route-pass rows | rows stay visible as `anchor`, `counted_seam`, or `excluded_noise` |
 
-Staged-only surface:
+Current research note:
 
-- menace is staged in tracked research docs
-- there is no stable menace operator surface in the runtime yet
+- the menace operator surface is now available in the runtime
+- `Research Beta 8.0` is the current active widened lane above prose
 
 ## Data Surfaces
 
@@ -114,7 +115,7 @@ SQLite tables:
 | --- | --- |
 | `eval_outputs` | source rows and mirrored top-level verdict state |
 | `eval_judgments` | top-level route-floor judgements |
-| `eval_lens_judgments` | row-level lens verdicts for `tone`, `scoreboard`, and `prose` |
+| `eval_lens_judgments` | row-level lens verdicts for `tone`, `scoreboard`, `prose`, and `menace` |
 | `eval_lens_archives` | archived rows per lens |
 | `eval_lens_failure_dispositions` | `retain` / `evict` records for failed lens rows |
 | `eval_lens_failure_disposition_archives` | archived failed-lens disposition rows |
@@ -126,7 +127,7 @@ Stable enums:
 | Surface | Values |
 | --- | --- |
 | route families | `cross-object`, `same-pick` |
-| lenses | `tone`, `scoreboard`, `prose` |
+| lenses | `tone`, `scoreboard`, `prose`, `menace` |
 | top-level verdicts | `pass`, `fail`, `pending` |
 | dispositions | `retain`, `evict` |
 | pulse labels | `anchor`, `counted_seam`, `excluded_noise` |
@@ -144,6 +145,7 @@ Bounded closeouts are part of the architecture, not just operator habit.
 | --- | --- |
 | `eval-scoreboard-close` | closes one bounded scoreboard range and settles untouched tone rows in-range |
 | `eval-prose-close` | closes one bounded prose range and settles untouched tone and scoreboard rows in-range |
+| `eval-menace-close` | closes one bounded menace range and settles untouched tone, scoreboard, and prose rows in-range |
 | `eval-pulse-close` | closes one pulse once every row is labeled and settles untouched legacy tone rows in-range |
 | `make end-runtime-check` | confirms there is no active sampler and no open live review slice |
 

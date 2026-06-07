@@ -16,6 +16,7 @@ from scorey.config import Settings, load_settings, require_openai_api_key
 from scorey.eval_db import (
     archive_failure_disposition_for_lens,
     archive_output_for_lens,
+    close_menace_range,
     close_prose_range,
     close_pulse,
     close_scoreboard_range,
@@ -62,14 +63,14 @@ from scorey.pipeline import (
 
 APP_PICKS: tuple[str, ...] = ("rock", "paper", "scissors")
 APP_BANNER_INNER_WIDTH = 62
-APP_BANNER_TITLE = "SCOREY RESEARCH PRE-BETA 8.0"
+APP_BANNER_TITLE = "SCOREY RESEARCH BETA 8.0"
 APP_BANNER_TAGLINE = "scorey keeps the score and you've already lost."
 APP_BANNER_REPO = "github.com/tryskian/scorey"
 APP_BANNER_REPO_URL = "https://github.com/tryskian/scorey"
 APP_BANNER_BOX_WIDTH = APP_BANNER_INNER_WIDTH + 2
 APP_BANNER_STACKED_WIDTH = len(APP_BANNER_TAGLINE)
 APP_BANNER_MINIMAL_WIDTH = len(APP_BANNER_REPO)
-APP_BANNER_MINIMAL_TITLE = "scorey research pre-beta 8.0"
+APP_BANNER_MINIMAL_TITLE = "scorey research beta 8.0"
 APP_BANNER_MINIMAL_TAGLINE_LINES: tuple[str, ...] = (
     "scorey keeps the score and",
     "you've already lost.",
@@ -288,6 +289,55 @@ def build_parser() -> argparse.ArgumentParser:
     eval_prose_close_parser.add_argument("--first-output-id", required=True, type=int)
     eval_prose_close_parser.add_argument("--last-output-id", required=True, type=int)
     eval_prose_close_parser.add_argument(
+        "--note",
+        default="",
+        help="Optional note for settling untouched lower-lens rows in the range.",
+    )
+    eval_menace_sample_parser = subparsers.add_parser(
+        "eval-menace-sample",
+        help=(
+            "List a stratified pending menace review sample from live route-pass rows."
+        ),
+    )
+    eval_menace_sample_parser.add_argument("--limit", type=int, default=12)
+    eval_menace_sample_parser.add_argument(
+        "--pick",
+        action="append",
+        default=[],
+        choices=APP_PICKS,
+        metavar="USER_PICK",
+        help="Repeat to narrow the menace sample to one or more user picks.",
+    )
+
+    eval_menace_judge_parser = subparsers.add_parser(
+        "eval-menace-judge",
+        help="Record a menace verdict for one eval output.",
+    )
+    eval_menace_judge_parser.add_argument("output_id", type=int)
+    eval_menace_judge_parser.add_argument("verdict", choices=("pass", "fail"))
+    eval_menace_judge_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short menace note explaining the verdict.",
+    )
+
+    eval_menace_archive_parser = subparsers.add_parser(
+        "eval-menace-archive",
+        help="Archive one pending menace row out of the active review surface.",
+    )
+    eval_menace_archive_parser.add_argument("output_id", type=int)
+    eval_menace_archive_parser.add_argument(
+        "--note",
+        required=True,
+        help="Short note explaining why the pending menace row is archived.",
+    )
+    eval_menace_close_parser = subparsers.add_parser(
+        "eval-menace-close",
+        help="Close one bounded menace source range once every row is addressed.",
+    )
+    eval_menace_close_parser.add_argument("--first-output-id", required=True, type=int)
+    eval_menace_close_parser.add_argument("--last-output-id", required=True, type=int)
+    eval_menace_close_parser.add_argument(
         "--note",
         default="",
         help="Optional note for settling untouched lower-lens rows in the range.",
@@ -1332,6 +1382,55 @@ def command_eval_prose_close(
     return 0
 
 
+def command_eval_menace_sample(limit: int, user_picks: list[str]) -> int:
+    return command_eval_lens_sample("menace", limit=limit, user_picks=user_picks)
+
+
+def command_eval_menace_judge(output_id: int, verdict: str, note: str) -> int:
+    return command_eval_lens_judge("menace", output_id, verdict, note)
+
+
+def command_eval_menace_archive(output_id: int, note: str) -> int:
+    return command_eval_lens_archive("menace", output_id, note)
+
+
+def command_eval_menace_close(
+    *,
+    first_output_id: int,
+    last_output_id: int,
+    note: str,
+) -> int:
+    db_path = default_eval_db_path()
+    init_db(db_path)
+    try:
+        summary = close_menace_range(
+            db_path,
+            first_output_id=first_output_id,
+            last_output_id=last_output_id,
+            note=note,
+        )
+    except Exception as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+
+    print(f"closed menace range {first_output_id}-{last_output_id}")
+    if note:
+        print(f"note: {note}")
+    print(
+        "menace range counts: "
+        f"total={summary['total']} pass={summary['pass']} "
+        f"fail={summary['fail']} pending={summary['pending']}"
+        + (f" archived={summary['archived']}" if summary["archived"] else "")
+    )
+    print(
+        "settled lower-lens rows: "
+        f"tone={summary['settled_tone']} "
+        f"scoreboard={summary['settled_scoreboard']} "
+        f"prose={summary['settled_prose']}"
+    )
+    return 0
+
+
 def command_eval_tone_disposition_sample(limit: int, user_picks: list[str]) -> int:
     db_path = default_eval_db_path()
     init_db(db_path)
@@ -1694,6 +1793,22 @@ def main(argv: list[str] | None = None) -> int:
         return command_eval_prose_archive(args.output_id, args.note)
     if args.command == "eval-prose-close":
         return command_eval_prose_close(
+            first_output_id=args.first_output_id,
+            last_output_id=args.last_output_id,
+            note=args.note,
+        )
+    if args.command == "eval-menace-sample":
+        return command_eval_menace_sample(args.limit, args.pick)
+    if args.command == "eval-menace-judge":
+        return command_eval_menace_judge(
+            args.output_id,
+            args.verdict,
+            args.note,
+        )
+    if args.command == "eval-menace-archive":
+        return command_eval_menace_archive(args.output_id, args.note)
+    if args.command == "eval-menace-close":
+        return command_eval_menace_close(
             first_output_id=args.first_output_id,
             last_output_id=args.last_output_id,
             note=args.note,

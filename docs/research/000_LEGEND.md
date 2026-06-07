@@ -5,7 +5,7 @@
 | Code | `000_LEGEND` |
 | Category | `legend` |
 | Status | `active` |
-| Last evidence | `2026-05-25` |
+| Last evidence | `2026-06-06` |
 | Owns | file map, code ranges, and shared status language for tracked research docs. |
 
 ## Boundary Map
@@ -19,7 +19,7 @@
 | `B05` | `050_B-FAIL_PRESSURE_PULSE.md` | fail-pressure pulse boundary | `boundary` | `closed` |
 | `B06` | `060_B-SCOREBOARD_JUDGEMENT.md` | scoreboard judgement boundary | `boundary` | `closed` |
 | `B07` | `070_B-BROADER_PROSE_JUDGEMENT.md` | broader prose judgement boundary | `boundary` | `closed` |
-| `PB08` | `410_PB-MENACE_JUDGEMENT.md` | menace-judgement staging boundary | `boundary` | `staged` |
+| `B08` | `080_B-MENACE_JUDGEMENT.md` | menace-judgement boundary | `boundary` | `active` |
 
 Boundary ladder:
 
@@ -32,9 +32,9 @@ flowchart LR
   B5["050<br/>B05<br/>closed"]
   B6["060<br/>B06<br/>closed"]
   B7["070<br/>B07<br/>closed"]
-  PB8["410<br/>PB08<br/>staged"]
+  B8["080<br/>B08<br/>active"]
 
-  B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> PB8
+  B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8
 ```
 
 ## Ordering
@@ -54,8 +54,8 @@ Range chart:
 xychart-beta
   title "Tracked research ranges"
   x-axis "Range" ["000", "010-099", "100-199", "200-299", "300-399", "400-499"]
-  y-axis "Current files" 0 --> 8
-  bar "Files" [1, 7, 0, 0, 0, 1]
+  y-axis "Current files" 0 --> 9
+  bar "Files" [1, 8, 0, 0, 0, 0]
 ```
 
 ## Chart Key

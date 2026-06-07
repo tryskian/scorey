@@ -1,6 +1,6 @@
 # Scorey
 
-[![Research Stage](https://img.shields.io/badge/research_stage-pre--Beta%208.0%20menace%20judgement-E15759)](./docs/research/README.md)
+[![Research Stage](https://img.shields.io/badge/research_stage-Beta%208.0%20menace%20judgement-E15759)](./docs/research/README.md)
 [![Polinko toy factory](https://img.shields.io/badge/polinko_toy_factory-active-4C956C)](https://github.com/tryskian/polinko)
 
 ## rock, paper, scissors, scorey
@@ -20,11 +20,20 @@ It only accepts three picks:
 
 Current stage:
 
-- `pre-Beta 8.0`
+- `Research Beta 8.0`
 - `menace judgement`
-- staged row-level lens on the quality of the visible round's menace
-- first staged family:
+- active row-level lens on the quality of the visible round's menace
+- active family:
   - `cross-object coherence drift`
+- bounded menace reads:
+  - `20307-20321`: `11` pass / `4` fail
+  - `20352-20366`: `11` pass / `4` fail
+  - `20367-20381`: `15` pass / `0` fail
+  - `20382-20396`: `9` pass / `6` fail
+- current read:
+  - menace is now distinct from the closed `Beta 7.0` prose surface because
+    two cross-object slices improved from prose `9 / 6` to menace `11 / 4`
+    while same-pick still collapsed cleanly at `15 / 0`
 
 Most recently closed beta:
 
@@ -40,9 +49,9 @@ That narrow surface is the point. Scorey is not trying to be a general chat tool
 In this repo, a new beta gets pinned when the method change alters what the
 evidence means, not just when wording or procedure gets tidier.
 
-The repo is now staged for `pre-Beta 8.0`, which asks whether the broader
-visible round lands as the right kind of compact rigged-round menace once the
-closed `Beta 7.0` prose surface has already proven its structural contrast.
+The repo is now in `Research Beta 8.0`, which asks whether the broader visible
+round lands as the right kind of compact rigged-round menace once the closed
+`Beta 7.0` prose surface has already proven its structural contrast.
 
 ## What This Repo Demonstrates
 
@@ -54,7 +63,7 @@ closed `Beta 7.0` prose surface has already proven its structural contrast.
   - fail-pressure pulse
   - scoreboard judgement
   - broader prose judgement
-  - staged menace judgement
+  - menace judgement
 - explicit closeout so bounded review lanes return to `0` pending when a slice
   is done
 
