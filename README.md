@@ -26,14 +26,17 @@ Current stage:
 - active family:
   - `cross-object coherence drift`
 - bounded menace reads:
+  - `20397-20403`: `4` pass / `3` fail
+  - `20404-20409`: `4` pass / `2` fail
   - `20307-20321`: `11` pass / `4` fail
   - `20352-20366`: `11` pass / `4` fail
   - `20367-20381`: `15` pass / `0` fail
   - `20382-20396`: `9` pass / `6` fail
 - current read:
   - menace is now distinct from the closed `Beta 7.0` prose surface because
-    two cross-object slices improved from prose `9 / 6` to menace `11 / 4`
-    while same-pick still collapsed cleanly at `15 / 0`
+    two larger cross-object slices improved from prose `9 / 6` to menace
+    `11 / 4`, while two fresher compact probes landed at `4 / 3` and `4 / 2`
+    and same-pick still collapsed cleanly at `15 / 0`
 
 Most recently closed beta:
 

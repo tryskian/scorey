@@ -23,7 +23,7 @@ until they become evidence.
 | most recently closed beta | `Research Beta 7.0` broader prose judgement |
 | active question | can Scorey judge the quality of its compact rigged-round menace rather than only the coherence of its prose? |
 | active family | `cross-object coherence drift` |
-| bounded menace reads | `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4`; `20367-20381: 15 / 0`; all close cleanly |
+| bounded menace reads | `20397-20403: 4 / 3`; `20404-20409: 4 / 2`; `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4`; `20367-20381: 15 / 0`; all close cleanly |
 
 Most recently closed contrast:
 
@@ -40,7 +40,7 @@ Current finding:
 | `Research Beta 5.0` | cross-object held at `8 / 5 / 2`, then `9 / 6 / 0`, then `9 / 6 / 0`; same-pick collapsed at `15 / 0 / 0`, then `15 / 0 / 0` |
 | `Research Beta 6.0` | cross-object scoreboard `15 / 0`, then `15 / 0`; same-pick scoreboard `15 / 0`, then `15 / 0` |
 | `Research Beta 7.0` | cross-object prose reopened at `9 / 6` and repeated there; same-pick stayed collapsed at `15 / 0` |
-| `Research Beta 8.0` | menace is now distinct from prose: one cross-object slice still held `9 / 6`, two cross-object slices improved to `11 / 4`, and same-pick still collapsed at `15 / 0` |
+| `Research Beta 8.0` | menace is distinct from prose: one cross-object slice still held `9 / 6`, two larger cross-object slices improved to `11 / 4`, two fresher compact probes landed at `4 / 3` and `4 / 2`, and same-pick still collapsed at `15 / 0` |
 | gate confidence | bounded pulse, scoreboard, prose, and menace closeouts are performing cleanly enough to support the active menace lens |
 | runtime | closed at `0` pending across route, tone, and disposition |
 
@@ -51,7 +51,7 @@ xychart-beta
   title "Current cross-object versus same-pick contrast"
   x-axis "Research layer" ["Beta 5 pulse", "Beta 6 scoreboard", "Beta 7 prose", "Beta 8 menace"]
   y-axis "Pressure rows" 0 --> 7
-  bar "Cross-object pressure" [6, 0, 6, 4]
+  bar "Cross-object pressure" [6, 0, 6, 3]
   bar "Same-pick pressure" [0, 0, 0, 0]
 ```
 
@@ -143,7 +143,7 @@ flowchart LR
   S5["bounded pulse verdicts<br/>with explicit row labels<br/>and exclusion reasons"]
   S6["scoreboard_claim holds<br/>as a row-level lane<br/>across tested families"]
   S7["broader prose reopens<br/>cross-object pressure<br/>at 9 pass / 6 fail"]
-  S8["menace separates from prose<br/>when one cross-object slice<br/>improves to 11 pass / 4 fail"]
+  S8["menace separates from prose<br/>when larger cross-object slices<br/>improve to 11 pass / 4 fail"]
 
   B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4 --> B5 --> S5 --> B6 --> S6 --> B7 --> S7 --> B8 --> S8
 ```

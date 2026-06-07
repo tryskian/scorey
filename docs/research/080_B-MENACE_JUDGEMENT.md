@@ -33,6 +33,7 @@ Bounded menace reads:
 
 | Range | Family | Menace read | Closeout |
 | --- | --- | --- | --- |
+| `20397-20403` | `cross-object coherence drift` | `4` pass / `3` fail | `pending=0`; `tone=7`; `scoreboard=7`; `prose=7` |
 | `20307-20321` | `cross-object coherence drift` | `11` pass / `4` fail | `pending=0`; `tone=0`; `scoreboard=0`; `prose=15` |
 | `20382-20396` | `cross-object coherence drift` | `9` pass / `6` fail | `pending=0`; `tone=0`; `scoreboard=0`; `prose=0` |
 | `20352-20366` | `cross-object coherence drift` | `11` pass / `4` fail | `pending=0`; `tone=0`; `scoreboard=0`; `prose=0` |
@@ -43,9 +44,12 @@ Meaning shift:
 - under `Beta 7.0`, both cross-object prose slices held at `9 / 6`
 - under `Beta 8.0`, one cross-object menace slice still held `9 / 6`
 - two later cross-object menace slices improved to `11 / 4`
+- one fresh smaller cross-object probe landed at `4 / 3` over `7` rows
 - same-pick menace still collapses cleanly at `15 / 0`
 - so menace is not just restating prose coherence; some prose-fail rows still
   land as the right kind of tiny menace while same-pick stays fully collapsed
+- the fresh probe also shows that menace is still an active live lane rather
+  than a closed solved surface
 
 ## Eval Shape
 
@@ -99,10 +103,10 @@ Menace read chart:
 ```mermaid
 xychart-beta
   title "Beta 8.0 menace reads"
-  x-axis "Bounded read" ["20307-20321", "20382-20396", "20352-20366", "20367-20381"]
+  x-axis "Bounded read" ["20397-20403", "20307-20321", "20382-20396", "20352-20366", "20367-20381"]
   y-axis "Fail rows" 0 --> 7
-  bar "Menace fail rows" [4, 6, 4, 0]
-  bar "Closed prose fail rows" [6, 6, 6, 0]
+  bar "Menace fail rows" [3, 4, 6, 4, 0]
+  bar "Closed prose fail rows" [3, 6, 6, 6, 0]
 ```
 
 ## What Changed
@@ -127,13 +131,18 @@ actually responding to:
 Two cross-object reads now show that menace can still hold even when the
 broader prose lane marked the same slice as weaker. The first same-pick menace
 read also stayed fully collapsed, which keeps the family split sharp instead of
-widening into noise.
+widening into noise. A newer seven-row live probe reopened the weak family
+again at `4 / 3`, which is smaller and noisier than the main bounded reads but
+is still useful because it proves the lane is active rather than artificially
+frozen.
 
 ## What It Still Needs
 
 - a decision on whether there is a sharper staged lane above menace
 - evidence that the menace lane can stay distinct without drifting into cruelty
   or generic hostility
+- at least one more fresh full-size cross-object repeat so the next move is not
+  overfit to a seven-row probe
 
 ## What Would Close It
 
