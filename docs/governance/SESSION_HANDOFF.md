@@ -110,41 +110,26 @@ Stable contrast:
 
 ## Active Kernel
 
-Menace operator surface branch:
+`Research Beta 8.0` is now merged on clean synced `main`.
 
-- branch: `codex/bigbrain/scorey-handoff-menace-sync`
-- tracked surfaces in play:
-  - `README.md`
-  - `docs/governance/CHARTER.md`
-  - `Makefile`
-  - `src/scorey/eval_db.py`
-  - `src/scorey/main.py`
-  - `tests/test_eval_db.py`
-  - `tests/test_main.py`
-  - `docs/runtime/ARCHITECTURE.md`
-  - `docs/runtime/RUNBOOK.md`
-  - `docs/governance/DECISIONS.md`
-  - `docs/governance/SESSION_HANDOFF.md`
-  - `docs/research/000_LEGEND.md`
-  - `docs/research/README.md`
-  - `docs/research/080_B-MENACE_JUDGEMENT.md`
-- tracked change:
-  - menace is being formalised as a real bounded row-level lens on the full
-    visible round
+What is live now:
+
+- menace is a real bounded row-level lens on the full visible round
+- operator surface:
   - `eval-menace-sample`
   - `eval-menace-judge`
   - `eval-menace-archive`
   - `eval-menace-close`
-  - menace closeout settles untouched `tone`, `scoreboard`, and `prose` rows
-    in-range
-  - `D-030` locks the row-level menace contract in the durable decisions ledger
-  - `D-031` starts `Research Beta 8.0` on menace judgement
-  - hardened cross-object menace repeat `20307-20321` closed at `11 / 4`
-  - first bounded menace read `20382-20396` closed at `9 / 6`
-  - second bounded menace read `20352-20366` closed at `11 / 4`
-  - first bounded same-pick menace read `20367-20381` closed at `15 / 0`
-  - the second read moved above the closed `Beta 7.0` prose surface and starts
-    `Research Beta 8.0`
+- menace closeout settles untouched `tone`, `scoreboard`, and `prose` rows
+  in-range
+- `D-030` locks the row-level menace contract in the durable decisions ledger
+- `D-031` starts `Research Beta 8.0` on menace judgement
+- active bounded menace evidence:
+  - `20397-20403`: `4 / 3`
+  - `20307-20321`: `11 / 4`
+  - `20382-20396`: `9 / 6`
+  - `20352-20366`: `11 / 4`
+  - `20367-20381`: `15 / 0`
 
 Private staging surface:
 
@@ -173,22 +158,23 @@ Current active research lane:
 
 ## Next Slice
 
-1. Finish the current menace operator branch and merge it on clean synced
-   `main`.
-2. Keep `Beta 5.0`, `Beta 6.0`, and `Beta 7.0` frozen as the closed evidence
+1. Keep `Beta 5.0`, `Beta 6.0`, and `Beta 7.0` frozen as the closed evidence
    ladder below active menace.
-3. Same-pick menace is now confirmed collapsed at `15 / 0`, while
-   cross-object has hardened at `11 / 4` twice after one opening `9 / 6`.
-4. Package this `Beta 8.0` branch on clean synced `main`.
-5. After merge, decide whether the next kernel is:
-   - one more cross-object menace repeat from fresh live rows
-   - or the next staged lane above menace
+2. Keep `Research Beta 8.0` active on clean synced `main`.
+3. Same-pick menace is confirmed collapsed at `15 / 0`, while cross-object has
+   now shown:
+   - one opening `9 / 6`
+   - two hardened `11 / 4` reads
+   - one smaller fresh probe at `4 / 3` over `7` rows
+4. Open at least one fresh full-size cross-object menace repeat from new live
+   rows.
+5. Only decide the lane above menace after that larger fresh repeat.
 
 ## Risks
 
 - low runtime risk: the queue is fully closed and there is no active sampler
-- small ops wrinkle: the repo-managed `caffeinate` PID file is still drifting
-  stale
+- low ops risk: repo-managed `caffeinate` is currently off and no managed PID
+  file is active
 
 ## Guardrails
 
