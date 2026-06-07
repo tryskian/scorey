@@ -7,6 +7,7 @@ from unittest import TestCase
 from scorey.eval_db import (
     archive_failure_disposition_for_lens,
     archive_output_for_lens,
+    close_menace_range,
     close_prose_range,
     close_pulse,
     close_scoreboard_range,
@@ -684,6 +685,80 @@ class EvalDbTests(TestCase):
             )
             self.assertEqual(scoreboard_summary["pending"], 0)
             self.assertEqual(scoreboard_summary["archived"], 2)
+
+    def test_close_menace_range_settles_tone_scoreboard_and_prose_lanes(
+        self,
+    ) -> None:
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+
+            first_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="first menace row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="second menace row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "pass", "route pass")
+            judge_output_for_lens(
+                db_path,
+                first_id,
+                lens="menace",
+                verdict="pass",
+                note="compact rigged-round menace",
+            )
+            judge_output_for_lens(
+                db_path,
+                second_id,
+                lens="menace",
+                verdict="fail",
+                note="smug superiority drift",
+            )
+
+            summary = close_menace_range(
+                db_path,
+                first_output_id=first_id,
+                last_output_id=second_id,
+                note="settled by first bounded menace run",
+            )
+
+            self.assertEqual(summary["total"], 2)
+            self.assertEqual(summary["pass"], 1)
+            self.assertEqual(summary["fail"], 1)
+            self.assertEqual(summary["pending"], 0)
+            self.assertEqual(summary["archived"], 0)
+            self.assertEqual(summary["settled_tone"], 2)
+            self.assertEqual(summary["settled_scoreboard"], 2)
+            self.assertEqual(summary["settled_prose"], 2)
+
+            tone_summary = lens_counts(db_path, lens="tone", source_mode="live")
+            self.assertEqual(tone_summary["pending"], 0)
+            self.assertEqual(tone_summary["archived"], 2)
+
+            scoreboard_summary = lens_counts(
+                db_path,
+                lens="scoreboard",
+                source_mode="live",
+            )
+            self.assertEqual(scoreboard_summary["pending"], 0)
+            self.assertEqual(scoreboard_summary["archived"], 2)
+
+            prose_summary = lens_counts(db_path, lens="prose", source_mode="live")
+            self.assertEqual(prose_summary["pending"], 0)
+            self.assertEqual(prose_summary["archived"], 2)
 
     def test_pulse_review_tracks_labels_exclusions_and_closeout(self) -> None:
         with TemporaryDirectory() as tmpdir:

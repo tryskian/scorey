@@ -48,7 +48,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines[0], "┌──────────────────────────────────────────────────────────────┐"
         )
-        self.assertIn("SCOREY RESEARCH PRE-BETA 8.0", lines[1])
+        self.assertIn("SCOREY RESEARCH BETA 8.0", lines[1])
 
     def test_choose_banner_lines_uses_stacked_header_when_mid_width(self) -> None:
         lines = choose_banner_lines(terminal_width=56)
@@ -56,7 +56,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "SCOREY RESEARCH PRE-BETA 8.0",
+                "SCOREY RESEARCH BETA 8.0",
                 "scorey keeps the score and you've already lost.",
                 "github.com/tryskian/scorey",
             ),
@@ -68,7 +68,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "scorey research pre-beta 8.0",
+                "scorey research beta 8.0",
                 "scorey keeps the score and",
                 "you've already lost.",
                 "sorry.",
@@ -82,7 +82,7 @@ class MainCommandTests(TestCase):
         self.assertEqual(
             lines,
             (
-                "scorey research pre-beta 8.0",
+                "scorey research beta 8.0",
                 "scorey keeps the score and",
                 "you've already lost.",
                 "sorry.",
@@ -906,6 +906,177 @@ class MainCommandTests(TestCase):
             output,
         )
         self.assertIn("settled lower-lens rows: tone=2 scoreboard=2", output)
+
+    def test_eval_menace_sample_judge_archive_and_close_cover_row_level_lane(
+        self,
+    ) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            archived_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="archived menace row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judged_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="judged menace row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            active_id = record_output(
+                db_path,
+                user_pick="scissors",
+                scorey_pick="rock",
+                route_family="cross-object",
+                round_text="active menace row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, archived_id, "pass", "route pass")
+            judge_output(db_path, judged_id, "pass", "route pass")
+            judge_output(db_path, active_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    archive_result = main(
+                        [
+                            "eval-menace-archive",
+                            str(archived_id),
+                            "--note",
+                            "staged out of the first menace lane",
+                        ]
+                    )
+                    judge_result = main(
+                        [
+                            "eval-menace-judge",
+                            str(judged_id),
+                            "pass",
+                            "--note",
+                            "compact rigged-round menace",
+                        ]
+                    )
+                    sample_result = main(["eval-menace-sample", "--limit", "5"])
+
+        self.assertEqual(archive_result, 0)
+        self.assertEqual(judge_result, 0)
+        self.assertEqual(sample_result, 0)
+        output = stdout.getvalue()
+        self.assertIn(
+            f"archived menace output {archived_id}",
+            output,
+        )
+        self.assertIn(
+            f"judged menace output {judged_id}: pass",
+            output,
+        )
+        self.assertIn(
+            "menace counts: total=3 pass=1 fail=0 pending=1 archived=1",
+            output,
+        )
+        self.assertIn("active menace row", output)
+        self.assertNotIn("archived menace row", output.split("menace sample:")[-1])
+
+    def test_eval_menace_close_settles_tone_scoreboard_and_prose_lanes(
+        self,
+    ) -> None:
+        stdout = io.StringIO()
+        with TemporaryDirectory() as tmpdir:
+            db_path = Path(tmpdir) / "evals.sqlite"
+            init_db(db_path)
+            first_id = record_output(
+                db_path,
+                user_pick="paper",
+                scorey_pick="scissors",
+                route_family="cross-object",
+                round_text="first bounded menace row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            second_id = record_output(
+                db_path,
+                user_pick="rock",
+                scorey_pick="paper",
+                route_family="cross-object",
+                round_text="second bounded menace row",
+                source_mode="live",
+                model="gpt-5-nano",
+            )
+            judge_output(db_path, first_id, "pass", "route pass")
+            judge_output(db_path, second_id, "pass", "route pass")
+            with patch("scorey.main.default_eval_db_path", return_value=db_path):
+                with redirect_stdout(stdout):
+                    judge_first_result = main(
+                        [
+                            "eval-menace-judge",
+                            str(first_id),
+                            "pass",
+                            "--note",
+                            "compact rigged-round menace",
+                        ]
+                    )
+                    judge_second_result = main(
+                        [
+                            "eval-menace-judge",
+                            str(second_id),
+                            "fail",
+                            "--note",
+                            "smug superiority drift",
+                        ]
+                    )
+                    close_result = main(
+                        [
+                            "eval-menace-close",
+                            "--first-output-id",
+                            str(first_id),
+                            "--last-output-id",
+                            str(second_id),
+                            "--note",
+                            "settled by first bounded menace run",
+                        ]
+                    )
+
+            tone_summary = lens_counts(db_path, lens="tone")
+            scoreboard_summary = lens_counts(db_path, lens="scoreboard")
+            prose_summary = lens_counts(db_path, lens="prose")
+
+        self.assertEqual(judge_first_result, 0)
+        self.assertEqual(judge_second_result, 0)
+        self.assertEqual(close_result, 0)
+        self.assertEqual(int(tone_summary["pending"] or 0), 0)
+        self.assertEqual(int(tone_summary["archived"] or 0), 2)
+        self.assertEqual(int(scoreboard_summary["pending"] or 0), 0)
+        self.assertEqual(int(scoreboard_summary["archived"] or 0), 2)
+        self.assertEqual(int(prose_summary["pending"] or 0), 0)
+        self.assertEqual(int(prose_summary["archived"] or 0), 2)
+        output = stdout.getvalue()
+        self.assertIn(
+            f"judged menace output {first_id}: pass",
+            output,
+        )
+        self.assertIn(
+            f"judged menace output {second_id}: fail",
+            output,
+        )
+        self.assertIn(
+            f"closed menace range {first_id}-{second_id}",
+            output,
+        )
+        self.assertIn(
+            "menace range counts: total=2 pass=1 fail=1 pending=0",
+            output,
+        )
+        self.assertIn(
+            "settled lower-lens rows: tone=2 scoreboard=2 prose=2",
+            output,
+        )
 
     def test_eval_tone_disposition_sample_dispose_and_archive_cover_failed_rows(
         self,

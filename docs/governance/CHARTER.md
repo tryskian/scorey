@@ -52,7 +52,7 @@ holds together.
 - Scoreboard stays a row-level lens on `scoreboard_claim`.
 - Broader prose stays a row-level lens on the round body around the score
   line.
-- Menace is the staged next lens on the full visible round.
+- Menace is the active lens above broader prose on the full visible round.
 
 Current tracked method ladder:
 
@@ -64,8 +64,8 @@ Current tracked method ladder:
   - closed scoreboard judgement baseline
 - `Research Beta 7.0`
   - closed broader prose judgement baseline
-- `pre-Beta 8.0`
-  - staged menace judgement lane
+- `Research Beta 8.0`
+  - active menace judgement lane
 
 ## Collaboration Model
 

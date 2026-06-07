@@ -179,6 +179,10 @@ Bounded widened lenses:
 | `make eval-prose-judge` | record row-level prose verdict on the round body around the score line |
 | `make eval-prose-archive` | archive one pending prose row |
 | `make eval-prose-close` | close one bounded prose range and settle untouched lower-lens rows in-range |
+| `make eval-menace-sample` | list pending menace review sample from live route-pass rows |
+| `make eval-menace-judge` | record row-level menace verdict on the full visible round |
+| `make eval-menace-archive` | archive one pending menace row |
+| `make eval-menace-close` | close one bounded menace range and settle untouched lower-lens rows in-range |
 
 Pulse surface:
 
