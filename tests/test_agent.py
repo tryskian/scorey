@@ -2,38 +2,45 @@ from unittest import TestCase
 
 from scorey.agent import SCOREY_INSTRUCTIONS, build_prompt
 
+PROHIBITION_DIRECTIVES = (
+    "never",
+    "do not",
+    "don't",
+    "not ",
+    "without",
+    "avoid",
+    "instead of",
+    "no ",
+)
+
 
 class AgentPromptTests(TestCase):
-    def test_instructions_use_abstract_constraints_not_phrase_anchors(self) -> None:
+    def test_instructions_use_positive_target_behaviour(self) -> None:
         self.assertIn(
-            "same-pick rounds still need a concrete physical mismatch",
+            "Keep same-pick rounds as two unequal copies of the same object.",
             SCOREY_INSTRUCTIONS,
         )
         self.assertIn(
-            (
-                "do not rely on abstract ranking, edition, software, "
-                "or duplicate-object shorthand"
-            ),
+            "Keep cross-object rounds as immediate cause-and-effect",
             SCOREY_INSTRUCTIONS,
         )
         self.assertIn(
-            (
-                "scoreboard_claim must always describe the user as losing, "
-                "behind, or scoreless"
-            ),
+            "Keep scoreboard_claim short and pointed at the user's losing side",
             SCOREY_INSTRUCTIONS,
         )
         self.assertIn(
-            (
-                "do not change the user's object into a neighboring object "
-                "class just to fake"
-            ),
+            "Keep each pick inside its exact object class.",
             SCOREY_INSTRUCTIONS,
         )
-        self.assertIn("a mismatch", SCOREY_INSTRUCTIONS)
+        self.assertIn("Return only the structured fields.", SCOREY_INSTRUCTIONS)
         self.assertNotIn("real one", SCOREY_INSTRUCTIONS)
         self.assertNotIn("napkin", SCOREY_INSTRUCTIONS)
         self.assertNotIn("version/build/patch/update/firmware", SCOREY_INSTRUCTIONS)
+
+        lower_instructions = SCOREY_INSTRUCTIONS.lower()
+        for directive in PROHIBITION_DIRECTIVES:
+            with self.subTest(directive=directive):
+                self.assertNotIn(directive, lower_instructions)
 
     def test_same_pick_prompt_biases_toward_concrete_demotion(self) -> None:
         prompt = build_prompt("paper", "paper", "same-pick")
@@ -51,31 +58,51 @@ class AgentPromptTests(TestCase):
         )
         self.assertIn(
             (
-                "demote the user's object into a degraded version of "
-                "that same object instead of turning it into a neighboring "
+                "let the user's object land as a degraded version "
+                "of that same object while staying inside the same "
                 "object class."
             ),
             prompt,
         )
         self.assertIn(
-            "Keep scoreboard_claim on the user's losing side of the score line.",
+            (
+                "Keep scoreboard_claim short, direct, and on the user's "
+                "losing side of the score line."
+            ),
             prompt,
         )
         self.assertNotIn("real one", prompt)
         self.assertNotIn("napkin", prompt)
         self.assertNotIn("version/build/patch/update/firmware", prompt)
 
+        lower_prompt = prompt.lower()
+        for directive in PROHIBITION_DIRECTIVES:
+            with self.subTest(directive=directive):
+                self.assertNotIn(directive, lower_prompt)
+
     def test_cross_object_prompt_requires_causal_mismatch(self) -> None:
         prompt = build_prompt("paper", "rock", "cross-object")
 
         self.assertIn(
             (
-                "The user's degraded state should feel like something "
+                "Let the user's degraded state feel like something "
                 "Scorey's object did to it"
             ),
             prompt,
         )
         self.assertIn(
-            "Keep scoreboard_claim on the user's losing side of the score line.",
+            (
+                "Keep scoreboard_claim short, direct, and on the user's "
+                "losing side of the score line."
+            ),
             prompt,
         )
+        self.assertIn(
+            "both picks still recognisable as themselves.",
+            prompt,
+        )
+
+        lower_prompt = prompt.lower()
+        for directive in PROHIBITION_DIRECTIVES:
+            with self.subTest(directive=directive):
+                self.assertNotIn(directive, lower_prompt)

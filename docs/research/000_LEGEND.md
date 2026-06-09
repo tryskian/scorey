@@ -5,7 +5,7 @@
 | Code | `000_LEGEND` |
 | Category | `legend` |
 | Status | `active` |
-| Last evidence | `2026-06-06` |
+| Last evidence | `2026-06-09` |
 | Owns | file map, code ranges, and shared status language for tracked research docs. |
 
 ## Boundary Map
@@ -19,7 +19,8 @@
 | `B05` | `050_B-FAIL_PRESSURE_PULSE.md` | fail-pressure pulse boundary | `boundary` | `closed` |
 | `B06` | `060_B-SCOREBOARD_JUDGEMENT.md` | scoreboard judgement boundary | `boundary` | `closed` |
 | `B07` | `070_B-BROADER_PROSE_JUDGEMENT.md` | broader prose judgement boundary | `boundary` | `closed` |
-| `B08` | `080_B-MENACE_JUDGEMENT.md` | menace-judgement boundary | `boundary` | `active` |
+| `B08` | `080_B-MENACE_JUDGEMENT.md` | menace-judgement boundary | `boundary` | `closed` |
+| `PB09` | `410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md` | positive runtime instruction contract | `boundary` | `staged` |
 
 Boundary ladder:
 
@@ -32,9 +33,10 @@ flowchart LR
   B5["050<br/>B05<br/>closed"]
   B6["060<br/>B06<br/>closed"]
   B7["070<br/>B07<br/>closed"]
-  B8["080<br/>B08<br/>active"]
+  B8["080<br/>B08<br/>closed"]
+  PB9["410<br/>PB09<br/>staged"]
 
-  B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8
+  B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8 --> PB9
 ```
 
 ## Ordering
@@ -54,8 +56,8 @@ Range chart:
 xychart-beta
   title "Tracked research ranges"
   x-axis "Range" ["000", "010-099", "100-199", "200-299", "300-399", "400-499"]
-  y-axis "Current files" 0 --> 9
-  bar "Files" [1, 8, 0, 0, 0, 0]
+  y-axis "Current files" 0 --> 10
+  bar "Files" [1, 8, 0, 0, 0, 1]
 ```
 
 ## Chart Key

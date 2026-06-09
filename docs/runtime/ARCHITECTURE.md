@@ -98,7 +98,8 @@ Ownership boundary:
 Current research note:
 
 - the menace operator surface is now available in the runtime
-- `Research Beta 8.0` is the current active widened lane above prose
+- `Research Beta 8.0` is the current closed widened menace baseline above prose
+- `pre-Beta 9.0` stages the next positive runtime contract above that baseline
 
 ## Data Surfaces
 
