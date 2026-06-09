@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-06-06
+Last updated: 2026-06-09
 
 ## Start Here
 
@@ -38,6 +38,9 @@ is the current active menace lane.
 
 Stable repo shape:
 
+- README now states the Polinko research model is staged for the next beta:
+  - status language is model-level, not repo-only
+  - badges align with the shared toy-factory status pattern
 - bare `scorey` opens the app loop
 - the runtime keeps picks fixed to:
   - `rock`
