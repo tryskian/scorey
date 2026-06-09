@@ -410,3 +410,17 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
 - Why: The second bounded cross-object menace read changed what the evidence
   means by improving one previously weak prose slice from `9 / 6` to `11 / 4`
   under the menace lens.
+
+## D-032: Beta 8.0 freezes below a staged positive runtime instruction contract
+
+- Date: `2026-06-09`
+- Category: `eval_quality`
+- Tags: `beta_boundary`, `runtime_contract`, `positive_instructions`, `prompt_ownership`
+- Provenance: `human-led method decision with implementation decision`
+- Decision: Close `Research Beta 8.0` as the frozen menace baseline. Stage
+  `pre-Beta 9.0` above it as a runtime instruction contract where
+  `src/scorey/config.py` stays structural only and `src/scorey/agent.py` owns
+  the live field-generation contract in positive target language.
+- Why: The live generator contract is changing again in a way that affects
+  evidence meaning. The next evidence must be cut above the new agent-local
+  positive-target contract rather than appended to the Beta 8 baseline.

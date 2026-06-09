@@ -34,13 +34,11 @@ scissors round. `Research Beta 4.0` is closed as the abstract row-level
 measurement baseline. `Research Beta 5.0` is closed as the fail-pressure pulse
 baseline. `Research Beta 6.0` is closed as the scoreboard baseline.
 `Research Beta 7.0` is closed as the broader prose baseline. `Research Beta 8.0`
-is the current active menace lane.
+is closed as the menace baseline. `pre-Beta 9.0` is the current staged runtime
+instruction contract.
 
 Stable repo shape:
 
-- README now states the Polinko research model is staged for the next beta:
-  - status language is model-level, not repo-only
-  - badges align with the shared toy-factory status pattern
 - bare `scorey` opens the app loop
 - the runtime keeps picks fixed to:
   - `rock`
@@ -65,13 +63,13 @@ Current runtime truth:
 - `tone_pending=0`
 - `disposition_pending=0`
 - live totals:
-  - `2474` route pass
+  - `2495` route pass
   - `0` fail
   - `0` pending
 - tone totals:
   - `454` pass
   - `627` fail
-  - `1393` archived
+  - `1414` archived
   - `0` pending
 - disposition totals:
   - `72` retain
@@ -113,11 +111,17 @@ Stable contrast:
 
 ## Active Kernel
 
-`Research Beta 8.0` is now merged on clean synced `main`.
+`Research Beta 8.0` is now frozen on clean synced `main`.
 
 What is live now:
 
 - menace is a real bounded row-level lens on the full visible round
+- the next tracked stage is `pre-Beta 9.0` positive runtime instruction
+  contract
+- `src/scorey/config.py` stays structural only
+- `src/scorey/agent.py` owns the live runtime instruction shape
+- new live evidence belongs above the rewritten prompt contract rather than
+  inside Beta 8.0
 - operator surface:
   - `eval-menace-sample`
   - `eval-menace-judge`
@@ -127,8 +131,12 @@ What is live now:
   in-range
 - `D-030` locks the row-level menace contract in the durable decisions ledger
 - `D-031` starts `Research Beta 8.0` on menace judgement
-- active bounded menace evidence:
+- `D-032` freezes Beta 8.0 below a staged positive runtime instruction
+  contract
+- frozen bounded menace evidence:
+  - `20410-20417`: `6 / 2`
   - `20397-20403`: `4 / 3`
+  - `20404-20409`: `4 / 2`
   - `20307-20321`: `11 / 4`
   - `20382-20396`: `9 / 6`
   - `20352-20366`: `11 / 4`
@@ -146,38 +154,39 @@ Private staging surface:
 - `docs/peanut/research/templates/backlog.md`
 - `docs/peanut/research/chart-language.md`
 
-Current active research lane:
+Current staged research lane:
 
-- `Research Beta 8.0`
-- `menace judgement`
-- judged surface:
-  - the full visible round
-- operator surface:
-  - locked
-- active family:
+- `pre-Beta 9.0`
+- `positive runtime instruction contract`
+- frozen baseline:
+  - `Research Beta 8.0` menace judgement
+- active family for the first fresh comparison slice:
   - `cross-object coherence drift`
 - active note:
-  - `docs/research/080_B-MENACE_JUDGEMENT.md`
+  - `docs/research/410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md`
 
 ## Next Slice
 
-1. Keep `Beta 5.0`, `Beta 6.0`, and `Beta 7.0` frozen as the closed evidence
-   ladder below active menace.
-2. Keep `Research Beta 8.0` active on clean synced `main`.
+1. Keep `Beta 5.0`, `Beta 6.0`, `Beta 7.0`, and `Beta 8.0` frozen as the
+   closed evidence ladder below the staged runtime contract.
+2. Land the agent-local positive runtime instruction rewrite before cutting
+   fresh live evidence.
 3. Same-pick menace is confirmed collapsed at `15 / 0`, while cross-object has
    now shown:
    - one opening `9 / 6`
    - two hardened `11 / 4` reads
-   - one smaller fresh probe at `4 / 3` over `7` rows
-4. Open at least one fresh full-size cross-object menace repeat from new live
-   rows.
-5. Only decide the lane above menace after that larger fresh repeat.
+   - one larger fresh probe at `6 / 2` over `8` rows
+   - one compact probe at `4 / 3` over `7` rows
+   - one compact repeat at `4 / 2` over `6` rows
+4. Open at least one fresh cross-object menace repeat from new live rows after
+   the rewritten contract lands.
+5. Promote a new beta only if the post-rewrite evidence changes meaning
+   cleanly against the frozen Beta 8.0 baseline.
 
 ## Risks
 
 - low runtime risk: the queue is fully closed and there is no active sampler
-- low ops risk: repo-managed `caffeinate` is currently off and no managed PID
-  file is active
+- small ops wrinkle: the repo-managed `caffeinate` PID file drifted stale again
 
 ## Guardrails
 

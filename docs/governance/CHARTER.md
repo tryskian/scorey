@@ -52,7 +52,10 @@ holds together.
 - Scoreboard stays a row-level lens on `scoreboard_claim`.
 - Broader prose stays a row-level lens on the round body around the score
   line.
-- Menace is the active lens above broader prose on the full visible round.
+- Menace is the most recently closed lens above broader prose on the full
+  visible round.
+- The next staged boundary above menace is a runtime instruction contract
+  reset before fresh evidence is promoted again.
 
 Current tracked method ladder:
 
@@ -65,7 +68,9 @@ Current tracked method ladder:
 - `Research Beta 7.0`
   - closed broader prose judgement baseline
 - `Research Beta 8.0`
-  - active menace judgement lane
+  - closed menace judgement baseline
+- `pre-Beta 9.0`
+  - staged positive runtime instruction contract
 
 ## Collaboration Model
 

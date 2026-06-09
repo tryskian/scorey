@@ -11,26 +11,25 @@ until they become evidence.
 | Surface | Current |
 | --- | --- |
 | Legend | [000_LEGEND.md](./000_LEGEND.md) |
-| Current active boundary | [080_B-MENACE_JUDGEMENT.md](./080_B-MENACE_JUDGEMENT.md) |
-| Most recently closed boundary | [070_B-BROADER_PROSE_JUDGEMENT.md](./070_B-BROADER_PROSE_JUDGEMENT.md) |
+| Current staged boundary | [410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) |
+| Most recently closed boundary | [080_B-MENACE_JUDGEMENT.md](./080_B-MENACE_JUDGEMENT.md) |
 | Filename contract | `NNN_B-NAME.md` for beta boundaries, `NNN_PB-NAME.md` for staged pre-beta boundaries |
 
 ## Current Stage
 
 | Surface | Current read |
 | --- | --- |
-| active beta | `Research Beta 8.0` menace judgement |
-| most recently closed beta | `Research Beta 7.0` broader prose judgement |
-| active question | can Scorey judge the quality of its compact rigged-round menace rather than only the coherence of its prose? |
-| active family | `cross-object coherence drift` |
-| bounded menace reads | `20397-20403: 4 / 3`; `20404-20409: 4 / 2`; `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4`; `20367-20381: 15 / 0`; all close cleanly |
+| staged contract | `pre-Beta 9.0` positive runtime instruction contract |
+| most recently closed beta | `Research Beta 8.0` menace judgement |
+| staged question | can Scorey keep the menace lane once the live runtime contract moves fully into `src/scorey/agent.py` and switches from prohibition piles to positive target behaviour? |
+| frozen menace baseline | `20410-20417: 6 / 2`; `20404-20409: 4 / 2`; `20397-20403: 4 / 3`; `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4`; `20367-20381: 15 / 0`; all closed cleanly |
 
 Most recently closed contrast:
 
 | Family | Evidence |
 | --- | --- |
-| cross-object prose | `20352-20366: 9 / 6`; `20382-20396: 9 / 6` |
-| same-pick prose | `20367-20381: 15 / 0` |
+| cross-object menace | `20410-20417: 6 / 2`; `20404-20409: 4 / 2`; `20397-20403: 4 / 3`; `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4` |
+| same-pick menace | `20367-20381: 15 / 0` |
 
 Current finding:
 
@@ -40,18 +39,19 @@ Current finding:
 | `Research Beta 5.0` | cross-object held at `8 / 5 / 2`, then `9 / 6 / 0`, then `9 / 6 / 0`; same-pick collapsed at `15 / 0 / 0`, then `15 / 0 / 0` |
 | `Research Beta 6.0` | cross-object scoreboard `15 / 0`, then `15 / 0`; same-pick scoreboard `15 / 0`, then `15 / 0` |
 | `Research Beta 7.0` | cross-object prose reopened at `9 / 6` and repeated there; same-pick stayed collapsed at `15 / 0` |
-| `Research Beta 8.0` | menace is distinct from prose: one cross-object slice still held `9 / 6`, two larger cross-object slices improved to `11 / 4`, two fresher compact probes landed at `4 / 3` and `4 / 2`, and same-pick still collapsed at `15 / 0` |
-| gate confidence | bounded pulse, scoreboard, prose, and menace closeouts are performing cleanly enough to support the active menace lens |
+| `Research Beta 8.0` | menace is distinct from prose: one cross-object slice still held `9 / 6`, two larger cross-object slices improved to `11 / 4`, a newer eight-row probe improved to `6 / 2`, two compact probes landed at `4 / 3` and `4 / 2`, and same-pick still collapsed at `15 / 0` |
+| `pre-Beta 9.0` | the next live contract moves runtime instruction shape fully into `agent.py`, keeps `config.py` structural, and rewrites the live prompt as positive target behaviour before any new menace evidence is cut |
+| gate confidence | bounded pulse, scoreboard, prose, and menace closeouts are performing cleanly enough to support the frozen menace baseline |
 | runtime | closed at `0` pending across route, tone, and disposition |
 
 Current contrast chart:
 
 ```mermaid
 xychart-beta
-  title "Current cross-object versus same-pick contrast"
+  title "Closed Beta 8.0 cross-object versus same-pick contrast"
   x-axis "Research layer" ["Beta 5 pulse", "Beta 6 scoreboard", "Beta 7 prose", "Beta 8 menace"]
   y-axis "Pressure rows" 0 --> 7
-  bar "Cross-object pressure" [6, 0, 6, 3]
+  bar "Cross-object pressure" [6, 0, 6, 2]
   bar "Same-pick pressure" [0, 0, 0, 0]
 ```
 
@@ -64,23 +64,27 @@ xychart-beta
 | `Research Beta 3.0` | Can Scorey keep its own voice once routing is settled? | The live judged lane keeps the route floor but switches the verdict lens to tone first. |
 | `Research Beta 4.0` | What changes when tone-first measurement drops phrase anchors? | The live judged lane keeps the same route floor and tone lens, but the generator contract shifts to abstract constraints aligned to the Polinko method. |
 | `Research Beta 5.0` | What changes when bounded fail pressure becomes the binary unit? | The live isolated lane keeps the route floor, but rows become pulse evidence and the pulse becomes the `PASS / FAIL` unit. |
-| `Research Beta 6.0` | Does the scoreboard fragment deserve its own judged lane? | The bounded isolated lane keeps the route floor, but the active verdict resets to row-level `PASS / FAIL` on `scoreboard_claim`. |
-| `Research Beta 7.0` | What reopens once the judged surface widens above the scoreboard? | The bounded isolated lane keeps the route floor, but the active verdict widens from `scoreboard_claim` to the broader round prose around the score line. |
-| `Research Beta 8.0` | What still holds once the judged surface widens from prose coherence to menace quality? | The bounded isolated lane keeps the route floor, but the active verdict now judges the full visible round as compact rigged-round menace. |
+| `Research Beta 6.0` | Does the scoreboard fragment deserve its own judged lane? | The bounded isolated lane keeps the route floor, and the verdict resets to row-level `PASS / FAIL` on `scoreboard_claim`. |
+| `Research Beta 7.0` | What reopens once the judged surface widens above the scoreboard? | The bounded isolated lane keeps the route floor, and the verdict widens from `scoreboard_claim` to the broader round prose around the score line. |
+| `Research Beta 8.0` | What still holds once the judged surface widens from prose coherence to menace quality? | The bounded isolated lane keeps the route floor, and the verdict judges the full visible round as compact rigged-round menace. |
 
-Current active note:
+Current staged note:
 
-- `Research Beta 8.0`
-- [Menace Judgement](./080_B-MENACE_JUDGEMENT.md)
-- active family:
-  - `cross-object coherence drift`
+- `pre-Beta 9.0`
+- [Positive Runtime Instruction Contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
+- frozen baseline:
+  - `Research Beta 8.0` menace judgement
 
 Most recently closed beta:
 
-- `Research Beta 7.0`
-- [Broader Prose Judgement](./070_B-BROADER_PROSE_JUDGEMENT.md)
-- closed broader prose evidence:
-  - `20352-20366`: `9` pass / `6` fail
+- `Research Beta 8.0`
+- [Menace Judgement](./080_B-MENACE_JUDGEMENT.md)
+- closed menace evidence:
+  - `20410-20417`: `6` pass / `2` fail
+  - `20404-20409`: `4` pass / `2` fail
+  - `20397-20403`: `4` pass / `3` fail
+  - `20307-20321`: `11` pass / `4` fail
+  - `20352-20366`: `11` pass / `4` fail
   - `20367-20381`: `15` pass / `0` fail
   - `20382-20396`: `9` pass / `6` fail
 
@@ -95,6 +99,7 @@ Read in order:
 7. [Research Beta 6.0: Scoreboard Judgement](./060_B-SCOREBOARD_JUDGEMENT.md)
 8. [Research Beta 7.0: Broader Prose Judgement](./070_B-BROADER_PROSE_JUDGEMENT.md)
 9. [Research Beta 8.0: Menace Judgement](./080_B-MENACE_JUDGEMENT.md)
+10. [Pre-Beta 9.0: Positive Runtime Instruction Contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
 
 ## How To Read The Betas And Stages
 
@@ -120,6 +125,8 @@ Each beta marks a real change in what the evaluation is asking:
   above `scoreboard_claim` to the broader round prose around the score line
 - `Research Beta 8.0` keeps the bounded source shape but judges the full
   visible round as menace rather than only broader prose coherence
+- `pre-Beta 9.0` keeps the closed menace baseline but stages a rewritten live
+  runtime contract before fresh evidence is promoted again
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 
@@ -135,6 +142,7 @@ flowchart LR
   B6["Research Beta 6.0<br/>scoreboard judgement"]
   B7["Research Beta 7.0<br/>broader prose judgement"]
   B8["Research Beta 8.0<br/>menace judgement"]
+  PB9["pre-Beta 9.0<br/>positive runtime contract"]
 
   S1["six valid pass pairs<br/>and nothing else"]
   S2["one object isolated<br/>across win and loss roles"]
@@ -144,8 +152,9 @@ flowchart LR
   S6["scoreboard_claim holds<br/>as a row-level lane<br/>across tested families"]
   S7["broader prose reopens<br/>cross-object pressure<br/>at 9 pass / 6 fail"]
   S8["menace separates from prose<br/>when larger cross-object slices<br/>improve to 11 pass / 4 fail"]
+  S9["beta 8 freezes as the<br/>menace baseline before a<br/>positive-only runtime reset"]
 
-  B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4 --> B5 --> S5 --> B6 --> S6 --> B7 --> S7 --> B8 --> S8
+  B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4 --> B5 --> S5 --> B6 --> S6 --> B7 --> S7 --> B8 --> S8 --> PB9 --> S9
 ```
 
 ## Plans
@@ -161,8 +170,8 @@ Parked lanes:
   - keep using those route-passed live rows as the tone-first evidence surface
   - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
-  - broader prose judgement is now the most recently closed widening step
-  - `Research Beta 8.0` menace judgement is the current active lane
+  - `Research Beta 8.0` menace judgement is now the most recently closed widening step
+  - `pre-Beta 9.0` positive runtime instruction contract is the current staged lane
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them
