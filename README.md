@@ -1,9 +1,19 @@
 # Scorey
 
-[![Research Stage](https://img.shields.io/badge/research_stage-Beta%208.0%20menace%20judgement-E15759)](./docs/research/README.md)
+[![Research Stage](https://img.shields.io/badge/research_stage-pre--Beta%209.0%20runtime%20contract-E9C46A)](./docs/research/README.md)
+[![Polinko Model](https://img.shields.io/badge/polinko_model-staged_next_beta-4C956C)](https://github.com/tryskian/polinko)
 [![Polinko toy factory](https://img.shields.io/badge/polinko_toy_factory-active-4C956C)](https://github.com/tryskian/polinko)
+![Model Refactor](https://img.shields.io/badge/model_refactor-active-F28E2B)
 
 ## rock, paper, scissors, scorey
+
+> [!NOTE]
+> **Current status:** The Polinko research model is being staged for the next
+> beta.
+>
+> This is an active refactor window for the model contract, evidence snapshots,
+> docs, and supporting tools. Current builds are kept stable while the repo
+> surfaces are simplified, tested, and aligned for the next release.
 
 scorey keeps the score and you've already lost.\
 sorry.
@@ -20,41 +30,44 @@ It only accepts three picks:
 
 Current stage:
 
-- `Research Beta 8.0`
-- `menace judgement`
-- active row-level lens on the quality of the visible round's menace
-- active family:
-  - `cross-object coherence drift`
-- bounded menace reads:
-  - `20397-20403`: `4` pass / `3` fail
+- `pre-Beta 9.0`
+- `positive runtime instruction contract`
+- staged contract above the frozen `Research Beta 8.0` menace baseline
+- frozen bounded menace reads:
+  - `20410-20417`: `6` pass / `2` fail
   - `20404-20409`: `4` pass / `2` fail
+  - `20397-20403`: `4` pass / `3` fail
   - `20307-20321`: `11` pass / `4` fail
   - `20352-20366`: `11` pass / `4` fail
   - `20367-20381`: `15` pass / `0` fail
   - `20382-20396`: `9` pass / `6` fail
-- current read:
-  - menace is now distinct from the closed `Beta 7.0` prose surface because
-    two larger cross-object slices improved from prose `9 / 6` to menace
-    `11 / 4`, while two fresher compact probes landed at `4 / 3` and `4 / 2`
-    and same-pick still collapsed cleanly at `15 / 0`
+- staged question:
+  - can Scorey keep the menace lane once the live runtime contract moves fully
+    into `src/scorey/agent.py` and switches from prohibition piles to positive
+    target behaviour?
 
 Most recently closed beta:
 
-- `Research Beta 7.0`
-- `broader prose judgement`
+- `Research Beta 8.0`
+- `menace judgement`
 - closed bounded evidence:
-  - `20352-20366`: `9` pass / `6` fail
+  - `20410-20417`: `6` pass / `2` fail
+  - `20404-20409`: `4` pass / `2` fail
+  - `20397-20403`: `4` pass / `3` fail
+  - `20307-20321`: `11` pass / `4` fail
+  - `20352-20366`: `11` pass / `4` fail
   - `20367-20381`: `15` pass / `0` fail
   - `20382-20396`: `9` pass / `6` fail
 
 That narrow surface is the point. Scorey is not trying to be a general chat tool or a generic joke machine. It is a small instrument for studying whether a model can preserve a rigged round, stay pick-specific, and keep unfair logic legible inside tight interaction guardrails.
 
 In this repo, a new beta gets pinned when the method change alters what the
-evidence means, not just when wording or procedure gets tidier.
+evidence means. When the contract is changing but fresh evidence is not cut
+yet, Scorey stages the next lane as a pre-beta boundary first.
 
-The repo is now in `Research Beta 8.0`, which asks whether the broader visible
-round lands as the right kind of compact rigged-round menace once the closed
-`Beta 7.0` prose surface has already proven its structural contrast.
+The repo is now staged at `pre-Beta 9.0`, which freezes the `Research Beta 8.0`
+menace baseline and rewrites the live runtime contract before new evidence is
+promoted again.
 
 ## What This Repo Demonstrates
 
@@ -69,6 +82,8 @@ round lands as the right kind of compact rigged-round menace once the closed
   - menace judgement
 - explicit closeout so bounded review lanes return to `0` pending when a slice
   is done
+- staged runtime-contract resets when a live prompt change would alter what the
+  next evidence means
 
 ## Run It
 
