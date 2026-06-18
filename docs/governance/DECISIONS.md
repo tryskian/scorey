@@ -424,3 +424,27 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
 - Why: The live generator contract is changing again in a way that affects
   evidence meaning. The next evidence must be cut above the new agent-local
   positive-target contract rather than appended to the Beta 8 baseline.
+
+## D-033: Shell helper contracts are a named local gate
+
+- Date: `2026-06-18`
+- Category: `workflow_environment`
+- Tags: `tooling_baseline`, `shell_scripts`, `closeout`, `maintenance`
+- Provenance: `implementation decision`
+- Decision:
+  - expose `make scripts-check` as the shell helper contract gate
+  - validate tracked `scripts/*.sh` shebangs and strict modes
+  - run `make scripts-check` inside the active closeout routine
+  - keep closeout control environment variables uppercase:
+    - `END_SKIP_GIT_CHECK`
+    - `END_GIT_BRANCH`
+    - `END_GIT_REMOTE`
+- Validation:
+  - `make scripts-check`
+  - `make check`
+  - `make lint-docs`
+  - `make end-preflight`
+- Why: Shell helper drift should fail through a small explicit operator target
+  before longer closeout checks run. Uppercase closeout environment variables
+  keep the branch-local preflight and clean-main git gate aligned with the
+  surrounding repo-family convention.
