@@ -32,7 +32,7 @@ CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 PIP_AUDIT_ARGS ?=
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-scoreboard-sample eval-scoreboard-judge eval-scoreboard-archive eval-scoreboard-close eval-prose-sample eval-prose-judge eval-prose-archive eval-prose-close eval-menace-sample eval-menace-judge eval-menace-archive eval-menace-close eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose eval-pulse-open eval-pulse-sample eval-pulse-judge eval-pulse-summary eval-pulse-close research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status decaffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
+.PHONY: install refresh-deps env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-scoreboard-sample eval-scoreboard-judge eval-scoreboard-archive eval-scoreboard-close eval-prose-sample eval-prose-judge eval-prose-archive eval-prose-close eval-menace-sample eval-menace-judge eval-menace-archive eval-menace-close eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose eval-pulse-open eval-pulse-sample eval-pulse-judge eval-pulse-summary eval-pulse-close research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status decaffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
 .PHONY: lint-docs package-install-check python-security-check security-checks
 .PHONY: eval-review-sample
 
@@ -40,6 +40,11 @@ install:
 	$(PYTHON) -m venv $(VENV)
 	$(BIN)/python -m pip install --upgrade pip
 	$(BIN)/python -m pip install -e ".[dev]"
+
+refresh-deps:
+	@test -d "$(VENV)" || $(PYTHON) -m venv $(VENV)
+	$(BIN)/python -m pip install --upgrade pip
+	$(BIN)/python -m pip install --upgrade --upgrade-strategy eager -e ".[dev]"
 
 env venv:
 	@test -d "$(VENV)" || (echo "Missing .venv. Run make install." && exit 1)

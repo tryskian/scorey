@@ -210,6 +210,14 @@ Sampling surface:
 | `make package-check` | distribution build check |
 | `make package-install-check` | editable package import smoke |
 | `make security-checks` | local dependency security audit |
+| `make refresh-deps` | refresh local Python dependencies after Dependabot work |
+
+Dependency maintenance:
+
+1. Merge grouped Dependabot PRs before single-package duplicates.
+2. Run `make refresh-deps` after syncing `main`.
+3. Run `make security-checks`.
+4. Finish with `make end` on clean synced `main`.
 
 ## Wake-Lock Surface
 
