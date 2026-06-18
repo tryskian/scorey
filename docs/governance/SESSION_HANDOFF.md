@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-06-12
+Last updated: 2026-06-18
 
 ## Start Here
 
@@ -54,6 +54,11 @@ Stable repo shape:
 - failure handling stays explicit:
   - `retain`
   - `evict`
+- dependency/security cleanup is current on `main`:
+  - grouped Python dependency updates are merged
+  - the grouped update includes the Starlette security bump
+  - the duplicate standalone Starlette PR was closed as superseded
+  - no open Scorey PRs remain
 
 Current runtime truth:
 
