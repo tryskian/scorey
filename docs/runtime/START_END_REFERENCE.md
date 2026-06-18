@@ -40,6 +40,7 @@ This is the compact command card for opening and closing a working session.
    - `make package-install-check`
    - `make end-runtime-check`
    - `make security-checks`
+   - `make refresh-deps` when dependency metadata changed
 2. Stop the repo-managed wake lock:
    - `make decaffeinate`
    - `make decaffeinate-status`
