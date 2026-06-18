@@ -206,6 +206,7 @@ Sampling surface:
 | Command | Job |
 | --- | --- |
 | `make lint-docs` | tracked docs lint gate |
+| `make scripts-check` | tracked shell helper contract gate |
 | `make check` | format, lint, typecheck, tests, and `git diff --check` |
 | `make package-check` | distribution build check |
 | `make package-install-check` | editable package import smoke |
@@ -236,6 +237,7 @@ Dependency maintenance:
    - `make path-leak-check`
    - `make path-leak-audit-local`
    - `make lint-docs`
+   - `make scripts-check`
    - `make check`
    - `make package-check`
    - `make package-install-check`

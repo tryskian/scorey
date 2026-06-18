@@ -212,6 +212,7 @@ Current staged research lane:
    - `make path-leak-check`
    - `make path-leak-audit-local`
    - `make lint-docs`
+   - `make scripts-check`
    - `make check`
    - `make package-check`
    - `make package-install-check`
