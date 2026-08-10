@@ -57,7 +57,7 @@ Stable repo shape:
 - current GitHub dependency queue:
   - `#94`: grouped GitHub Actions updates
   - `#97`: grouped Python dependency updates
-  - no feature PR exists yet for the active local selector repair
+  - `#98`: CLI arrow-navigation repair
 
 Current runtime truth:
 
@@ -117,9 +117,8 @@ Stable contrast:
 
 Current tracked maintenance slice:
 
-- restore live CLI arrow navigation without changing its intentional timing
-- active branch:
-  - `codex/bigbrain/cli-arrow-navigation`
+- live CLI arrow navigation is restored without changing its intentional timing
+- the repair lands through PR `#98`
 - `up` and `down` are the only selection-moving keys
 - `enter` confirms and `esc` exits
 - selector input now reads terminal bytes directly instead of mixing buffered
@@ -133,7 +132,9 @@ Current tracked maintenance slice:
   - real pseudo-terminal smoke: rapid `down`, `up`, wrap-`up`, `enter`, and
     `esc` passed without echoed escape garbage
   - `make check`: `90` pass
-- current branch work is not committed, pushed, or opened as a PR
+  - full feature-branch `make end` validation passed through security and
+    runner shutdown; only the expected clean-`main` gate remained
+  - PR `#98` required checks passed
 
 Research state underneath the maintenance slice:
 
@@ -193,31 +194,25 @@ Current staged research lane:
 
 ## Next Slice
 
-1. Review the bounded CLI selector repair without widening into timing or
-   visual redesign.
-2. When approved, package it through the protected-main feature-branch flow
-   and rerun `make end` on clean synced `main`.
-3. Keep `Beta 5.0`, `Beta 6.0`, `Beta 7.0`, and `Beta 8.0` frozen as the
+1. Keep `Beta 5.0`, `Beta 6.0`, `Beta 7.0`, and `Beta 8.0` frozen as the
    closed evidence ladder below the staged runtime contract.
-4. Land the agent-local positive runtime instruction rewrite before cutting
+2. Land the agent-local positive runtime instruction rewrite before cutting
    fresh live evidence.
-5. Same-pick menace is confirmed collapsed at `15 / 0`, while cross-object has
+3. Same-pick menace is confirmed collapsed at `15 / 0`, while cross-object has
    now shown:
    - one opening `9 / 6`
    - two hardened `11 / 4` reads
    - one larger fresh probe at `6 / 2` over `8` rows
    - one compact probe at `4 / 3` over `7` rows
    - one compact repeat at `4 / 2` over `6` rows
-6. Open at least one fresh cross-object menace repeat from new live rows after
+4. Open at least one fresh cross-object menace repeat from new live rows after
    the rewritten contract lands.
-7. Promote a new beta only if the post-rewrite evidence changes meaning
+5. Promote a new beta only if the post-rewrite evidence changes meaning
    cleanly against the frozen Beta 8.0 baseline.
 
 ## Risks
 
 - low runtime risk: the queue is fully closed and there is no active sampler
-- expected tracked-work state: the selector feature branch is dirty
-- small ops wrinkle: the repo-managed `caffeinate` PID file is stale
 - dependency queue is separate from this kernel: open Dependabot PRs `#94` and
   `#97` remain untouched
 
