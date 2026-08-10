@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import select
 import shutil
 import sys
@@ -8,7 +9,8 @@ import termios
 import threading
 import time
 import tty
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import TextIO
 
@@ -680,7 +682,8 @@ def render_round_scene(
     return len(lines)
 
 
-def read_selector_key(input_stream: TextIO | None = None) -> str:
+@contextmanager
+def selector_terminal_mode(input_stream: TextIO | None = None) -> Iterator[int]:
     stream = sys.stdin if input_stream is None else input_stream
     if not stream.isatty():
         raise RuntimeError("Selector key reading requires a TTY.")
@@ -689,35 +692,44 @@ def read_selector_key(input_stream: TextIO | None = None) -> str:
     original = termios.tcgetattr(fileno)
     try:
         tty.setraw(fileno)
-        first = stream.read(1)
-        if first in ("\r", "\n"):
-            return "ENTER"
-        if first == "\x1b":
-            second = _read_optional_tty_byte(stream)
-            if second is None:
-                return "ESC"
-            if second == "[":
-                third = _read_optional_tty_byte(stream)
-                if third == "A":
-                    return "UP"
-                if third == "B":
-                    return "DOWN"
-            return "ESC"
-        return first
+        yield fileno
     finally:
         termios.tcsetattr(fileno, termios.TCSADRAIN, original)
 
 
+def _read_selector_key(fileno: int) -> str:
+    first = os.read(fileno, 1)
+    if first in (b"\r", b"\n"):
+        return "ENTER"
+    if first == b"\x1b":
+        second = _read_optional_tty_byte(fileno)
+        if second is None:
+            return "ESC"
+        if second in (b"[", b"O"):
+            third = _read_optional_tty_byte(fileno)
+            if third == b"A":
+                return "UP"
+            if third == b"B":
+                return "DOWN"
+        return "ESC"
+    return first.decode(errors="ignore")
+
+
+def read_selector_key(input_stream: TextIO | None = None) -> str:
+    with selector_terminal_mode(input_stream) as fileno:
+        return _read_selector_key(fileno)
+
+
 def _read_optional_tty_byte(
-    stream: TextIO,
+    fileno: int,
     *,
     timeout_seconds: float = ESC_SEQUENCE_TIMEOUT_SECONDS,
-) -> str | None:
-    ready, _, _ = select.select([stream.fileno()], [], [], timeout_seconds)
+) -> bytes | None:
+    ready, _, _ = select.select([fileno], [], [], timeout_seconds)
     if not ready:
         return None
-    value = stream.read(1)
-    if value == "":
+    value = os.read(fileno, 1)
+    if value == b"":
         return None
     return value
 
@@ -761,25 +773,26 @@ def prompt_for_pick_selector() -> tuple[int, str]:
         return APP_PICKS.index(pick), pick
 
     selected_index = 0
-    sys.stdout.write(ANSI_CURSOR_HIDE)
-    sys.stdout.flush()
-    try:
-        while True:
-            render_round_scene(selected_index)
-            key = read_selector_key()
-            if key == "UP":
-                selected_index = (selected_index - 1) % len(APP_PICKS)
-                render_round_scene(selected_index, redraw=True)
-            elif key == "DOWN":
-                selected_index = (selected_index + 1) % len(APP_PICKS)
-                render_round_scene(selected_index, redraw=True)
-            elif key == "ENTER":
-                return selected_index, APP_PICKS[selected_index]
-            elif key == "ESC":
-                raise AppExit
-    finally:
-        sys.stdout.write(ANSI_CURSOR_SHOW)
+    with selector_terminal_mode(sys.stdin) as fileno:
+        sys.stdout.write(ANSI_CURSOR_HIDE)
         sys.stdout.flush()
+        try:
+            render_round_scene(selected_index)
+            while True:
+                key = _read_selector_key(fileno)
+                if key == "UP":
+                    selected_index = (selected_index - 1) % len(APP_PICKS)
+                    render_round_scene(selected_index, redraw=True)
+                elif key == "DOWN":
+                    selected_index = (selected_index + 1) % len(APP_PICKS)
+                    render_round_scene(selected_index, redraw=True)
+                elif key == "ENTER":
+                    return selected_index, APP_PICKS[selected_index]
+                elif key == "ESC":
+                    raise AppExit
+        finally:
+            sys.stdout.write(ANSI_CURSOR_SHOW)
+            sys.stdout.flush()
 
 
 def prompt_to_continue(
@@ -976,16 +989,20 @@ def command_app(local: bool) -> int:
                     round_state = live_round_task()
 
             if use_selector:
-                render_round_scene(
-                    selected_index,
-                    output_stream=sys.stdout,
-                    redraw=True,
-                    revealed_scorey_pick=round_state.scorey_pick,
-                    round_state=round_state,
-                )
-                if not prompt_to_continue_selector(output_stream=sys.stdout):
-                    print("")
-                    return 0
+                with selector_terminal_mode(sys.stdin) as fileno:
+                    render_round_scene(
+                        selected_index,
+                        output_stream=sys.stdout,
+                        redraw=True,
+                        revealed_scorey_pick=round_state.scorey_pick,
+                        round_state=round_state,
+                    )
+                    if not prompt_to_continue_selector(
+                        read_key_fn=lambda: _read_selector_key(fileno),
+                        output_stream=sys.stdout,
+                    ):
+                        print("")
+                        return 0
                 time.sleep(APP_CONTINUE_DELAY_SECONDS)
             else:
                 print("")
