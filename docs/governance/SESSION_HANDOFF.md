@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-06-18
+Last updated: 2026-08-10
 
 ## Start Here
 
@@ -54,11 +54,10 @@ Stable repo shape:
 - failure handling stays explicit:
   - `retain`
   - `evict`
-- dependency/security cleanup is current on `main`:
-  - grouped Python dependency updates are merged
-  - the grouped update includes the Starlette security bump
-  - the duplicate standalone Starlette PR was closed as superseded
-  - no open Scorey PRs remain
+- current GitHub dependency queue:
+  - `#94`: grouped GitHub Actions updates
+  - `#97`: grouped Python dependency updates
+  - no feature PR exists yet for the active local selector repair
 
 Current runtime truth:
 
@@ -116,6 +115,28 @@ Stable contrast:
 
 ## Active Kernel
 
+Current tracked maintenance slice:
+
+- restore live CLI arrow navigation without changing its intentional timing
+- active branch:
+  - `codex/bigbrain/cli-arrow-navigation`
+- `up` and `down` are the only selection-moving keys
+- `enter` confirms and `esc` exits
+- selector input now reads terminal bytes directly instead of mixing buffered
+  text reads with file-descriptor polling
+- one terminal mode remains active across the selector interaction so rapid
+  keypresses cannot fall into a canonical-mode gap
+- the duplicate scene render after each arrow movement is removed
+- `ESC_SEQUENCE_TIMEOUT_SECONDS` remains `0.03`
+- validation completed:
+  - focused `tests/test_main.py`: `38` pass with `4` arrow-sequence subtests
+  - real pseudo-terminal smoke: rapid `down`, `up`, wrap-`up`, `enter`, and
+    `esc` passed without echoed escape garbage
+  - `make check`: `90` pass
+- current branch work is not committed, pushed, or opened as a PR
+
+Research state underneath the maintenance slice:
+
 `Research Beta 8.0` is now frozen on clean synced `main`.
 
 What is live now:
@@ -172,26 +193,33 @@ Current staged research lane:
 
 ## Next Slice
 
-1. Keep `Beta 5.0`, `Beta 6.0`, `Beta 7.0`, and `Beta 8.0` frozen as the
+1. Review the bounded CLI selector repair without widening into timing or
+   visual redesign.
+2. When approved, package it through the protected-main feature-branch flow
+   and rerun `make end` on clean synced `main`.
+3. Keep `Beta 5.0`, `Beta 6.0`, `Beta 7.0`, and `Beta 8.0` frozen as the
    closed evidence ladder below the staged runtime contract.
-2. Land the agent-local positive runtime instruction rewrite before cutting
+4. Land the agent-local positive runtime instruction rewrite before cutting
    fresh live evidence.
-3. Same-pick menace is confirmed collapsed at `15 / 0`, while cross-object has
+5. Same-pick menace is confirmed collapsed at `15 / 0`, while cross-object has
    now shown:
    - one opening `9 / 6`
    - two hardened `11 / 4` reads
    - one larger fresh probe at `6 / 2` over `8` rows
    - one compact probe at `4 / 3` over `7` rows
    - one compact repeat at `4 / 2` over `6` rows
-4. Open at least one fresh cross-object menace repeat from new live rows after
+6. Open at least one fresh cross-object menace repeat from new live rows after
    the rewritten contract lands.
-5. Promote a new beta only if the post-rewrite evidence changes meaning
+7. Promote a new beta only if the post-rewrite evidence changes meaning
    cleanly against the frozen Beta 8.0 baseline.
 
 ## Risks
 
 - low runtime risk: the queue is fully closed and there is no active sampler
-- small ops wrinkle: the repo-managed `caffeinate` PID file drifted stale again
+- expected tracked-work state: the selector feature branch is dirty
+- small ops wrinkle: the repo-managed `caffeinate` PID file is stale
+- dependency queue is separate from this kernel: open Dependabot PRs `#94` and
+  `#97` remain untouched
 
 ## Guardrails
 

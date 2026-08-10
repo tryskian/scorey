@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import io
-from contextlib import redirect_stderr, redirect_stdout
+from contextlib import nullcontext, redirect_stderr, redirect_stdout
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import TextIO, cast
 from unittest import TestCase
-from unittest.mock import patch
+from unittest.mock import call, patch
 
 from scorey.eval_db import (
     init_db,
@@ -20,14 +20,15 @@ from scorey.main import (
     build_round_scene_lines,
     choose_banner_lines,
     main,
+    prompt_for_pick_selector,
     read_selector_key,
 )
 
 
 class _FakeTTYStream:
-    def __init__(self, reads: list[str], fileno: int = 99) -> None:
-        self._reads = reads
+    def __init__(self, fileno: int = 99) -> None:
         self._fileno = fileno
+        self.writes: list[str] = []
 
     def isatty(self) -> bool:
         return True
@@ -35,10 +36,12 @@ class _FakeTTYStream:
     def fileno(self) -> int:
         return self._fileno
 
-    def read(self, _count: int) -> str:
-        if not self._reads:
-            raise AssertionError("Unexpected extra read")
-        return self._reads.pop(0)
+    def write(self, value: str) -> int:
+        self.writes.append(value)
+        return len(value)
+
+    def flush(self) -> None:
+        pass
 
 
 class MainCommandTests(TestCase):
@@ -111,34 +114,73 @@ class MainCommandTests(TestCase):
     def test_read_selector_key_returns_esc_without_waiting_for_followup_byte(
         self,
     ) -> None:
-        stream = _FakeTTYStream(["\x1b"])
+        stream = _FakeTTYStream()
 
         with patch("scorey.main.termios.tcgetattr", return_value=object()):
             with patch("scorey.main.tty.setraw"):
                 with patch("scorey.main.termios.tcsetattr"):
-                    with patch(
-                        "scorey.main.select.select",
-                        return_value=([], [], []),
-                    ):
-                        self.assertEqual(read_selector_key(cast(TextIO, stream)), "ESC")
+                    with patch("scorey.main.os.read", return_value=b"\x1b"):
+                        with patch(
+                            "scorey.main.select.select",
+                            return_value=([], [], []),
+                        ):
+                            self.assertEqual(
+                                read_selector_key(cast(TextIO, stream)), "ESC"
+                            )
 
-    def test_read_selector_key_still_parses_arrow_sequences(self) -> None:
-        stream = _FakeTTYStream(["\x1b", "[", "B"])
+    def test_read_selector_key_parses_up_and_down_arrow_sequences(self) -> None:
+        stream = _FakeTTYStream()
 
-        with patch("scorey.main.termios.tcgetattr", return_value=object()):
-            with patch("scorey.main.tty.setraw"):
-                with patch("scorey.main.termios.tcsetattr"):
+        for prefix in (b"[", b"O"):
+            for final_byte, expected in ((b"A", "UP"), (b"B", "DOWN")):
+                with self.subTest(prefix=prefix, expected=expected):
+                    with patch("scorey.main.termios.tcgetattr", return_value=object()):
+                        with patch("scorey.main.tty.setraw"):
+                            with patch("scorey.main.termios.tcsetattr"):
+                                with patch(
+                                    "scorey.main.os.read",
+                                    side_effect=[b"\x1b", prefix, final_byte],
+                                ):
+                                    with patch(
+                                        "scorey.main.select.select",
+                                        side_effect=[
+                                            ([stream.fileno()], [], []),
+                                            ([stream.fileno()], [], []),
+                                        ],
+                                    ):
+                                        self.assertEqual(
+                                            read_selector_key(cast(TextIO, stream)),
+                                            expected,
+                                        )
+
+    def test_pick_selector_keeps_one_terminal_mode_for_arrow_navigation(
+        self,
+    ) -> None:
+        input_stream = _FakeTTYStream(fileno=98)
+        output_stream = _FakeTTYStream(fileno=99)
+
+        with patch("scorey.main.sys.stdin", input_stream):
+            with patch("scorey.main.sys.stdout", output_stream):
+                with patch(
+                    "scorey.main.selector_terminal_mode",
+                    return_value=nullcontext(input_stream.fileno()),
+                ) as terminal_mode:
                     with patch(
-                        "scorey.main.select.select",
-                        side_effect=[
-                            ([stream.fileno()], [], []),
-                            ([stream.fileno()], [], []),
-                        ],
-                    ):
-                        self.assertEqual(
-                            read_selector_key(cast(TextIO, stream)),
-                            "DOWN",
-                        )
+                        "scorey.main._read_selector_key",
+                        side_effect=["DOWN", "ENTER"],
+                    ) as read_key:
+                        with patch("scorey.main.render_round_scene") as render:
+                            self.assertEqual(
+                                prompt_for_pick_selector(),
+                                (1, "paper"),
+                            )
+
+        terminal_mode.assert_called_once_with(input_stream)
+        self.assertEqual(read_key.call_args_list, [call(98), call(98)])
+        self.assertEqual(
+            render.call_args_list,
+            [call(0), call(1, redraw=True)],
+        )
 
     def test_local_play_prints_a_round(self) -> None:
         stdout = io.StringIO()
