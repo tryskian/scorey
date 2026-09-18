@@ -23,6 +23,8 @@ This is the compact command card for opening and closing a working session.
 4. Run:
    - `make doctor-env`
    - `make start-runtime-check`
+   - `make caffeinate`
+   - `make caffeinate-status`
    - `make session-status`
 
 ## End
@@ -40,13 +42,11 @@ This is the compact command card for opening and closing a working session.
    - `make end-runtime-check`
    - `make security-checks`
    - `make refresh-deps` when dependency metadata changed
-2. Print the repository and runtime snapshot:
-   - `make session-status`
+2. Stop the repo-managed wake lock:
+   - `make decaffeinate`
+   - `make decaffeinate-status`
 3. Finish on clean synced `main`:
    - `make end-git-check`
-
-The external Coffee Codex plugin owns Mac-wide keep-awake state. Scorey's
-start and end wrappers leave that shared session unchanged.
 
 ## Wrapper Shortcuts
 
