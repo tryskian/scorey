@@ -32,10 +32,10 @@ scissors round. `Research Beta 4.0` is closed as the abstract row-level
 measurement baseline. `Research Beta 5.0` is closed as the fail-pressure pulse
 baseline. `Research Beta 6.0` is closed as the scoreboard baseline.
 `Research Beta 7.0` is closed as the broader prose baseline. `Research Beta 8.0`
-is closed as the menace baseline. `pre-Beta 9.0` is the current staged runtime
-instruction contract.
+is closed as the menace baseline. `pre-Beta 9.0` is the current staged positive
+runtime instruction contract and its first fresh `15`-minute pulse.
 
-The session resumed on `2026-09-18` from clean `main` at `1d0e6e6`.
+The session resumed on `2026-09-18` from clean `main` at `cb80bb0`.
 
 Mac-wide power control is external to this repository. The Coffee Codex plugin
 owns the one shared keep-awake session for Polinko and the toys. Scorey's
@@ -62,6 +62,8 @@ Stable repo shape:
 - failure handling stays explicit:
   - `retain`
   - `evict`
+- those dispositions belong to the failed-tone workflow and do not apply to the
+  active pre-Beta 9.0 pulse
 
 Open dependency PRs, checked on `2026-09-18`:
 
@@ -155,31 +157,32 @@ The CLI arrow-navigation repair merged through PR `#98` at `51eb2a8`:
 
 ## Active Kernel
 
-The next research slice is a fresh bounded cross-object menace comparison
-under the positive runtime instructions already in `agent.py`.
-`Research Beta 8.0` remains the frozen comparison baseline; `pre-Beta 9.0`
-remains staged while fresh comparison evidence is gathered.
+The next research slice is one `15`-minute live cross-object pulse under the
+positive runtime instructions already in `agent.py`. `Research Beta 8.0`
+remains the frozen comparison baseline; `pre-Beta 9.0` remains staged while
+that fresh pulse evidence is gathered.
 
 What is live now:
 
-- menace is a real bounded row-level lens on the full visible round
 - the current staged boundary is `pre-Beta 9.0` positive runtime instruction
-  contract
+  contract plus a `15`-minute binary pulse
 - `src/scorey/config.py` stays structural only
 - `src/scorey/agent.py` owns the live runtime instruction shape
 - new live evidence belongs above the rewritten prompt contract rather than
   inside Beta 8.0
 - operator surface:
-  - `eval-menace-sample`
-  - `eval-menace-judge`
-  - `eval-menace-archive`
-  - `eval-menace-close`
-- menace closeout settles untouched `tone`, `scoreboard`, and `prose` rows
-  in-range
-- `D-030` locks the row-level menace contract in the durable decisions ledger
-- `D-031` starts `Research Beta 8.0` on menace judgement
+  - `eval-sample-live` with `EVAL_DURATION_SECONDS=900`
+  - `eval-pulse-open`
+  - `eval-pulse-sample`
+  - `eval-pulse-judge`
+  - `eval-pulse-summary`
+  - `eval-pulse-close`
+- rows are `anchor`, `counted_seam`, or `excluded_noise`; only the first two
+  affect the strict `PASS` / `FAIL` result
+- `retain` and `evict` are not pulse dispositions
 - `D-032` freezes Beta 8.0 below a staged positive runtime instruction
   contract
+- `D-035` fixes the first fresh evidence unit as a `15`-minute binary pulse
 - frozen bounded menace evidence:
   - `20410-20417`: `6 / 2`
   - `20397-20403`: `4 / 3`
@@ -204,7 +207,7 @@ Private staging surface:
 Current staged research lane:
 
 - `pre-Beta 9.0`
-- `positive runtime instruction contract`
+- positive runtime instruction contract and one `15`-minute binary pulse
 - frozen baseline:
   - `Research Beta 8.0` menace judgement
 - active family for the first fresh comparison slice:
@@ -218,23 +221,20 @@ Current staged research lane:
    closed evidence ladder below the staged runtime contract.
 2. Use the agent-local positive runtime instruction contract already merged
    through PR `#78` for fresh live evidence.
-3. Compare against the frozen Beta 8.0 evidence. Same-pick menace closed at
-   `15 / 0`, while cross-object showed:
-   - one opening `9 / 6`
-   - two hardened `11 / 4` reads
-   - one larger fresh probe at `6 / 2` over `8` rows
-   - one compact probe at `4 / 3` over `7` rows
-   - one compact repeat at `4 / 2` over `6` rows
-4. Open at least one fresh cross-object menace repeat from new live rows under
-   that contract, record row-level verdicts, and close back to `0` pending.
-5. Promote a new beta only if the post-rewrite evidence changes meaning
-   cleanly against the frozen Beta 8.0 baseline.
+3. Sample the fixed cross-object pair cycle for `900` seconds. Record the
+   actual UTC window and output-id range; same-pick is out of scope unless a
+   later kernel explicitly reopens it.
+4. Open that route-pass range as one pulse. Label every row as `anchor`,
+   `counted_seam`, or reasoned `excluded_noise`, then close it at `0` pending.
+5. Report the pulse-level `PASS` / `FAIL` result beside the frozen Beta 8.0
+   baseline. Promotion remains a human method decision only if the completed
+   pulse changes what the post-rewrite evidence means.
 
 ## Risks
 
 - low runtime risk: the queue is fully closed and there is no active sampler
-- fresh evidence is still needed to assess the rewritten runtime contract
-  against the frozen Beta 8.0 baseline
+- one complete `15`-minute pulse is still needed to assess the rewritten runtime
+  contract beside the frozen Beta 8.0 baseline
 - dependency maintenance remains queued separately: open Dependabot PRs `#94`
   and `#100` were verified on `2026-09-18`
 

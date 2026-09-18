@@ -6,7 +6,6 @@ import select
 import shutil
 import sys
 import termios
-import threading
 import time
 import tty
 from collections.abc import Callable, Iterator
@@ -66,23 +65,19 @@ from scorey.pipeline import (
 APP_PICKS: tuple[str, ...] = ("rock", "paper", "scissors")
 APP_BANNER_INNER_WIDTH = 62
 APP_BANNER_TITLE = "SCOREY RESEARCH PRE-BETA 9.0"
-APP_BANNER_TAGLINE = "scorey keeps the score and you've already lost."
+APP_BANNER_TAGLINE = "your move."
 APP_BANNER_REPO = "github.com/tryskian/scorey"
 APP_BANNER_REPO_URL = "https://github.com/tryskian/scorey"
 APP_BANNER_BOX_WIDTH = APP_BANNER_INNER_WIDTH + 2
-APP_BANNER_STACKED_WIDTH = len(APP_BANNER_TAGLINE)
+# Preserve the readable layout breakpoint when short banner copy changes.
+APP_BANNER_STACKED_WIDTH = 47
 APP_BANNER_MINIMAL_WIDTH = len(APP_BANNER_REPO)
 APP_BANNER_MINIMAL_TITLE = "scorey research pre-beta 9.0"
-APP_BANNER_MINIMAL_TAGLINE_LINES: tuple[str, ...] = (
-    "scorey keeps the score and",
-    "you've already lost.",
-    "sorry.",
-)
+APP_BANNER_MINIMAL_TAGLINE_LINES: tuple[str, ...] = (APP_BANNER_TAGLINE,)
 APP_ROUND_PROMPT = "let's play!"
 APP_PICK_PROMPT = "you:"
-APP_PICK_PROMPT_FALLBACK = "pick your loser:"
+APP_PICK_PROMPT_FALLBACK = "pick one:"
 APP_CONTINUE_PROMPT = "another round [y/n]?"
-APP_LOADING_TEXT = "scorey is deciding why you lost"
 APP_ME_PLACEHOLDER = "[inactive until you press enter]"
 APP_PLAY_HINT = "press enter to play or esc to exit"
 APP_REPLAY_HINT = "press enter to play again or esc to exit"
@@ -605,8 +600,6 @@ def build_score_line(round_state: RoundState) -> str:
 def build_round_scene_lines(
     selected_index: int,
     *,
-    revealed_scorey_pick: str | None = None,
-    loading_frame: str | None = None,
     round_state: RoundState | None = None,
     style_active: bool = False,
 ) -> list[str]:
@@ -622,10 +615,10 @@ def build_round_scene_lines(
     lines.append("")
 
     lines.append("me:")
-    if revealed_scorey_pick is None:
+    if round_state is None:
         lines.append(format_muted(f"  {APP_ME_PLACEHOLDER}", style_active=style_active))
     else:
-        me_line = f"> {revealed_scorey_pick}"
+        me_line = f"> {round_state.scorey_pick}"
         if style_active:
             me_line = f"{ANSI_BOLD}{me_line}{ANSI_RESET}"
         lines.append(me_line)
@@ -634,8 +627,6 @@ def build_round_scene_lines(
 
     if round_state is not None:
         lines.append(f"> {build_ruling_line(round_state)}")
-    elif loading_frame is not None:
-        lines.append(f"> {loading_frame} {APP_LOADING_TEXT}")
     else:
         lines.append("")
 
@@ -660,16 +651,12 @@ def render_round_scene(
     *,
     output_stream: TextIO | None = None,
     redraw: bool = False,
-    revealed_scorey_pick: str | None = None,
-    loading_frame: str | None = None,
     round_state: RoundState | None = None,
 ) -> int:
     stream = sys.stdout if output_stream is None else output_stream
     style_active = bool(getattr(stream, "isatty", lambda: False)())
     lines = build_round_scene_lines(
         selected_index,
-        revealed_scorey_pick=revealed_scorey_pick,
-        loading_frame=loading_frame,
         round_state=round_state,
         style_active=style_active,
     )
@@ -825,54 +812,6 @@ def prompt_to_continue_selector(
             return False
 
 
-def run_with_loading(
-    task: Callable[[], RoundState],
-    *,
-    output_stream: TextIO | None = None,
-    render_frame: Callable[[str], None] | None = None,
-) -> RoundState:
-    stream = sys.stdout if output_stream is None else output_stream
-    result: dict[str, RoundState] = {}
-    error: dict[str, BaseException] = {}
-    stop = threading.Event()
-    frames = ("⠋", "⠙", "⠹", "⠸", "⠼", "⠴")
-
-    def animate() -> None:
-        frame_index = 0
-        while not stop.is_set():
-            frame = frames[frame_index % len(frames)]
-            if render_frame is None:
-                stream.write(f"\r\x1b[2K{frame}")
-                stream.flush()
-            else:
-                render_frame(frame)
-            frame_index += 1
-            if stop.wait(0.14):
-                break
-        if render_frame is None:
-            stream.write("\r\x1b[2K")
-            stream.flush()
-
-    def worker() -> None:
-        try:
-            result["value"] = task()
-        except BaseException as exc:  # pragma: no cover - exercised in live mode
-            error["value"] = exc
-        finally:
-            stop.set()
-
-    thread = threading.Thread(target=animate, daemon=True)
-    thread.start()
-    worker_thread = threading.Thread(target=worker, daemon=True)
-    worker_thread.start()
-    worker_thread.join()
-    thread.join()
-
-    if "value" in error:
-        raise error["value"]
-    return result["value"]
-
-
 def build_live_round_state(
     user_pick: str,
     *,
@@ -966,27 +905,7 @@ def command_app(local: bool) -> int:
                         scorey_score=current_score,
                     )
 
-                def render_loading_frame(
-                    frame: str,
-                    current_index: int = selected_index,
-                    current_scorey_pick: str = scorey_pick,
-                ) -> None:
-                    render_round_scene(
-                        current_index,
-                        output_stream=sys.stdout,
-                        redraw=True,
-                        revealed_scorey_pick=current_scorey_pick,
-                        loading_frame=frame,
-                    )
-
-                if use_selector:
-                    round_state = run_with_loading(
-                        live_round_task,
-                        output_stream=sys.stdout,
-                        render_frame=render_loading_frame,
-                    )
-                else:
-                    round_state = live_round_task()
+                round_state = live_round_task()
 
             if use_selector:
                 with selector_terminal_mode(sys.stdin) as fileno:
@@ -994,7 +913,6 @@ def command_app(local: bool) -> int:
                         selected_index,
                         output_stream=sys.stdout,
                         redraw=True,
-                        revealed_scorey_pick=round_state.scorey_pick,
                         round_state=round_state,
                     )
                     if not prompt_to_continue_selector(

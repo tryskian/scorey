@@ -21,7 +21,8 @@ until they become evidence.
 | --- | --- |
 | staged contract | `pre-Beta 9.0` positive runtime instruction contract |
 | most recently closed beta | `Research Beta 8.0` menace judgement |
-| staged question | can Scorey keep the menace lane once the live runtime contract moves fully into `src/scorey/agent.py` and switches from prohibition piles to positive target behaviour? |
+| staged question | can Scorey keep cross-object coherence through one `15`-minute live pulse once the runtime contract moves fully into `src/scorey/agent.py` and switches from prohibition piles to positive target behaviour? |
+| staged method | route-pass rows only; `anchor` / `counted_seam` / `excluded_noise` remain auditable; the pulse result is `PASS` / `FAIL`, not `retain` / `evict` |
 | frozen menace baseline | `20410-20417: 6 / 2`; `20404-20409: 4 / 2`; `20397-20403: 4 / 3`; `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4`; `20367-20381: 15 / 0`; all closed cleanly |
 
 Most recently closed contrast:
@@ -40,7 +41,7 @@ Current finding:
 | `Research Beta 6.0` | cross-object scoreboard `15 / 0`, then `15 / 0`; same-pick scoreboard `15 / 0`, then `15 / 0` |
 | `Research Beta 7.0` | cross-object prose reopened at `9 / 6` and repeated there; same-pick stayed collapsed at `15 / 0` |
 | `Research Beta 8.0` | menace is distinct from prose: one cross-object slice still held `9 / 6`, two larger cross-object slices improved to `11 / 4`, a newer eight-row probe improved to `6 / 2`, two compact probes landed at `4 / 3` and `4 / 2`, and same-pick still collapsed at `15 / 0` |
-| `pre-Beta 9.0` | the next live contract moves runtime instruction shape fully into `agent.py`, keeps `config.py` structural, and rewrites the live prompt as positive target behaviour before any new menace evidence is cut |
+| `pre-Beta 9.0` | the next live contract moves runtime instruction shape fully into `agent.py`, keeps `config.py` structural, and tests the positive target prompt with one `15`-minute live cross-object `PASS` / `FAIL` pulse |
 | gate confidence | bounded pulse, scoreboard, prose, and menace closeouts are performing cleanly enough to support the frozen menace baseline |
 | runtime | closed at `0` pending across route, tone, and disposition |
 
@@ -67,6 +68,7 @@ xychart-beta
 | `Research Beta 6.0` | Does the scoreboard fragment deserve its own judged lane? | The bounded isolated lane keeps the route floor, and the verdict resets to row-level `PASS / FAIL` on `scoreboard_claim`. |
 | `Research Beta 7.0` | What reopens once the judged surface widens above the scoreboard? | The bounded isolated lane keeps the route floor, and the verdict widens from `scoreboard_claim` to the broader round prose around the score line. |
 | `Research Beta 8.0` | What still holds once the judged surface widens from prose coherence to menace quality? | The bounded isolated lane keeps the route floor, and the verdict judges the full visible round as compact rigged-round menace. |
+| `pre-Beta 9.0` | Does a positive agent-local runtime contract hold across a sustained cross-object pulse? | The closed menace baseline stays frozen while one `15`-minute route-pass pulse becomes the binary `PASS / FAIL` unit. |
 
 Current staged note:
 
@@ -74,6 +76,9 @@ Current staged note:
 - [Positive Runtime Instruction Contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
 - frozen baseline:
   - `Research Beta 8.0` menace judgement
+- first fresh evidence unit:
+  - one `15`-minute live cross-object pulse
+  - `PASS` / `FAIL` at the pulse level, with no `retain` / `evict` disposition
 
 Most recently closed beta:
 
@@ -125,8 +130,9 @@ Each beta marks a real change in what the evaluation is asking:
   above `scoreboard_claim` to the broader round prose around the score line
 - `Research Beta 8.0` keeps the bounded source shape but judges the full
   visible round as menace rather than only broader prose coherence
-- `pre-Beta 9.0` keeps the closed menace baseline but stages a rewritten live
-  runtime contract before fresh evidence is promoted again
+- `pre-Beta 9.0` keeps the closed menace baseline, stages a rewritten live
+  runtime contract, and tests it through one `15`-minute cross-object pulse
+  with a strict `PASS / FAIL` result
 
 Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
 
@@ -142,7 +148,7 @@ flowchart LR
   B6["Research Beta 6.0<br/>scoreboard judgement"]
   B7["Research Beta 7.0<br/>broader prose judgement"]
   B8["Research Beta 8.0<br/>menace judgement"]
-  PB9["pre-Beta 9.0<br/>positive runtime contract"]
+  PB9["pre-Beta 9.0<br/>positive contract + 15-minute pulse"]
 
   S1["six valid pass pairs<br/>and nothing else"]
   S2["one object isolated<br/>across win and loss roles"]
@@ -152,7 +158,7 @@ flowchart LR
   S6["scoreboard_claim holds<br/>as a row-level lane<br/>across tested families"]
   S7["broader prose reopens<br/>cross-object pressure<br/>at 9 pass / 6 fail"]
   S8["menace separates from prose<br/>when larger cross-object slices<br/>improve to 11 pass / 4 fail"]
-  S9["beta 8 freezes as the<br/>menace baseline before a<br/>positive-only runtime reset"]
+  S9["beta 8 freezes as the menace<br/>baseline; the rewritten contract<br/>enters one binary cross-object pulse"]
 
   B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4 --> B5 --> S5 --> B6 --> S6 --> B7 --> S7 --> B8 --> S8 --> PB9 --> S9
 ```
@@ -171,7 +177,8 @@ Parked lanes:
   - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
 - later eval lenses:
   - `Research Beta 8.0` menace judgement is now the most recently closed widening step
-  - `pre-Beta 9.0` positive runtime instruction contract is the current staged lane
+  - `pre-Beta 9.0` positive runtime instruction contract and `15`-minute pulse
+    are the current staged lane
 - research visuals:
   - keep the beta map and per-beta notes in tracked docs
   - only add heavier cross-beta visuals if the method story actually needs them

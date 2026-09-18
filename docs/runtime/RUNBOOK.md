@@ -199,6 +199,32 @@ Sampling surface:
 | `make eval-sample-local` | record deterministic local rounds |
 | `make eval-sample-live` | record live API rounds |
 
+## Current Pre-Beta 9.0 Pulse
+
+The active fresh-evidence unit is one `15`-minute live cross-object pulse under
+the positive runtime instructions in `src/scorey/agent.py`. `Research Beta 8.0`
+stays frozen while this pulse is collected and interpreted.
+
+1. Sample the fixed cross-object pair cycle for `900` seconds:
+
+   ```sh
+   make eval-sample-live EVAL_DURATION_SECONDS=900 \
+     EVAL_PAIRS="paper,scissors rock,paper scissors,rock"
+   ```
+
+2. Record the actual UTC start and finish timestamps plus the first and last
+   output IDs printed by the sampler. Open the pulse only over that route-pass
+   range, using the timestamps in its note.
+3. Label every row with `make eval-pulse-judge`:
+   - `anchor`
+   - `counted_seam`
+   - `excluded_noise` only with `operator_artifact` or `off_target_failure`
+4. Run `make eval-pulse-summary`. The pulse is `PASS` only if anchors outnumber
+   counted seams. A tie is `FAIL`; excluded noise is reported but not counted.
+5. Close the fully labelled pulse with `make eval-pulse-close` and confirm it
+   returns to `0` pending. Do not run `eval-tone-dispose` or assign `retain` /
+   `evict` as part of this pulse.
+
 ## Validation Surface
 
 | Command | Job |
