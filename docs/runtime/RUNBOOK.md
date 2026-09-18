@@ -58,6 +58,8 @@ Local-only lane:
 4. Run:
    - `make doctor-env`
    - `make start-runtime-check`
+   - `make caffeinate`
+   - `make caffeinate-status`
    - `make session-status`
 5. Install or refresh the environment when needed:
    - `make install`
@@ -199,32 +201,6 @@ Sampling surface:
 | `make eval-sample-local` | record deterministic local rounds |
 | `make eval-sample-live` | record live API rounds |
 
-## Current Pre-Beta 9.0 Pulse
-
-The active fresh-evidence unit is one `15`-minute live cross-object pulse under
-the positive runtime instructions in `src/scorey/agent.py`. `Research Beta 8.0`
-stays frozen while this pulse is collected and interpreted.
-
-1. Sample the fixed cross-object pair cycle for `900` seconds:
-
-   ```sh
-   make eval-sample-live EVAL_DURATION_SECONDS=900 \
-     EVAL_PAIRS="paper,scissors rock,paper scissors,rock"
-   ```
-
-2. Record the actual UTC start and finish timestamps plus the first and last
-   output IDs printed by the sampler. Open the pulse only over that route-pass
-   range, using the timestamps in its note.
-3. Label every row with `make eval-pulse-judge`:
-   - `anchor`
-   - `counted_seam`
-   - `excluded_noise` only with `operator_artifact` or `off_target_failure`
-4. Run `make eval-pulse-summary`. The pulse is `PASS` only if anchors outnumber
-   counted seams. A tie is `FAIL`; excluded noise is reported but not counted.
-5. Close the fully labelled pulse with `make eval-pulse-close` and confirm it
-   returns to `0` pending. Do not run `eval-tone-dispose` or assign `retain` /
-   `evict` as part of this pulse.
-
 ## Validation Surface
 
 | Command | Job |
@@ -244,15 +220,14 @@ Dependency maintenance:
 3. Run `make security-checks`.
 4. Finish with `make end` on clean synced `main`.
 
-## Shared Power Control
+## Wake-Lock Surface
 
-The external Coffee Codex plugin owns the one shared Mac-wide keep-awake
-session for Polinko and the toys. Scorey does not inspect, start, adopt, or
-stop that session during startup, preflight, closeout, or status reporting.
-
-The repository owns no power-control PID file, log, process state, or Make
-target. Its lifecycle remains focused on runtime safety, eval evidence,
-validation, and Git state.
+| Command | Job |
+| --- | --- |
+| `make caffeinate` | start repo-managed wake lock |
+| `make caffeinate-status` | report repo-managed wake-lock status |
+| `make decaffeinate` | stop repo-managed wake lock |
+| `make decaffeinate-status` | report closeout wake-lock status |
 
 ## End Of Day
 
@@ -272,7 +247,8 @@ validation, and Git state.
 3. Merge through the protected-main flow.
 4. After merge, switch back to `main` and pull fast-forward only.
 5. Run closeout checks:
-   - `make session-status`
+   - `make decaffeinate`
+   - `make decaffeinate-status`
    - `make end-git-check`
 6. Update tracked handoff and research truth before stopping.
 

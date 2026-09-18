@@ -44,16 +44,11 @@ holds together.
 - Failed tone rows stay explicit:
   - `retain`
   - `evict`
-- `retain` and `evict` belong only to the failed-tone disposition workflow;
-  they are not pulse outcomes.
 - Widened lenses advance one layer at a time and must close back to
   `0` pending.
 - Pulse stays the bounded run-level lens:
   - rows are labelled as `anchor`, `counted_seam`, or `excluded_noise`
   - only anchors and counted seams affect the pulse verdict
-  - anchors must outnumber counted seams for `PASS`; a tie is `FAIL`
-- `pre-Beta 9.0` tests its rewritten runtime contract with one `15`-minute
-  live cross-object pulse before any promotion decision.
 - Scoreboard stays a row-level lens on `scoreboard_claim`.
 - Broader prose stays a row-level lens on the round body around the score
   line.
@@ -75,7 +70,7 @@ Current tracked method ladder:
 - `Research Beta 8.0`
   - closed menace judgement baseline
 - `pre-Beta 9.0`
-  - staged positive runtime instruction contract and `15`-minute binary pulse
+  - staged positive runtime instruction contract
 
 ## Collaboration Model
 
