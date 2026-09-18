@@ -20,7 +20,8 @@
 | `B06` | `060_B-SCOREBOARD_JUDGEMENT.md` | scoreboard judgement boundary | `boundary` | `closed` |
 | `B07` | `070_B-BROADER_PROSE_JUDGEMENT.md` | broader prose judgement boundary | `boundary` | `closed` |
 | `B08` | `080_B-MENACE_JUDGEMENT.md` | menace-judgement boundary | `boundary` | `closed` |
-| `PB09` | `410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md` | positive runtime instruction contract and `15`-minute pulse | `boundary` | `staged` |
+| `PB09-A` | `410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md` | positive runtime instruction contract | `boundary` | `staged` |
+| `PB09-B` | `420_PB-PULSE_EVALUATION_METHOD.md` | route-pass pulse evaluation method | `boundary` | `staged` |
 
 Boundary ladder:
 
@@ -34,9 +35,10 @@ flowchart LR
   B6["060<br/>B06<br/>closed"]
   B7["070<br/>B07<br/>closed"]
   B8["080<br/>B08<br/>closed"]
-  PB9["410<br/>PB09<br/>staged"]
+  PB9A["410<br/>PB09-A<br/>contract<br/>staged"]
+  PB9B["420<br/>PB09-B<br/>method<br/>staged"]
 
-  B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8 --> PB9
+  B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8 --> PB9A --> PB9B
 ```
 
 ## Ordering
@@ -57,7 +59,7 @@ xychart-beta
   title "Tracked research ranges"
   x-axis "Range" ["000", "010-099", "100-199", "200-299", "300-399", "400-499"]
   y-axis "Current files" 0 --> 10
-  bar "Files" [1, 8, 0, 0, 0, 1]
+  bar "Files" [1, 8, 0, 0, 0, 2]
 ```
 
 ## Chart Key

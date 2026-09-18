@@ -11,7 +11,7 @@ until they become evidence.
 | Surface | Current |
 | --- | --- |
 | Legend | [000_LEGEND.md](./000_LEGEND.md) |
-| Current staged boundary | [410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) |
+| Current staged boundaries | [410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) and [420_PB-PULSE_EVALUATION_METHOD.md](./420_PB-PULSE_EVALUATION_METHOD.md) |
 | Most recently closed boundary | [080_B-MENACE_JUDGEMENT.md](./080_B-MENACE_JUDGEMENT.md) |
 | Filename contract | `NNN_B-NAME.md` for beta boundaries, `NNN_PB-NAME.md` for staged pre-beta boundaries |
 
@@ -70,10 +70,11 @@ xychart-beta
 | `Research Beta 8.0` | What still holds once the judged surface widens from prose coherence to menace quality? | The bounded isolated lane keeps the route floor, and the verdict judges the full visible round as compact rigged-round menace. |
 | `pre-Beta 9.0` | Does a positive agent-local runtime contract hold across a sustained cross-object pulse? | The closed menace baseline stays frozen while one `15`-minute route-pass pulse becomes the binary `PASS / FAIL` unit. |
 
-Current staged note:
+Current staged notes:
 
 - `pre-Beta 9.0`
 - [Positive Runtime Instruction Contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
+- [Pulse Evaluation Method](./420_PB-PULSE_EVALUATION_METHOD.md)
 - frozen baseline:
   - `Research Beta 8.0` menace judgement
 - first fresh evidence unit:
@@ -105,6 +106,7 @@ Read in order:
 8. [Research Beta 7.0: Broader Prose Judgement](./070_B-BROADER_PROSE_JUDGEMENT.md)
 9. [Research Beta 8.0: Menace Judgement](./080_B-MENACE_JUDGEMENT.md)
 10. [Pre-Beta 9.0: Positive Runtime Instruction Contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
+11. [Pre-Beta 9.0: Pulse Evaluation Method](./420_PB-PULSE_EVALUATION_METHOD.md)
 
 ## How To Read The Betas And Stages
 
