@@ -448,3 +448,27 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   before longer closeout checks run. Uppercase closeout environment variables
   keep the branch-local preflight and clean-main git gate aligned with the
   surrounding repo-family convention.
+
+## D-034: Keep Mac-wide power control outside the repository lifecycle
+
+- Date: `2026-09-18`
+- Category: `workflow_environment`
+- Tags: `coffee_plugin`, `keep_awake`, `operator_surface`, `repo_lifecycle`
+- Provenance: `human-led repo-family decision`, later `implementation decision`
+- Decision:
+  - let the external Coffee Codex plugin exclusively own the one shared
+    Mac-wide keep-awake session for Polinko and the toys
+  - remove Scorey's power-control variables and Make targets
+  - keep startup, preflight, closeout, and session status focused on
+    repository-owned runtime, eval, validation, and Git state
+  - leave external Coffee state unchanged throughout the repo lifecycle
+  - supersede the wake-lock portion of `D-013` while preserving its runtime
+    gates and shared start/end operator contract
+- Validation:
+  - `make start`
+  - `make end-preflight`
+  - `make end` on clean synced `main`
+  - tooling contracts reject repository-owned power-control targets and calls
+- Why: A Mac-wide process is shared across repositories and tasks. Repository
+  lifecycle hooks create conflicting ownership and allow one closeout to
+  interfere with unrelated work.

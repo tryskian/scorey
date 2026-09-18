@@ -23,8 +23,6 @@ Last updated: 2026-09-18
 4. Run session preflight:
    - `make doctor-env`
    - `make start-runtime-check`
-   - `make caffeinate`
-   - `make caffeinate-status`
    - `make session-status`
 
 ## Current Snapshot
@@ -37,10 +35,14 @@ baseline. `Research Beta 6.0` is closed as the scoreboard baseline.
 is closed as the menace baseline. `pre-Beta 9.0` is the current staged runtime
 instruction contract.
 
-The session resumed on `2026-09-18` from clean `main` at `51eb2a8`.
+The session resumed on `2026-09-18` from clean `main` at `1d0e6e6`.
+
+Mac-wide power control is external to this repository. The Coffee Codex plugin
+owns the one shared keep-awake session for Polinko and the toys. Scorey's
+startup, preflight, closeout, and session status leave it unchanged.
 `make start` passed, and the live runtime counts below were confirmed.
 The handoff reconciliation passed `make end-preflight` on `2026-09-18`,
-including `90` tests, packaging, runtime closeout, and the dependency security
+including `91` tests, packaging, runtime closeout, and the dependency security
 audit.
 
 Stable repo shape:
@@ -261,8 +263,7 @@ Current staged research lane:
    - `make package-install-check`
    - `make end-runtime-check`
    - `make security-checks`
-2. Stop the repo-managed wake lock:
-   - `make decaffeinate`
-   - `make decaffeinate-status`
+2. Print the repository and runtime snapshot:
+   - `make session-status`
 3. Finish on clean synced `main`:
    - `make end-git-check`

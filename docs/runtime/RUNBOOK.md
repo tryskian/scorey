@@ -58,8 +58,6 @@ Local-only lane:
 4. Run:
    - `make doctor-env`
    - `make start-runtime-check`
-   - `make caffeinate`
-   - `make caffeinate-status`
    - `make session-status`
 5. Install or refresh the environment when needed:
    - `make install`
@@ -220,14 +218,15 @@ Dependency maintenance:
 3. Run `make security-checks`.
 4. Finish with `make end` on clean synced `main`.
 
-## Wake-Lock Surface
+## Shared Power Control
 
-| Command | Job |
-| --- | --- |
-| `make caffeinate` | start repo-managed wake lock |
-| `make caffeinate-status` | report repo-managed wake-lock status |
-| `make decaffeinate` | stop repo-managed wake lock |
-| `make decaffeinate-status` | report closeout wake-lock status |
+The external Coffee Codex plugin owns the one shared Mac-wide keep-awake
+session for Polinko and the toys. Scorey does not inspect, start, adopt, or
+stop that session during startup, preflight, closeout, or status reporting.
+
+The repository owns no power-control PID file, log, process state, or Make
+target. Its lifecycle remains focused on runtime safety, eval evidence,
+validation, and Git state.
 
 ## End Of Day
 
@@ -247,8 +246,7 @@ Dependency maintenance:
 3. Merge through the protected-main flow.
 4. After merge, switch back to `main` and pull fast-forward only.
 5. Run closeout checks:
-   - `make decaffeinate`
-   - `make decaffeinate-status`
+   - `make session-status`
    - `make end-git-check`
 6. Update tracked handoff and research truth before stopping.
 
