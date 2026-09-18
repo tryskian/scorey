@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-08-10
+Last updated: 2026-09-18
 
 ## Start Here
 
@@ -37,6 +37,12 @@ baseline. `Research Beta 6.0` is closed as the scoreboard baseline.
 is closed as the menace baseline. `pre-Beta 9.0` is the current staged runtime
 instruction contract.
 
+The session resumed on `2026-09-18` from clean `main` at `51eb2a8`.
+`make start` passed, and the live runtime counts below were confirmed.
+The handoff reconciliation passed `make end-preflight` on `2026-09-18`,
+including `90` tests, packaging, runtime closeout, and the dependency security
+audit.
+
 Stable repo shape:
 
 - bare `scorey` opens the app loop
@@ -54,10 +60,13 @@ Stable repo shape:
 - failure handling stays explicit:
   - `retain`
   - `evict`
-- current GitHub dependency queue:
-  - `#94`: grouped GitHub Actions updates
-  - `#97`: grouped Python dependency updates
-  - `#98`: CLI arrow-navigation repair
+
+Open dependency PRs, checked on `2026-09-18`:
+
+- [#94](https://github.com/tryskian/scorey/pull/94): grouped GitHub Actions updates
+- [#100](https://github.com/tryskian/scorey/pull/100): grouped Python dependency updates
+
+The older Python dependency PR `#97` is closed without merging.
 
 Current runtime truth:
 
@@ -113,12 +122,18 @@ Stable contrast:
 - newer bounded eval gates are performing cleanly across pulse, scoreboard,
   and prose closeout
 
-## Active Kernel
+## Landed Runtime Work
 
-Current tracked maintenance slice:
+The positive runtime instruction rewrite merged through PR `#78` at `af789c3`:
+
+- `src/scorey/config.py` remains structural: picks, routing, and settings
+- `src/scorey/agent.py` already owns the live instructions and per-round prompt
+- the rewrite states the wanted output as positive target behaviour
+- the runtime still owns routing and composition around the three model fields
+
+The CLI arrow-navigation repair merged through PR `#98` at `51eb2a8`:
 
 - live CLI arrow navigation is restored without changing its intentional timing
-- the repair lands through PR `#98`
 - `up` and `down` are the only selection-moving keys
 - `enter` confirms and `esc` exits
 - selector input now reads terminal bytes directly instead of mixing buffered
@@ -127,23 +142,26 @@ Current tracked maintenance slice:
   keypresses cannot fall into a canonical-mode gap
 - the duplicate scene render after each arrow movement is removed
 - `ESC_SEQUENCE_TIMEOUT_SECONDS` remains `0.03`
-- validation completed:
+- validation recorded on `2026-08-10`:
   - focused `tests/test_main.py`: `38` pass with `4` arrow-sequence subtests
   - real pseudo-terminal smoke: rapid `down`, `up`, wrap-`up`, `enter`, and
     `esc` passed without echoed escape garbage
   - `make check`: `90` pass
-  - full feature-branch `make end` validation passed through security and
-    runner shutdown; only the expected clean-`main` gate remained
+  - feature-branch `make end` validation passed through security and
+    runner shutdown before merge
   - PR `#98` required checks passed
 
-Research state underneath the maintenance slice:
+## Active Kernel
 
-`Research Beta 8.0` is now frozen on clean synced `main`.
+The next research slice is a fresh bounded cross-object menace comparison
+under the positive runtime instructions already in `agent.py`.
+`Research Beta 8.0` remains the frozen comparison baseline; `pre-Beta 9.0`
+remains staged while fresh comparison evidence is gathered.
 
 What is live now:
 
 - menace is a real bounded row-level lens on the full visible round
-- the next tracked stage is `pre-Beta 9.0` positive runtime instruction
+- the current staged boundary is `pre-Beta 9.0` positive runtime instruction
   contract
 - `src/scorey/config.py` stays structural only
 - `src/scorey/agent.py` owns the live runtime instruction shape
@@ -196,25 +214,27 @@ Current staged research lane:
 
 1. Keep `Beta 5.0`, `Beta 6.0`, `Beta 7.0`, and `Beta 8.0` frozen as the
    closed evidence ladder below the staged runtime contract.
-2. Land the agent-local positive runtime instruction rewrite before cutting
-   fresh live evidence.
-3. Same-pick menace is confirmed collapsed at `15 / 0`, while cross-object has
-   now shown:
+2. Use the agent-local positive runtime instruction contract already merged
+   through PR `#78` for fresh live evidence.
+3. Compare against the frozen Beta 8.0 evidence. Same-pick menace closed at
+   `15 / 0`, while cross-object showed:
    - one opening `9 / 6`
    - two hardened `11 / 4` reads
    - one larger fresh probe at `6 / 2` over `8` rows
    - one compact probe at `4 / 3` over `7` rows
    - one compact repeat at `4 / 2` over `6` rows
-4. Open at least one fresh cross-object menace repeat from new live rows after
-   the rewritten contract lands.
+4. Open at least one fresh cross-object menace repeat from new live rows under
+   that contract, record row-level verdicts, and close back to `0` pending.
 5. Promote a new beta only if the post-rewrite evidence changes meaning
    cleanly against the frozen Beta 8.0 baseline.
 
 ## Risks
 
 - low runtime risk: the queue is fully closed and there is no active sampler
-- dependency queue is separate from this kernel: open Dependabot PRs `#94` and
-  `#97` remain untouched
+- fresh evidence is still needed to assess the rewritten runtime contract
+  against the frozen Beta 8.0 baseline
+- dependency maintenance remains queued separately: open Dependabot PRs `#94`
+  and `#100` were verified on `2026-09-18`
 
 ## Guardrails
 
