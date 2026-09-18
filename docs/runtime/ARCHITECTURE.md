@@ -78,10 +78,10 @@ Ownership boundary:
 1. Bare `scorey` enters the local CLI loop in `main.py`.
 2. The user selects one fixed pick.
 3. The runtime validates the selected pick.
-4. The runtime routes to an allowed Scorey pick.
-5. The runtime reveals Scorey's pick and route frame.
-6. The live model generates only the unstable round fields.
-7. The runtime composes the final unfair round.
+4. The runtime selects an allowed Scorey pick and route family internally.
+5. The live model generates only the unstable round fields for that matchup.
+6. The runtime composes the complete unfair round.
+7. The completed round reveals Scorey's pick, ruling, and score together.
 
 ## Selector Input Contract
 
@@ -111,6 +111,7 @@ Current research note:
 - the menace operator surface is now available in the runtime
 - `Research Beta 8.0` is the current closed widened menace baseline above prose
 - `pre-Beta 9.0` stages the next positive runtime contract above that baseline
+  and tests it with one `15`-minute live cross-object pulse
 
 ## Data Surfaces
 

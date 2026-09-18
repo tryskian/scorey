@@ -11,13 +11,16 @@ preserve as the project evolves.
 ```mermaid
 flowchart TD
   A["User pick"]
-  B["Scorey pick"]
-  C["Matchup route"]
-  D["Scorey winning state"]
-  E["User worse state"]
-  F["Scoreboard claim"]
-  H["Compose response"]
-  I["Final round"]
+  I["Final round: first visible reveal"]
+
+  subgraph INTERNAL["Internal round construction"]
+    B["Allowed Scorey pick"]
+    C["Matchup route"]
+    D["Scorey winning state"]
+    E["User worse state"]
+    F["Scoreboard claim"]
+    H["Compose complete response"]
+  end
 
   A --> B
   A --> C
@@ -32,9 +35,13 @@ flowchart TD
 
 ## Reading Note
 
-Scorey is not a general joke generator. The route starts with the user's actual
-pick and Scorey's actual pick, then invents a reason that preserves both sides
-of the round.
+Scorey is not a general joke generator. The runtime selects an allowed matchup
+from the user's actual pick and Scorey's actual pick, then obtains the bounded
+fields that preserve both sides of the round.
+
+That construction is internal. The player sees no interim Scorey pick, route
+frame, loader, or narrated deliberation. Scorey's pick, the ruling, and the
+score appear together in the completed round.
 
 Different-pick rounds use cross-object fake rules.
 

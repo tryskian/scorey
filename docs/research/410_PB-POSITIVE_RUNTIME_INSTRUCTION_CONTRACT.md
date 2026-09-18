@@ -8,29 +8,31 @@
 | Category | `boundary` |
 | Status | `staged` |
 | Last evidence | `2026-06-09` |
-| Owns | the staged runtime-instruction contract above the closed menace baseline. |
+| Owns | the staged runtime-instruction contract and its first fresh `15`-minute pulse above the closed menace baseline. |
 
 ## Boundary
 
 `Research Beta 8.0` is the frozen menace baseline. Its bounded reads remain the
 source for the current menace comparison surface.
 
-`pre-Beta 9.0` names the next runtime contract before new live menace evidence
-is cut. The first fresh bounded menace slice under the rewritten contract is
-the point where a new beta can earn promotion.
+`pre-Beta 9.0` names the next runtime contract and the evidence rule that tests
+it. The first fresh `15`-minute live cross-object pulse under the rewritten
+contract is the point where a new beta can earn promotion.
 
-The active question is whether Scorey can keep the menace lane once the live
-runtime contract becomes fully agent-local and framed as positive target
-behaviour rather than prohibition piles.
+The active question is whether Scorey can keep cross-object coherence during
+that sustained pulse once the live runtime contract becomes fully agent-local
+and framed as positive target behaviour rather than prohibition piles.
 
 ## Diagram
 
 ```mermaid
 flowchart TD
   A["Closed Beta 8.0 menace baseline"] --> B["Positive runtime instruction contract"]
-  B --> C["Fresh bounded menace slice"]
-  C --> D["Compare against Beta 8.0 baseline"]
-  D --> E["Promote only if the evidence meaning changes cleanly"]
+  B --> C["15-minute live cross-object pulse"]
+  C --> D["Label rows: anchor, counted seam, or excluded noise"]
+  D --> E["Pulse-level PASS or FAIL"]
+  E --> F["Interpret beside the frozen Beta 8.0 baseline"]
+  F --> G["Promote only if the evidence meaning changes cleanly"]
 ```
 
 ## Contract
@@ -53,6 +55,13 @@ flowchart TD
   - `scoreboard_claim` on the user's losing side of the score line
 - new live evidence belongs above this contract rewrite and should not be
   appended to the closed Beta 8.0 baseline
+- the first fresh evidence run is one `15`-minute live cross-object pulse:
+  - only route-pass rows enter
+  - each row is labelled `anchor`, `counted_seam`, or `excluded_noise`
+  - `PASS` requires more anchors than counted seams; a tie is `FAIL`
+  - `excluded_noise` needs a supported narrow reason and does not affect the
+    verdict
+  - `retain` and `evict` do not apply to this pulse
 
 ## Evidence Stack
 
@@ -60,8 +69,11 @@ The staged contract keeps this evidence order:
 
 1. Closed `Research Beta 8.0` menace reads as the frozen baseline.
 2. The rewritten agent-local prompt contract in `src/scorey/agent.py`.
-3. Fresh bounded menace slices gathered only after the prompt rewrite lands.
-4. A new beta boundary only if the post-rewrite evidence changes meaning
+3. One fresh `15`-minute live cross-object pulse gathered only after the prompt
+   rewrite lands.
+4. A binary pulse result, with the row evidence and any exclusions still
+   inspectable.
+5. A new beta boundary only if the post-rewrite evidence changes meaning
    cleanly against the Beta 8.0 baseline.
 
 ## First Kernel Shape
@@ -72,13 +84,15 @@ It should record:
 
 - the live agent contract now in `src/scorey/agent.py`
 - the closed Beta 8.0 baseline it is being compared against
-- at least one fresh bounded cross-object menace slice
-- row-level menace verdicts plus closeout counts
-- whether same-pick still collapses cleanly if that family is reopened
+- one fresh `15`-minute live cross-object pulse
+- the actual UTC sampling window and output-id range
+- row labels, exclusion reasons, and the binary pulse result
+- pulse closeout at `0` pending
+- no same-pick reopening unless a later kernel explicitly authorises it
 
 ## Decision Rule
 
-`pre-Beta 9.0` can promote only when fresh post-rewrite menace evidence is
-strong enough that the new contract changes what the bounded reads mean. Until
-then, Beta 8.0 remains the frozen baseline and the staged contract remains the
-current tracked research surface.
+`pre-Beta 9.0` can promote only when the completed post-rewrite pulse is strong
+enough, alongside the frozen Beta 8.0 baseline, to change what the evidence
+means. Until then, Beta 8.0 remains frozen and the staged contract plus pulse
+rule remains the current tracked research surface.

@@ -18,11 +18,13 @@ from scorey.eval_db import (
 from scorey.eval_sampling import EvalSampleSummary
 from scorey.main import (
     build_round_scene_lines,
+    build_ruling_line,
     choose_banner_lines,
     main,
     prompt_for_pick_selector,
     read_selector_key,
 )
+from scorey.pipeline import build_local_round_state
 
 
 class _FakeTTYStream:
@@ -60,7 +62,7 @@ class MainCommandTests(TestCase):
             lines,
             (
                 "SCOREY RESEARCH PRE-BETA 9.0",
-                "scorey keeps the score and you've already lost.",
+                "your move.",
                 "github.com/tryskian/scorey",
             ),
         )
@@ -72,9 +74,7 @@ class MainCommandTests(TestCase):
             lines,
             (
                 "scorey research pre-beta 9.0",
-                "scorey keeps the score and",
-                "you've already lost.",
-                "sorry.",
+                "your move.",
                 "github.com/tryskian/scorey",
             ),
         )
@@ -86,9 +86,7 @@ class MainCommandTests(TestCase):
             lines,
             (
                 "scorey research pre-beta 9.0",
-                "scorey keeps the score and",
-                "you've already lost.",
-                "sorry.",
+                "your move.",
             ),
         )
 
@@ -99,17 +97,22 @@ class MainCommandTests(TestCase):
         self.assertIn("\x1b[1m", lines[4])
         self.assertIn("\x1b[38;5;117m", lines[4])
 
-    def test_round_scene_keeps_consistent_height_across_reveal_states(self) -> None:
+    def test_round_scene_holds_until_a_completed_round_arrives(self) -> None:
         hidden_lines = build_round_scene_lines(selected_index=1)
-        loading_lines = build_round_scene_lines(
+        round_state = build_local_round_state("paper")
+        completed_lines = build_round_scene_lines(
             selected_index=1,
-            revealed_scorey_pick="rock",
-            loading_frame="⠋",
+            round_state=round_state,
         )
 
-        self.assertEqual(len(hidden_lines), len(loading_lines))
+        self.assertEqual(len(hidden_lines), len(completed_lines))
         self.assertEqual(hidden_lines[7], "me:")
         self.assertEqual(hidden_lines[8], "  [inactive until you press enter]")
+        self.assertEqual(completed_lines[7], "me:")
+        self.assertEqual(completed_lines[8], f"> {round_state.scorey_pick}")
+        self.assertNotEqual(hidden_lines[8], f"> {round_state.scorey_pick}")
+        self.assertIn(build_ruling_line(round_state), "\n".join(completed_lines))
+        self.assertNotIn("deciding", "\n".join(hidden_lines + completed_lines))
 
     def test_read_selector_key_returns_esc_without_waiting_for_followup_byte(
         self,

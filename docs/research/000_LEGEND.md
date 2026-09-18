@@ -20,7 +20,7 @@
 | `B06` | `060_B-SCOREBOARD_JUDGEMENT.md` | scoreboard judgement boundary | `boundary` | `closed` |
 | `B07` | `070_B-BROADER_PROSE_JUDGEMENT.md` | broader prose judgement boundary | `boundary` | `closed` |
 | `B08` | `080_B-MENACE_JUDGEMENT.md` | menace-judgement boundary | `boundary` | `closed` |
-| `PB09` | `410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md` | positive runtime instruction contract | `boundary` | `staged` |
+| `PB09` | `410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md` | positive runtime instruction contract and `15`-minute pulse | `boundary` | `staged` |
 
 Boundary ladder:
 

@@ -33,6 +33,8 @@ Current stage:
 - `pre-Beta 9.0`
 - `positive runtime instruction contract`
 - staged contract above the frozen `Research Beta 8.0` menace baseline
+- first fresh evidence unit: one `15`-minute live cross-object pulse
+- pulse result: strict `PASS` / `FAIL`; `retain` / `evict` do not apply
 - frozen bounded menace reads:
   - `20410-20417`: `6` pass / `2` fail
   - `20404-20409`: `4` pass / `2` fail
@@ -42,9 +44,9 @@ Current stage:
   - `20367-20381`: `15` pass / `0` fail
   - `20382-20396`: `9` pass / `6` fail
 - staged question:
-  - can Scorey keep the menace lane once the live runtime contract moves fully
-    into `src/scorey/agent.py` and switches from prohibition piles to positive
-    target behaviour?
+  - can Scorey keep cross-object coherence through that pulse once the live
+    runtime contract moves fully into `src/scorey/agent.py` and switches from
+    prohibition piles to positive target behaviour?
 
 Most recently closed beta:
 
@@ -66,8 +68,8 @@ evidence means. When the contract is changing but fresh evidence is not cut
 yet, Scorey stages the next lane as a pre-beta boundary first.
 
 The repo is now staged at `pre-Beta 9.0`, which freezes the `Research Beta 8.0`
-menace baseline and rewrites the live runtime contract before new evidence is
-promoted again.
+menace baseline, rewrites the live runtime contract, and tests that rewrite with
+one `15`-minute live cross-object pulse before new evidence is promoted again.
 
 ## What This Repo Demonstrates
 
