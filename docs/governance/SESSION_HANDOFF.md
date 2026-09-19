@@ -121,15 +121,21 @@ task workflow and its helper team in `D-037`, the charter, and
 `docs/diagrams/COLLABORATION.md`.
 
 - the human lead and primary engineer manage experiments together
-- the primary engineer delegates supporting research, notes, diagrams, and
-  document writing to a continuing task in the Scorey project, using the same
-  local checkout
+- the primary engineer delegates supporting research, transcript capture,
+  notes, diagrams, and document writing to a continuing task in the Scorey
+  project, using the same local checkout
 - assignments carry the relevant conversation, sources, scope, and result;
   the primary engineer reviews and integrates the returned work
 - the documentation task can act as a lead for its own bounded helper team,
   coordinate files, review contributions, and return one coherent result;
   small assignments can be completed directly
 - the collaboration diagram shows both levels of delegation and review
+- transcript capture can progress alongside experiments, preserving supplied
+  or directly inspected exchanges, speakers, order, and source references;
+  exact wording stays separate from summaries, gaps remain explicit, and
+  capture dates stay separate from discourse dates
+- captures belong in the private `docs/peanut/transcripts/` lane; the diagram
+  includes an optional transcript keeper
 - the primary engineer coordinates file ownership and shared-checkout Git
   operations; supporting work remains within the agreed active kernel
 - the workflow is recorded; the companion task has not been created and has

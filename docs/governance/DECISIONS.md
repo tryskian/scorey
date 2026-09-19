@@ -542,14 +542,17 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   - "or if not a worktree, then another project thread :)"
   - subsequent refinement: "maybe that task has its own team of
     subagents!!!!!!!!", confirmed with "yes exactly! let's add this to diagrams"
+  - capture refinement: "it can help us capture transcripts along the way so
+    you don't have to stop and shift focus"
 - Decision:
   - the human lead and primary engineer keep working together on experiments;
     the primary engineer directs the supporting work
   - use a continuing documentation task under the Scorey project, with its
     own conversation and the same local checkout
-  - delegate the research, note-taking, diagrams, and document writing that
-    the primary engineer would otherwise perform; each assignment carries
-    the relevant conversation, sources, scope, and intended result
+  - delegate the research, transcript capture, note-taking, diagrams, and
+    document writing that the primary engineer would otherwise perform;
+    each assignment carries the relevant conversation, sources, scope, and
+    intended result
   - the documentation task acts as a lead: it can complete small assignments
     directly or delegate bounded parts to its own subagents, coordinate their
     file ownership, review their contributions, and return one coherent result
@@ -561,6 +564,13 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
     documentation task edits its assigned files
   - keep supporting tasks within the agreed active kernel, with observations,
     hypotheses, and human decisions distinctly attributed
+  - capture exchanges alongside the experiments from supplied or directly
+    inspected source messages; preserve speakers, order, and source location,
+    distinguish exact wording from summaries, and mark gaps without inventing
+    missing text or dates
+  - keep transcript captures private under `docs/peanut/transcripts/`, with
+    capture dates separate from discourse dates and later corrections
+    preserved in context
 - Why: Documentation can progress alongside the experiments while the human
   lead and primary engineer keep their attention on the findings. Reusing a
   project task retains its working context and gives it direct access to the

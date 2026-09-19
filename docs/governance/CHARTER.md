@@ -101,8 +101,9 @@ Working shape:
 
 Under [D-037](DECISIONS.md#d-037-delegate-documentation-to-a-continuing-project-task),
 the human lead and primary engineer manage experiments together. The primary
-engineer delegates supporting research, note-taking, diagrams, and document
-writing to a continuing Scorey project task using the same local checkout.
+engineer delegates supporting research, transcript capture, note-taking,
+diagrams, and document writing to a continuing Scorey project task using the
+same local checkout.
 These assignments are pieces of the primary engineer's own work, with their
 relevant conversation, sources, scope, and intended result made explicit.
 
@@ -111,6 +112,13 @@ or delegate bounded parts to its own subagents. It coordinates helper file
 ownership, reviews their contributions, and returns one coherent result to the
 primary engineer. The [collaboration diagram](../diagrams/COLLABORATION.md)
 shows both levels of delegation and review.
+
+The documentation team can capture exchanges while the experiment discussion
+continues. Captures preserve source wording, speakers, order, and source
+location, with summaries and interpretation clearly distinguished. Gaps remain
+explicit; capture dates and discourse dates remain distinct, and later
+corrections retain their context. Transcript captures stay private under
+`docs/peanut/transcripts/`.
 
 The primary engineer coordinates file ownership, reviews the returned work,
 and integrates it into the correct documentation surface. Experiment execution
