@@ -472,3 +472,39 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
 - Why: A Mac-wide process is shared across repositories and tasks. Repository
   lifecycle hooks create conflicting ownership and allow one closeout to
   interfere with unrelated work.
+
+## D-035: Both picks come before a brief dots loader and the ruling
+
+- Date: `2026-09-18`
+- Category: `runtime_engineering`
+- Tags: `interaction_contract`, `after_pick_loader`, `decision_provenance`
+- Provenance: `human-led method decision`, recorded from the human lead's
+  direct clarification and subsequent refinement.
+- Source:
+  - initial clarification: "scorey doesn't think. he answers as soon as the
+    user picks, as if they were playing in real life"
+  - refinement: "scorey can think after the picks" and "so we can use a short
+    loader there (the one with the dots haha)"
+  - presentation clarification: "with no weird narratives lol"
+- Decision:
+  - the user confirms a pick, then Scorey's pick appears as the other move in
+    the round
+  - once both picks are visible, allow a brief dots loader while Scorey
+    prepares the ruling
+  - show only the loader during that wait, with no caption or narrated
+    thinking, deciding, or other inner monologue
+  - follow the loader with the ruling and score
+  - route selection and field generation remain internal runtime work under
+    `D-003` and `D-004`
+  - the refinement supersedes this entry's initial requirement for one
+    complete response with no loader
+- Attribution: The human lead now authorizes an after-pick loader. This does
+  not retroactively validate the human-led provenance claimed by the
+  historical May 5 `D-025` at commit `4ad6818`. That historical entry is not
+  the current ledger's `D-025`.
+- Why: The picks establish the round first. A brief loader then gives Scorey
+  a moment to prepare the explanation before the ruling and score appear.
+- Implementation: The live TTY shows both picks, then the existing Braille-dot
+  spinner without a caption, then the ruling and score. The loader stops when
+  generation finishes; no minimum wait is added. This implements the requested
+  presentation without claiming a measured live response duration.

@@ -79,9 +79,15 @@ Ownership boundary:
 2. The user selects one fixed pick.
 3. The runtime validates the selected pick.
 4. The runtime routes to an allowed Scorey pick.
-5. The runtime reveals Scorey's pick and route frame.
-6. The live model generates only the unstable round fields.
-7. The runtime composes the final unfair round.
+5. The runtime displays Scorey's pick alongside the user's pick.
+6. In the live TTY, a dots loader appears after both picks while the model
+   generates only the unstable round fields.
+7. The runtime composes and displays the ruling and score.
+
+`D-035` specifies a brief after-pick dots loader with no caption or narrated
+deliberation. The live TTY uses the existing Braille-dot spinner alone until
+generation completes, then displays the ruling and score without an added
+minimum wait. Live response duration has not been measured for this change.
 
 ## Selector Input Contract
 
