@@ -1,78 +1,60 @@
 <!-- @format -->
 
-# Research Template Folder
+# Research template folder
 
-Local peanut draft for splitting the `scorey` research-doc standard into
-reusable category templates.
+Reusable templates for the tracked `docs/research/` lane. They describe a
+document shape; they are not evidence or an active method by themselves.
 
 ## Kernel
 
 | Rule | Choice |
 | --- | --- |
-| Target folder | `docs/research/` |
-| Entry file | `README.md` |
-| Legend file | `000_LEGEND.md` |
-| Filename shape | `NNN_CODE.md` or `NNN_CODE-QUALIFIER.md` |
-| Boundary code rule | `B` for beta boundaries, `PB` for staged pre-beta boundaries |
-| Dates | inside docs, not filenames |
-| Default style | concise and visual-forward |
-| First content surface | table or diagram |
+| Entry | `docs/research/README.md` |
+| Legend | `000_LEGEND.md` |
+| Filename | `NNN_CODE.md` or `NNN_CODE-QUALIFIER.md` |
+| Boundary filenames | `NNN_B-NAME.md` for beta boundaries; `NNN_PB-NAME.md` for staged pre-beta boundaries |
+| Dates | Inside documents, not filenames |
+| Style | Concise, visual-forward, table or diagram first |
 
-## Template Files
+## Templates
 
-| Template | Use For |
+| Template | Use for |
 | --- | --- |
 | [legend.md](legend.md) | `000_LEGEND.md` |
-| [boundary.md](boundary.md) | beta or method boundary docs |
-| [lane.md](lane.md) | current evidence lane docs |
-| [case.md](case.md) | representative artefact or case docs |
-| [validation.md](validation.md) | run, soak, or gate proof docs |
-| [hypothesis.md](hypothesis.md) | staged hypothesis docs |
-| [backlog.md](backlog.md) | source pool and candidate family docs |
+| [boundary.md](boundary.md) | Beta or method boundaries |
+| [lane.md](lane.md) | Current evidence lanes |
+| [case.md](case.md) | Representative artefacts or cases |
+| [validation.md](validation.md) | Run, soak or gate proof |
+| [hypothesis.md](hypothesis.md) | Staged hypotheses |
+| [backlog.md](backlog.md) | Source pools and candidate families |
 
-## Code Ranges
+## Code ranges
 
 | Range | Role |
 | ---: | --- |
-| `000` | index and legend |
-| `010-099` | closed or active beta boundaries |
-| `100-199` | route and tone lane docs |
-| `200-299` | bounded lens and family lane docs |
-| `300-399` | operator gate and validation lane docs |
-| `400-499` | staged pre-beta boundaries, hypotheses, and backlog |
+| `000` | Index and legend |
+| `010-099` | Closed or active beta boundaries |
+| `100-199` | Route and tone lanes |
+| `200-299` | Bounded lens and family lanes |
+| `300-399` | Operator gates and validation |
+| `400-499` | Staged pre-beta boundaries, hypotheses and backlog |
 
-## Boundary Filename Shape
+Examples: `040_B-ABSTRACT_TONE_MEASUREMENT.md` and
+`410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md`.
 
-Use boundary files like this in `scorey`:
+## Shared metadata and style
 
-- `NNN_B-NAME.md`
-  - active or closed beta boundary
-- `NNN_PB-NAME.md`
-  - staged pre-beta boundary
-
-Examples:
-
-- `040_B-ABSTRACT_TONE_MEASUREMENT.md`
-- `070_B-BROADER_PROSE_JUDGEMENT.md`
-- `410_PB-MENACE_JUDGEMENT.md`
-
-## Shared Metadata
-
-Every category template starts with this table shape.
+Every template begins with:
 
 | Field | Value |
 | --- | --- |
-| Code | short lane code |
-| Category | `legend`, `boundary`, `lane`, `case`, `validation`, `hypothesis`, or `backlog` |
-| Status | current state |
+| Code | Short lane code |
+| Category | `legend`, `boundary`, `lane`, `case`, `validation`, `hypothesis` or `backlog` |
+| Status | Current state |
 | Last evidence | `YYYY-MM-DD` |
-| Owns | one sentence naming the doc's job |
+| Owns | One sentence naming the document's job |
 
-## Style Rules
-
-- Apply the [charter's concision rule](../../governance/CHARTER.md#document-roles).
-- Lead with a table or diagram.
-- Use prose only for interpretation.
-- Keep inventories in tables.
-- Use one or two bullets per prose section.
-- Prefer one compact Mermaid diagram when a contrast or eval flow is the point.
+Apply the [charter's concision rule](../../governance/CHARTER.md#document-roles):
+lead with the useful point, keep inventories in tables, and use one or two
+bullets per prose section. A diagram is useful only when it makes the evidence
+or relationship clearer.
