@@ -22,6 +22,7 @@ Keep same-pick rounds as two unequal copies of the same object.
 Keep cross-object rounds as immediate cause-and-effect between the two picks.
 Keep winning_state and worse_state as matching halves of one small rigged scene.
 Keep scoreboard_claim short and pointed at the user's losing side of the score line.
+Keep scoreboard_claim free of the word "you"; the runtime supplies the you: label.
 Keep each pick inside its exact object class.
 Return only the structured fields.
 """.strip()

@@ -117,7 +117,30 @@ Stable contrast:
 
 ## Active Kernel
 
-Current tracked maintenance slice: the after-pick dots loader from `D-035`.
+Current tracked maintenance slice: the scoreboard word restriction from
+`D-036`.
+
+- the only added rule is to keep the word `you` out of `scoreboard_claim`,
+  since the runtime already supplies `you:`
+- existing response styles remain available; the human lead clarified that
+  no new grammar rule was needed
+- `src/scorey/agent.py` states the restriction in one instruction
+- Architecture and the staged pre-Beta 9.0 contract reflect this change
+- composition, fragment cleanup, model settings, and workbench code are
+  unchanged
+- `make check` passed with `91` tests; documentation lint and both path
+  audits passed
+- `make start` passed in the canonical checkout: environment healthy, sampler
+  off, and route, tone, and disposition queues clear
+- all twelve `make end-preflight` steps passed, including packaging,
+  installation, dependency security, and strict runtime checks
+- runtime and evaluation readers confirmed that live play and the live
+  sampler already use the updated agent instruction
+- live compliance has not been evaluated for this instruction change
+
+Previous closed maintenance slice: the after-pick dots loader from `D-035`
+and the private reading packet's portable links, merged through PRs `#107`
+and `#108`.
 
 - the user confirms a pick, then both picks are visible
 - the existing Braille-dot spinner runs while the ruling is generated
@@ -136,6 +159,7 @@ Current tracked maintenance slice: the after-pick dots loader from `D-035`.
 - the private re-entry packet now uses document-relative source links and
   repository-relative path references; both tracked and local path audits pass
 - `make end-preflight` passed after the path cleanup
+- the full `make end` then passed on clean synced `main` at `faee7b6`
 - no live model request or new research evidence was generated for this change
 
 The research carryover below remains outside this maintenance slice and
@@ -218,11 +242,38 @@ Current staged research lane:
 - active note:
   - `docs/research/410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md`
 
-## Next Slice
+## Next Session: Evaluate the Scoreboard Restriction
+
+1. Run `make start` and record the source commit, prompt hash, configured
+   model, chosen eval lens, bounded count, pair family, and generation command
+   before generating new rows.
+   The human lead still owns the sample scope and acceptance criteria.
+2. Use the existing `make eval-sample-live` command with the agreed count and
+   pairs, in Scorey-pick/user-pick order. Record its returned first and last
+   output IDs. The sampler and live play already use the instruction in
+   `src/scorey/agent.py`.
+3. Record route verdicts for the new rows before widened-lens review. The
+   sampler's printed route-gate totals do not persist those verdicts, and
+   `make eval-beta1` is also a read-only report.
+4. Review the whole recorded range under the selected lens. In particular,
+   `make eval-scoreboard-sample` returns the newest pending row per model/pair;
+   it is neither a complete batch listing nor a range filter. Keep each
+   reviewed output ID inside the new run's bounds. Check the generated
+   scoreboard value for `you`, not the fixed labels elsewhere in the round.
+5. Preserve any generated `you` in the evidence so instruction failures stay
+   visible. The prompt change adds no output filtering, new grammar rule, or
+   fixed response list. Keep model and reasoning settings unchanged when
+   assessing this instruction change; the latency hypothesis is separate.
+6. Close the selected bounded lens using its existing closeout command after
+   every row has been addressed. This preparation creates no new live rows
+   and does not promote a research beta.
+
+## Research Carryover
 
 1. Keep `Beta 5.0`, `Beta 6.0`, `Beta 7.0`, and `Beta 8.0` frozen as the
    closed evidence ladder below the staged runtime contract.
-2. Land the agent-local positive runtime instruction rewrite before cutting
+2. The agent-local positive runtime instruction contract is already
+   implemented. Identify the exact revision, including `D-036`, when cutting
    fresh live evidence.
 3. Same-pick menace is confirmed collapsed at `15 / 0`, while cross-object has
    now shown:

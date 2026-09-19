@@ -73,6 +73,10 @@ Ownership boundary:
 | `scoreboard_claim` | model | provide the small unfair score-side claim |
 | final round composition | runtime | output labels, prose shape, and close |
 
+The runtime supplies the scoreboard's `you:` label. `D-036` adds a live
+instruction to keep the word `you` out of `scoreboard_claim`, preserving the
+existing response styles. The composer and fragment cleanup are unchanged.
+
 ## Runtime Flow
 
 1. Bare `scorey` enters the local CLI loop in `main.py`.
