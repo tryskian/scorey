@@ -106,6 +106,12 @@ writing to a continuing Scorey project task using the same local checkout.
 These assignments are pieces of the primary engineer's own work, with their
 relevant conversation, sources, scope, and intended result made explicit.
 
+The documentation task acts as a lead. It can handle small assignments directly
+or delegate bounded parts to its own subagents. It coordinates helper file
+ownership, reviews their contributions, and returns one coherent result to the
+primary engineer. The [collaboration diagram](../diagrams/COLLABORATION.md)
+shows both levels of delegation and review.
+
 The primary engineer coordinates file ownership, reviews the returned work,
 and integrates it into the correct documentation surface. Experiment execution
 and shared-checkout Git operations remain with the primary engineer. The

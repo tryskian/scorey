@@ -540,6 +540,8 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
     helpers"
   - "you send messages to another thread. maybe a worktree?"
   - "or if not a worktree, then another project thread :)"
+  - subsequent refinement: "maybe that task has its own team of
+    subagents!!!!!!!!", confirmed with "yes exactly! let's add this to diagrams"
 - Decision:
   - the human lead and primary engineer keep working together on experiments;
     the primary engineer directs the supporting work
@@ -548,6 +550,9 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   - delegate the research, note-taking, diagrams, and document writing that
     the primary engineer would otherwise perform; each assignment carries
     the relevant conversation, sources, scope, and intended result
+  - the documentation task acts as a lead: it can complete small assignments
+    directly or delegate bounded parts to its own subagents, coordinate their
+    file ownership, review their contributions, and return one coherent result
   - the primary engineer sends assignments and follow-ups, reviews returned
     work against the evidence and conversation, and integrates it into the
     appropriate documentation surface
@@ -560,6 +565,8 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   lead and primary engineer keep their attention on the findings. Reusing a
   project task retains its working context and gives it direct access to the
   canonical notes and run receipts.
+- Diagram: [Experiment and documentation collaboration](../diagrams/COLLABORATION.md)
+  shows the documentation lead, its optional helper team, and both review steps.
 - Boundary: Human ownership of scope, acceptance criteria, meaning-level
   trade-offs, and go/no-go decisions is unchanged. Private notes stay under
   `docs/peanut/`, and canonical eval evidence stays under `.local/`. Task
