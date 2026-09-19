@@ -116,32 +116,18 @@ Stable contrast:
 
 ## Active Kernel
 
-Latest tracked maintenance slice: document the continuing documentation
-task workflow and its helper team in `D-037`, the charter, and
-`docs/diagrams/COLLABORATION.md`.
+Latest maintenance: `D-038` makes concision a rule for all documentation,
+including private notes and helper reports. The charter owns the rule; research
+templates link to it. The private documentation-role proposal is shortened.
 
-- the human lead and primary engineer manage experiments together
-- the primary engineer delegates supporting research, transcript capture,
-  notes, diagrams, and document writing to a continuing task in the Scorey
-  project, using the same local checkout
-- assignments carry the relevant conversation, sources, scope, and result;
-  the primary engineer reviews and integrates the returned work
-- the documentation task can act as a lead for its own bounded helper team,
-  coordinate files, review contributions, and return one coherent result;
-  small assignments can be completed directly
-- the collaboration diagram shows both levels of delegation and review
-- transcript capture can progress alongside experiments, preserving supplied
-  or directly inspected exchanges, speakers, order, and source references;
-  exact wording stays separate from summaries, gaps remain explicit, and
-  capture dates stay separate from discourse dates
-- captures belong in the private `docs/peanut/transcripts/` lane; the diagram
-  includes an optional transcript keeper
-- the primary engineer coordinates file ownership and shared-checkout Git
-  operations; supporting work remains within the agreed active kernel
-- the workflow is recorded; the companion task has not been created and has
-  no task identifier yet
-- all twelve `make end-preflight` steps passed, including documentation and
-  path checks, all `91` tests, packaging, security, and strict runtime closure
+The continuing documentation workflow is recorded in `D-037` and
+[the collaboration diagram](../diagrams/COLLABORATION.md). Its proposed roles
+and reader evidence are in
+`docs/peanut/research/2026-09-19-documentation-roles/README.md`.
+The companion task has not been created and has no task identifier yet.
+
+Validation: all twelve `make end-preflight` steps passed, including all `91`
+tests, packaging, security and runtime closure.
 
 September 19 exploratory evidence is retained in
 `docs/peanut/research/2026-09-19-model-experiments/README.md`, with three source

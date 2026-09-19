@@ -582,3 +582,16 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   `docs/peanut/`, and canonical eval evidence stays under `.local/`. Task
   creation and its identifier belong in the session handoff; this decision
   records the workflow rather than certifying that a companion task exists.
+
+## D-038: Keep all documentation concise
+
+- Date: `2026-09-19`
+- Category: `workflow_environment`
+- Tags: `documentation`, `concision`
+- Provenance: `human-led method decision`
+- Source: "all documentation needs to be concise" because "no one reads
+  long-winded documents. not even botbots".
+- Decision: Apply the charter's concise writing rule to all documentation,
+  including private notes and helper reports. Keep the useful point, essential
+  conditions, attribution, and evidence links; remove repetition.
+- Why: Documentation must be readable by people and agents.
