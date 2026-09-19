@@ -97,6 +97,22 @@ Working shape:
 - protected-main flow for tracked merges
 - clean synced `main` as the tracked stop state
 
+### Documentation Delegation
+
+Under [D-037](DECISIONS.md#d-037-delegate-documentation-to-a-continuing-project-task),
+the human lead and primary engineer manage experiments together. The primary
+engineer delegates supporting research, note-taking, diagrams, and document
+writing to a continuing Scorey project task using the same local checkout.
+These assignments are pieces of the primary engineer's own work, with their
+relevant conversation, sources, scope, and intended result made explicit.
+
+The primary engineer coordinates file ownership, reviews the returned work,
+and integrates it into the correct documentation surface. Experiment execution
+and shared-checkout Git operations remain with the primary engineer. The
+documentation task edits assigned files within the same active kernel.
+Observations, hypotheses, and human decisions retain distinct attribution;
+the human lead's decision ownership above is unchanged.
+
 ## Repo Truth Boundaries
 
 - Tracked repo docs and live repo state outrank memory when they disagree.
