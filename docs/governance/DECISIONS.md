@@ -527,3 +527,41 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
 - Implementation: The instruction lives in `src/scorey/agent.py`. Composition
   and fragment cleanup are unchanged; this is a generation instruction, not
   a deterministic word-removal rule.
+
+## D-037: Delegate documentation to a continuing project task
+
+- Date: `2026-09-19`
+- Category: `workflow_environment`
+- Tags: `delegation`, `documentation`, `shared_checkout`, `decision_provenance`
+- Provenance: `human-led method decision`, with the agreed task and file
+  coordination formalized by the engineer.
+- Source:
+  - "the mini beables will just be your internal prompts, just assigned to
+    helpers"
+  - "you send messages to another thread. maybe a worktree?"
+  - "or if not a worktree, then another project thread :)"
+- Decision:
+  - the human lead and primary engineer keep working together on experiments;
+    the primary engineer directs the supporting work
+  - use a continuing documentation task under the Scorey project, with its
+    own conversation and the same local checkout
+  - delegate the research, note-taking, diagrams, and document writing that
+    the primary engineer would otherwise perform; each assignment carries
+    the relevant conversation, sources, scope, and intended result
+  - the primary engineer sends assignments and follow-ups, reviews returned
+    work against the evidence and conversation, and integrates it into the
+    appropriate documentation surface
+  - coordinate file ownership before concurrent edits; the primary engineer
+    owns experiment execution and shared-checkout Git operations, while the
+    documentation task edits its assigned files
+  - keep supporting tasks within the agreed active kernel, with observations,
+    hypotheses, and human decisions distinctly attributed
+- Why: Documentation can progress alongside the experiments while the human
+  lead and primary engineer keep their attention on the findings. Reusing a
+  project task retains its working context and gives it direct access to the
+  canonical notes and run receipts.
+- Boundary: Human ownership of scope, acceptance criteria, meaning-level
+  trade-offs, and go/no-go decisions is unchanged. Private notes stay under
+  `docs/peanut/`, and canonical eval evidence stays under `.local/`. Task
+  creation and its identifier belong in the session handoff; this decision
+  records the workflow rather than certifying that a companion task exists.

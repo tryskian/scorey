@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-09-18
+Last updated: 2026-09-19
 
 ## Start Here
 
@@ -58,8 +58,7 @@ Stable repo shape:
   - `evict`
 - current GitHub dependency queue:
   - `#94`: grouped GitHub Actions updates
-  - `#97`: grouped Python dependency updates
-  - `#98`: CLI arrow-navigation repair
+  - `#100`: grouped Python dependency updates
 
 Current runtime truth:
 
@@ -69,13 +68,13 @@ Current runtime truth:
 - `tone_pending=0`
 - `disposition_pending=0`
 - live totals:
-  - `2495` route pass
+  - `2520` route pass
   - `0` fail
   - `0` pending
 - tone totals:
   - `454` pass
   - `627` fail
-  - `1414` archived
+  - `1439` archived
   - `0` pending
 - disposition totals:
   - `72` retain
@@ -117,8 +116,35 @@ Stable contrast:
 
 ## Active Kernel
 
-Current tracked maintenance slice: the scoreboard word restriction from
-`D-036`.
+Latest tracked maintenance slice: document the continuing documentation
+task workflow in `D-037` and the charter.
+
+- the human lead and primary engineer manage experiments together
+- the primary engineer delegates supporting research, notes, diagrams, and
+  document writing to a continuing task in the Scorey project, using the same
+  local checkout
+- assignments carry the relevant conversation, sources, scope, and result;
+  the primary engineer reviews and integrates the returned work
+- the primary engineer coordinates file ownership and shared-checkout Git
+  operations; supporting work remains within the agreed active kernel
+- the workflow is recorded; the companion task has not been created and has
+  no task identifier yet
+- all twelve `make end-preflight` steps passed, including documentation and
+  path checks, all `91` tests, packaging, security, and strict runtime closure
+
+September 19 exploratory evidence is retained in
+`docs/peanut/research/2026-09-19-model-experiments/README.md`, with three source
+references on settings, measurement, and usage/batching. Five runs produced
+`20418-20442`: mini at `none` and `medium`, Luna at `medium` and `low`, then one
+Luna round at `none`. The 25 rows have 25 route passes and 24 scoreboard passes
+with one numeric-contradiction failure. All 25 composed scoreboard claims
+exclude the word `you`; broader response observations remain separate from
+the stored lens verdicts. The ranges are closed, with untouched tone archived.
+These runs used process-local overrides; ordinary configuration still resolves
+to `gpt-5-nano`. No lasting model choice or beta promotion has been made.
+
+Previous closed maintenance slice: the scoreboard word restriction from
+`D-036`, merged through PR `#109`.
 
 - the only added rule is to keep the word `you` out of `scoreboard_claim`,
   since the runtime already supplies `you:`
@@ -136,7 +162,9 @@ Current tracked maintenance slice: the scoreboard word restriction from
   installation, dependency security, and strict runtime checks
 - runtime and evaluation readers confirmed that live play and the live
   sampler already use the updated agent instruction
-- live compliance has not been evaluated for this instruction change
+- the subsequent September 19 exploratory rows exercise this instruction;
+  their bounded findings are recorded above, without claiming general
+  compliance or a controlled comparison with the earlier prompt
 
 Previous closed maintenance slice: the after-pick dots loader from `D-035`
 and the private reading packet's portable links, merged through PRs `#107`
@@ -219,16 +247,16 @@ What is live now:
   - `20352-20366`: `11 / 4`
   - `20367-20381`: `15 / 0`
 
-Private staging surface:
+Research templates and private staging surface:
 
-- `docs/peanut/research/templates/README.md`
-- `docs/peanut/research/templates/legend.md`
-- `docs/peanut/research/templates/boundary.md`
-- `docs/peanut/research/templates/lane.md`
-- `docs/peanut/research/templates/case.md`
-- `docs/peanut/research/templates/validation.md`
-- `docs/peanut/research/templates/hypothesis.md`
-- `docs/peanut/research/templates/backlog.md`
+- `docs/runtime/templates/README.md`
+- `docs/runtime/templates/legend.md`
+- `docs/runtime/templates/boundary.md`
+- `docs/runtime/templates/lane.md`
+- `docs/runtime/templates/case.md`
+- `docs/runtime/templates/validation.md`
+- `docs/runtime/templates/hypothesis.md`
+- `docs/runtime/templates/backlog.md`
 - `docs/peanut/research/chart-language.md`
 
 Current staged research lane:
@@ -242,7 +270,23 @@ Current staged research lane:
 - active note:
   - `docs/research/410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md`
 
-## Next Session: Evaluate the Scoreboard Restriction
+## Next Session
+
+Start with the September 19 experiment index above and confirm live state with
+`make start`. The documentation workflow is agreed; create the companion
+project task when asked and record its identifier here. Give it the existing
+notes and documentation standards as context, then send bounded assignments
+while the human lead and primary engineer continue the experiments.
+
+The next experiment and any lasting model or effort choice still need to be
+selected with the human lead. Preserve the five exploratory run receipts and
+keep the frozen beta baselines separate.
+
+### Procedure for a Future Scoreboard Restriction Evaluation
+
+The procedure below was prepared before the September 19 trials. It remains
+available for a separately selected instruction comparison; it does not
+describe those model/effort experiments as a controlled prompt comparison.
 
 1. Run `make start` and record the source commit, prompt hash, configured
    model, chosen eval lens, bounded count, pair family, and generation command
@@ -291,7 +335,7 @@ Current staged research lane:
 
 - low runtime risk: the queue is fully closed and there is no active sampler
 - dependency queue is separate from this kernel: open Dependabot PRs `#94` and
-  `#97` remain untouched
+  `#100` remain untouched
 
 ## Guardrails
 
