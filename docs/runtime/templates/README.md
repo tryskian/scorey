@@ -70,6 +70,7 @@ Every category template starts with this table shape.
 
 ## Style Rules
 
+- Apply the [charter's concision rule](../../governance/CHARTER.md#document-roles).
 - Lead with a table or diagram.
 - Use prose only for interpretation.
 - Keep inventories in tables.

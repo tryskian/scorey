@@ -136,6 +136,11 @@ the human lead's decision ownership above is unchanged.
 
 ## Document Roles
 
+All documentation stays concise, including private notes and helper reports
+([D-038](DECISIONS.md#d-038-keep-all-documentation-concise)). Lead with the useful
+finding, decision, or action. State each point once and link supporting evidence.
+Keep the conditions and attribution needed to understand it accurately.
+
 | Surface | Owns |
 | --- | --- |
 | `CHARTER` | durable rules and collaboration model |
