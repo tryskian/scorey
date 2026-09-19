@@ -82,7 +82,6 @@ APP_ROUND_PROMPT = "let's play!"
 APP_PICK_PROMPT = "you:"
 APP_PICK_PROMPT_FALLBACK = "pick your loser:"
 APP_CONTINUE_PROMPT = "another round [y/n]?"
-APP_LOADING_TEXT = "scorey is deciding why you lost"
 APP_ME_PLACEHOLDER = "[inactive until you press enter]"
 APP_PLAY_HINT = "press enter to play or esc to exit"
 APP_REPLAY_HINT = "press enter to play again or esc to exit"
@@ -635,7 +634,7 @@ def build_round_scene_lines(
     if round_state is not None:
         lines.append(f"> {build_ruling_line(round_state)}")
     elif loading_frame is not None:
-        lines.append(f"> {loading_frame} {APP_LOADING_TEXT}")
+        lines.append(f"> {loading_frame}")
     else:
         lines.append("")
 

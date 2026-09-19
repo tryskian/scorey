@@ -117,7 +117,31 @@ Stable contrast:
 
 ## Active Kernel
 
-Current tracked maintenance slice:
+Current tracked maintenance slice: the after-pick dots loader from `D-035`.
+
+- the user confirms a pick, then both picks are visible
+- the existing Braille-dot spinner runs while the ruling is generated
+- the loader has no caption or narrated deliberation
+- the ruling and score appear when generation finishes, without an added
+  minimum wait
+- the decision records the human lead's refinement and preserves the
+  correction to the historical attribution
+- a controlled rendering smoke verified both picks, the dots-only wait,
+  the completed ruling and score, and stable scene height
+- `make check` passed with `91` tests
+- documentation lint, shell contracts, tracked-path checks, and dependency
+  security checks passed
+- packaging, editable installation/import, and the strict runtime-state
+  check passed; no sampler or open live review slice was present
+- `make end-preflight` stops at the local path audit because the ignored
+  private re-entry packet contains absolute source links; the tracked-path
+  check passes, and full lifecycle closure is not claimed
+- no live model request or new research evidence was generated for this change
+
+The research carryover below remains outside this maintenance slice and
+requires fresh alignment before a new research run.
+
+Previous closed maintenance slice, retained as historical context:
 
 - live CLI arrow navigation is restored without changing its intentional timing
 - the repair lands through PR `#98`
