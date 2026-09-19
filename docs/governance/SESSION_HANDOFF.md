@@ -133,9 +133,9 @@ Current tracked maintenance slice: the after-pick dots loader from `D-035`.
   security checks passed
 - packaging, editable installation/import, and the strict runtime-state
   check passed; no sampler or open live review slice was present
-- `make end-preflight` stops at the local path audit because the ignored
-  private re-entry packet contains absolute source links; the tracked-path
-  check passes, and full lifecycle closure is not claimed
+- the private re-entry packet now uses document-relative source links and
+  repository-relative path references; both tracked and local path audits pass
+- `make end-preflight` passed after the path cleanup
 - no live model request or new research evidence was generated for this change
 
 The research carryover below remains outside this maintenance slice and
