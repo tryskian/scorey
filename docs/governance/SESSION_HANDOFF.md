@@ -116,18 +116,22 @@ Stable contrast:
 
 ## Active Kernel
 
-Latest maintenance: `D-038` makes concision a rule for all documentation,
-including private notes and helper reports. The charter owns the rule; research
-templates link to it. The private documentation-role proposal is shortened.
+Completed documentation trial: shortened the research index and recent reports
+under `D-038`, refreshed templates, and clarified Beta 2's long-run versus
+combined-batch counts from the original source history.
 
-The continuing documentation workflow is recorded in `D-037` and
-[the collaboration diagram](../diagrams/COLLABORATION.md). Its proposed roles
-and reader evidence are in
-`docs/peanut/research/2026-09-19-documentation-roles/README.md`.
-The companion task has not been created and has no task identifier yet.
+Companion task: **Scorey documentation**,
+`01a0bb5c-6c52-7301-99e7-82d3364f6fd5`, using the same local checkout.
+The trial exercised task handoff, shared files, transcript capture and an
+internal evidence reader. Primary review corrected scope, units and attribution.
+The companion retains documentation context; the primary owns integration and Git.
+Private trial receipts: `docs/peanut/research/2026-09-19-documentation-workflow/`.
 
-Validation: all twelve `make end-preflight` steps passed, including all `91`
-tests, packaging, security and runtime closure.
+Validation: all twelve `make end-preflight` steps passed, including `91` tests.
+Original run files and canonical DB bytes were unchanged before lifecycle checks.
+
+Previous maintenance: `D-038` merged in PR `#113`; all `91` tests and the full
+`make end` ritual passed on clean synced `main`.
 
 September 19 exploratory evidence is retained in
 `docs/peanut/research/2026-09-19-model-experiments/README.md`, with three source
