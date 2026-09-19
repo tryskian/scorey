@@ -110,8 +110,8 @@ Core operator commands:
 make start
 make end-preflight
 make end-git-check
-make caffeinate-status
-make decaffeinate
+make session-status
+make security-checks
 make check
 ```
 

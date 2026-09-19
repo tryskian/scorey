@@ -166,6 +166,10 @@ The closeout target for the repo is still:
 - clean synced `main`
 - runtime back at `0` pending
 
+Mac-wide keep-awake state sits outside this architecture. The external Coffee
+Codex plugin owns the shared session; Scorey's lifecycle commands neither
+inspect nor mutate it.
+
 ## Placement Rules
 
 | Surface | Home |

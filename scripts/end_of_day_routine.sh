@@ -3,10 +3,10 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
-TOTAL_STEPS=14
+TOTAL_STEPS=13
 
 if [ "${END_SKIP_GIT_CHECK:-}" = "1" ]; then
-	TOTAL_STEPS=13
+	TOTAL_STEPS=12
 fi
 
 echo "[end] starting end-of-day routine in: $ROOT_DIR"
@@ -43,16 +43,13 @@ make --no-print-directory end-runtime-check
 echo "[end] 11/$TOTAL_STEPS security-checks"
 make --no-print-directory security-checks
 
-echo "[end] 12/$TOTAL_STEPS decaffeinate"
-make --no-print-directory decaffeinate || true
-
-echo "[end] 13/$TOTAL_STEPS decaffeinate-status"
-make --no-print-directory decaffeinate-status || true
+echo "[end] 12/$TOTAL_STEPS session snapshot"
+make --no-print-directory session-status
 
 if [ "${END_SKIP_GIT_CHECK:-}" = "1" ]; then
 	echo "[end] git closeout skipped (preflight only)"
 else
-	echo "[end] 14/$TOTAL_STEPS git closeout"
+	echo "[end] 13/$TOTAL_STEPS git closeout"
 	bash ./scripts/check_end_git_clean.sh
 fi
 
