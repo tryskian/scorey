@@ -122,7 +122,8 @@ make check
 - [docs/governance/DECISIONS.md](./docs/governance/DECISIONS.md)
   - durable runtime and eval decisions
 - [docs/diagrams/COLLABORATION.md](./docs/diagrams/COLLABORATION.md)
-  - experiment collaboration, documentation lead, and helper team
+  - experiment collaboration, transcript capture, documentation lead, and
+    helper team
 
 ---
 
