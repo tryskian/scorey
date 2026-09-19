@@ -121,6 +121,8 @@ make check
   - beta map and research reading path
 - [docs/governance/DECISIONS.md](./docs/governance/DECISIONS.md)
   - durable runtime and eval decisions
+- [docs/diagrams/COLLABORATION.md](./docs/diagrams/COLLABORATION.md)
+  - experiment collaboration, documentation lead, and helper team
 
 ---
 

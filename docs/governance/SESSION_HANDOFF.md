@@ -117,7 +117,8 @@ Stable contrast:
 ## Active Kernel
 
 Latest tracked maintenance slice: document the continuing documentation
-task workflow in `D-037` and the charter.
+task workflow and its helper team in `D-037`, the charter, and
+`docs/diagrams/COLLABORATION.md`.
 
 - the human lead and primary engineer manage experiments together
 - the primary engineer delegates supporting research, notes, diagrams, and
@@ -125,6 +126,10 @@ task workflow in `D-037` and the charter.
   local checkout
 - assignments carry the relevant conversation, sources, scope, and result;
   the primary engineer reviews and integrates the returned work
+- the documentation task can act as a lead for its own bounded helper team,
+  coordinate files, review contributions, and return one coherent result;
+  small assignments can be completed directly
+- the collaboration diagram shows both levels of delegation and review
 - the primary engineer coordinates file ownership and shared-checkout Git
   operations; supporting work remains within the agreed active kernel
 - the workflow is recorded; the companion task has not been created and has
@@ -275,8 +280,9 @@ Current staged research lane:
 Start with the September 19 experiment index above and confirm live state with
 `make start`. The documentation workflow is agreed; create the companion
 project task when asked and record its identifier here. Give it the existing
-notes and documentation standards as context, then send bounded assignments
-while the human lead and primary engineer continue the experiments.
+notes, documentation standards, and collaboration diagram as context, then
+send bounded assignments while the human lead and primary engineer continue
+the experiments.
 
 The next experiment and any lasting model or effort choice still need to be
 selected with the human lead. Preserve the five exploratory run receipts and
