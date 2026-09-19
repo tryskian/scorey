@@ -508,3 +508,22 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   spinner without a caption, then the ruling and score. The loader stops when
   generation finishes; no minimum wait is added. This implements the requested
   presentation without claiming a measured live response duration.
+
+## D-036: Reserve the word you for the scoreboard label
+
+- Date: `2026-09-18`
+- Category: `runtime_engineering`
+- Tags: `scoreboard_claim`, `field_contract`, `positive_instructions`
+- Provenance: `human-led method decision`. The human lead flagged
+  `you: you lose` and clarified that the needed change is restricting the
+  word `you`, while keeping the existing response styles.
+- Decision: Keep the word `you` out of `scoreboard_claim`. The runtime already
+  supplies the `you:` label under `D-004`. This restriction applies only to
+  the scoreboard field and adds no new grammatical or response-style rule.
+- Live instruction: 'Keep scoreboard_claim free of the word "you"; the runtime
+  supplies the you: label.'
+- Why: Prevent the generated field from repeating the user reference already
+  present in the score line.
+- Implementation: The instruction lives in `src/scorey/agent.py`. Composition
+  and fragment cleanup are unchanged; this is a generation instruction, not
+  a deterministic word-removal rule.

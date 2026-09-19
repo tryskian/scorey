@@ -51,8 +51,22 @@ flowchart TD
   - pick-specific playful menace
   - same-pick rounds as two unequal copies of one object
   - `scoreboard_claim` on the user's losing side of the score line
+  - `scoreboard_claim` excludes the word `you`; the runtime supplies `you:`
 - new live evidence belongs above this contract rewrite and should not be
   appended to the closed Beta 8.0 baseline
+
+### Scoreboard Word Restriction
+
+[D-036](../governance/DECISIONS.md#d-036-reserve-the-word-you-for-the-scoreboard-label)
+records the human lead's September 18 clarification. The only added
+restriction is the word `you` in `scoreboard_claim`; existing response styles
+remain available. The live instruction in `src/scorey/agent.py` reads:
+
+> Keep scoreboard_claim free of the word "you"; the runtime supplies the you: label.
+
+This is an instruction change, not an output filter or a measured compliance
+result. The contract remains `staged`; its last-evidence date and the closed
+Beta 8.0 baseline are unchanged.
 
 ## Evidence Stack
 
