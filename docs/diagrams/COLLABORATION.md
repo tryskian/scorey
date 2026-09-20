@@ -45,7 +45,7 @@ flowchart TD
 
 | Role | Owns |
 | --- | --- |
-| Human lead | Questions, scope, acceptance criteria, meaning-level judgement, and go/no-go decisions |
+| Human lead | Questions, scope, acceptance criteria, current research verdicts, meaning-level judgement, and go/no-go decisions |
 | Primary engineer | Experiment execution, assignments to the documentation lead, final review and integration, and shared-checkout Git operations |
 | Documentation lead | Breaking down the assigned work, choosing useful helpers, coordinating their files, reviewing their contributions, and returning a coherent result |
 | Helpers | Bounded transcript capture, source reading, writing, or diagram work with the context and sources supplied by the documentation lead |

@@ -72,3 +72,10 @@ no_implicit_optional = true
 [[tool.mypy.overrides]]
 module = ["agents", "dotenv"]
 ignore_missing_imports = true
+
+# OpenAI's optional NumPy proxy can expose notebook-installed stubs that use
+# Python 3.12 syntax. Scorey does not use NumPy; keep our Python 3.10 checks.
+[[tool.mypy.overrides]]
+module = ["numpy.*"]
+follow_imports = "skip"
+follow_imports_for_stubs = true

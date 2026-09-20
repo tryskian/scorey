@@ -63,18 +63,20 @@ Stable repo shape:
 Current runtime truth:
 
 - `live_batch: closed`
-- `batch_meta: missing`
+- sampler: off
+- active slice: none
+- canonical database: present; SQLite `quick_check` passed
 - `route_pending=0`
 - `tone_pending=0`
 - `disposition_pending=0`
 - live totals:
-  - `2520` route pass
+  - `2532` route pass
   - `0` fail
   - `0` pending
 - tone totals:
   - `454` pass
   - `627` fail
-  - `1439` archived
+  - `1451` archived
   - `0` pending
 - disposition totals:
   - `72` retain
@@ -118,16 +120,20 @@ Stable contrast:
 
 Completed documentation trial: shortened the research index and recent reports
 under `D-038`, refreshed templates, and clarified Beta 2's long-run versus
-combined-batch counts from the original source history.
+combined-batch counts from the original source history. That trial is complete;
+the established D-037 documentation workflow continues alongside the research.
 
 Companion task: **Scorey documentation**,
 `01a0bb5c-6c52-7301-99e7-82d3364f6fd5`, using the same local checkout.
 The trial exercised task handoff, shared files, transcript capture and an
 internal evidence reader. Primary review corrected scope, units and attribution.
 The companion retains documentation context; the primary owns integration and Git.
+The human lead supplies current research verdicts; the documentation team
+records exact verdicts and reasons with output IDs and provenance.
 Private trial receipts: `docs/peanut/research/2026-09-19-documentation-workflow/`.
 
-Validation: all twelve `make end-preflight` steps passed, including `91` tests.
+Documentation-trial validation: all twelve `make end-preflight` steps passed,
+including `91` tests.
 Original run files and canonical DB bytes were unchanged before lifecycle checks.
 
 Previous maintenance: `D-038` merged in PR `#113`; all `91` tests and the full
@@ -137,12 +143,36 @@ September 19 exploratory evidence is retained in
 `docs/peanut/research/2026-09-19-model-experiments/README.md`, with three source
 references on settings, measurement, and usage/batching. Five runs produced
 `20418-20442`: mini at `none` and `medium`, Luna at `medium` and `low`, then one
-Luna round at `none`. The 25 rows have 25 route passes and 24 scoreboard passes
+Luna round at `none`. The 25-row pass/fail totals are historical Codex engineer
+judgments only, not human acceptance: 25 route passes and 24 scoreboard passes
 with one numeric-contradiction failure. All 25 composed scoreboard claims
-exclude the word `you`; broader response observations remain separate from
-the stored lens verdicts. The ranges are closed, with untouched tone archived.
+exclude `you`; broader observations remain separately attributed. The ranges
+are closed, with untouched tone archived.
 These runs used process-local overrides; ordinary configuration still resolves
 to `gpt-5-nano`. No lasting model choice or beta promotion has been made.
+
+Previous bounded continuation: Luna `none`, outputs `20443-20448`, is
+documented in `docs/peanut/research/2026-09-19-luna-none-six/`. Its saved
+engineer labels remain historical, and its human review is unresolved and
+disputed; those rows are not accepted evidence.
+
+Current private continuation: Luna `none`, outputs `20449-20454`, is documented
+in `docs/peanut/research/2026-09-19-luna-none-workflow-six/`. The human CSV and
+notes sidecar contain the exact full-round verdicts: one `PASS` and five
+`FAIL`, with exact notes. The existing menace lens now persists those human
+verdicts with source and hash attribution; separate mechanical route-floor
+passes are persisted separately. Range closeout is `6` total, `1` pass, `5`
+fail, `0` pending, `0` archived, with tone, scoreboard, and prose each settled
+for all six rows. The CSV and sidecar are unchanged, and before/after comparison
+found no other judgment or generated-field changes. The reusable local review
+workbench is complete; no new evaluation generation, model choice, or runtime
+configuration change belongs to this closeout.
+
+Workbench validation: all twelve `make end-preflight` steps passed, including
+`101` tests. The notebook ran without changing the database, CSV, or sidecar.
+A narrow mypy override excludes optional NumPy stubs using newer Python syntax;
+Scorey retains its Python 3.10 type-checking target. Final closure uses the
+protected PR flow and full `make end` on clean synced `main`.
 
 Previous closed maintenance slice: the scoreboard word restriction from
 `D-036`, merged through PR `#109`.
@@ -191,8 +221,8 @@ and `#108`.
 - the full `make end` then passed on clean synced `main` at `faee7b6`
 - no live model request or new research evidence was generated for this change
 
-The research carryover below remains outside this maintenance slice and
-requires fresh alignment before a new research run.
+The research carryover below remains outside this maintenance slice. The
+continuing research is already underway under the established workflow.
 
 Previous closed maintenance slice, retained as historical context:
 
@@ -274,11 +304,11 @@ Current staged research lane:
 ## Next Session
 
 Start with the September 19 experiment index above and confirm live state with
-`make start`. The documentation workflow is agreed; create the companion
-project task when asked and record its identifier here. Give it the existing
-notes, documentation standards, and collaboration diagram as context, then
-send bounded assignments while the human lead and primary engineer continue
-the experiments.
+`make start`. Use the existing companion task and established documentation
+workflow: give it the existing notes, documentation standards, and
+collaboration diagram as context, then send bounded assignments while the
+human lead supplies research verdicts and the primary engineer coordinates
+integration.
 
 The next experiment and any lasting model or effort choice still need to be
 selected with the human lead. Preserve the five exploratory run receipts and

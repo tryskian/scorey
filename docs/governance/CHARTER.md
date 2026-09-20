@@ -107,6 +107,10 @@ same local checkout.
 These assignments are pieces of the primary engineer's own work, with their
 relevant conversation, sources, scope, and intended result made explicit.
 
+This workflow is established and the research is already underway. The human
+lead currently supplies the research verdicts; the documentation team records
+the exact verdicts and reasons with output IDs and source provenance.
+
 The documentation task acts as a lead. It can handle small assignments directly
 or delegate bounded parts to its own subagents. It coordinates helper file
 ownership, reviews their contributions, and returns one coherent result to the
@@ -124,8 +128,8 @@ The primary engineer coordinates file ownership, reviews the returned work,
 and integrates it into the correct documentation surface. Experiment execution
 and shared-checkout Git operations remain with the primary engineer. The
 documentation task edits assigned files within the same active kernel.
-Observations, hypotheses, and human decisions retain distinct attribution;
-the human lead's decision ownership above is unchanged.
+Observations, hypotheses, human decisions, and engineer interpretations retain
+distinct attribution; human research-verdict ownership is current.
 
 ## Repo Truth Boundaries
 
