@@ -544,9 +544,17 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
     subagents!!!!!!!!", confirmed with "yes exactly! let's add this to diagrams"
   - capture refinement: "it can help us capture transcripts along the way so
     you don't have to stop and shift focus"
+- Current clarification: "i have to give the verdicts until you can manage what
+  we're looking for" and "stay in ur lane >:{ haha the research is already
+  underway".
 - Decision:
+  - this documentation workflow is established and continues alongside the
+    research
   - the human lead and primary engineer keep working together on experiments;
     the primary engineer directs the supporting work
+  - the human lead currently supplies the research verdicts; the documentation
+    team records the exact verdicts and reasons with output IDs and provenance
+    until the human changes that responsibility
   - use a continuing documentation task under the Scorey project, with its
     own conversation and the same local checkout
   - delegate the research, transcript capture, note-taking, diagrams, and
@@ -577,9 +585,9 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   canonical notes and run receipts.
 - Diagram: [Experiment and documentation collaboration](../diagrams/COLLABORATION.md)
   shows the documentation lead, its optional helper team, and both review steps.
-- Boundary: Human ownership of scope, acceptance criteria, meaning-level
-  trade-offs, and go/no-go decisions is unchanged. Private notes stay under
-  `docs/peanut/`, and canonical eval evidence stays under `.local/`. Task
+- Boundary: Human ownership of scope, acceptance criteria, research verdicts,
+  meaning-level trade-offs, and go/no-go decisions is unchanged. Private notes
+  stay under `docs/peanut/`, and canonical eval evidence stays under `.local/`. Task
   creation and its identifier belong in the session handoff; this decision
   records the workflow rather than certifying that a companion task exists.
 

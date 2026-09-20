@@ -199,6 +199,27 @@ Sampling surface:
 | `make eval-sample-local` | record deterministic local rounds |
 | `make eval-sample-live` | record live API rounds |
 
+## Local Review Workbench
+
+For the private six-round human-review workbench, from the repository root:
+
+1. Create the local environment and install its requirements:
+   - `python3 -m venv .venv`
+   - `.venv/bin/python -m pip install -r output/jupyter-notebook/requirements.txt`
+2. Launch it:
+   - `.venv/bin/jupyter lab output/jupyter-notebook/scorey-review-workbench.ipynb`
+3. Run the two code cells. Use `Previous` and `Next` to move between
+   rounds; edits remain in memory until explicitly saved.
+4. Use `Save review` to write the local
+   `output/jupyter-notebook/scorey-review-workbench.notes.json` sidecar. This
+   workbench save never writes the evaluation database.
+
+The module, template notebook, requirements, and tests are reusable local
+tooling. Original CSV, Numbers, sidecar, and dated six-review notebooks remain
+in their original output paths as ignored personal evidence. The default
+source path continues to work. This procedure generates no new eval rows and
+changes no model or runtime configuration.
+
 ## Validation Surface
 
 | Command | Job |

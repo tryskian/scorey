@@ -49,6 +49,24 @@ Route, tone, pulse, scoreboard, prose and menace verdicts remain distinct.
 Beta labels are research architectures, not app releases, package versions,
 branch names or another sweep.
 
+The established evaluation process remains the [Beta 8 Eval
+Shape](./080_B-MENACE_JUDGEMENT.md#eval-shape) and the staged [First Kernel
+Shape](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md#first-kernel-shape):
+bounded raw runs, route validity as the floor, full visible rounds judged
+row-by-row across cross-object and same-pick families, and human-supplied
+verdicts tied to exact settings, prompt, source, and output IDs. The current
+private continuation is `20449-20454`: its CSV and notes sidecar hold one
+human `PASS` and five `FAIL` verdicts with exact notes. Those human verdicts
+are now persisted in the existing menace lens with source and hash attribution;
+the separate mechanical route-floor passes are engineer evidence. The range
+closed at `6` total, `1` pass, `5` fail, `0` pending, and `0` archived, with
+tone, scoreboard, and prose settled for all six rows. No new beta, prompt
+change, model choice, or runtime configuration change is claimed.
+
+The older private `20443-20448` continuation retains historical Codex engineer
+labels; its human review remains unresolved and disputed, and it is not an
+accepted baseline.
+
 ## Reading order and boundaries
 
 Read the legend, then Betas 1–8, then the staged pre-Beta 9 contract. Use the
