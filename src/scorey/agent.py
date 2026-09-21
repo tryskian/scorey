@@ -4,6 +4,7 @@ import time
 from collections.abc import Callable
 from dataclasses import asdict
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from scorey.config import Settings, normalise_pick, route_family_for
 from scorey.pipeline import RoundFields, normalise_round_fields
@@ -13,6 +14,11 @@ from scorey.retrieval import (
     generation_receipt,
     write_json,
 )
+
+if TYPE_CHECKING:
+    from agents import Agent
+
+SCOREY_PROMPT_VERSION = "restored-321d970"
 
 SCOREY_INSTRUCTIONS = """
 You are Scorey, a bratty rigged rock, paper, scissors mini chatbot.
@@ -84,6 +90,35 @@ def build_prompt(
     return prompt
 
 
+def build_live_agent(settings: Settings) -> Agent[None]:
+    """Use one request contract for the app and its golden smoke runs."""
+    try:
+        from agents import Agent, ModelSettings
+        from openai.types.shared import Reasoning
+    except ImportError as exc:  # pragma: no cover - optional live dependencies
+        raise RuntimeError(
+            "Live generation requires the openai-agents package."
+        ) from exc
+    return Agent(
+        name=settings.app_name,
+        instructions=SCOREY_INSTRUCTIONS,
+        model=settings.model,
+        model_settings=ModelSettings(
+            reasoning=(
+                Reasoning(
+                    effort=settings.reasoning_effort,
+                    summary=settings.reasoning_summary,
+                )
+                if settings.reasoning_effort or settings.reasoning_summary
+                else None
+            ),
+            verbosity=settings.verbosity,
+            top_p=settings.top_p,
+        ),
+        output_type=RoundFields,
+    )
+
+
 def generate_live_round_fields(
     settings: Settings,
     user_pick: str,
@@ -94,8 +129,7 @@ def generate_live_round_fields(
     receipt_sink: Callable[[Path], None] | None = None,
 ) -> RoundFields:
     try:
-        from agents import Agent, ModelSettings, Runner
-        from openai.types.shared import Reasoning
+        from agents import Runner
     except ImportError as exc:  # pragma: no cover - requires optional runtime deps
         raise RuntimeError(
             "Live generation requires the openai-agents package."
@@ -129,24 +163,7 @@ def generate_live_round_fields(
         route_family,
         context=retrieval_context.context if retrieval_context else "",
     )
-    agent = Agent(
-        name=settings.app_name,
-        instructions=SCOREY_INSTRUCTIONS,
-        model=settings.model,
-        model_settings=ModelSettings(
-            reasoning=(
-                Reasoning(
-                    effort=settings.reasoning_effort,
-                    summary=settings.reasoning_summary,
-                )
-                if settings.reasoning_effort or settings.reasoning_summary
-                else None
-            ),
-            verbosity=settings.verbosity,
-            top_p=settings.top_p,
-        ),
-        output_type=RoundFields,
-    )
+    agent = build_live_agent(settings)
     record = (
         generation_receipt(settings, retrieval_context, prompt, SCOREY_INSTRUCTIONS)
         if retrieval_context is not None

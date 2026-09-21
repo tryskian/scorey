@@ -5,6 +5,7 @@ PIP := $(shell if [ -x "$(BIN)/pip" ]; then echo "$(BIN)/pip"; else echo "$(PYTH
 PY := $(shell if [ -x "$(BIN)/python" ]; then echo "$(BIN)/python"; else echo "$(PYTHON)"; fi)
 PICK ?= rock
 MEMORY_SCOREY_PICK ?= scissors
+SMOKE_RUN ?=
 LOCAL ?=
 EVAL_LIMIT ?= 10
 EVAL_VERDICT ?=
@@ -34,6 +35,14 @@ RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 .PHONY: lint-docs scripts-check package-install-check python-security-check security-checks
 .PHONY: eval-review-sample
 .PHONY: memory-build memory-status memory-preview
+.PHONY: smoke-prepare smoke-run
+
+smoke-prepare:
+	PYTHONPATH=src $(PY) -m scorey.smoke prepare
+
+smoke-run:
+	@test -n "$(SMOKE_RUN)" || (echo "Set SMOKE_RUN to the prepared run directory."; exit 2)
+	PYTHONPATH=src $(PY) -m scorey.smoke run "$(SMOKE_RUN)"
 
 install:
 	$(PYTHON) -m venv $(VENV)
