@@ -5,6 +5,9 @@
 Reusable templates for the tracked `docs/research/` lane. They describe a
 document shape; they are not evidence or an active method by themselves.
 
+The charter's [document naming standard](../../governance/CHARTER.md#document-naming)
+covers the other document types. Research-specific rules follow below.
+
 ## Kernel
 
 | Rule | Choice |
@@ -55,6 +58,7 @@ Every template begins with:
 | Owns | One sentence naming the document's job |
 
 Apply the [charter's concision rule](../../governance/CHARTER.md#document-roles):
-lead with the useful point, keep inventories in tables, and use one or two
-bullets per prose section. A diagram is useful only when it makes the evidence
-or relationship clearer.
+use concise, natural language within the selected template, preserving required
+structure and evidence. Lead with the useful point, keep inventories in tables,
+and use one or two bullets per prose section. A diagram is useful only when it
+makes the evidence or relationship clearer.
