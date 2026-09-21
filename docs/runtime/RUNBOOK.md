@@ -199,6 +199,36 @@ Sampling surface:
 | `make eval-sample-local` | record deterministic local rounds |
 | `make eval-sample-live` | record live API rounds |
 
+## Source-Linked Memory
+
+Source-linked memory is an opt-in live-generation condition. It is separate from
+the default runtime and from the current Beta 1 local run. The corpus is the
+four exact principles in `src/scorey/data/principles.json`; raw outputs,
+verdicts, and generated examples are not ingested.
+
+Build and inspect the local snapshot:
+
+1. Ensure the source files and corpus entries are the intended revisions.
+2. Run `make memory-build` with `OPENAI_API_KEY` available. The command embeds
+   the four principles and six pair queries in one request and appends an
+   immutable content-addressed snapshot to `.local/memory.sqlite`.
+3. Pin the returned snapshot ID in `SCOREY_MEMORY_INDEX` and set
+   `SCOREY_MEMORY_ENABLED=true` for the named live condition. The default is
+   disabled.
+4. Run `make memory-status` locally to inspect the pinned snapshot.
+5. Run `make memory-preview PICK=rock MEMORY_SCOREY_PICK=scissors` (or another
+   allowed pair) to inspect local route-filtered retrieval.
+
+Enabled rounds load one frozen snapshot for the batch, retrieve locally with
+`top_k=2` and `max_chars=1200`, and make no per-round embedding request.
+Generation receipts live under `.local/memory-receipts/`; completed live eval
+rows receive an output-ID sidecar under `.local/evals.sqlite.retrieval/`. These
+receipts are provenance metadata, not verdicts or new gates. A source or corpus
+change requires a new build and pin. Activation is per named local condition;
+behavioral efficacy must be measured under the existing gates.
+
+Receipt paths resolve from the repository root, as their `path_base` records.
+
 ## Local Review Workbench
 
 For the private six-round human-review workbench, from the repository root:

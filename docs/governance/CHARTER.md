@@ -2,7 +2,7 @@
 
 This page owns durable rules, collaboration model, and document boundaries.
 
-- Use `docs/governance/DECISIONS.md` for durable decision history.
+- Use `docs/governance/DECISIONS.md` for runtime decision history.
 - Use `docs/governance/SESSION_HANDOFF.md` for the active kernel and carryover.
 - Use `docs/runtime/ARCHITECTURE.md` for the stable system shape.
 - Use `docs/runtime/RUNBOOK.md` for operator procedure.
@@ -56,9 +56,19 @@ holds together.
   visible round.
 - The next staged boundary above menace is a runtime instruction contract
   reset before fresh evidence is promoted again.
+- Under [D-039](DECISIONS.md#d-039-restart-changed-model-measurement-at-beta-1),
+  this current changed-model restart begins at the established Beta 1 route
+  gate. It is a planned measurement sequence, not a new beta or a restoration
+  of historical generator phrase banks.
 
 Current tracked method ladder:
 
+- `Research Beta 1.0`
+  - closed pick-routing baseline
+- `Research Beta 2.0`
+  - closed focused object-lane baseline
+- `Research Beta 3.0`
+  - closed anchored tone-first baseline
 - `Research Beta 4.0`
   - closed abstract tone measurement baseline
 - `Research Beta 5.0`
@@ -99,8 +109,7 @@ Working shape:
 
 ### Documentation Delegation
 
-Under [D-037](DECISIONS.md#d-037-delegate-documentation-to-a-continuing-project-task),
-the human lead and primary engineer manage experiments together. The primary
+The human lead and primary engineer manage experiments together. The primary
 engineer delegates supporting research, transcript capture, note-taking,
 diagrams, and document writing to a continuing Scorey project task using the
 same local checkout.
@@ -108,8 +117,10 @@ These assignments are pieces of the primary engineer's own work, with their
 relevant conversation, sources, scope, and intended result made explicit.
 
 This workflow is established and the research is already underway. The human
-lead currently supplies the research verdicts; the documentation team records
-the exact verdicts and reasons with output IDs and source provenance.
+lead owns scope, acceptance criteria, meaning-level judgement, and go/no-go;
+current user delegation permits the primary engineer to judge current runs in
+real time. The documentation team records exact verdicts and reasons with
+output IDs and source provenance.
 
 The documentation task acts as a lead. It can handle small assignments directly
 or delegate bounded parts to its own subagents. It coordinates helper file
@@ -124,12 +135,15 @@ explicit; capture dates and discourse dates remain distinct, and later
 corrections retain their context. Transcript captures stay private under
 `docs/peanut/transcripts/`.
 
-The primary engineer coordinates file ownership, reviews the returned work,
-and integrates it into the correct documentation surface. Experiment execution
+The primary engineer coordinates file ownership, personally reads the returned
+reports, checks their supporting evidence, and integrates the findings into the
+correct documentation surface. Experiment execution
 and shared-checkout Git operations remain with the primary engineer. The
 documentation task edits assigned files within the same active kernel.
 Observations, hypotheses, human decisions, and engineer interpretations retain
-distinct attribution; human research-verdict ownership is current.
+distinct attribution. Human criteria, meaning-level judgement, and go/no-go
+ownership remain current; the primary's delegated live judging is recorded with
+its source and attribution.
 
 ## Repo Truth Boundaries
 
@@ -140,15 +154,19 @@ distinct attribution; human research-verdict ownership is current.
 
 ## Document Roles
 
-All documentation stays concise, including private notes and helper reports
-([D-038](DECISIONS.md#d-038-keep-all-documentation-concise)). Lead with the useful
-finding, decision, or action. State each point once and link supporting evidence.
+All documentation stays concise, including private notes and helper reports.
+Lead with the useful finding, decision, or action. State each point once and link supporting evidence.
 Keep the conditions and attribution needed to understand it accurately.
+
+The runtime decision ledger records runtime choices. Capture experiment
+conditions, findings, and proposed research directions in research notes;
+keep collaboration and writing preferences here. A proposal retains its
+attribution until the human lead adopts it.
 
 | Surface | Owns |
 | --- | --- |
 | `CHARTER` | durable rules and collaboration model |
-| `DECISIONS` | durable decision history |
+| `DECISIONS` | runtime decision history |
 | `SESSION_HANDOFF` | active kernel and carryover |
 | `ARCHITECTURE` | stable runtime shape |
 | `RUNBOOK` | operator procedure |

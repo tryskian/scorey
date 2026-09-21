@@ -41,6 +41,10 @@ The stable runtime contract is:
 | `src/scorey/config.py` | fixed picks, route rules, and settings |
 | `src/scorey/pipeline.py` | deterministic local fixtures and round composition |
 | `src/scorey/agent.py` | structured live field generation |
+| `src/scorey/retrieval.py` | source-linked corpus loading, frozen retrieval, and receipts |
+| `src/scorey/vector_store.py` | immutable content-addressed local memory snapshots |
+| `src/scorey/memory.py` | memory build, status, and preview commands |
+| `src/scorey/data/principles.json` | four exact source-linked pipeline principles |
 | `src/scorey/eval_gates.py` | route-floor and lens gate helpers |
 | `src/scorey/eval_db.py` | SQLite schema and review persistence |
 | `src/scorey/eval_sampling.py` | local and live eval population helpers |
@@ -93,6 +97,16 @@ deliberation. The live TTY uses the existing Braille-dot spinner alone until
 generation completes, then displays the ruling and score without an added
 minimum wait. Live response duration has not been measured for this change.
 
+The [opt-in source-linked retrieval flow](../diagrams/PIPELINE.md#opt-in-source-linked-retrieval)
+is implemented after pick and route selection, but it is not part of the default
+runtime or the current Beta 1 local run. `memory-build` freezes the four exact
+source-linked principles plus six pair queries into a content-addressed local
+SQLite snapshot. An enabled run loads one pinned snapshot, retrieves locally with
+the route filter, `top_k=2`, and `max_chars=1200`, and records provenance beside
+the live eval output. Activation is per named local condition; behavioral
+efficacy is measured under the existing gates. No retrieval receipt changes an
+eval verdict or advances a beta.
+
 ## Selector Input Contract
 
 - `up` and `down` are the only keys that move the active pick.
@@ -130,6 +144,9 @@ Local state:
 | --- | --- |
 | `.local/evals.sqlite` | live eval evidence store |
 | `.local/live_eval_batch.meta` | optional live batch metadata for sampler continuity |
+| `.local/memory.sqlite` | immutable content-addressed source-linked memory snapshots |
+| `.local/memory-receipts/` | per-generation prompt, settings, retrieval, fields, and response receipts |
+| `.local/evals.sqlite.retrieval/` | output-ID sidecars linking completed receipts to eval rows |
 
 SQLite tables:
 
@@ -187,6 +204,10 @@ inspect nor mutate it.
 | route rules and settings | `src/scorey/config.py` |
 | deterministic local round composition | `src/scorey/pipeline.py` |
 | live field generation | `src/scorey/agent.py` |
+| source-linked retrieval and receipts | `src/scorey/retrieval.py` |
+| immutable local memory snapshots | `src/scorey/vector_store.py` |
+| memory operator commands | `src/scorey/memory.py` and `src/scorey/main.py` |
+| source-linked corpus | `src/scorey/data/principles.json` |
 | app loop and operator commands | `src/scorey/main.py` |
 | eval schema and persistence | `src/scorey/eval_db.py` |
 | eval population helpers | `src/scorey/eval_sampling.py` |
@@ -199,7 +220,7 @@ inspect nor mutate it.
 | Doc | Owns |
 | --- | --- |
 | `CHARTER` | durable rules and collaboration model |
-| `DECISIONS` | durable decision history |
+| `DECISIONS` | runtime decision history |
 | `SESSION_HANDOFF` | active slice and carryover |
 | `RUNBOOK` | operator procedure |
 | `START_END_REFERENCE` | compact command card |
