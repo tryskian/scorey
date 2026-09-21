@@ -14,7 +14,12 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import TextIO
 
-from scorey.config import Settings, load_settings, require_openai_api_key
+from scorey.config import (
+    Settings,
+    load_settings,
+    require_openai_api_key,
+    route_family_for,
+)
 from scorey.eval_db import (
     archive_failure_disposition_for_lens,
     archive_output_for_lens,
@@ -109,6 +114,18 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=False)
 
     subparsers.add_parser("app", help="Open the interactive Scorey app.")
+
+    subparsers.add_parser(
+        "memory-build", help="Embed source principles and freeze an index."
+    )
+    subparsers.add_parser(
+        "memory-status", help="Inspect the pinned memory snapshot locally."
+    )
+    memory_preview = subparsers.add_parser(
+        "memory-preview", help="Preview local retrieval for a pair."
+    )
+    memory_preview.add_argument("--user-pick", required=True, choices=APP_PICKS)
+    memory_preview.add_argument("--scorey-pick", required=True, choices=APP_PICKS)
 
     play_parser = subparsers.add_parser("play", help="Play one Scorey round.")
     play_parser.add_argument("pick")
@@ -879,7 +896,7 @@ def build_live_round_state(
     scorey_pick: str,
     scorey_score: int,
 ) -> RoundState:
-    route_family = "same-pick" if user_pick == scorey_pick else "cross-object"
+    route_family = route_family_for(user_pick, scorey_pick)
 
     from scorey.agent import generate_live_round_fields
 
@@ -918,7 +935,7 @@ def build_round_text(
         settings,
         user_pick,
         scorey_pick,
-        "same-pick" if user_pick == scorey_pick else "cross-object",
+        route_family_for(user_pick, scorey_pick),
     )
     round_state = build_round_state(
         user_pick,
@@ -1760,6 +1777,15 @@ def command_eval_sample_live(
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+
+    if args.command in {"memory-build", "memory-status", "memory-preview"}:
+        from scorey.memory import command_memory
+
+        return command_memory(
+            args.command,
+            getattr(args, "user_pick", ""),
+            getattr(args, "scorey_pick", ""),
+        )
 
     if args.command in (None, "app"):
         return command_app(local=args.local)

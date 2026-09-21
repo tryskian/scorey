@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
+from collections.abc import Callable
 from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
@@ -454,6 +455,7 @@ def record_output(
     round_text: str,
     source_mode: str,
     model: str,
+    before_commit: Callable[[int], Callable[[], None]] | None = None,
 ) -> int:
     if user_pick not in USER_PICKS:
         raise ValueError(f"Unsupported user pick '{user_pick}'.")
@@ -468,33 +470,41 @@ def record_output(
     if not model.strip():
         raise ValueError("Model must be non-empty.")
 
-    with closing(connect(db_path)) as conn, conn:
-        prepare_db(conn)
-        cursor = conn.execute(
-            """
-            INSERT INTO eval_outputs (
-                user_pick,
-                scorey_pick,
-                route_family,
-                round_text,
-                source_mode,
-                model,
-                created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
-            """,
-            (
-                user_pick,
-                scorey_pick,
-                route_family,
-                round_text,
-                source_mode,
-                model,
-                utc_now(),
-            ),
-        )
-        if cursor.lastrowid is None:
-            raise RuntimeError("Failed to retrieve inserted output id.")
-        return cursor.lastrowid
+    undo_receipt: Callable[[], None] | None = None
+    try:
+        with closing(connect(db_path)) as conn, conn:
+            prepare_db(conn)
+            cursor = conn.execute(
+                """
+                INSERT INTO eval_outputs (
+                    user_pick,
+                    scorey_pick,
+                    route_family,
+                    round_text,
+                    source_mode,
+                    model,
+                    created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    user_pick,
+                    scorey_pick,
+                    route_family,
+                    round_text,
+                    source_mode,
+                    model,
+                    utc_now(),
+                ),
+            )
+            if cursor.lastrowid is None:
+                raise RuntimeError("Failed to retrieve inserted output id.")
+            if before_commit is not None:
+                undo_receipt = before_commit(cursor.lastrowid)
+            return cursor.lastrowid
+    except BaseException:
+        if undo_receipt is not None:
+            undo_receipt()
+        raise
 
 
 def record_round_state(
@@ -504,6 +514,7 @@ def record_round_state(
     *,
     source_mode: str,
     model: str,
+    before_commit: Callable[[int], Callable[[], None]] | None = None,
 ) -> int:
     return record_output(
         db_path,
@@ -513,6 +524,7 @@ def record_round_state(
         round_text=round_text,
         source_mode=source_mode,
         model=model,
+        before_commit=before_commit,
     )
 
 

@@ -1,6 +1,9 @@
 # Decisions Log
 
-This file is the durable archive of Scorey's engineering, runtime, and eval decisions.
+This file records Scorey's runtime decisions, including executable evaluation
+and evidence contracts. Research findings belong in `docs/research/` and
+private research notes; collaboration and writing rules belong in
+[CHARTER](CHARTER.md). Historical entries retain their original provenance.
 
 ## How To Use This File
 
@@ -10,7 +13,7 @@ This file is the durable archive of Scorey's engineering, runtime, and eval deci
   - use `docs/runtime/ARCHITECTURE.md`
 - Need the active kernel and carryover:
   - use `docs/governance/SESSION_HANDOFF.md`
-- Need the reasoning behind a repo choice:
+- Need the reasoning behind a runtime choice:
   - use this file
 
 Keep entries short, but informative enough to show what changed and why.
@@ -37,15 +40,16 @@ If a decision crosses layers, say so plainly instead of flattening the method in
 
 ## Entry Rule
 
-Add an entry only when the decision still governs the repo.
+Add an entry when an agreed decision changes the runtime or its executable
+evaluation and evidence contract.
 
 Good fits:
 
 - runtime contract changes
 - eval method boundaries
 - evidence handling rules
-- workflow or closeout rules
-- durable document-role changes
+
+Keep collaboration, document roles, and writing preferences in the charter.
 
 Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-session facts out of this file.
 
@@ -528,78 +532,91 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   and fragment cleanup are unchanged; this is a generation instruction, not
   a deterministic word-removal rule.
 
-## D-037: Delegate documentation to a continuing project task
+## Relocated Documentation Guidance
 
-- Date: `2026-09-19`
-- Category: `workflow_environment`
-- Tags: `delegation`, `documentation`, `shared_checkout`, `decision_provenance`
-- Provenance: `human-led method decision`, with the agreed task and file
-  coordination formalized by the engineer.
+<!-- markdownlint-disable MD033 -->
+<a id="d-037-delegate-documentation-to-a-continuing-project-task"></a>
+<a id="d-038-keep-all-documentation-concise"></a>
+<!-- markdownlint-enable MD033 -->
+
+Former D-037 and D-038 are collaboration and writing guidance, now owned by the
+[charter's delegation](CHARTER.md#documentation-delegation) and
+[document roles](CHARTER.md#document-roles) sections. Their identifiers remain
+reserved; the [original records](https://github.com/tryskian/scorey/blob/e2db735fa01a2b878f879fb4fac1125fe4e74501/docs/governance/DECISIONS.md#L531)
+remain in Git history. These links preserve older research references.
+
+## D-039: Restart changed-model measurement at Beta 1
+
+- Date: `2026-09-20`
+- Category: `eval_quality`
+- Tags: `model_restart`, `beta_1`
+- Provenance: `human-led method decision`.
 - Source:
-  - "the mini beables will just be your internal prompts, just assigned to
-    helpers"
-  - "you send messages to another thread. maybe a worktree?"
-  - "or if not a worktree, then another project thread :)"
-  - subsequent refinement: "maybe that task has its own team of
-    subagents!!!!!!!!", confirmed with "yes exactly! let's add this to diagrams"
-  - capture refinement: "it can help us capture transcripts along the way so
-    you don't have to stop and shift focus"
-- Current clarification: "i have to give the verdicts until you can manage what
-  we're looking for" and "stay in ur lane >:{ haha the research is already
-  underway".
+  - "can you take a look at scorey's history? we'll need to follow the eval
+    gates exactly as they are done"
+  - "so we have to start where the first beta starts and measure in that
+    established rubric"
+  - earlier steering: "we return to polinko's original method: long runs since
+    we've completely changed the model" and "for long runs we use batch calls
+    polinko has the deets"
+  - current clarification: "no assumptions or inferences"
 - Decision:
-  - this documentation workflow is established and continues alongside the
-    research
-  - the human lead and primary engineer keep working together on experiments;
-    the primary engineer directs the supporting work
-  - the human lead currently supplies the research verdicts; the documentation
-    team records the exact verdicts and reasons with output IDs and provenance
-    until the human changes that responsibility
-  - use a continuing documentation task under the Scorey project, with its
-    own conversation and the same local checkout
-  - delegate the research, transcript capture, note-taking, diagrams, and
-    document writing that the primary engineer would otherwise perform;
-    each assignment carries the relevant conversation, sources, scope, and
-    intended result
-  - the documentation task acts as a lead: it can complete small assignments
-    directly or delegate bounded parts to its own subagents, coordinate their
-    file ownership, review their contributions, and return one coherent result
-  - the primary engineer sends assignments and follow-ups, reviews returned
-    work against the evidence and conversation, and integrates it into the
-    appropriate documentation surface
-  - coordinate file ownership before concurrent edits; the primary engineer
-    owns experiment execution and shared-checkout Git operations, while the
-    documentation task edits its assigned files
-  - keep supporting tasks within the agreed active kernel, with observations,
-    hypotheses, and human decisions distinctly attributed
-  - capture exchanges alongside the experiments from supplied or directly
-    inspected source messages; preserve speakers, order, and source location,
-    distinguish exact wording from summaries, and mark gaps without inventing
-    missing text or dates
-  - keep transcript captures private under `docs/peanut/transcripts/`, with
-    capture dates separate from discourse dates and later corrections
-    preserved in context
-- Why: Documentation can progress alongside the experiments while the human
-  lead and primary engineer keep their attention on the findings. Reusing a
-  project task retains its working context and gives it direct access to the
-  canonical notes and run receipts.
-- Diagram: [Experiment and documentation collaboration](../diagrams/COLLABORATION.md)
-  shows the documentation lead, its optional helper team, and both review steps.
-- Boundary: Human ownership of scope, acceptance criteria, research verdicts,
-  meaning-level trade-offs, and go/no-go decisions is unchanged. Private notes
-  stay under `docs/peanut/`, and canonical eval evidence stays under `.local/`. Task
-  creation and its identifier belong in the session handoff; this decision
-  records the workflow rather than certifying that a companion task exists.
+  - use the established [Beta 1 rubric](../research/010_B-PICK_ROUTING.md) and
+    [route gate code](../../src/scorey/eval_gates.py): pick-only, Scorey/user
+    order, full six-pair coverage
+  - compute the route gate, then persist each verdict and record the condition
+    and exact output range needed for comparison
+  - advance through Beta 2 object lanes, Beta 3/4 tone and retain/evict, then
+    later boundaries in order, using each boundary's own object and close rule
+  - keep closed betas and staged `pre-Beta 9.0` as comparison surfaces; do not
+    open menace immediately, restore phrase anchors, or turn findings into
+    generator examples
+  - the human lead retains scope, criteria, judgement, and go/no-go, while
+    current delegation permits primary judging in real time
+  - follow the documented method exactly, tie procedure and criteria to source,
+    and keep missing or ambiguous method details unresolved until the human lead
+    clarifies them before dependent work; this applies to the primary,
+    documentation, and readers
+- Boundary: This method-order restart responds to a changed condition; it does
+  not invent a universal threshold, create a beta automatically, or rewrite
+  later-lens identities and attribution. It restores method order, not old
+  instructions.
 
-## D-038: Keep all documentation concise
+## D-040: Opt-in source-linked principle memory stays outside the core contract
 
-- Date: `2026-09-19`
-- Category: `workflow_environment`
-- Tags: `documentation`, `concision`
-- Provenance: `human-led method decision`
-- Source: "all documentation needs to be concise" because "no one reads
-  long-winded documents. not even botbots".
-- Decision: Apply the charter's concise writing rule to all documentation,
-  including private notes and helper reports. Keep the useful point, essential
-  conditions, attribution, and evidence links; remove repetition.
-- Why: Documentation must be readable by people and agents.
+- Date: `2026-09-20`
+- Category: `runtime_engineering`
+- Tags: `source_linked_memory`, `frozen_snapshot`, `retrieval_provenance`
+- Provenance: `human-led method decision with implementation decision`.
+- Source:
+  - user approval: "yes we go!" following the recommendation to keep the
+    existing core, retrieve a small source-linked set of abstract principles,
+    preserve raw outputs and verdicts as evidence, use local SQLite, and freeze
+    the run condition with per-output provenance
+- Decision:
+  - human boundary: keep the existing Scorey identity, pick/route ownership,
+    three generated fields, composition, fixtures, and eval gates unchanged;
+    preserve raw responses, verdicts, and generated examples as evidence rather
+    than prompt context
+  - engineering implementation: build an immutable content-addressed local
+    SQLite snapshot with `text-embedding-3-small`, the four principle
+    embeddings, and six pick-query embeddings in one embedding request
+  - engineering implementation: adapt the four exact `PIPELINE.md` Reading
+    Note excerpts into `src/scorey/data/principles.json` as source-linked
+    context; this selection does not add a taste standard or prompt examples
+  - engineering implementation: enable only when the operator pins
+    `SCOREY_MEMORY_INDEX` and sets `SCOREY_MEMORY_ENABLED`; retrieve locally
+    after pair and route selection with the route filter, `top_k=2`, and
+    `max_chars=1200`
+  - engineering implementation: freeze one memory snapshot for each
+    memory-enabled eval run; record the prompt, settings, selected sources,
+    source/index provenance, fields, and response IDs in a receipt, with an
+    output-ID sidecar that does not change the eval schema or verdicts
+  - keep the current Beta 1 local run separate and do not advance a beta from
+    memory activation or retrieval receipts
+- Why: This gives Scorey a small, reproducible source-linked context layer
+  without turning observed evidence into prompt examples or changing the
+  meaning of the established eval sequence.
+- Boundary: Defaults stay off. A source change requires a new build and pin.
+  Activation is per named local condition, and behavioral efficacy is measured
+  under the existing gates rather than inferred from retrieval receipts.

@@ -1,7 +1,18 @@
 from __future__ import annotations
 
-from scorey.config import Settings
+import time
+from collections.abc import Callable
+from dataclasses import asdict
+from pathlib import Path
+
+from scorey.config import Settings, normalise_pick, route_family_for
 from scorey.pipeline import RoundFields, normalise_round_fields
+from scorey.retrieval import (
+    FrozenMemory,
+    RetrievalContext,
+    generation_receipt,
+    write_json,
+)
 
 SCOREY_INSTRUCTIONS = """
 You are Scorey, a bratty rigged rock, paper, scissors mini chatbot.
@@ -28,7 +39,13 @@ Return only the structured fields.
 """.strip()
 
 
-def build_prompt(user_pick: str, scorey_pick: str, route_family: str) -> str:
+def build_prompt(
+    user_pick: str,
+    scorey_pick: str,
+    route_family: str,
+    *,
+    context: str = "",
+) -> str:
     if route_family == "same-pick":
         route_guidance = (
             "Same-pick round: keep the distinction material and physical between two "
@@ -42,7 +59,7 @@ def build_prompt(user_pick: str, scorey_pick: str, route_family: str) -> str:
             "causal. Let the user's degraded state feel like something Scorey's "
             "object did to it, with both picks still recognisable as themselves.\n"
         )
-    return (
+    prompt = (
         f"User pick: {user_pick}\n"
         f"Scorey pick: {scorey_pick}\n"
         f"Route family: {route_family}\n"
@@ -58,6 +75,13 @@ def build_prompt(user_pick: str, scorey_pick: str, route_family: str) -> str:
         "me: [scorey score], you: [scoreboard_claim]\n"
         "Keep the fragments aligned with that exact matchup."
     )
+    if context:
+        prompt += (
+            "\n\n[Scorey principles]\n"
+            + context
+            + "\nApply this context within the existing round and field contract."
+        )
+    return prompt
 
 
 def generate_live_round_fields(
@@ -65,24 +89,98 @@ def generate_live_round_fields(
     user_pick: str,
     scorey_pick: str,
     route_family: str,
+    *,
+    retrieval_context: RetrievalContext | None = None,
+    receipt_sink: Callable[[Path], None] | None = None,
 ) -> RoundFields:
     try:
-        from agents import Agent, Runner
+        from agents import Agent, ModelSettings, Runner
+        from openai.types.shared import Reasoning
     except ImportError as exc:  # pragma: no cover - requires optional runtime deps
         raise RuntimeError(
             "Live generation requires the openai-agents package."
         ) from exc
 
+    if settings.memory_enabled:
+        user_pick, scorey_pick = normalise_pick(user_pick), normalise_pick(scorey_pick)
+        if route_family != route_family_for(user_pick, scorey_pick):
+            raise ValueError("Route family does not match the selected picks.")
+        retrieval_context = retrieval_context or FrozenMemory(settings).retrieve(
+            user_pick, scorey_pick
+        )
+        if (
+            retrieval_context.index != settings.memory_index
+            or retrieval_context.embedding_model != settings.memory_embedding_model
+            or (
+                retrieval_context.user_pick,
+                retrieval_context.scorey_pick,
+                retrieval_context.route_family,
+            )
+            != (user_pick, scorey_pick, route_family)
+            or retrieval_context.top_k != settings.memory_top_k
+            or retrieval_context.max_chars != settings.memory_max_chars
+        ):
+            raise ValueError("Retrieval context does not match this round's condition.")
+    elif retrieval_context is not None:
+        raise ValueError("Retrieval context supplied while memory is disabled.")
+    prompt = build_prompt(
+        user_pick,
+        scorey_pick,
+        route_family,
+        context=retrieval_context.context if retrieval_context else "",
+    )
     agent = Agent(
         name=settings.app_name,
         instructions=SCOREY_INSTRUCTIONS,
         model=settings.model,
+        model_settings=ModelSettings(
+            reasoning=(
+                Reasoning(
+                    effort=settings.reasoning_effort,
+                    summary=settings.reasoning_summary,
+                )
+                if settings.reasoning_effort or settings.reasoning_summary
+                else None
+            ),
+            verbosity=settings.verbosity,
+            top_p=settings.top_p,
+        ),
         output_type=RoundFields,
     )
-    result = Runner.run_sync(agent, build_prompt(user_pick, scorey_pick, route_family))
-    output = result.final_output
-    if isinstance(output, RoundFields):
-        return normalise_round_fields(output)
-    if isinstance(output, dict):
-        return normalise_round_fields(RoundFields(**output))
-    raise RuntimeError("Live generation returned an unexpected output shape.")
+    record = (
+        generation_receipt(settings, retrieval_context, prompt, SCOREY_INSTRUCTIONS)
+        if retrieval_context is not None
+        else None
+    )
+    started = time.monotonic()
+    try:
+        result = Runner.run_sync(agent, prompt)
+        output = result.final_output
+        if isinstance(output, RoundFields):
+            fields = normalise_round_fields(output)
+        elif isinstance(output, dict):
+            fields = normalise_round_fields(RoundFields(**output))
+        else:
+            raise RuntimeError("Live generation returned an unexpected output shape.")
+        if record is not None:
+            path, receipt = record
+            receipt.update(
+                status="completed",
+                fields=asdict(fields),
+                generation_seconds=time.monotonic() - started,
+                response_ids=[r.response_id for r in result.raw_responses],
+            )
+            write_json(path, receipt)
+            if receipt_sink is not None:
+                receipt_sink(path)
+        return fields
+    except BaseException as error:
+        if record is not None:
+            path, receipt = record
+            receipt.update(
+                status="failed",
+                error_type=type(error).__name__,
+                generation_seconds=time.monotonic() - started,
+            )
+            write_json(path, receipt)
+        raise

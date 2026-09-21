@@ -1,7 +1,7 @@
 # Experiment and Documentation Collaboration
 
 This is the workflow agreed in
-[D-037](../governance/DECISIONS.md#d-037-delegate-documentation-to-a-continuing-project-task):
+[the charter](../governance/CHARTER.md#documentation-delegation):
 the human lead and primary engineer work together on experiments, while a
 continuing documentation task coordinates supporting work in the same local
 checkout.
