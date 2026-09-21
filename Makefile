@@ -6,6 +6,7 @@ PY := $(shell if [ -x "$(BIN)/python" ]; then echo "$(BIN)/python"; else echo "$
 PICK ?= rock
 MEMORY_SCOREY_PICK ?= scissors
 SMOKE_RUN ?=
+REVIEW_NOTES ?= output/jupyter-notebook/scorey-coherent-absurdity-review.notes.json
 LOCAL ?=
 EVAL_LIMIT ?= 10
 EVAL_VERDICT ?=
@@ -35,7 +36,7 @@ RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 .PHONY: lint-docs scripts-check package-install-check python-security-check security-checks
 .PHONY: eval-review-sample
 .PHONY: memory-build memory-status memory-preview
-.PHONY: smoke-prepare smoke-run
+.PHONY: smoke-prepare smoke-run smoke-review-import smoke-review-sync
 
 smoke-prepare:
 	PYTHONPATH=src $(PY) -m scorey.smoke prepare
@@ -43,6 +44,13 @@ smoke-prepare:
 smoke-run:
 	@test -n "$(SMOKE_RUN)" || (echo "Set SMOKE_RUN to the prepared run directory."; exit 2)
 	PYTHONPATH=src $(PY) -m scorey.smoke run "$(SMOKE_RUN)"
+
+smoke-review-import:
+	@test -n "$(SMOKE_RUN)" || (echo "Set SMOKE_RUN to the saved run directory."; exit 2)
+	PYTHONPATH=src $(PY) -m scorey.review_store import "$(SMOKE_RUN)"
+
+smoke-review-sync:
+	PYTHONPATH=src $(PY) -m scorey.review_store import-notes "$(REVIEW_NOTES)"
 
 install:
 	$(PYTHON) -m venv $(VENV)
