@@ -424,3 +424,20 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
 - Why: The live generator contract is changing again in a way that affects
   evidence meaning. The next evidence must be cut above the new agent-local
   positive-target contract rather than appended to the Beta 8 baseline.
+
+## D-033: Re-enter Scorey from the verified June 9 cutoff
+
+- Date: `2026-09-22`
+- Category: `workflow_environment`
+- Tags: `continuity`, `source_context`, `recovery`, `assumption_control`, `protected_main`
+- Provenance: `human-led workflow and evidence-governance decision with implementation decision`
+- Decision: Restore Scorey's tracked project surface to the verified
+  `2026-06-09` cutoff as the re-entry baseline. The current Starlette security
+  patch remains an explicitly identified operational exception; later work
+  that was not re-established against verified source context does not govern
+  resumed work.
+- Why: Model sunsets broke continuity around the active source context.
+  Subsequent work accumulated from assumptions and self-directed
+  interpretation rather than confirmed intent, chronology, and evidence.
+  Returning to the last verified checkpoint makes the boundary explicit and
+  puts those sources back before any new implementation.
