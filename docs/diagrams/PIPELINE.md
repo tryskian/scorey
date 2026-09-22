@@ -82,43 +82,6 @@ scorey.
 
 The score line must present Scorey as ahead after the round.
 
-## Opt-in Source-Linked Retrieval
-
-This path is implemented but opt-in, and it is separate from the default
-runtime and the current Beta 1 local run. It keeps runtime-selected picks and
-route authoritative, retrieves from a frozen local SQLite snapshot built from
-four exact source-linked pipeline principles, and passes bounded context into
-the existing three-field generation path. The snapshot defaults to
-`text-embedding-3-small` and is pinned by `SCOREY_MEMORY_INDEX` while
-`SCOREY_MEMORY_ENABLED` is enabled. Build validates each excerpt against its
-source document and stores the complete source-document hashes.
-
-```mermaid
-flowchart LR
-  P["Runtime-selected picks + route"]
-  V["Frozen local SQLite<br/>source-linked snapshot"]
-  R["Retrieve relevant<br/>Scorey context"]
-  F["Generate the existing<br/>three round fields"]
-  C["Runtime composition"]
-  O["Live eval output"]
-  Q["Selected sources + index<br/>provenance receipt"]
-
-  P --> R
-  V --> R
-  R -->|"bounded prompt context"| F
-  F --> C
-  C --> O
-  R -.-> Q
-  Q -.-> O
-```
-
-The provenance receipt sits beside the live eval output as metadata. It is not a
-new research gate, verdict, or replacement for the existing eval stack. Retrieval
-uses the route filter, `top_k=2`, and `max_chars=1200`; the per-round path does
-not make an embedding request. A source change requires a new build and pin.
-Activation is per named local condition. Behavioral efficacy is measured under
-the existing gates, and this path does not advance Beta 1 or any later beta.
-
 ## Eval Shape Diagram
 
 ```mermaid

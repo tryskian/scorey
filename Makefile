@@ -4,9 +4,6 @@ BIN := $(VENV)/bin
 PIP := $(shell if [ -x "$(BIN)/pip" ]; then echo "$(BIN)/pip"; else echo "$(PYTHON) -m pip"; fi)
 PY := $(shell if [ -x "$(BIN)/python" ]; then echo "$(BIN)/python"; else echo "$(PYTHON)"; fi)
 PICK ?= rock
-MEMORY_SCOREY_PICK ?= scissors
-SMOKE_RUN ?=
-REVIEW_NOTES ?= output/jupyter-notebook/scorey-coherent-absurdity-review.notes.json
 LOCAL ?=
 EVAL_LIMIT ?= 10
 EVAL_VERDICT ?=
@@ -29,38 +26,20 @@ PULSE_LAST_OUTPUT_ID ?=
 OPENAI_LIMITS_URL ?= https://platform.openai.com/settings/organization/limits
 OPENAI_USAGE_URL ?= https://platform.openai.com/settings/organization/usage
 OPENAI_BILLING_URL ?= https://platform.openai.com/settings/organization/billing/overview
+CAFFEINATE_PID_FILE ?= /tmp/scorey-caffeinate.pid
+CAFFEINATE_LOG ?= /tmp/scorey-caffeinate.log
+CAFFEINATE_CMD ?= /usr/bin/caffeinate -d -i -m
 PIP_AUDIT_ARGS ?=
 RUNTIME_ARGS = $(if $(filter 1 true yes,$(LOCAL)),--local,)
 
-.PHONY: install refresh-deps env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-scoreboard-sample eval-scoreboard-judge eval-scoreboard-archive eval-scoreboard-close eval-prose-sample eval-prose-judge eval-prose-archive eval-prose-close eval-menace-sample eval-menace-judge eval-menace-archive eval-menace-close eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose eval-pulse-open eval-pulse-sample eval-pulse-judge eval-pulse-summary eval-pulse-close research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
-.PHONY: lint-docs scripts-check package-install-check python-security-check security-checks
+.PHONY: install env venv doctor-env path-leak-check path-leak-audit-local session-status test test-cov lint format-check format typecheck precommit-install precommit-run prepush-run check package-check app play rock paper scissors eval-init eval-list eval-judge eval-tone-sample eval-tone-judge eval-tone-archive eval-scoreboard-sample eval-scoreboard-judge eval-scoreboard-archive eval-scoreboard-close eval-prose-sample eval-prose-judge eval-prose-archive eval-prose-close eval-menace-sample eval-menace-judge eval-menace-archive eval-menace-close eval-tone-disposition-sample eval-tone-disposition-archive eval-tone-dispose eval-pulse-open eval-pulse-sample eval-pulse-judge eval-pulse-summary eval-pulse-close research-beta1 eval-beta1 eval-sample-local eval-sample-live open-limits open-usage open-billing open-cost-console caffeinate decaffeinate caffeinate-status decaffeinate-status start end rituals start-runtime-check end-preflight end-docs-check end-runtime-check end-git-check clean
+.PHONY: lint-docs package-install-check python-security-check security-checks
 .PHONY: eval-review-sample
-.PHONY: memory-build memory-status memory-preview
-.PHONY: smoke-prepare smoke-run smoke-review-import smoke-review-sync
-
-smoke-prepare:
-	PYTHONPATH=src $(PY) -m scorey.smoke prepare
-
-smoke-run:
-	@test -n "$(SMOKE_RUN)" || (echo "Set SMOKE_RUN to the prepared run directory."; exit 2)
-	PYTHONPATH=src $(PY) -m scorey.smoke run "$(SMOKE_RUN)"
-
-smoke-review-import:
-	@test -n "$(SMOKE_RUN)" || (echo "Set SMOKE_RUN to the saved run directory."; exit 2)
-	PYTHONPATH=src $(PY) -m scorey.review_store import "$(SMOKE_RUN)"
-
-smoke-review-sync:
-	PYTHONPATH=src $(PY) -m scorey.review_store import-notes "$(REVIEW_NOTES)"
 
 install:
 	$(PYTHON) -m venv $(VENV)
 	$(BIN)/python -m pip install --upgrade pip
 	$(BIN)/python -m pip install -e ".[dev]"
-
-refresh-deps:
-	@test -d "$(VENV)" || $(PYTHON) -m venv $(VENV)
-	$(BIN)/python -m pip install --upgrade pip
-	$(BIN)/python -m pip install --upgrade --upgrade-strategy eager -e ".[dev]"
 
 env venv:
 	@test -d "$(VENV)" || (echo "Missing .venv. Run make install." && exit 1)
@@ -97,9 +76,6 @@ typecheck:
 lint-docs:
 	npx --yes markdownlint-cli2 README.md docs/**/*.md
 
-scripts-check:
-	$(PY) ./scripts/check_shell_scripts.py
-
 precommit-install:
 	$(PY) -m pre_commit install --install-hooks --hook-type pre-commit --hook-type pre-push
 
@@ -127,9 +103,19 @@ session-status:
 	if [ -f "docs/governance/SESSION_HANDOFF.md" ]; then \
 		echo "handoff: docs/governance/SESSION_HANDOFF.md"; \
 	fi; \
-	if [ -f "pyproject.toml" ]; then \
-		echo "package: pyproject.toml"; \
-	fi; \
+		if [ -f "pyproject.toml" ]; then \
+			echo "package: pyproject.toml"; \
+		fi; \
+		if [ -f "$(CAFFEINATE_PID_FILE)" ]; then \
+			PID=$$(cat "$(CAFFEINATE_PID_FILE)" 2>/dev/null || true); \
+			if [ -n "$$PID" ] && kill -0 "$$PID" 2>/dev/null; then \
+				echo "caffeinate: on (PID $$PID)"; \
+			else \
+				echo "caffeinate: stale pid file"; \
+			fi; \
+		else \
+			echo "caffeinate: off"; \
+		fi; \
 	PYTHONPATH=src $(PY) ./scripts/check_end_runtime_state.py
 
 check:
@@ -154,15 +140,6 @@ security-checks: python-security-check
 
 app:
 	PYTHONPATH=src $(PY) -m scorey $(RUNTIME_ARGS)
-
-memory-build:
-	PYTHONPATH=src $(PY) -m scorey memory-build
-
-memory-status:
-	PYTHONPATH=src $(PY) -m scorey memory-status
-
-memory-preview:
-	PYTHONPATH=src $(PY) -m scorey memory-preview --user-pick $(PICK) --scorey-pick $(MEMORY_SCOREY_PICK)
 
 play:
 	PYTHONPATH=src $(PY) -m scorey $(RUNTIME_ARGS) play $(PICK)
@@ -311,6 +288,75 @@ open-cost-console:
 	$(MAKE) --no-print-directory open-usage; \
 	$(MAKE) --no-print-directory open-billing
 
+caffeinate:
+	@set -eu; \
+	if [ "$$(uname -s)" != "Darwin" ]; then \
+		echo "caffeinate is macOS-only; skipping."; \
+		exit 0; \
+	fi; \
+	if [ -f "$(CAFFEINATE_PID_FILE)" ]; then \
+		PID=$$(cat "$(CAFFEINATE_PID_FILE)" 2>/dev/null || true); \
+		if [ -n "$$PID" ] && kill -0 "$$PID" 2>/dev/null; then \
+			echo "caffeinate already running (PID $$PID)."; \
+			exit 0; \
+		fi; \
+		rm -f "$(CAFFEINATE_PID_FILE)"; \
+	fi; \
+	nohup $(CAFFEINATE_CMD) >"$(CAFFEINATE_LOG)" 2>&1 & \
+	PID=$$!; \
+	echo "$$PID" >"$(CAFFEINATE_PID_FILE)"; \
+	sleep 0.1; \
+	if kill -0 "$$PID" 2>/dev/null; then \
+		echo "caffeinate started (PID $$PID)."; \
+	else \
+		rm -f "$(CAFFEINATE_PID_FILE)"; \
+		echo "Failed to start caffeinate."; \
+		exit 1; \
+	fi
+
+decaffeinate:
+	@set -eu; \
+	if [ "$$(uname -s)" != "Darwin" ]; then \
+		echo "caffeinate is macOS-only; skipping."; \
+		exit 0; \
+	fi; \
+	if [ ! -f "$(CAFFEINATE_PID_FILE)" ]; then \
+		echo "No managed caffeinate PID file found."; \
+		exit 0; \
+	fi; \
+	PID=$$(cat "$(CAFFEINATE_PID_FILE)" 2>/dev/null || true); \
+	if [ -n "$$PID" ] && kill -0 "$$PID" 2>/dev/null; then \
+		kill "$$PID"; \
+		sleep 0.1; \
+		echo "caffeinate stopped (PID $$PID)."; \
+	else \
+		echo "Stale PID file found; cleaning up."; \
+	fi; \
+	rm -f "$(CAFFEINATE_PID_FILE)"
+
+caffeinate-status:
+	@set -eu; \
+	if [ "$$(uname -s)" != "Darwin" ]; then \
+		echo "caffeinate status is only available on macOS."; \
+		exit 0; \
+	fi; \
+	if [ -f "$(CAFFEINATE_PID_FILE)" ]; then \
+		PID=$$(cat "$(CAFFEINATE_PID_FILE)" 2>/dev/null || true); \
+		if [ -n "$$PID" ] && kill -0 "$$PID" 2>/dev/null; then \
+			echo "Managed caffeinate: RUNNING (PID $$PID)."; \
+		else \
+			echo "Managed caffeinate: STALE PID file."; \
+		fi; \
+	else \
+		echo "Managed caffeinate: OFF."; \
+		EXISTING_PID=$$(pgrep -f "^/usr/bin/caffeinate -d -i -m( |$$)" | head -n 1 || true); \
+		if [ -n "$$EXISTING_PID" ]; then \
+			echo "Unmanaged caffeinate detected (PID $$EXISTING_PID); not owned by this repo."; \
+		fi; \
+	fi
+
+decaffeinate-status: caffeinate-status
+
 start:
 	bash ./scripts/start_of_day_routine.sh
 
@@ -321,7 +367,7 @@ end:
 	./scripts/end_of_day_routine.sh
 
 end-preflight:
-	END_SKIP_GIT_CHECK=1 ./scripts/end_of_day_routine.sh
+	end_SKIP_GIT_CHECK=1 ./scripts/end_of_day_routine.sh
 
 end-docs-check:
 	$(PY) ./scripts/check_end_docs.py

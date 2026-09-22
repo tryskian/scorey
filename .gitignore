@@ -22,11 +22,3 @@ dist/
 docs/peanut/**
 !docs/peanut/
 !docs/peanut/.gitkeep
-
-# Personal review evidence stays local; reusable notebook tooling is tracked.
-output/jupyter-notebook/*.csv
-output/jupyter-notebook/*.numbers
-output/jupyter-notebook/*.notes.json
-output/jupyter-notebook/*.local.ipynb
-output/jupyter-notebook/scorey-luna-none-six-review.ipynb
-output/jupyter-notebook/scorey-luna-none-workflow-six-review.ipynb

@@ -71,11 +71,6 @@ The first focused rock lane produced:
 | paper lane | `3579` | `1790` rows of `paper/scissors` | `1789` rows of `rock/paper` | all-pass under `Research Beta 1.0` |
 | scissors lane | `3579` | `1790` rows of `scissors/rock` | `1789` rows of `paper/scissors` | all-pass under `Research Beta 1.0` |
 
-The rock pair counts include the short validation sample: `3580` combined
-rows versus `3568` in the one-hour run. The
-[original account](https://github.com/tryskian/scorey/blob/4a86697d630ea7954cd4de0d47139e052a9251fd/docs/research/BETA_2_OBJECT_LANES.md#current-signal)
-preserves this distinction; the old local batch is absent from the current DB.
-
 The local deterministic queue is now fully judged:
 
 | Surface | Pass | Fail | Pending |

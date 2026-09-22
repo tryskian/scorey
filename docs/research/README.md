@@ -1,155 +1,207 @@
 # Research
 
-The tracked research lane stays small. Each beta changes what the evidence is
-allowed to mean; raw runs and scratch notes remain private until promoted.
+Scorey keeps the tracked research lane small on purpose.
+
+Each beta is a distinct eval approach. This folder preserves the method shifts
+that changed what the evidence means.
+
+Raw run notes and scratch material stay out of the tracked research surface
+until they become evidence.
 
 | Surface | Current |
 | --- | --- |
 | Legend | [000_LEGEND.md](./000_LEGEND.md) |
-| Paused inquiry | [420_PB-COHERENT_ABSURDITY.md](./420_PB-COHERENT_ABSURDITY.md) |
-| Historical staged contract | [410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) |
-| Last closed boundary | [080_B-MENACE_JUDGEMENT.md](./080_B-MENACE_JUDGEMENT.md) |
-| Current validation | [300_VALIDATION-GOLDEN_SMOKE.md](./300_VALIDATION-GOLDEN_SMOKE.md) |
-| Filename contract | `NNN_B-NAME.md` for beta boundaries; `NNN_PB-NAME.md` for staged pre-beta boundaries |
+| Current staged boundary | [410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) |
+| Most recently closed boundary | [080_B-MENACE_JUDGEMENT.md](./080_B-MENACE_JUDGEMENT.md) |
+| Filename contract | `NNN_B-NAME.md` for beta boundaries, `NNN_PB-NAME.md` for staged pre-beta boundaries |
 
-## Current stage
+## Current Stage
 
-The [coherent-absurdity inquiry](./420_PB-COHERENT_ABSURDITY.md) is paused under
-D-045. The previous generation instructions and matchup prompts are restored
-from `321d970`; all 154 offline tests pass. The detailed engineering method
-requires alignment with the established protocol before work resumes. No
-active Beta 9 or additional database gate is established.
-The first six-call smoke passed all mechanical checks. Its
-[validation record](./300_VALIDATION-GOLDEN_SMOKE.md) preserves the condition
-and limits. D-043 keeps the existing measures
-and human wording while adding the staged review dataset/case/event surface and
-a separate source-bound `.notes.json` sidecar. The canonical review now holds
-six cases; its initial import had six Codex-primary observations, zero quality
-judgments, and six quality-pending cases. The one-round
-notebook, idempotent import paths, and `149`-test tooling check were verified;
-historical `eval_*` state and protected originals remain unchanged. The
-[initial review receipt](../../.local/reviews/20260921T165455028594Z/verification.json)
-holds that source-bound verification.
-
-The follow-up save recorded six exact human `FAIL` judgments and one human
-observation after D-044 made per-round reasons optional; six Codex-primary
-observations remain and no assistant judgments were added. The shared rejection
-was behavioral and attributed: “this is not scorey's voice” and “scorey's 8
-years old. the behaviour has drifted from his established model”. A round-five
-note asks what the golden prompts are and says to align before adjusting
-`agents.py`. These events are not inferred coherent-absurdity adjudications or
-historical gate closure. The [save-fix receipt](../../.local/reviews/20260921T165455028594Z/20260921T191226Z-save-fix/verification.json)
-records the exact source-side result: seven human events added to SQLite and
-zero on repeat sync.
-
-## Historical restart
-
-The local [Beta 1 restart](./010_B-PICK_ROUTING.md) under
-[D-039](../governance/DECISIONS.md#d-039-restart-changed-model-measurement-at-beta-1)
-is complete: 3,568 route passes, 0 fails, 0 pending, IDs `20500-24067`, with
-all six pairs covered. The [private receipt](../peanut/research/2026-09-20-beta1-local-restart/verification.json)
-verifies persisted judgments and unchanged prior evidence. This deterministic
-local run measured routing; live model quality and retrieval efficacy remain
-separate questions. Beta 2 has not started.
-
-Research Beta 1.0 through Research Beta 8.0 are closed baselines; the current
-coherent-absurdity inquiry remains paused, with human rejection and restoration
-recorded. Protocol alignment comes before further adaptation.
-
-The earlier [410 pre-Beta contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
-remains a staged historical comparison above the closed `Research Beta 8.0`
-menace baseline. It is not the immediate command to open a fresh menace run, and
-it does not authorize restoring historical phrase banks.
-
-| Historical comparison | Evidence |
+| Surface | Current read |
 | --- | --- |
-| Cross-object menace | `20410-20417: 6 / 2`; `20404-20409: 4 / 2`; `20397-20403: 4 / 3`; `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4` |
-| Same-pick menace | `20367-20381: 15 / 0` |
-| Runtime closure | `0` pending across route, tone and disposition |
+| staged contract | `pre-Beta 9.0` positive runtime instruction contract |
+| most recently closed beta | `Research Beta 8.0` menace judgement |
+| staged question | can Scorey keep the menace lane once the live runtime contract moves fully into `src/scorey/agent.py` and switches from prohibition piles to positive target behaviour? |
+| frozen menace baseline | `20410-20417: 6 / 2`; `20404-20409: 4 / 2`; `20397-20403: 4 / 3`; `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4`; `20367-20381: 15 / 0`; all closed cleanly |
 
-Latest exploratory live snapshot (`20455-20499`) is 45 cross-object rows, 15
-per reverse pair: route `45` pass and menace `10` pass / `35` fail. Tone,
-scoreboard, and prose each have 45 archive rows, not individual measured
-passes. The two private packets are [Luna pulse](../peanut/research/2026-09-20-luna-medium-pulse/)
-and [Luna two-pulse](../peanut/research/2026-09-20-luna-medium-two-pulses/);
-neither is the Beta 1 restart.
+Most recently closed contrast:
 
-Earlier closed contrast:
-
-- Beta 5 pulse: cross-object `8 / 5 / 2`, then `9 / 6 / 0`, then `9 / 6 / 0`; same-pick `15 / 0 / 0`, then `15 / 0 / 0`.
-- Beta 6 scoreboard: cross-object and same-pick slices each held at `15 / 0`.
-- Beta 7 prose: cross-object reopened at `9 / 6` and repeated; same-pick held at `15 / 0`.
-
-## New Research Direction
-
-The prompt and model experiments led the September 20 session. The human
-identified coherent absurdity as a new beta arc: inventive excuses can extend
-the relationship between picks, as in the magic-paper/scissors-to-frog example.
-The paused [420 boundary](./420_PB-COHERENT_ABSURDITY.md) preserves the engineering
-review proposal; its alignment remains open. The established
-measurement order and historical verdicts stay explicit.
-
-The [session findings](../peanut/research/2026-09-20-session-findings.md) link
-experiment conditions, human readings, Probsie's evaluation precedent, and the
-verified prompt-anchoring history. The [context reports](../peanut/research/2026-09-20-context-reading/README.md)
-provide supporting source readings. The September 21 prompt rewrite was
-restored after the human rejected its voice and requested protocol alignment.
-The four supplied concepts remain exploratory references, not expected-output
-phrases or four adopted golden passes.
-The [golden-smoke packet](../peanut/research/2026-09-21-golden-smoke-audit/README.md)
-records the source audit and experiment. The primary's
-[Polinko report](../peanut/research/2026-09-21-golden-smoke-audit/polinko-foundation-report.md)
-is incomplete as a trace of the golden-prompt and smoke-test method; context
-plumbing alone does not establish that method.
-
-## Beta map
-
-| Beta | Question / changed lens |
+| Family | Evidence |
 | --- | --- |
-| [1.0](./010_B-PICK_ROUTING.md) | Does Scorey choose a valid rigged route? Pick routing only. |
-| [2.0](./020_B-OBJECT_LANES.md) | Can one object hold a stable win/loss lane? Explicit local pair cycles. |
-| [3.0](./030_B-TONE_FIRST.md) | Can Scorey keep its voice once routing is settled? Tone first. |
-| [4.0](./040_B-ABSTRACT_TONE_MEASUREMENT.md) | What changes when phrase anchors leave tone measurement? Abstract constraints. |
-| [5.0](./050_B-FAIL_PRESSURE_PULSE.md) | What changes when bounded fail pressure becomes the binary unit? Pulse evidence. |
-| [6.0](./060_B-SCOREBOARD_JUDGEMENT.md) | Does `scoreboard_claim` deserve its own judged lane? Row-level scoreboard. |
-| [7.0](./070_B-BROADER_PROSE_JUDGEMENT.md) | What reopens above the scoreboard fragment? Broader round prose. |
-| [8.0](./080_B-MENACE_JUDGEMENT.md) | What holds when the full visible round is judged as menace? Menace quality. |
-| [pre-9.0 historical](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) | Can positive runtime instructions preserve the menace lane? Earlier staged contract. |
-| [pre-9.0 paused](./420_PB-COHERENT_ABSURDITY.md) | Does the invented relationship make the unfair win follow? Protocol alignment pending. |
+| cross-object menace | `20410-20417: 6 / 2`; `20404-20409: 4 / 2`; `20397-20403: 4 / 3`; `20307-20321: 11 / 4`; `20382-20396: 9 / 6`; `20352-20366: 11 / 4` |
+| same-pick menace | `20367-20381: 15 / 0` |
 
-Each later beta narrows its own claim; it does not erase earlier evidence.
-Route, tone, pulse, scoreboard, prose and menace verdicts remain distinct.
-`PASS`/`FAIL` comes before failure disposition, and archive is not a pass.
-Beta labels are research architectures, not app releases, package versions,
-branch names or another sweep.
+Current finding:
 
-The established measurement sequence begins with the [Beta 1 route rubric](./010_B-PICK_ROUTING.md):
-compute the gate in Scorey/user order, then persist individual route verdicts
-for the exact output range and per-pair counts. Advance through each later
-boundary only after its own judged object and close condition are met. Record
-exact settings, prompt, source revision, any captured patch, source mode, run
-scope, and output IDs. `research-beta1` reporting does not itself persist route
-verdicts, and its initialization path may migrate the schema.
+| Layer | Current read |
+| --- | --- |
+| `Research Beta 4.0` | closed row-level abstract measurement baseline |
+| `Research Beta 5.0` | cross-object held at `8 / 5 / 2`, then `9 / 6 / 0`, then `9 / 6 / 0`; same-pick collapsed at `15 / 0 / 0`, then `15 / 0 / 0` |
+| `Research Beta 6.0` | cross-object scoreboard `15 / 0`, then `15 / 0`; same-pick scoreboard `15 / 0`, then `15 / 0` |
+| `Research Beta 7.0` | cross-object prose reopened at `9 / 6` and repeated there; same-pick stayed collapsed at `15 / 0` |
+| `Research Beta 8.0` | menace is distinct from prose: one cross-object slice still held `9 / 6`, two larger cross-object slices improved to `11 / 4`, a newer eight-row probe improved to `6 / 2`, two compact probes landed at `4 / 3` and `4 / 2`, and same-pick still collapsed at `15 / 0` |
+| `pre-Beta 9.0` | the next live contract moves runtime instruction shape fully into `agent.py`, keeps `config.py` structural, and rewrites the live prompt as positive target behaviour before any new menace evidence is cut |
+| gate confidence | bounded pulse, scoreboard, prose, and menace closeouts are performing cleanly enough to support the frozen menace baseline |
+| runtime | closed at `0` pending across route, tone, and disposition |
 
-The private continuation `20449-20454` holds one human `PASS` and five human
-`FAIL` verdicts with exact notes and source/hash attribution. Disputed
-`20443-20448` retains historical Codex labels and is not an accepted baseline.
-No new beta, prompt change, or lasting model choice is claimed by either
-continuation.
+Current contrast chart:
 
-## Reading order and boundaries
+```mermaid
+xychart-beta
+  title "Closed Beta 8.0 cross-object versus same-pick contrast"
+  x-axis "Research layer" ["Beta 5 pulse", "Beta 6 scoreboard", "Beta 7 prose", "Beta 8 menace"]
+  y-axis "Pressure rows" 0 --> 7
+  bar "Cross-object pressure" [6, 0, 6, 2]
+  bar "Same-pick pressure" [0, 0, 0, 0]
+```
 
-Read the legend, then Betas 1–8, then the staged 410 contract and paused 420
-boundary. Use the
-individual boundary document for its judged object, unit, sample range,
-baseline, and close condition. Plans are not active method until the repository
-earns them.
+## Beta Map
 
-The local private model packet at
-`docs/peanut/research/2026-09-19-model-experiments/README.md` is exploratory
-evidence, not a new beta. Its run folders preserve raw outputs, prompts,
-reviews and receipts. Scorey uses the shared Polinko research model in a
-smaller rigged-round instrument: route-first, lane-shaped evaluation and
-binary evidence discipline. Durable decisions belong in
-[DECISIONS](../governance/DECISIONS.md); runtime and operator truth belong in
-[ARCHITECTURE](../runtime/ARCHITECTURE.md) and [RUNBOOK](../runtime/RUNBOOK.md).
+| Beta | Question | What Changed |
+| --- | --- | --- |
+| `Research Beta 1.0` | Does Scorey choose a valid rigged route? | The first gate narrowed to pick routing only. |
+| `Research Beta 2.0` | Can one object hold a stable win/loss lane? | Explicit local pair cycles isolate one object across both roles in one focused lane. |
+| `Research Beta 3.0` | Can Scorey keep its own voice once routing is settled? | The live judged lane keeps the route floor but switches the verdict lens to tone first. |
+| `Research Beta 4.0` | What changes when tone-first measurement drops phrase anchors? | The live judged lane keeps the same route floor and tone lens, but the generator contract shifts to abstract constraints aligned to the Polinko method. |
+| `Research Beta 5.0` | What changes when bounded fail pressure becomes the binary unit? | The live isolated lane keeps the route floor, but rows become pulse evidence and the pulse becomes the `PASS / FAIL` unit. |
+| `Research Beta 6.0` | Does the scoreboard fragment deserve its own judged lane? | The bounded isolated lane keeps the route floor, and the verdict resets to row-level `PASS / FAIL` on `scoreboard_claim`. |
+| `Research Beta 7.0` | What reopens once the judged surface widens above the scoreboard? | The bounded isolated lane keeps the route floor, and the verdict widens from `scoreboard_claim` to the broader round prose around the score line. |
+| `Research Beta 8.0` | What still holds once the judged surface widens from prose coherence to menace quality? | The bounded isolated lane keeps the route floor, and the verdict judges the full visible round as compact rigged-round menace. |
+
+Current staged note:
+
+- `pre-Beta 9.0`
+- [Positive Runtime Instruction Contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
+- frozen baseline:
+  - `Research Beta 8.0` menace judgement
+
+Most recently closed beta:
+
+- `Research Beta 8.0`
+- [Menace Judgement](./080_B-MENACE_JUDGEMENT.md)
+- closed menace evidence:
+  - `20410-20417`: `6` pass / `2` fail
+  - `20404-20409`: `4` pass / `2` fail
+  - `20397-20403`: `4` pass / `3` fail
+  - `20307-20321`: `11` pass / `4` fail
+  - `20352-20366`: `11` pass / `4` fail
+  - `20367-20381`: `15` pass / `0` fail
+  - `20382-20396`: `9` pass / `6` fail
+
+Read in order:
+
+1. [Research Legend](./000_LEGEND.md)
+2. [Research Beta 1.0: Pick Routing First](./010_B-PICK_ROUTING.md)
+3. [Research Beta 2.0: Focused Object Lanes](./020_B-OBJECT_LANES.md)
+4. [Research Beta 3.0: Tone First](./030_B-TONE_FIRST.md)
+5. [Research Beta 4.0: Abstract Tone Measurement](./040_B-ABSTRACT_TONE_MEASUREMENT.md)
+6. [Research Beta 5.0: Fail-Pressure Pulse](./050_B-FAIL_PRESSURE_PULSE.md)
+7. [Research Beta 6.0: Scoreboard Judgement](./060_B-SCOREBOARD_JUDGEMENT.md)
+8. [Research Beta 7.0: Broader Prose Judgement](./070_B-BROADER_PROSE_JUDGEMENT.md)
+9. [Research Beta 8.0: Menace Judgement](./080_B-MENACE_JUDGEMENT.md)
+10. [Pre-Beta 9.0: Positive Runtime Instruction Contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
+
+## How To Read The Betas And Stages
+
+These betas and staged notes are research architectures. They are not app
+release versions, package versions, branch names, or one more sweep.
+
+Each beta marks a real change in what the evaluation is asking:
+
+- `Research Beta 1.0` proved route validity at the pick level
+- `Research Beta 2.0` keeps the same gate but changes the sampling shape to inspect one object lane at a time
+- `Research Beta 3.0` keeps the live route floor but changes the verdict lens to Scorey's voice
+- `Research Beta 4.0` keeps the tone-first question but changes the live generator contract from phrase-anchored to de-anchored measurement
+- failed rows now stay binary first and then move through `RETAIN / EVICT` as
+  the disposition layer
+- `Research Beta 5.0` moves the binary unit from the row to the bounded pulse
+  while keeping row evidence visible as:
+  - `anchor`
+  - `counted_seam`
+  - `excluded_noise`
+- `Research Beta 6.0` keeps the bounded source shape but narrows the verdict
+  back down to row-level `PASS / FAIL` on `scoreboard_claim`
+- `Research Beta 7.0` keeps the bounded source shape but widens the verdict
+  above `scoreboard_claim` to the broader round prose around the score line
+- `Research Beta 8.0` keeps the bounded source shape but judges the full
+  visible round as menace rather than only broader prose coherence
+- `pre-Beta 9.0` keeps the closed menace baseline but stages a rewritten live
+  runtime contract before fresh evidence is promoted again
+
+Later betas do not erase earlier ones. They narrow what each verdict is allowed to mean.
+
+## Cross-Beta Flow
+
+```mermaid
+flowchart LR
+  B1["Research Beta 1.0<br/>pick routing only"]
+  B2["Research Beta 2.0<br/>focused object lanes"]
+  B3["Research Beta 3.0<br/>tone first"]
+  B4["Research Beta 4.0<br/>abstract tone measurement"]
+  B5["Research Beta 5.0<br/>fail-pressure pulse"]
+  B6["Research Beta 6.0<br/>scoreboard judgement"]
+  B7["Research Beta 7.0<br/>broader prose judgement"]
+  B8["Research Beta 8.0<br/>menace judgement"]
+  PB9["pre-Beta 9.0<br/>positive runtime contract"]
+
+  S1["six valid pass pairs<br/>and nothing else"]
+  S2["one object isolated<br/>across win and loss roles"]
+  S3["five positive tone traits<br/>on judged live rounds"]
+  S4["same tone bar<br/>without phrase anchors<br/>in the live generator"]
+  S5["bounded pulse verdicts<br/>with explicit row labels<br/>and exclusion reasons"]
+  S6["scoreboard_claim holds<br/>as a row-level lane<br/>across tested families"]
+  S7["broader prose reopens<br/>cross-object pressure<br/>at 9 pass / 6 fail"]
+  S8["menace separates from prose<br/>when larger cross-object slices<br/>improve to 11 pass / 4 fail"]
+  S9["beta 8 freezes as the<br/>menace baseline before a<br/>positive-only runtime reset"]
+
+  B1 --> S1 --> B2 --> S2 --> B3 --> S3 --> B4 --> S4 --> B5 --> S5 --> B6 --> S6 --> B7 --> S7 --> B8 --> S8 --> PB9 --> S9
+```
+
+## Plans
+
+Plans are useful, but they are not evidence. They do not become active method until the repo earns them.
+
+Parked lanes:
+
+- object lanes:
+  - complete for the current local pass
+- live gameplay:
+  - the widened live queue is now fully route-passed again
+  - keep using those route-passed live rows as the tone-first evidence surface
+  - after the stale queue archive, use fresh runs rather than old backlog traversal for the next tone evidence
+- later eval lenses:
+  - `Research Beta 8.0` menace judgement is now the most recently closed widening step
+  - `pre-Beta 9.0` positive runtime instruction contract is the current staged lane
+- research visuals:
+  - keep the beta map and per-beta notes in tracked docs
+  - only add heavier cross-beta visuals if the method story actually needs them
+
+## Polinko Contrast
+
+Scorey uses the same **[Polinko research model](https://github.com/tryskian/polinko)**, but it is a smaller rigged-round instrument.
+
+```mermaid
+flowchart LR
+  P["Polinko"]
+  P1["broader research system"]
+  P2["many runtime and eval surfaces"]
+  P3["binary fail pressure across products"]
+
+  Q["Scorey"]
+  Q1["rigged round instrument"]
+  Q2["pick-routed round generation"]
+  Q3["routing-first and lane-shaped evals"]
+
+  S["shared line\\nhuman-led research\\nbinary eval discipline\\nrepo-native docs and diagrams"]
+
+  P --> P1
+  P --> P2
+  P --> P3
+
+  Q --> Q1
+  Q --> Q2
+  Q --> Q3
+
+  P --- S
+  Q --- S
+```

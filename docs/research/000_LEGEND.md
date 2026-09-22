@@ -5,7 +5,7 @@
 | Code | `000_LEGEND` |
 | Category | `legend` |
 | Status | `active` |
-| Last evidence | `2026-09-21` |
+| Last evidence | `2026-06-09` |
 | Owns | file map, code ranges, and shared status language for tracked research docs. |
 
 ## Boundary Map
@@ -21,8 +21,6 @@
 | `B07` | `070_B-BROADER_PROSE_JUDGEMENT.md` | broader prose judgement boundary | `boundary` | `closed` |
 | `B08` | `080_B-MENACE_JUDGEMENT.md` | menace-judgement boundary | `boundary` | `closed` |
 | `PB09` | `410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md` | positive runtime instruction contract | `boundary` | `staged` |
-| `PB09-CA` | `420_PB-COHERENT_ABSURDITY.md` | coherent-absurdity inquiry awaiting protocol alignment | `boundary` | `paused` |
-| `300_VALIDATION-GOLDEN_SMOKE` | `300_VALIDATION-GOLDEN_SMOKE.md` | six-case smoke integrity | `validation` | `snapshot` |
 
 Boundary ladder:
 
@@ -37,10 +35,8 @@ flowchart LR
   B7["070<br/>B07<br/>closed"]
   B8["080<br/>B08<br/>closed"]
   PB9["410<br/>PB09<br/>staged"]
-  PB9CA["420<br/>PB09-CA<br/>paused"]
 
   B1 --> B2 --> B3 --> B4 --> B5 --> B6 --> B7 --> B8 --> PB9
-  PB9 -.->|"proposed refinement"| PB9CA
 ```
 
 ## Ordering
@@ -61,7 +57,7 @@ xychart-beta
   title "Tracked research ranges"
   x-axis "Range" ["000", "010-099", "100-199", "200-299", "300-399", "400-499"]
   y-axis "Current files" 0 --> 10
-  bar "Files" [1, 8, 0, 0, 1, 2]
+  bar "Files" [1, 8, 0, 0, 0, 1]
 ```
 
 ## Chart Key
