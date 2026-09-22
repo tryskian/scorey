@@ -3,7 +3,6 @@ from __future__ import annotations
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
-from pathlib import Path
 
 from scorey.agent import generate_live_round_fields
 from scorey.config import (
@@ -13,7 +12,7 @@ from scorey.config import (
     normalise_pick,
     require_openai_api_key,
 )
-from scorey.eval_db import default_eval_db_path, record_round_state
+from scorey.eval_db import record_round_state
 from scorey.eval_gates import (
     evaluate_research_beta_1,
     research_beta_1_pass_pairs,
@@ -24,7 +23,6 @@ from scorey.pipeline import (
     choose_scorey_pick,
     compose_round,
 )
-from scorey.retrieval import FrozenMemory, bind_eval_receipt
 
 LOCAL_SAMPLE_PATTERNS: tuple[str, ...] = ("baseline", "research-beta-1-coverage")
 
@@ -219,7 +217,6 @@ def sample_live_eval_outputs(
 
     settings = load_settings()
     require_openai_api_key()
-    memory = FrozenMemory(settings) if settings.memory_enabled else None
     pick_cycle = user_pick_cycle or USER_PICKS
     model_name = model or settings.model
 
@@ -241,26 +238,13 @@ def sample_live_eval_outputs(
         else:
             user_pick = pick_cycle[index % len(pick_cycle)]
             scorey_pick = choose_scorey_pick(user_pick)
-        user_pick, scorey_pick = normalise_pick(user_pick), normalise_pick(scorey_pick)
         route_family = "same-pick" if user_pick == scorey_pick else "cross-object"
-        receipts: list[Path] = []
-        if memory is None:
-            fields = generate_live_round_fields(
-                settings, user_pick, scorey_pick, route_family
-            )
-        else:
-            fields = generate_live_round_fields(
-                settings,
-                user_pick,
-                scorey_pick,
-                route_family,
-                retrieval_context=memory.retrieve(user_pick, scorey_pick),
-                receipt_sink=receipts.append,
-            )
-            if len(receipts) != 1:
-                raise RuntimeError(
-                    "Memory-enabled generation did not produce a receipt."
-                )
+        fields = generate_live_round_fields(
+            settings,
+            user_pick,
+            scorey_pick,
+            route_family,
+        )
         round_state = build_round_state(
             user_pick,
             scorey_pick,
@@ -268,34 +252,13 @@ def sample_live_eval_outputs(
             scorey_score=index + 1,
         )
         round_text = compose_round(round_state)
-        if receipts:
-            db_path = default_eval_db_path()
-
-            def bind(
-                output_id: int,
-                receipt_path: Path = receipts[0],
-                text: str = round_text,
-                destination: Path = db_path,
-            ) -> Callable[[], None]:
-                sidecar = bind_eval_receipt(destination, output_id, receipt_path, text)
-                return lambda: sidecar.unlink(missing_ok=True)
-
-            output_id = record_round_state(
-                db_path,
-                round_state,
-                round_text,
-                source_mode="live",
-                model=model_name,
-                before_commit=bind,
-            )
-        else:
-            output_id = record_round_state(
-                None,
-                round_state,
-                round_text,
-                source_mode="live",
-                model=model_name,
-            )
+        output_id = record_round_state(
+            None,
+            round_state,
+            round_text,
+            source_mode="live",
+            model=model_name,
+        )
         output_ids.append(output_id)
 
         gate_result = evaluate_research_beta_1(
