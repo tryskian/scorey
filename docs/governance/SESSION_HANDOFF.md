@@ -18,8 +18,9 @@ Generation and method implementation are paused. The human directed restoration
 of the established prompt, followed by a Polinko method report and a stop.
 Restoration is complete under D-045. The report remains incomplete as a trace
 of the golden-prompt and smoke-test protocol; tracing context plumbing alone
-did not answer the research question. Current work groups existing changes into
-focused local commits. No later historical gate has been opened.
+did not answer the research question. Existing changes are grouped into generation
+evidence, attributed review, and restoration/alignment records. No later
+historical gate has been opened.
 
 ## Current Snapshot
 
@@ -240,9 +241,11 @@ Use `make end-preflight` for branch validation. Follow the protected PR flow,
 then finish with `make end` on clean synced `main`. The
 [runbook](../runtime/RUNBOOK.md) owns the individual checks.
 
-The [session closeout receipt](../peanut/research/2026-09-20-session-closeout/closeout.json)
-records final validation and Git state. Closeout also preserved eleven original
-path-bearing logs/records in a verified archive before making portable working
-copies; future retrieval receipts use repository-relative paths. The
-[portability receipt](../peanut/research/2026-09-20-session-closeout/path-portability.json)
-records original and working-copy hashes. Responses and verdicts are unchanged.
+The [September 21 closeout receipt](../peanut/research/2026-09-21-session-closeout/closeout.json)
+records validation and Git status. Its
+[portability receipt](../peanut/research/2026-09-21-session-closeout/path-portability.json)
+preserves exact originals and hashes for seven logs before making portable
+reading copies. Recovery checkpoints retain their original manifests and link
+to their archived log originals. Responses, verdicts, and databases are unchanged.
+The [September 20 receipt](../peanut/research/2026-09-20-session-closeout/closeout.json)
+remains the previous closeout record.
