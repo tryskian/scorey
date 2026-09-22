@@ -620,3 +620,130 @@ remain in Git history. These links preserve older research references.
 - Boundary: Defaults stay off. A source change requires a new build and pin.
   Activation is per named local condition, and behavioral efficacy is measured
   under the existing gates rather than inferred from retrieval receipts.
+
+## D-041: Explore coherent absurdity through frozen golden cases
+
+- Date: `2026-09-21`
+- Category: `runtime_engineering`
+- Tags: `coherent_absurdity`, `golden_cases`, `smoke_tests`
+- Provenance: human-led inquiry; the detailed prompt rewrite and six-case
+  implementation were engineering choices, later rejected and restored in D-045.
+- Source: "that's on you to adapt to scorey"; the four supplied concepts are
+  "just a reference", not wording to use verbatim.
+- Historical implementation: replace exact-object-class and physical-only instructions with
+  imaginative properties, powers, and roles whose relationship makes the
+  unfair win follow. Preserve runtime picks, three generated fields, score,
+  and composition. References remain research evidence, not generator examples.
+- Scoring clarification: the human reaffirmed "i still love our original
+  scoring behaviour" and "nothing to adopt from the platform there". Keep
+  runtime-owned score progression and `me: [score], you: [scoreboard_claim]`.
+  Independent smoke cases start at 1; this does not change app scoring.
+- Historical condition: `coherent-absurdity-1` used a shared agent factory for app
+  and smoke. Six fixed reverse/same-pick inputs start at score 1. Preparation
+  freezes source, settings, prompts, schema, endpoint, and retrieved context;
+  execution keeps each request, raw response, failure, and composed round.
+- Boundary: one fresh request per case, zero retries, 60 seconds per case.
+  Mechanical checks and attributed quality judgments remain separate. Smoke
+  writes isolated evidence, advances no historical gate, and supplies no
+  numerical beta or automatic quality threshold.
+
+## D-042: Formalize coherent absurdity as the next staged boundary
+
+- Date: `2026-09-21`
+- Status: paused under D-045. The engineering formalization below remains
+  a record for protocol alignment, not permission to resume evaluation.
+- Category: `eval_quality`
+- Tags: `pre_beta_9`, `coherent_absurdity`, `bounded_review`
+- Provenance: human-led direction with repo formalization of the previous
+  boundary method.
+- Source: "ok so that's your responsibility haha just follow the previous
+  ones", following the request to finish the new beta setup.
+- Decision: record [Pre-Beta 9.0: Coherent Absurdity](../research/420_PB-COHERENT_ABSURDITY.md)
+  as the current staged refinement above the frozen Beta 8 comparison.
+  Preserve the earlier `410` staged contract and closed evidence unchanged.
+- Review: apply `coherent-absurdity-review-1` to one complete composed round
+  at a time, asking whether its invented relationship makes the unfair win
+  follow. Use the six original smoke cases; record attributed judgments in a
+  separate sidecar. Mechanical admission, relational quality, scoreboard,
+  and menace retain separate meanings. Reference concepts stay out of the
+  generator and expected-answer fixtures.
+- Close condition: six attributed relational verdicts with reasons, zero
+  quality pending, and verified source links. Preserve failed evidence and
+  apply disposition only where the inherited lens requires it. No all-pass
+  threshold or pulse arithmetic is introduced.
+- Promotion: follow the [earlier boundary pattern](../research/070_B-BROADER_PROSE_JUDGEMENT.md):
+  a closed bounded review and an explicit comparison must show what changed
+  in evidence meaning, with D-039's required lower gates satisfied, before
+  the human lead's go/no-go. The current six
+  mechanical passes leave quality and promotion pending.
+- Boundary: this stages a comparison, not a new active database gate or an
+  advance through D-039's ordered restart. The runtime, model settings,
+  original scoring, canonical databases, and original smoke artifacts stay
+  unchanged.
+
+## D-043: Preserve Scorey's review meaning while adding attributed notes
+
+- Date: `2026-09-21`
+- Category: `evidence_governance`
+- Tags: `staged_review`, `smoke_evidence`, `attribution`, `notebook`
+- Provenance: human-led method decision with implementation contract.
+- Source: SCO-2 user messages: "yes...these are things i want scorey to
+  keep...i just wanted you to be able to have your notes as well" and "ok yes
+  let's finish...beta arc includes updating the readme".
+- Decision: finish the staged beta-arc review setup by reusing the six saved
+  smoke responses. Preserve Scorey's existing meaningful measures, structure,
+  and human wording; add independently attributed assistant observations
+  alongside them. An observation does not require a verdict.
+- Implementation contract: add `review_datasets`, `review_cases`, and
+  `review_events` to the existing `.local/evals.sqlite` without changing
+  historical `eval_*` routing, lens, pulse, or judgment rows. Import the frozen
+  manifest and criteria plus full receipts, raw request/response bytes and
+  hashes, picks, composed text, settings, timing, and token data as a separate
+  staged dataset. Store append-only attributed observation and judgment events;
+  require a verdict only for judgments.
+- Notebook boundary: read SQLite and save a separate source-bound
+  `.notes.json` sidecar. An explicit importer syncs notes to the new tables.
+  Existing CSV, notebook, and notes remain intact. No new model calls,
+  automatic quality judgments, canonical gate changes, or promotion claims.
+
+## D-044: Make staged review verdicts explicit and explanations optional
+
+- Date: `2026-09-21`
+- Category: `evidence_governance`
+- Tags: `staged_review`, `notebook`, `optional_reason`, `pulse_review`
+- Provenance: human-led operational correction with implementation adaptation.
+- Source: SCO-2 user clarification: "i can't save notes and you aren't expected
+  to save notes every. time. especially in one eval pulse. all of these have
+  the same issue".
+- Decision: an attributed staged-review judgment is valid when the evaluator
+  records an explicit `PASS` or `FAIL`; its explanation is optional. Shared
+  issues may be recorded once for a bounded pulse rather than duplicated on
+  every row. No new batch-note schema is introduced, and no explanation is
+  fabricated or duplicated.
+- Implementation contract: `Save all reviews` saves every edited round. The
+  notebook labels mechanical evidence as `Automated route check (Valid/Invalid)`
+  and `Automated mechanical checks (Checks passed/Checks failed)`, with explicit
+  text that these checks do not judge voice or quality. This operational
+  correction supersedes D-042's per-row reason requirement while preserving its
+  frozen criteria, source boundaries, and pending quality state.
+
+## D-045: Restore the established generation contract and pause adaptation
+
+- Date: `2026-09-21`
+- Category: `runtime_engineering`
+- Tags: `restoration`, `protocol_alignment`, `golden_cases`
+- Provenance: explicit human correction.
+- Source: "restore what we already had before anything else" and "Stop there".
+  The human specified high-signal user/assistant golden pairs and directed a
+  Polinko source report before further work.
+- Decision: restore the instructions and matchup prompt builder from
+  `321d9702148ece91c39bcd66d64a2e02612a5ce7`. Pause new generation and method
+  implementation until the established protocol is understood and aligned.
+- Verification: exact instruction equality and all six matchup prompts, with
+  and without context, match the baseline; all 154 offline tests pass.
+  Model settings, composition, scoring, original smoke evidence, databases,
+  and human verdicts are unchanged. No model calls were made.
+- Retained state: the shared Agent factory and evidence/review tooling remain.
+  Prompt metadata is `restored-321d970`; the rejected experiment remains frozen
+  as `coherent-absurdity-1`. The existing six-case fixture provides matchup
+  coverage and does not yet implement the requested golden pairs.

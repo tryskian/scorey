@@ -1,6 +1,9 @@
 from unittest import TestCase
 
-from scorey.agent import SCOREY_INSTRUCTIONS, build_prompt
+from scorey.agent import SCOREY_INSTRUCTIONS, build_live_agent, build_prompt
+from scorey.config import Settings, route_family_for
+from scorey.eval_gates import research_beta_1_pass_pairs
+from scorey.pipeline import RoundFields
 
 PROHIBITION_DIRECTIVES = (
     "never",
@@ -106,3 +109,32 @@ class AgentPromptTests(TestCase):
         for directive in PROHIBITION_DIRECTIVES:
             with self.subTest(directive=directive):
                 self.assertNotIn(directive, lower_prompt)
+
+
+def test_matchup_and_optional_context_are_preserved() -> None:
+    for scorey, user in research_beta_1_pass_pairs():
+        route = route_family_for(user, scorey)
+        prompt = build_prompt(user, scorey, route)
+        assert f"User pick: {user}" in prompt
+        assert f"Scorey pick: {scorey}" in prompt
+        assert f"Route family: {route}" in prompt
+        assert "[winning_state]" in prompt
+        assert "[worse_state]" in prompt
+        assert "you: [scoreboard_claim]" in prompt
+        augmented = build_prompt(user, scorey, route, context="frozen test context")
+        assert augmented.startswith(prompt)
+        assert augmented.count("frozen test context") == 1
+        assert "frozen test context" not in prompt
+
+
+def test_shared_agent_preserves_application_settings_and_schema() -> None:
+    settings = Settings("Scorey", "test-model", "medium", "detailed", "low", 0.98)
+    agent = build_live_agent(settings)
+    assert agent.model == settings.model
+    assert agent.output_type is RoundFields
+    assert agent.instructions == SCOREY_INSTRUCTIONS
+    assert agent.model_settings.reasoning is not None
+    assert agent.model_settings.reasoning.effort == "medium"
+    assert agent.model_settings.reasoning.summary == "detailed"
+    assert agent.model_settings.verbosity == "low"
+    assert agent.model_settings.top_p == 0.98

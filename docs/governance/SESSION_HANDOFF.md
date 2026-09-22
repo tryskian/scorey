@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-09-20
+Last updated: 2026-09-21
 
 ## Start Here
 
@@ -14,9 +14,13 @@ make start-runtime-check
 make session-status
 ```
 
-The Beta 1 local restart is complete. The next gate has not started. Current
-discussion is shaping a coherent-absurdity research arc from the prompt and
-model experiments; its Scorey rubric and beta identifier remain open.
+Generation and method implementation are paused. The human directed restoration
+of the established prompt, followed by a Polinko method report and a stop.
+Restoration is complete under D-045. The report remains incomplete as a trace
+of the golden-prompt and smoke-test protocol; tracing context plumbing alone
+did not answer the research question. Existing changes are grouped into generation
+evidence, attributed review, and restoration/alignment records. No later
+historical gate has been opened.
 
 ## Current Snapshot
 
@@ -24,6 +28,66 @@ Scorey remains a local CLI research instrument for one unfair rock, paper,
 scissors round. Runtime owns routing and composition; the model supplies only
 `winning_state`, `worse_state`, and `scoreboard_claim`. Route validity remains
 the first gate, and the closed Beta 1–8 surfaces remain historical baselines.
+
+The current prompt version is `restored-321d970`. Instructions and all six
+matchup prompts, with and without retrieved context, match the previous
+`321d970` baseline exactly. The rejected `coherent-absurdity-1` condition remains
+frozen in the original smoke evidence. Model settings, fields, composer, and
+scoring are unchanged. The high-signal user/assistant golden pairs requested
+by the human have not been implemented.
+
+The human reaffirmed original scoring: retain the app's score progression and
+`me: [score], you: [scoreboard_claim]`. Platform scoring is outside this
+adaptation; smoke cases start at 1 because each is an independent first round.
+
+| Surface | Current state |
+| --- | --- |
+| Shared agent contract | `build_live_agent` in `src/scorey/agent.py` serves app and smoke |
+| Experimental inputs | `src/scorey/data/golden_cases.json`: six reverse/same-pick matchups at score 1; no assistant reference answers |
+| Preparation | Tooling retained; new preparation paused pending alignment |
+| Execution | Tooling retained; new generation paused pending alignment |
+| Evidence | Run folders preserve requests, raw responses, receipts, and mechanical results; human review is recorded separately |
+| Review import | Dataset `20260921T165455028594Z`: 6 cases, 6 assistant observation events, 6 human `FAIL` judgment events, 1 human observation event, 0 assistant judgment events |
+| Verification | Restoration: `make check` passed 154 tests; all 40 protected evidence files match their hashes |
+| Live smoke | `20260921T165455028594Z`: 6 mechanical passes, 0 failures; 6 human `FAIL` reviews recorded |
+
+The [validation record](../research/300_VALIDATION-GOLDEN_SMOKE.md) links the
+run condition and evidence. Six attempts used 3,330 tokens in 34.262 seconds
+combined. Raw hashes verified; that smoke run left both databases unchanged.
+The later review import added only the `review_*` tables and events described below.
+The [execution pipeline](../diagrams/GOLDEN_SMOKE.md) records the verified
+preparation, execution, and implemented research review flow.
+
+The six existing smoke responses are the only review material in scope. The
+implemented one-round reader is
+`output/jupyter-notebook/scorey-coherent-absurdity-review.ipynb`. Its
+top-to-bottom run against a temporary import of all six original receipts
+passed 9 new UI tests and 10 historical tests; live Jupyter checks confirmed
+Next/Previous navigation, wrapped content without horizontal overflow, and
+separate assistant observations from saved human verdicts. No new model calls
+and no generated reasons were added. Human review now contains six saved `FAIL`
+judgements and one saved observation; six assistant observations remain
+separate, with zero assistant judgements.
+The active ignored working copy is open at round 6 with its saved FAIL in Jupyter:
+`http://127.0.0.1:8893/lab/tree/output/jupyter-notebook/scorey-coherent-absurdity-review.local.ipynb`.
+The tracked notebook has execution outputs cleared.
+
+The canonical import is idempotent and byte-exact for source requests,
+responses, and receipts. Criteria are frozen at SHA-256
+`6fae6ca3b0f8cf6879d9ff55e0bf4819e7ec73e8f3b94fbdbabbe728fbb3cbea`, with the
+local copy at `.local/reviews/20260921T165455028594Z/review-criteria.md`.
+The initial setup verification receipt is
+`.local/reviews/20260921T165455028594Z/verification.json`. SQLite
+`quick_check` and `foreign_key_check` passed; all eight historical `eval_*`
+table row counts and hashes, plus 48 protected source-file hashes, remain
+unchanged. Existing review tooling and historical gate tables remain intact.
+Import is review setup evidence, not a quality verdict or promotion.
+
+The latest save-fix receipt is
+`.local/reviews/20260921T165455028594Z/20260921T191226Z-save-fix/verification.json`.
+It verifies preservation of the human reasons and phrases, with none generated.
+The sync added exactly 7 human events, and the repeat sync added 0; existing
+events and all historical eval tables remain unchanged.
 
 The current local experimental configuration uses `gpt-5.6-luna`, medium reasoning,
 detailed reasoning summary, low verbosity, and `top_p=0.98`. The September 20
@@ -39,8 +103,8 @@ Four exact pipeline principles and six pair queries use a separate SQLite
 snapshot; each enabled live batch freezes its retrieval condition and records
 source-linked receipts. The default for a fresh checkout remains off.
 
-Verification: `make check` passed 120 tests; package build, docs lint, and path
-checks passed. Six local previews all selected `pair-awareness` and
+September 20 verification: `make check` passed 120 tests; package build, docs
+lint, and path checks passed. Six local previews all selected `pair-awareness` and
 `unfair-score-posture` (284 characters). One isolated live integration round
 succeeded, stayed pending with zero judgements, and wrote no canonical eval
 rows. These checks establish integration, not behavioral efficacy. Exact
@@ -66,12 +130,26 @@ prompts, observed responses, and human readings are linked in the concise
 [session findings](../peanut/research/2026-09-20-session-findings.md).
 Playground explorations and app eval conditions retain separate provenance.
 
-The human identified coherent absurdity as a new research arc, using the
-magic-paper/scissors-to-frog response as useful signal. The exact Scorey
-criteria, gate placement, and beta identifier still need shaping. The primary
-recommends reviewing the base prompt, matchup guidance, and retrieved
-principles together: the current exact-object-class instruction is in tension
-with that transformation. This recommendation has not changed the prompt.
+The engineering prompt rewrite exceeded the intended adjustment to stable
+Scorey. All six smoke cases passed mechanics and received human `FAIL`
+judgments about voice and behaviour. One human observation, six assistant
+observations, and zero assistant judgments remain recorded separately.
+The [paused boundary](../research/420_PB-COHERENT_ABSURDITY.md) and its frozen
+`coherent-absurdity-review-1` criteria preserve the experimental record.
+The human's failures are not relabelled as another lens's verdicts.
+
+Preserved human feedback includes the first reason, `this is not scorey's
+voice`; the observation phrase, `scorey's 8 years old. the behaviour has drifted
+from his established model`; and the Round 5 note, `\nwhat are your golden
+prompts?\nwe need to align before you adjust agents.py`. The next step is to
+trace Polinko's established golden-prompt and smoke-test method through a
+concrete case, then align its application to Scorey before any adjustment.
+The [primary report](../peanut/research/2026-09-21-golden-smoke-audit/polinko-foundation-report.md)
+contains verified partial findings, not a completed method audit.
+
+Scorey is an existing research project with a protocol. Read authoritative
+sources or ask the human when understanding is incomplete. Do not fill gaps
+with invented method or treat an unverified interpretation as a finding.
 
 Supporting context: three readers covered 57 curated records plus two archive
 guides. The primary read all reports and checked passages in 20 source files;
@@ -85,69 +163,89 @@ is complete: three readers fully read all 69 tracked Markdown documents
 (41 Huey, 28 Scorey), and the primary personally read every report and checked
 supporting passages. The audit's findings remain proposed alignment; it changed
 no source documents. The user pinned the alignment edits for a later
-user-selected session. The packet retains the proposed scope; the
-coherent-absurdity rubric and next discussion above remain open.
+user-selected session. That broader alignment remains deferred; golden-smoke
+adaptation is now paused under D-045.
 
-## Method: Restart From Beta 1
+## Historical Restart and Evidence Boundaries
 
 [D-039](DECISIONS.md#d-039-restart-changed-model-measurement-at-beta-1) records
-the human-led decision to follow the original gate sequence after the model
-change. Start with [Beta 1](../research/010_B-PICK_ROUTING.md): picks only, in
-Scorey/user order, all six allowed pairs, with full six-pair coverage. The
-current primary user delegation permits Codex to judge current runs in real
-time; the human lead still owns scope, criteria, meaning-level judgement, and
-go/no-go.
+the September 20 model restart. Its [Beta 1](../research/010_B-PICK_ROUTING.md)
+route measurement is complete; the original Beta 2–8 sequence and earlier
+staged 410 positive-runtime contract remain documented comparison surfaces. The
+paused 420 inquiry preserves the proposed next boundary; its
+sidecar comparison does not advance the D-039 gate order, relabel historical
+rows, or establish retrieval efficacy.
 
-Follow the documented method exactly: tie procedure and criteria to source, with
-no assumptions or inferences. Keep missing or ambiguous method details
-unresolved until the human lead clarifies them before dependent work. This
-applies to the primary, documentation, and readers.
+Continue to record source revision and patch, full instructions, requested
+settings, retrieval condition, transport, run bounds, exact artifacts, and
+attributed judgments. Human ownership of scope, criteria, meaning-level
+judgment, and go/no-go remains; the primary's delegated judgments retain their
+attribution. Missing criteria stay unresolved before dependent work.
 
-Before generation, record the source revision, prompt, model and reasoning
-settings, captured uncommitted patch, source mode, run scope, generation
-command, and intended pair cycle. Historically, Beta 1 established the
-deterministic six-pair route baseline; Beta 2 then bridged to a 395-row live
-queue. Those counts are historical evidence, not new minimums. For the
-long-run condition, synchronous grouped runs exist, but no OpenAI Batch API
-submit/import adapter was found in the inspected path. Honor the Polinko
-batch-call intent and consult
-`docs/peanut/research/2026-09-19-model-experiments/usage-and-batching.md`.
-Record the selected transport, run size, and budget before generation.
+Any resumed evaluation follows the established protocol and required D-039
+gates. The engineering proposal in D-042 is paused. Historical procedure remains in
+[the research map](../research/README.md).
+`research-beta1` reports route results but does not persist judgments, and its
+initialization may migrate the schema. Smoke uses an isolated evidence folder
+instead. PASS/FAIL, failure disposition, archive, and mechanical completion
+retain separate meanings. Findings and reference responses do not become
+generator phrase banks.
 
-Use the Beta 1 route computation, then persist individual route verdicts for
-the exact output-ID range and per-pair counts. The `research-beta1` reporting
-path computes and prints recent results, but does not itself persist those
-verdicts, and its initialization path may migrate the schema; treat it as
-write-capable. Record PASS/FAIL and pending state before advancing.
+Long-run Batch API adaptation remains separate from the six-call smoke; the
+[batching note](../peanut/research/2026-09-19-model-experiments/usage-and-batching.md)
+preserves that intent and the inspected transport gap.
 
-Advance only in order: Beta 2 object lanes; Beta 3/4 positive tone with
-`retain`/`evict`; then Beta 5 pulse, Beta 6 scoreboard, Beta 7 prose, and Beta
-8 menace, each using its own judged object and close condition. Closeout is
-not a measured pass, and archived rows remain distinct from PASS. Preserve
-Beta 4 de-anchoring: findings do not become generator phrase examples, and
-the restart does not restore historical phrase banks. `pre-Beta 9.0` remains a
-staged historical comparison, not an immediate menace command.
+## Continuing Task Registry
 
-The source-linked memory path does not change this order. It remains a separate
-named generation condition with the current base prompt and route gates intact;
-receipts stay evidence metadata beside eval rows rather than new verdict fields.
-Its behavioral efficacy still needs measurement under the existing gates, and
-activation does not advance a beta.
+SCO-2 (`01a0b6ed-3be0-7942-9d29-8103fe7d1b2f`) remains the primary director:
+it dispatches source packets, owns generation, live state, integration,
+verification, and Git, and personally reads returns.
+
+| Continuing task | Sole write ownership | Return to primary |
+| --- | --- | --- |
+| Scorey documentation / alignment `01a0bb5c-6c52-7301-99e7-82d3364f6fd5` | `README.md`, `docs/governance/CHARTER.md`, `docs/governance/SESSION_HANDOFF.md`, `docs/diagrams/COLLABORATION.md` | Alignment edits, concise synthesis, and cross-owner gaps |
+| Scorey runtime records `01a0c4f0-fc8c-7c62-a742-19ebbe9a93d0` | `DECISIONS.md`, `ARCHITECTURE.md`, `RUNBOOK.md`, `START_END_REFERENCE.md` | Runtime record edits and source-backed gaps |
+| Scorey research records `01a0c4f1-3173-7f52-b50f-7f0b004f667e` | Assigned tracked research and current private research summaries | Research records and unresolved evidence boundaries |
+| Scorey transcript keeper `01a0c4f1-803f-7622-b3c4-0c1f1320e5a1` | Curated excerpts under `docs/peanut/transcripts/` | Exact sourced captures, separated interpretation, and gaps |
+
+Research records include research diagrams; runtime records include execution
+pipelines. Owners keep these current with their records and flag cross-owner
+changes for alignment. Captures retain source diagrams and provenance;
+new explanatory drawings and proposed flows remain clearly labelled.
+
+These tasks receive only dispatched context; later parent messages do not arrive
+automatically, and no task continuously monitors the conversation. Supporting
+bounded subagents inherit their delegating task's file boundary. Transcript
+capture starts when a supplied or directly inspected exchange contains a
+meaningful discovery, correction, or rationale. All returns remain subject to
+primary review and integration. Transcript format follows the [local transcript
+README](../peanut/transcripts/README.md), which routes to the canonical standard;
+this task does not invent a new format.
 
 ## Workflow and Closeout
 
-Companion task: **Scorey documentation**,
-`01a0bb5c-6c52-7301-99e7-82d3364f6fd5`, using this checkout. The primary owns
-generation, live state, integration, verification, and Git; documentation
-delegates edit only the assigned files.
+The primary owns generation, live state, integration, verification, and Git;
+each documentation task edits only its assigned files in this checkout.
+
+Use local checkpoints during work and group commits around coherent changes.
+Initial setup checkpoint: `.local/checkpoints/20260921T185820Z/`.
+Latest review correction checkpoint: `.local/checkpoints/20260921T191756Z-review-save-fix/`.
+Restoration receipt: `.local/checkpoints/20260921T211826Z-before-prompt-restore/receipt.json`.
+Pre-commit grouping checkpoint: `.local/checkpoints/20260921T225440Z-before-grouped-commits/`.
+Checkpoints preserve the current code/docs
+and selected private notes; their manifests list copies, hashes, scope, and
+references to existing smoke evidence and databases. Checkpoints follow the
+[runbook](../runtime/RUNBOOK.md#local-checkpoints-and-commit-cadence).
 
 Use `make end-preflight` for branch validation. Follow the protected PR flow,
 then finish with `make end` on clean synced `main`. The
 [runbook](../runtime/RUNBOOK.md) owns the individual checks.
 
-The [session closeout receipt](../peanut/research/2026-09-20-session-closeout/closeout.json)
-records final validation and Git state. Closeout also preserved eleven original
-path-bearing logs/records in a verified archive before making portable working
-copies; future retrieval receipts use repository-relative paths. The
-[portability receipt](../peanut/research/2026-09-20-session-closeout/path-portability.json)
-records original and working-copy hashes. Responses and verdicts are unchanged.
+The [September 21 closeout receipt](../peanut/research/2026-09-21-session-closeout/closeout.json)
+records validation and Git status. Its
+[portability receipt](../peanut/research/2026-09-21-session-closeout/path-portability.json)
+preserves exact originals and hashes for seven logs before making portable
+reading copies. Recovery checkpoints retain their original manifests and link
+to their archived log originals. Responses, verdicts, and databases are unchanged.
+The [September 20 receipt](../peanut/research/2026-09-20-session-closeout/closeout.json)
+remains the previous closeout record.

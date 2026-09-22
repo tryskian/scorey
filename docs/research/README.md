@@ -6,11 +6,43 @@ allowed to mean; raw runs and scratch notes remain private until promoted.
 | Surface | Current |
 | --- | --- |
 | Legend | [000_LEGEND.md](./000_LEGEND.md) |
-| Staged boundary | [410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) |
+| Paused inquiry | [420_PB-COHERENT_ABSURDITY.md](./420_PB-COHERENT_ABSURDITY.md) |
+| Historical staged contract | [410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) |
 | Last closed boundary | [080_B-MENACE_JUDGEMENT.md](./080_B-MENACE_JUDGEMENT.md) |
+| Current validation | [300_VALIDATION-GOLDEN_SMOKE.md](./300_VALIDATION-GOLDEN_SMOKE.md) |
 | Filename contract | `NNN_B-NAME.md` for beta boundaries; `NNN_PB-NAME.md` for staged pre-beta boundaries |
 
 ## Current stage
+
+The [coherent-absurdity inquiry](./420_PB-COHERENT_ABSURDITY.md) is paused under
+D-045. The previous generation instructions and matchup prompts are restored
+from `321d970`; all 154 offline tests pass. The detailed engineering method
+requires alignment with the established protocol before work resumes. No
+active Beta 9 or additional database gate is established.
+The first six-call smoke passed all mechanical checks. Its
+[validation record](./300_VALIDATION-GOLDEN_SMOKE.md) preserves the condition
+and limits. D-043 keeps the existing measures
+and human wording while adding the staged review dataset/case/event surface and
+a separate source-bound `.notes.json` sidecar. The canonical review now holds
+six cases; its initial import had six Codex-primary observations, zero quality
+judgments, and six quality-pending cases. The one-round
+notebook, idempotent import paths, and `149`-test tooling check were verified;
+historical `eval_*` state and protected originals remain unchanged. The
+[initial review receipt](../../.local/reviews/20260921T165455028594Z/verification.json)
+holds that source-bound verification.
+
+The follow-up save recorded six exact human `FAIL` judgments and one human
+observation after D-044 made per-round reasons optional; six Codex-primary
+observations remain and no assistant judgments were added. The shared rejection
+was behavioral and attributed: “this is not scorey's voice” and “scorey's 8
+years old. the behaviour has drifted from his established model”. A round-five
+note asks what the golden prompts are and says to align before adjusting
+`agents.py`. These events are not inferred coherent-absurdity adjudications or
+historical gate closure. The [save-fix receipt](../../.local/reviews/20260921T165455028594Z/20260921T191226Z-save-fix/verification.json)
+records the exact source-side result: seven human events added to SQLite and
+zero on repeat sync.
+
+## Historical restart
 
 The local [Beta 1 restart](./010_B-PICK_ROUTING.md) under
 [D-039](../governance/DECISIONS.md#d-039-restart-changed-model-measurement-at-beta-1)
@@ -20,12 +52,14 @@ verifies persisted judgments and unchanged prior evidence. This deterministic
 local run measured routing; live model quality and retrieval efficacy remain
 separate questions. Beta 2 has not started.
 
-Research Beta 1.0 through Research Beta 8.0 are closed baselines; only
-`pre-Beta 9.0` remains staged.
+Research Beta 1.0 through Research Beta 8.0 are closed baselines; the current
+coherent-absurdity inquiry remains paused, with human rejection and restoration
+recorded. Protocol alignment comes before further adaptation.
 
-`pre-Beta 9.0` remains a staged historical comparison above the closed
-`Research Beta 8.0` menace baseline. It is not the immediate command to open a
-fresh menace run, and it does not authorize restoring historical phrase banks.
+The earlier [410 pre-Beta contract](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md)
+remains a staged historical comparison above the closed `Research Beta 8.0`
+menace baseline. It is not the immediate command to open a fresh menace run, and
+it does not authorize restoring historical phrase banks.
 
 | Historical comparison | Evidence |
 | --- | --- |
@@ -51,14 +85,22 @@ Earlier closed contrast:
 The prompt and model experiments led the September 20 session. The human
 identified coherent absurdity as a new beta arc: inventive excuses can extend
 the relationship between picks, as in the magic-paper/scissors-to-frog example.
-Exact Scorey criteria, gate placement, and a beta identifier remain open;
-the established measurement order and historical verdicts stay explicit.
+The paused [420 boundary](./420_PB-COHERENT_ABSURDITY.md) preserves the engineering
+review proposal; its alignment remains open. The established
+measurement order and historical verdicts stay explicit.
 
 The [session findings](../peanut/research/2026-09-20-session-findings.md) link
 experiment conditions, human readings, Probsie's evaluation precedent, and the
 verified prompt-anchoring history. The [context reports](../peanut/research/2026-09-20-context-reading/README.md)
-provide supporting source readings. The primary's proposed next discussion is
-a joint review of the full instruction surface before shaping this arc.
+provide supporting source readings. The September 21 prompt rewrite was
+restored after the human rejected its voice and requested protocol alignment.
+The four supplied concepts remain exploratory references, not expected-output
+phrases or four adopted golden passes.
+The [golden-smoke packet](../peanut/research/2026-09-21-golden-smoke-audit/README.md)
+records the source audit and experiment. The primary's
+[Polinko report](../peanut/research/2026-09-21-golden-smoke-audit/polinko-foundation-report.md)
+is incomplete as a trace of the golden-prompt and smoke-test method; context
+plumbing alone does not establish that method.
 
 ## Beta map
 
@@ -72,7 +114,8 @@ a joint review of the full instruction surface before shaping this arc.
 | [6.0](./060_B-SCOREBOARD_JUDGEMENT.md) | Does `scoreboard_claim` deserve its own judged lane? Row-level scoreboard. |
 | [7.0](./070_B-BROADER_PROSE_JUDGEMENT.md) | What reopens above the scoreboard fragment? Broader round prose. |
 | [8.0](./080_B-MENACE_JUDGEMENT.md) | What holds when the full visible round is judged as menace? Menace quality. |
-| [pre-9.0](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) | Can positive runtime instructions preserve the menace lane? Staged, not yet new evidence. |
+| [pre-9.0 historical](./410_PB-POSITIVE_RUNTIME_INSTRUCTION_CONTRACT.md) | Can positive runtime instructions preserve the menace lane? Earlier staged contract. |
+| [pre-9.0 paused](./420_PB-COHERENT_ABSURDITY.md) | Does the invented relationship make the unfair win follow? Protocol alignment pending. |
 
 Each later beta narrows its own claim; it does not erase earlier evidence.
 Route, tone, pulse, scoreboard, prose and menace verdicts remain distinct.
@@ -96,7 +139,8 @@ continuation.
 
 ## Reading order and boundaries
 
-Read the legend, then Betas 1–8, then the staged pre-Beta 9 contract. Use the
+Read the legend, then Betas 1–8, then the staged 410 contract and paused 420
+boundary. Use the
 individual boundary document for its judged object, unit, sample range,
 baseline, and close condition. Plans are not active method until the repository
 earns them.
