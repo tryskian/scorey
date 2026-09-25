@@ -1,6 +1,25 @@
 # Session Handoff
 
-Last updated: 2026-06-09
+Last updated: 2026-09-24
+
+## Current restoration
+
+The September 8 archive has been verified against its recorded SHA-256 and
+restored locally from August 10 source `51eb2a8` under D-035. Source files,
+installed packages and research records came from that saved copy. The current
+API credential is retained; other Scorey environment settings match the archive.
+The restored model is `gpt-5-nano`. The SDK supplies low verbosity and omits an
+explicit reasoning effort. Prompts and round composition are unchanged.
+
+The pre-restoration state, including later research records, is frozen in a
+verified read-only snapshot. Portable provenance is recorded in
+`.local/restoration/2026-09-24/receipt.json`. The restored queue is closed with
+2,495 live records and zero pending reviews. The historical research handoff
+below retains its August 10 context; it does not activate its Next Slice.
+
+The local portfolio and workbench are being checked against this restored
+runtime. Human assessment of the output remains open. No research sampling,
+judgement or coherent-absurdity work is activated by this restoration.
 
 ## Start Here
 
@@ -54,6 +73,10 @@ Stable repo shape:
 - failure handling stays explicit:
   - `retain`
   - `evict`
+- current GitHub dependency queue:
+  - `#94`: grouped GitHub Actions updates
+  - `#97`: grouped Python dependency updates
+  - `#98`: CLI arrow-navigation repair
 
 Current runtime truth:
 
@@ -110,6 +133,29 @@ Stable contrast:
   and prose closeout
 
 ## Active Kernel
+
+Current tracked maintenance slice:
+
+- live CLI arrow navigation is restored without changing its intentional timing
+- the repair lands through PR `#98`
+- `up` and `down` are the only selection-moving keys
+- `enter` confirms and `esc` exits
+- selector input now reads terminal bytes directly instead of mixing buffered
+  text reads with file-descriptor polling
+- one terminal mode remains active across the selector interaction so rapid
+  keypresses cannot fall into a canonical-mode gap
+- the duplicate scene render after each arrow movement is removed
+- `ESC_SEQUENCE_TIMEOUT_SECONDS` remains `0.03`
+- validation completed:
+  - focused `tests/test_main.py`: `38` pass with `4` arrow-sequence subtests
+  - real pseudo-terminal smoke: rapid `down`, `up`, wrap-`up`, `enter`, and
+    `esc` passed without echoed escape garbage
+  - `make check`: `90` pass
+  - full feature-branch `make end` validation passed through security and
+    runner shutdown; only the expected clean-`main` gate remained
+  - PR `#98` required checks passed
+
+Research state underneath the maintenance slice:
 
 `Research Beta 8.0` is now frozen on clean synced `main`.
 
@@ -186,7 +232,8 @@ Current staged research lane:
 ## Risks
 
 - low runtime risk: the queue is fully closed and there is no active sampler
-- small ops wrinkle: the repo-managed `caffeinate` PID file drifted stale again
+- dependency queue is separate from this kernel: open Dependabot PRs `#94` and
+  `#97` remain untouched
 
 ## Guardrails
 
@@ -207,6 +254,7 @@ Current staged research lane:
    - `make path-leak-check`
    - `make path-leak-audit-local`
    - `make lint-docs`
+   - `make scripts-check`
    - `make check`
    - `make package-check`
    - `make package-install-check`

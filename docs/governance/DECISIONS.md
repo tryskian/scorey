@@ -425,19 +425,43 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   evidence meaning. The next evidence must be cut above the new agent-local
   positive-target contract rather than appended to the Beta 8 baseline.
 
-## D-033: Re-enter Scorey from the verified June 9 cutoff
+## D-033: Shell helper contracts are a named local gate
 
-- Date: `2026-09-22`
+- Date: `2026-06-18`
 - Category: `workflow_environment`
-- Tags: `continuity`, `source_context`, `recovery`, `assumption_control`, `protected_main`
-- Provenance: `human-led workflow and evidence-governance decision with implementation decision`
-- Decision: Restore Scorey's tracked project surface to the verified
-  `2026-06-09` cutoff as the re-entry baseline. The current Starlette security
-  patch remains an explicitly identified operational exception; later work
-  that was not re-established against verified source context does not govern
-  resumed work.
-- Why: Model sunsets broke continuity around the active source context.
-  Subsequent work accumulated from assumptions and self-directed
-  interpretation rather than confirmed intent, chronology, and evidence.
-  Returning to the last verified checkpoint makes the boundary explicit and
-  puts those sources back before any new implementation.
+- Tags: `tooling_baseline`, `shell_scripts`, `closeout`, `maintenance`
+- Provenance: `implementation decision`
+- Decision:
+  - expose `make scripts-check` as the shell helper contract gate
+  - validate tracked `scripts/*.sh` shebangs and strict modes
+  - run `make scripts-check` inside the active closeout routine
+  - keep closeout control environment variables uppercase:
+    - `END_SKIP_GIT_CHECK`
+    - `END_GIT_BRANCH`
+    - `END_GIT_REMOTE`
+- Validation:
+  - `make scripts-check`
+  - `make check`
+  - `make lint-docs`
+  - `make end-preflight`
+- Why: Shell helper drift should fail through a small explicit operator target
+  before longer closeout checks run. Uppercase closeout environment variables
+  keep the branch-local preflight and clean-main git gate aligned with the
+  surrounding repo-family convention.
+
+## D-035: Restore the September 8 saved runtime
+
+- Date: `2026-09-24`
+- Category: `workflow_environment`
+- Tags: `snapshot_restore`, `source_context`, `preservation`
+- Provenance: `human-led restoration decision with implementation decision`
+- Decision: Freeze the current state, then restore the newest identified
+  complete Scorey snapshot before the September false start. The verified
+  September 8 GitHub backup contains August 10 source `51eb2a8`, its installed
+  dependencies, environment settings and research records.
+- Boundary: Preserve the current API credential. Restore the archived model
+  setting `gpt-5-nano`, with the original SDK defaults. Preserve the newer state
+  in the verified frozen snapshot; it is not merged into the restored research
+  records. Coherent absurdity remains a later beta, outside this restoration.
+- Meaning: Snapshot integrity and integration checks establish what was
+  restored. They do not establish accepted wording or a new behaviour verdict.
