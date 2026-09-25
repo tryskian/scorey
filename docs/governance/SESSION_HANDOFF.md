@@ -17,8 +17,12 @@ verified read-only snapshot. Portable provenance is recorded in
 2,495 live records and zero pending reviews. The historical research handoff
 below retains its August 10 context; it does not activate its Next Slice.
 
-The local portfolio and workbench are being checked against this restored
-runtime. Human assessment of the output remains open. No research sampling,
+Branch-local preflight passed, including 90 source tests, type checks,
+packaging, runtime closure and the dependency audit. The portfolio/workbench
+checks also pass. Two ordinary live rounds completed; both still repeat "you"
+in the score line. The restoration is faithful, but wording recovery is not
+established. This remains a local restoration branch pending human review;
+GitHub main and the public portfolio are unchanged. No research sampling,
 judgement or coherent-absurdity work is activated by this restoration.
 
 ## Start Here
