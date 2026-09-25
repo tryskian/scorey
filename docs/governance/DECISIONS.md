@@ -425,6 +425,10 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   evidence meaning. The next evidence must be cut above the new agent-local
   positive-target contract rather than appended to the Beta 8 baseline.
 
+The June 18 shell-helper record and September 22 re-entry record below each
+used `D-033` in their original histories. Their titles, dates and text are
+preserved; D-035 selects the current restoration boundary.
+
 ## D-033: Shell helper contracts are a named local gate
 
 - Date: `2026-06-18`
@@ -449,6 +453,23 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   keep the branch-local preflight and clean-main git gate aligned with the
   surrounding repo-family convention.
 
+## D-033: Re-enter Scorey from the verified June 9 cutoff
+
+- Date: `2026-09-22`
+- Category: `workflow_environment`
+- Tags: `continuity`, `source_context`, `recovery`, `assumption_control`, `protected_main`
+- Provenance: `human-led workflow and evidence-governance decision with implementation decision`
+- Decision: Restore Scorey's tracked project surface to the verified
+  `2026-06-09` cutoff as the re-entry baseline. The current Starlette security
+  patch remains an explicitly identified operational exception; later work
+  that was not re-established against verified source context does not govern
+  resumed work.
+- Why: Model sunsets broke continuity around the active source context.
+  Subsequent work accumulated from assumptions and self-directed
+  interpretation rather than confirmed intent, chronology, and evidence.
+  Returning to the last verified checkpoint makes the boundary explicit and
+  puts those sources back before any new implementation.
+
 ## D-035: Restore the September 8 saved runtime
 
 - Date: `2026-09-24`
@@ -465,3 +486,6 @@ Keep branch-local cleanup, temporary wrapper churn, wording tweaks, and current-
   records. Coherent absurdity remains a later beta, outside this restoration.
 - Meaning: Snapshot integrity and integration checks establish what was
   restored. They do not establish accepted wording or a new behaviour verdict.
+- Closeout authorization (`2026-09-25`): The human lead approved proceeding
+  with review, protected-main merge and final `make end` for this saved
+  restoration. This does not assign a wording verdict or activate new research.

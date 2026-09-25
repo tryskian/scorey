@@ -1,6 +1,6 @@
 # Session Handoff
 
-Last updated: 2026-09-24
+Last updated: 2026-09-25
 
 ## Current restoration
 
@@ -21,9 +21,20 @@ Branch-local preflight passed, including 90 source tests, type checks,
 packaging, runtime closure and the dependency audit. The portfolio/workbench
 checks also pass. Two ordinary live rounds completed; both still repeat "you"
 in the score line. The restoration is faithful, but wording recovery is not
-established. This remains a local restoration branch pending human review;
-GitHub main and the public portfolio are unchanged. No research sampling,
-judgement or coherent-absurdity work is activated by this restoration.
+established. On September 25 the author approved completing this saved
+restoration through review, protected-main merge and final `make end`.
+
+The September 25 review confirmed that all tracked files except this handoff
+and the decision log match source `51eb2a8`; Starlette remains pinned to the
+existing security-patched `1.3.1`. Both dated D-033 records are preserved under
+their original titles. The evidence database still matches the restoration
+receipt and has zero pending reviews. Validation and closeout receipts live
+under `.local/closeout/2026-09-25/`.
+
+The published portfolio uses its separately frozen May 5 Scorey and its own
+scoreboard instruction. This research-repo closeout does not change that
+published version, create a research verdict, or activate sampling or the
+coherent-absurdity beta. The historical Next Slice below remains inactive.
 
 ## Start Here
 
