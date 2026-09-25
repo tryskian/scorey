@@ -83,6 +83,17 @@ Ownership boundary:
 6. The live model generates only the unstable round fields.
 7. The runtime composes the final unfair round.
 
+## Selector Input Contract
+
+- `up` and `down` are the only keys that move the active pick.
+- `enter` confirms the active pick.
+- `esc` exits the app or declines another round.
+- Arrow sequences are read directly from the terminal file descriptor while
+  one terminal mode remains active for the whole selector interaction.
+- `ESC_SEQUENCE_TIMEOUT_SECONDS = 0.03` is the intentional boundary between a
+  bare `esc` press and the remaining bytes of an arrow sequence. A key-mapping
+  repair does not implicitly authorise changing that interaction timing.
+
 ## Evaluation Stack
 
 | Surface | Binary Unit | Stable Shape | Notes |
