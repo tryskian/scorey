@@ -1,6 +1,14 @@
 # Session Handoff
 
-Last updated: 2026-06-09
+Last updated: 2026-10-02
+
+## Dependency Maintenance
+
+[PR #132](https://github.com/tryskian/scorey/pull/132) updates PyJWT to
+`2.15.0` and urllib3 to `2.8.0`. All 88 tests, code checks and the package
+build pass. The audited local Python dependencies have no known vulnerabilities
+after refreshing the development environment's virtualenv dependency.
+This maintenance note preserves the restored June 9 research state below.
 
 ## Start Here
 
